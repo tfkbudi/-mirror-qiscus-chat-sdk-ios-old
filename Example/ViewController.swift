@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QiscusCore
 
 class ViewController: UIViewController {
 
