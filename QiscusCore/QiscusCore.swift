@@ -18,6 +18,8 @@ class QiscusCore: NSObject {
         
     }
     
+    // MARK : Auth
+    
     /// SDK Connect with userId. The handler to be called once the request has finished.
     ///
     /// - parameter userID              : must be unique per appid, exm: email, phonenumber, udid.
@@ -39,5 +41,33 @@ class QiscusCore: NSObject {
     class func disconnect(completionHandler: @escaping () -> Void) {
         
     }
+    
+    // MARK : Room Management
+    
+    /// Get or create room with participant
+    ///
+    /// - Parameters:
+    ///   - withParticipants: Qiscus user id.
+    ///   - completionHandler: Qiscus Room Object and error if exist. error exm:
+    class func newRoom(withParticipants: [String], completionHandler: @escaping (QiscusRoom, Error) -> Void)) {
+        
+    }
+    
+    
+    /// Get
+    ///
+    /// - Parameters:
+    ///   - withID: existing roomID from server or local db.
+    ///   - completionHandler: Response Qiscus Room Object and error if exist.
+    class func getRoom(withID: [String], completionHandler: @escaping (QiscusRoom, Error) -> Void)) {
+    
+    }
+    
+    class func newRoom(withParticipants: [String], completionHandler: @escaping (QiscusRoom, Error) -> Void)) {
+    
+    }
+    
+    
+    // MARK : Utilities
     
 }
