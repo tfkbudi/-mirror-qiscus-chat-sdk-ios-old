@@ -6,9 +6,39 @@
 //  Copyright © 2018 Qiscus. All rights reserved.
 //
 
-import UIKit
+import Foundation
+
+typealias HTTPHeaders = [String:String]
+
+protocol EndPoint {
+    var baseURL : URL { get }
+    var path    : String { get }
+    var method  : HTTPMethod { get }
+    var header  : HTTPMethods? { get }
+}
+
+internal enum CLientAPI {
+    case sync
+    case syncEvent
+    case search
+    case setDeviceToken
+    case removeDeviceToken
+    case loginRegister
+    case upload
+    case unread
+}
+
+extension CLientAPI : EndPoint {
+    
+}
+
+
 
 var BASE_URL: String = ""
+
+struct APOEndPoint {
+    var URL : String 
+}
 
 internal class APIClientEndpoint {
     static var SYNC: String = BASE_URL + "/sync"
@@ -23,9 +53,9 @@ internal class APIClientEndpoint {
     
     static var LOGIN_REGISTER: String = BASE_URL + "/login_or_register"
     
-    static var ALL_UNREAD_COUNT: String = BASE_URL
+    static var ALL_UNREAD_COUNT: String = BASE_URL + "/total_unread_count"
     
-    static var UPLOAD: String = BASE_URL
+    static var UPLOAD: String = BASE_URL + "/upload"
 }
 
 internal class APIUserEndPoint {
@@ -39,7 +69,7 @@ internal class APIUserEndPoint {
 }
 
 internal class APIMessage {
-    static var DELETE_MESSAGES: String = BASE_URL
+    static var DELETE_MESSAGES: String = BASE_URL + "/delete_messages"
     
     static var CLEAR_MESSAGES: String = BASE_URL + "/clear_room_messages"
 }
