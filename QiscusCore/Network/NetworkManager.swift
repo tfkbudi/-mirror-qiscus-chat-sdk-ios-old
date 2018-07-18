@@ -8,6 +8,20 @@
 
 import UIKit
 
+enum NetworkResponse:String {
+    case success
+    case authenticationError = "You need to be authenticated first."
+    case badRequest = "Bad request"
+    case outdated = "The url you requested is outdated."
+    case failed = "Network request failed."
+    case noData = "Response returned with no data to decode."
+}
+
+enum Result<String>{
+    case success
+    case failure(String)
+}
+
 enum NetworkEnvironment : String {
     case production
     case staging
@@ -16,7 +30,7 @@ enum NetworkEnvironment : String {
 class NetworkManager: NSObject {
     static let environment  : NetworkEnvironment = .production
     static let APPID        : String = ""
-    let clientRouter    = Router<CLientAPI>()
+    let clientRouter    = Router<APIClient>()
     
     fileprivate func handleNetworkResponse(_ response: HTTPURLResponse) -> Result<String>{
         switch response.statusCode {
@@ -31,9 +45,9 @@ class NetworkManager: NSObject {
 
 // MARK : Client
 extension NetworkManager {
-    func login() {
-        clientRouter.request(.loginRegister) { (<#Data?#>, <#URLResponse?#>, <#Error?#>) in
-            <#code#>
+    func login(email: String, password: String) {
+        clientRouter.request(.loginRegister(user: email, password: password)) { (data, response, error) in
+            //
         }
     }
     

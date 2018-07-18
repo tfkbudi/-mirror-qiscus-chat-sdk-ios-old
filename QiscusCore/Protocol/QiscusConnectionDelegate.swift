@@ -8,8 +8,8 @@
 
 import UIKit
 
-protocol QiscusConnectionDelegate: NSObject {
+protocol QiscusConnectionDelegate {
 
-    func didSucceed
+    func didSucceed()
     
 }

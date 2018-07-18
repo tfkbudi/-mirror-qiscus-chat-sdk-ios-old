@@ -8,22 +8,22 @@
 
 import Foundation
 
-public typealias NetworkRouterCompletion = (_ data: Data?,_ response: URLResponse?,_ error: Error?)->()
+internal typealias NetworkRouterCompletion = (_ data: Data?,_ response: URLResponse?,_ error: Error?)->()
 
 protocol NetworkRouter: class {
-    associatedtype EndPoint: EndPointType
-    func request(_ route: EndPoint, completion: @escaping NetworkRouterCompletion)
+    associatedtype endPoint: EndPoint
+    func request(_ route: endPoint, completion: @escaping NetworkRouterCompletion)
     func cancel()
 }
 
 class Router<endpoint: EndPoint>: NetworkRouter {
+    private let session = URLSession(configuration: .default)
     private var task: URLSessionTask?
     
     func request(_ route: endpoint, completion: @escaping NetworkRouterCompletion) {
-        let session = URLSession.shared
         do {
             let request = try self.buildRequest(from: route)
-            NetworkLogger.log(request: request)
+            //NetworkLogger.log(request: request)
             task = session.dataTask(with: request, completionHandler: { data, response, error in
                 completion(data, response, error)
             })
