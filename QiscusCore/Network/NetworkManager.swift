@@ -27,7 +27,7 @@ enum NetworkEnvironment : String {
     case staging
 }
 
-class NetworkManager: NSObject {
+public class NetworkManager: NSObject {
     static let environment  : NetworkEnvironment = .production
     static let APPID        : String = ""
     let clientRouter    = Router<APIClient>()
@@ -45,27 +45,9 @@ class NetworkManager: NSObject {
 
 // MARK : Client
 extension NetworkManager {
-    func login(email: String, password: String, completion: @escaping (_ user: UserModel?, _ error: String?) -> Void) {
-        clientRouter.request(.loginRegister(user: email, password: password)) { (data, response, error) in
-            if error != nil {
-                completion(nil, "Please check your network connection.")
-            }
-            
-            if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
-                switch result {
-                case .success:
-                    guard let responseData = data else {
-                        completion(nil, NetworkResponse.noData.rawValue)
-                        return
-                    }
-                    print(responseData)
-                    
-                case .failure(let error):
-                    completion(nil,error)
-                }
-            }
+    public func login(email: String, password: String ,username : String? ,avatarUrl : String?) {
+        clientRouter.request(.loginRegister(user: email, password: password,username: username,avatarUrl: avatarUrl)) { (data, response, error) in
+            print("response login \(response)")
         }
     }
-    
 }

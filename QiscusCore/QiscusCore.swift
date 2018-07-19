@@ -8,20 +8,8 @@
 
 import UIKit
 
-/// SDK Connect with userId and passkey. The handler to be called once the request has finished.
-/// - parameter userID              : must be unique per appid, exm: email, phonenumber, udid.
-/// - userKey                       : user password
-/// - parameter completion          : The code to be executed once the request has finished, also give a user object and error.
-///
-public func connect(userID: String, userKey: String, completion: @escaping (String, Error?) -> Void) {
-    NetworkManager().login(email: userID, password: userKey) { (data, error) in
-        
-    }
-}
-
-public class QiscusCore: NSObject {
-    
-    
+open class QiscusCore: NSObject {
+  
     /// added your app Qiscus APP ID
     ///
     /// - Parameter WithAppID: Qiscus SDK App ID
@@ -40,7 +28,14 @@ public class QiscusCore: NSObject {
         
     }
     
-    
+    /// SDK Connect with userId and passkey. The handler to be called once the request has finished.
+    /// - parameter userID              : must be unique per appid, exm: email, phonenumber, udid.
+    /// - userKey                       : user password
+    /// - parameter completion          : The code to be executed once the request has finished, also give a user object and error.
+    ///
+    class func connect(userID: String, userKey: String, completion: @escaping (SDKUser, Error) -> Void) {
+        
+    }
     
     class func disconnect(completionHandler: @escaping () -> Void) {
         
@@ -68,4 +63,9 @@ public class QiscusCore: NSObject {
     
     // MARK : Utilities
     
+    
+    // MARK : NetworkManager
+    public static var networkManager : NetworkManager {
+        get { return NetworkManager() }
+    }
 }
