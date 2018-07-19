@@ -27,7 +27,7 @@ enum NetworkEnvironment : String {
     case staging
 }
 
-class NetworkManager: NSObject {
+public class NetworkManager: NSObject {
     static let environment  : NetworkEnvironment = .production
     static let APPID        : String = ""
     let clientRouter    = Router<APIClient>()
@@ -45,10 +45,9 @@ class NetworkManager: NSObject {
 
 // MARK : Client
 extension NetworkManager {
-    func login(email: String, password: String) {
-        clientRouter.request(.loginRegister(user: email, password: password)) { (data, response, error) in
-            //
+    public func login(email: String, password: String ,username : String? ,avatarUrl : String?) {
+        clientRouter.request(.loginRegister(user: email, password: password,username: username,avatarUrl: avatarUrl)) { (data, response, error) in
+            print("response login \(response)")
         }
     }
-    
 }

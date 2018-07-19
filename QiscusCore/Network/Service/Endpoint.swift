@@ -18,17 +18,17 @@ protocol EndPoint {
 
 // MARK: General API
 internal enum APIClient {
-    case sync
-    case syncEvent
-    case search(keyword: String)
+    case sync(lastReceivedCommentId: Int, order: String, limit: Int)
+    case syncEvent(startEventId : Int)
+    case search(keyword: String, roomId: Int?, lastCommentId: Int?)
     case registerDeviceToken(token: String)
-    case removeDeviceToken
-    case loginRegister(user: String, password: String)
-    case upload
+    case removeDeviceToken(token: String)
+    case loginRegister(user: String, password: String , username: String?, avatarUrl: String?)
     case unread
-}
+    case upload
+ }
 
-var TOKEN : String {
+var AUTHTOKEN : String {
     get {
         return ""
     }
@@ -42,22 +42,22 @@ extension APIClient : EndPoint {
     
     var path: String {
         switch self {
-        case .removeDeviceToken:
-            return "/remove_user_device_token"
-        case .sync:
+        case .sync( _, _, _):
             return "/sync"
-        case .syncEvent:
+        case .syncEvent( _):
             return "/sync_event"
-        case .search:
+        case .search( _, _, _):
             return "/search_messages"
-        case .registerDeviceToken:
+        case .registerDeviceToken( _):
             return "/set_user_device_token"
-        case .upload:
-            return "/upload"
+        case .removeDeviceToken( _):
+            return "/remove_user_device_token"
+        case .loginRegister( _, _, _, _):
+            return "/login_or_register"
         case .unread:
             return "/total_unread_count"
-        case .loginRegister( _, _):
-            return "/login_or_register"
+        case .upload:
+            return "/upload"
         }
     }
     
@@ -76,18 +76,67 @@ extension APIClient : EndPoint {
     
     var task: HTTPTask {
         switch self {
-        case .loginRegister(let user, let password):
+        case .sync(let lastReceivedCommentId ,let order, let limit) :
             let param = [
-                "email"             : user,
-                "password"          : password,
-                "device_platform"   : "ios",
-            ]
+                "token"                       : AUTHTOKEN,
+                "last_received_comment_id"    : lastReceivedCommentId,
+                "order"                       : order,
+                "limit"                       : limit //found in sdk qiscus not from documentation
+                ] as [String : Any]
+            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+        case .syncEvent(let startEventId):
+            let param = [
+                "token"                       : AUTHTOKEN,
+                "start_event_id"              : startEventId
+                ] as [String : Any]
+            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+        case .search(let keyword,let roomId,let lastCommentId) :
+            var param = [
+                "token"                       : AUTHTOKEN,
+                "query"                       : keyword
+                ] as [String : Any]
+            
+            if let roomid = roomId{
+                param["room_id"] = roomid
+            }
+            
+            if let lastcommentid = lastCommentId{
+                param["last_comment_id"] = lastcommentid
+            }
+            
             return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
         case .registerDeviceToken(let token):
             let param = [
-                "device_token"      : token,
-                "device_platform"   : "ios",
+                "token"                       : AUTHTOKEN,
+                "device_token"                : token,
+                "device_platform"             : "ios",
                 ]
+            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+        case .removeDeviceToken(let token):
+            let param = [
+                "token"                       : AUTHTOKEN,
+                "device_token"                : token,
+                "device_platform"             : "ios",
+                ]
+            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+        case .loginRegister(let user, let password, let username, let avatarUrl):
+            var param = [
+                "email"                       : user,
+                "password"                    : password,
+                "device_platform"             : "ios",
+            ]
+            
+            if let usernm = username {
+                param["username"] = usernm
+            }
+            if let avatarurl = avatarUrl{
+                param["avatar_url"] = avatarurl
+            }
+            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+        case .unread :
+            let param = [
+                "token"                       : AUTHTOKEN
+            ]
             return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
         default:
             return .request
@@ -168,7 +217,7 @@ extension APIMessage : EndPoint {
         switch self {
         case .delete(let id):
             let params = [
-                "token" :
+                "token" : AUTHTOKEN,
                 "unique_ids" : id
             ]
             return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)

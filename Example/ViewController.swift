@@ -13,7 +13,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        QiscusCore.networkManager.login(email: "", password: "", username: nil, avatarUrl: nil)
     }
 
     override func didReceiveMemoryWarning() {

@@ -8,9 +8,8 @@
 
 import UIKit
 
-class QiscusCore: NSObject {
-    
-    
+open class QiscusCore: NSObject {
+  
     /// added your app Qiscus APP ID
     ///
     /// - Parameter WithAppID: Qiscus SDK App ID
@@ -64,4 +63,9 @@ class QiscusCore: NSObject {
     
     // MARK : Utilities
     
+    
+    // MARK : NetworkManager
+    public static var networkManager : NetworkManager {
+        get { return NetworkManager() }
+    }
 }
