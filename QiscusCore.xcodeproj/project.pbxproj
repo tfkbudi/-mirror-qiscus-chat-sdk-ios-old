@@ -29,6 +29,7 @@
 		3D5593B020FEFE0D00AE35E5 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5593AF20FEFE0D00AE35E5 /* Router.swift */; };
 		3D5593B320FF1EE300AE35E5 /* ParameterEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5593B220FF1EE200AE35E5 /* ParameterEncoder.swift */; };
 		3D5593B720FF1FDA00AE35E5 /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5593B620FF1FDA00AE35E5 /* ParameterEncoding.swift */; };
+		3D5593BA2100609400AE35E5 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5593B92100609400AE35E5 /* Auth.swift */; };
 		F116692197E20D674B69897F /* Pods_QiscusCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 560FF1F83A73EA20444892C4 /* Pods_QiscusCore.framework */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +69,7 @@
 		3D5593AF20FEFE0D00AE35E5 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		3D5593B220FF1EE200AE35E5 /* ParameterEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterEncoder.swift; sourceTree = "<group>"; };
 		3D5593B620FF1FDA00AE35E5 /* ParameterEncoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParameterEncoding.swift; sourceTree = "<group>"; };
+		3D5593B92100609400AE35E5 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
 		560FF1F83A73EA20444892C4 /* Pods_QiscusCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QiscusCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		64802D245F1D9AD426A11FD8 /* Pods-QiscusCore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QiscusCore.release.xcconfig"; path = "Pods/Target Support Files/Pods-QiscusCore/Pods-QiscusCore.release.xcconfig"; sourceTree = "<group>"; };
 		A30556DA65A102F1FEE21504 /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -149,6 +151,7 @@
 				3D55939620FC904400AE35E5 /* SDKClient.swift */,
 				3D55939820FC908D00AE35E5 /* QiscusCore.swift */,
 				3D5593A120FD974900AE35E5 /* QiscusRoom.swift */,
+				3D5593B8210041CB00AE35E5 /* Storage */,
 				3D5593AC20FEF5D100AE35E5 /* Network */,
 				3D55939E20FC9D9100AE35E5 /* Protocol */,
 				3D55939A20FC992300AE35E5 /* Model */,
@@ -182,6 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				3D55939B20FC995300AE35E5 /* SDKUser.swift */,
+				3D5593B92100609400AE35E5 /* Auth.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -221,6 +225,13 @@
 				3D5593B220FF1EE200AE35E5 /* ParameterEncoder.swift */,
 			);
 			path = Encoding;
+			sourceTree = "<group>";
+		};
+		3D5593B8210041CB00AE35E5 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Storage;
 			sourceTree = "<group>";
 		};
 		42551FCE4760561079503A31 /* Pods */ = {
@@ -550,6 +561,7 @@
 				3D55939920FC908D00AE35E5 /* QiscusCore.swift in Sources */,
 				3D5593A520FDB48400AE35E5 /* Endpoint.swift in Sources */,
 				3D55939720FC904400AE35E5 /* SDKClient.swift in Sources */,
+				3D5593BA2100609400AE35E5 /* Auth.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

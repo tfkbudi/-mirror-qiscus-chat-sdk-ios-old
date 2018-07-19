@@ -16,7 +16,7 @@ protocol EndPoint {
     var task: HTTPTask { get }
 }
 
-// MARK : General API
+// MARK: General API
 internal enum APIClient {
     case sync
     case syncEvent
@@ -26,6 +26,12 @@ internal enum APIClient {
     case loginRegister(user: String, password: String)
     case upload
     case unread
+}
+
+var TOKEN : String {
+    get {
+        return ""
+    }
 }
 
 extension APIClient : EndPoint {
@@ -89,6 +95,7 @@ extension APIClient : EndPoint {
     }
 }
 
+// MARK: User API
 internal enum APIUser {
     case block
     case unblock
@@ -125,9 +132,10 @@ extension APIUser : EndPoint {
     }
 }
 
+// MARK: Message API
 internal enum APIMessage {
     case updateStatus(id: String)
-    case delete
+    case delete(id: String)
     case clear
 }
 
@@ -139,7 +147,7 @@ extension APIMessage : EndPoint {
     
     var path: String {
         switch self {
-        case .delete:
+        case .delete( _):
             return "/delete_messages"
         case .clear:
             return "/clear_room_messages"
@@ -157,10 +165,20 @@ extension APIMessage : EndPoint {
     }
     
     var task: HTTPTask {
-        return .request
+        switch self {
+        case .delete(let id):
+            let params = [
+                "token" :
+                "unique_ids" : id
+            ]
+            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
+        default :
+            return .request
+        }
     }
 }
 
+// MARK: Room API
 internal enum APIRoom {
     case roomList
     case roomInfo
