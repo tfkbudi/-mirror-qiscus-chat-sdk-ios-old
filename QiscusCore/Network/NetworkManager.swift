@@ -45,9 +45,26 @@ class NetworkManager: NSObject {
 
 // MARK : Client
 extension NetworkManager {
-    func login(email: String, password: String) {
+    func login(email: String, password: String, completion: @escaping (_ user: UserModel?, _ error: String?) -> Void) {
         clientRouter.request(.loginRegister(user: email, password: password)) { (data, response, error) in
-            //
+            if error != nil {
+                completion(nil, "Please check your network connection.")
+            }
+            
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, NetworkResponse.noData.rawValue)
+                        return
+                    }
+                    print(responseData)
+                    
+                case .failure(let error):
+                    completion(nil,error)
+                }
+            }
         }
     }
     

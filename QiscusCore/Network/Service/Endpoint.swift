@@ -28,12 +28,6 @@ internal enum APIClient {
     case unread
 }
 
-var TOKEN : String {
-    get {
-        return ""
-    }
-}
-
 extension APIClient : EndPoint {
     var baseURL: URL {
         guard let url = URL(string: "http://") else { fatalError("baseURL could not be configured.")}
@@ -165,16 +159,7 @@ extension APIMessage : EndPoint {
     }
     
     var task: HTTPTask {
-        switch self {
-        case .delete(let id):
-            let params = [
-                "token" :
-                "unique_ids" : id
-            ]
-            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
-        default :
-            return .request
-        }
+        return .request
     }
 }
 
