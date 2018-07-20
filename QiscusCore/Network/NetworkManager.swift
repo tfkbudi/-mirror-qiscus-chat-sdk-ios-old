@@ -10,7 +10,8 @@ import UIKit
 
 enum NetworkResponse:String {
     case success
-    case authenticationError = "You need to be authenticated first."
+    case clientError = "Client Error."
+    case serverError = "Server Error."
     case badRequest = "Bad request"
     case outdated = "The url you requested is outdated."
     case failed = "Network request failed."
@@ -37,8 +38,8 @@ public class NetworkManager: NSObject {
         print("response code \(response.statusCode)")
         switch response.statusCode {
         case 200...299: return .success
-        case 401...500: return .failure(NetworkResponse.authenticationError.rawValue)
-        case 501...599: return .failure(NetworkResponse.badRequest.rawValue)
+        case 400...499: return .failure(NetworkResponse.clientError.rawValue)
+        case 500...599: return .failure(NetworkResponse.serverError.rawValue)
         case 600: return .failure(NetworkResponse.outdated.rawValue)
         default: return .failure(NetworkResponse.failed.rawValue)
         }
@@ -61,7 +62,6 @@ extension NetworkManager {
                         return
                     }
                     do {
-                        print("response: \(responseData)")
                         let jsondata = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
                         print("json: \(jsondata)")
                         let apiResponse = try JSONDecoder().decode(UserAPIResponse.self, from: responseData)
@@ -70,6 +70,7 @@ extension NetworkManager {
                         completion(nil, NetworkResponse.unableToDecode.rawValue)
                     }
                 case .failure(let errorMessage):
+                    // MARK: Todo print error message
                     completion(nil,errorMessage)
                 }
             }
