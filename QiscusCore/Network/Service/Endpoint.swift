@@ -240,9 +240,9 @@ extension APIUser : EndPoint {
 
 // MARK: Message API
 internal enum APIMessage {
-    case updateStatus(id: String)
     case delete(id: String)
-    case clear
+    case updateStatus(roomId: Int,lastCommentReadId: Int?, lastCommentReceivedId: Int?)
+    case clear(roomChannelIds: [String])
 }
 
 extension APIMessage : EndPoint {
@@ -255,10 +255,10 @@ extension APIMessage : EndPoint {
         switch self {
         case .delete( _):
             return "/delete_messages"
-        case .clear:
-            return "/clear_room_messages"
-        case .updateStatus( _):
+        case .updateStatus( _, _, _):
             return "/update_comment_status"
+        case .clear( _):
+            return "/clear_room_messages"
         }
     }
     
@@ -278,8 +278,27 @@ extension APIMessage : EndPoint {
                 "unique_ids" : id
             ]
             return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
-        default :
-            return .request
+        case .updateStatus(let roomId,let lastCommentReadId,let lastCommentReceivedId):
+            var params = [
+                "token" : AUTHTOKEN,
+                "room_id" : roomId
+                ] as [String : Any]
+            
+            if let lastcommentreadid = lastCommentReadId {
+                params["last_comment_read_id"] = lastcommentreadid
+            }
+            
+            if let lastcommentreceivedid = lastCommentReceivedId {
+                params["last_comment_received_id"] = lastcommentreceivedid
+            }
+            
+            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
+        case .clear(let roomChannelIds):
+            let params = [
+                "token" : AUTHTOKEN,
+                "unique_ids" : roomChannelIds
+                ] as [String : Any]
+            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
         }
     }
 }
@@ -428,7 +447,6 @@ extension APIRoom : EndPoint {
                 "emails"                     : emails
                 ] as [String : Any]
             return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
-
         default:
             return .request
         }
