@@ -13,14 +13,20 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        QiscusCore.networkManager.login(email: "", password: "", username: nil, avatarUrl: nil)
+        QiscusCore.setup(WithAppID: "sampleapp-65ghcsaysse")
+        
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    @IBAction func clickLogin(_ sender: Any) {
+        QiscusCore.connect(userID: "", userKey: "") { (user, error) in
+            //
+        }
+    }
+    
 
 }
 

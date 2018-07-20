@@ -28,15 +28,32 @@ internal enum APIClient {
     case upload
  }
 
+// MARK: TODO Manage This
 var AUTHTOKEN : String {
     get {
         return ""
     }
 }
 
+var BASEURL : String {
+    get {
+        return "https://api.qiscus.com/api/v2/mobile"
+    }
+}
+
+var HEADERS : [String: String] {
+    get {
+        return [
+            "QISCUS_SDK_APP_ID" : "sampleapp-65ghcsaysse",
+        ]
+    }
+}
+/////
+
+
 extension APIClient : EndPoint {
     var baseURL: URL {
-        guard let url = URL(string: "http://") else { fatalError("baseURL could not be configured.")}
+        guard let url = URL(string: BASEURL) else { fatalError("baseURL could not be configured.")}
         return url
     }
     
@@ -71,7 +88,7 @@ extension APIClient : EndPoint {
     }
     
     var header: HTTPHeaders? {
-        return nil
+        return HEADERS
     }
     
     var task: HTTPTask {
@@ -153,7 +170,7 @@ internal enum APIUser {
 
 extension APIUser : EndPoint {
     var baseURL: URL {
-        guard let url = URL(string: "http://") else { fatalError("baseURL could not be configured.")}
+        guard let url = URL(string: BASEURL) else { fatalError("baseURL could not be configured.")}
         return url
     }
     
@@ -190,7 +207,7 @@ internal enum APIMessage {
 
 extension APIMessage : EndPoint {
     var baseURL: URL {
-        guard let url = URL(string: "http://") else { fatalError("baseURL could not be configured.")}
+        guard let url = URL(string: BASEURL) else { fatalError("baseURL could not be configured.")}
         return url
     }
     
@@ -241,7 +258,7 @@ internal enum APIRoom {
 
 extension APIRoom : EndPoint {
     var baseURL: URL {
-        guard let url = URL(string: "http://") else { fatalError("baseURL could not be configured.")}
+        guard let url = URL(string: BASEURL) else { fatalError("baseURL could not be configured.")}
         return url
     }
     
