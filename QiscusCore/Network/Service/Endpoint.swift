@@ -24,7 +24,11 @@ internal enum APIClient {
     case registerDeviceToken(token: String)
     case removeDeviceToken(token: String)
     case loginRegister(user: String, password: String , username: String?, avatarUrl: String?)
+    case loginRegisterJWT(identityToken: String)
+    case nonce
     case unread
+    case myProfile
+    case updateMyProfile(name: String, avatarUrl: String)
     case upload
  }
 
@@ -54,8 +58,16 @@ extension APIClient : EndPoint {
             return "/remove_user_device_token"
         case .loginRegister( _, _, _, _):
             return "/login_or_register"
+        case .loginRegisterJWT( _):
+            return "/auth/verify_identity_token"
+        case .nonce :
+            return "/auth/nonce"
         case .unread:
             return "/total_unread_count"
+        case .myProfile:
+            return "my_profile"
+        case .updateMyProfile :
+            return "my_profile"
         case .upload:
             return "/upload"
         }
@@ -63,10 +75,12 @@ extension APIClient : EndPoint {
     
     var httpMethod: HTTPMethod {
         switch self {
-        case .sync, .syncEvent, .unread:
+        case .sync, .syncEvent, .unread, .myProfile:
             return .get
-        case .search, .registerDeviceToken, .removeDeviceToken, .loginRegister, .upload:
+        case .search, .registerDeviceToken, .removeDeviceToken, .loginRegister, .loginRegisterJWT, .upload, .nonce:
             return .post
+        case .updateMyProfile :
+            return .patch
         }
     }
     
@@ -133,9 +147,28 @@ extension APIClient : EndPoint {
                 param["avatar_url"] = avatarurl
             }
             return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+        case .loginRegisterJWT(let identityToken):
+            let param = [
+                "identity_token"                       : identityToken
+                ]
+            
+            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+        case .nonce :
+            return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: nil)
         case .unread :
             let param = [
                 "token"                       : AUTHTOKEN
+            ]
+            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+        case .myProfile :
+            let param = [
+                "token"                       : AUTHTOKEN
+            ]
+               return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+        case .updateMyProfile(let name,let avatarUrl) :
+            let param = [
+                "name"                        : name,
+                "avatarUrl"                   : avatarUrl,
             ]
             return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
         default:
@@ -146,9 +179,9 @@ extension APIClient : EndPoint {
 
 // MARK: User API
 internal enum APIUser {
-    case block
-    case unblock
-    case listBloked
+    case block(email: String)
+    case unblock(email: String)
+    case listBloked(page: Int, limit: Int)
 }
 
 extension APIUser : EndPoint {
@@ -159,25 +192,47 @@ extension APIUser : EndPoint {
     
     var path: String {
         switch self {
-        case .block:
+        case .block( _):
             return "/block_user"
-        case .unblock:
+        case .unblock( _):
             return "/unblock_user"
-        case .listBloked:
+        case .listBloked( _, _):
             return "/get_blocked_user"
         }
     }
     
     var httpMethod: HTTPMethod {
-        return .get
+        switch self {
+        case .block, .unblock, .listBloked :
+            return .post
+        }
     }
-    
     var header: HTTPHeaders? {
         return nil
     }
     
     var task: HTTPTask {
-        return .request
+        switch self {
+        case .block(let email):
+            let param = [
+                "token"                       : AUTHTOKEN,
+                "user_email"                  : email
+            ]
+             return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+        case .unblock(let email):
+            let param = [
+                "token"                       : AUTHTOKEN,
+                "user_email"                  : email
+            ]
+            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+        case .listBloked(let page,let limit):
+            let param = [
+                "token"                       : AUTHTOKEN,
+                "page"                        : page,
+                "limit"                       : limit
+                ] as [String : Any]
+            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+        }
     }
 }
 
