@@ -53,16 +53,28 @@ internal struct UserModel {
     let id      : Int
     let email   : String
     let username    : String
-    let avatar_url  : String
-    let token       : String
-    let rtKey       : String
-    let pnIOSConfig  : Bool
+//    let avatarUrl  : String
+//    let token       : String
+//    let rtKey       : String
+//    let pnIOSConfig  : Bool
 }
 
 extension UserModel : Decodable {
+    private enum UserModelCodingKey: String, CodingKey {
+        case id
+        case email
+        case username
+        case avatarUrl     = "avatar_url"
+        case token
+        case rtKey
+        case pnIOSConfig    = "pn_ios_configured"
+    }
     
-    
-//    init(from decoder: Decoder) throws {
-//        
-//    }
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: UserModelCodingKey.self)
+        
+        id          = try container.decode(Int.self, forKey: UserModelCodingKey.id)
+        email       = try container.decode(String.self, forKey: UserModelCodingKey.email)
+        username    = try container.decode(String.self, forKey: UserModelCodingKey.username)
+    }
 }
