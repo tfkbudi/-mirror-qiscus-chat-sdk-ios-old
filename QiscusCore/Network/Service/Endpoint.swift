@@ -13,7 +13,7 @@ protocol EndPoint {
     var path        : String { get }
     var httpMethod  : HTTPMethod { get }
     var header      : HTTPHeaders? { get }
-    var task: HTTPTask { get }
+    var task        : HTTPTask { get }
 }
 
 // MARK: General API
@@ -214,7 +214,7 @@ extension APIUser : EndPoint {
         case .unblock( _):
             return "/unblock_user"
         case .listBloked( _, _):
-            return "/get_blocked_user"
+            return "/get_blocked_users"
         }
     }
     
@@ -257,6 +257,8 @@ extension APIUser : EndPoint {
 
 // MARK: Message API
 internal enum APIMessage {
+    case postComment(topicId: String,type: String,comment: String, uniqueTempId: String?) // without payload
+    case loadComment(topicId: Int,lastCommentId: Int?,timestamp: String?,after: Bool?,limit: Int?)
     case delete(id: String)
     case updateStatus(roomId: Int,lastCommentReadId: Int?, lastCommentReceivedId: Int?)
     case clear(roomChannelIds: [String])
@@ -270,6 +272,10 @@ extension APIMessage : EndPoint {
     
     var path: String {
         switch self {
+        case .postComment:
+            return "/post_comment"
+        case .loadComment:
+            return "/load_comments"
         case .delete( _):
             return "/delete_messages"
         case .updateStatus( _, _, _):
@@ -289,16 +295,47 @@ extension APIMessage : EndPoint {
     
     var task: HTTPTask {
         switch self {
+        case .postComment(let topicId,let type,let comment,let uniqueTempId):
+            var params = [
+                "token"                      : AUTHTOKEN,
+                "topic_id"                   : topicId,
+                "type"                       : type,
+                "comment"                    : comment
+                ] as [String : Any]
+            
+            if let uniquetempid = uniqueTempId {
+                params["unique_temp_id"] = uniquetempid
+            }
+            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
+        case .loadComment(let topicId, let lastCommentId ,let timestamp,let after,let limit):
+            var params = [
+                "token"                      : AUTHTOKEN,
+                "topic_id"                   : topicId
+                ] as [String : Any]
+            
+            if let lastcommentid = lastCommentId {
+                params["last_comment_id"] = lastcommentid
+            }
+            if let timestmp = timestamp {
+                params["timestamp"] = timestmp
+            }
+            if let aftr = after {
+                params["after"] = aftr
+            }
+            if let limt = limit {
+                params["limit"] = limt
+            }
+            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
         case .delete(let id):
             let params = [
-                "token" : AUTHTOKEN,
-                "unique_ids" : id
+                "token"                     : AUTHTOKEN,
+                "unique_ids"                : id
             ]
             return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
         case .updateStatus(let roomId,let lastCommentReadId,let lastCommentReceivedId):
             var params = [
-                "token" : AUTHTOKEN,
-                "room_id" : roomId
+                "token"                     : AUTHTOKEN,
+                "room_id"                   : roomId
                 ] as [String : Any]
             
             if let lastcommentreadid = lastCommentReadId {
@@ -312,8 +349,8 @@ extension APIMessage : EndPoint {
             return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
         case .clear(let roomChannelIds):
             let params = [
-                "token" : AUTHTOKEN,
-                "unique_ids" : roomChannelIds
+                "token"                      : AUTHTOKEN,
+                "unique_ids"                 : roomChannelIds
                 ] as [String : Any]
             return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
         }
@@ -330,6 +367,7 @@ internal enum APIRoom {
     case roomWithID(uniqueId: String,name: String?, avatarUrl: String?)
     case addParticipant(roomId: String, emails: [String])
     case removeParticipant(roomId: String, emails: [String])
+    case getRoomById(roomId: Int)
 }
 
 extension APIRoom : EndPoint {
@@ -356,12 +394,14 @@ extension APIRoom : EndPoint {
             return "/add_room_participants"
         case .removeParticipant( _, _):
             return "/remove_room_participants"
+        case .getRoomById( _):
+            return "/get_room_by_id"
         }
     }
     
     var httpMethod: HTTPMethod {
         switch self {
-        case .roomList:
+        case .roomList, .getRoomById:
             return .get
         case .roomInfo, .createNewRoom, .updateRoom, .roomWithParticipant, .roomWithID, .addParticipant, .removeParticipant:
             return .post
@@ -464,8 +504,13 @@ extension APIRoom : EndPoint {
                 "emails"                     : emails
                 ] as [String : Any]
             return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
-        default:
-            return .request
+        case .getRoomById(let roomId):
+            let params = [
+                "token"                      : AUTHTOKEN,
+                "room_id"                    : roomId
+                ] as [String : Any]
+
+            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
         }
     }
 }
