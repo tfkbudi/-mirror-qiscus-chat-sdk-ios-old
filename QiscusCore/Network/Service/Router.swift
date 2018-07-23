@@ -44,6 +44,10 @@ class Router<endpoint: EndPoint>: NetworkRouter {
                                  timeoutInterval: 10.0)
         
         request.httpMethod = route.httpMethod.rawValue
+        if let header = route.header {
+            self.addAdditionalHeaders(header, request: &request)
+        }
+        
         do {
             switch route.task {
             case .request:
