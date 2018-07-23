@@ -30,51 +30,111 @@ import UIKit
     }
  }
 */
-struct UserAPIResponse {
-    let status  : Int
-    let results : UserModel
-}
-
-extension UserAPIResponse : Decodable {
-    private enum UserAPIResponseCodingKey: String, CodingKey {
-        case status
-        case results
+struct UserApiResponse : Codable {
+    let results : Results
+    let status : Int
+    
+    enum CodingKeys: String, CodingKey {
+        
+        case results = "results"
+        case status = "status"
     }
     
     init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: UserAPIResponseCodingKey.self)
-        
-        status  = try container.decode(Int.self, forKey: .status)
-        results  = try container.decode(UserModel.self, forKey: .results)
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        results = try values.decode(Results.self, forKey: .results)
+        status = try values.decode(Int.self, forKey: .status)
     }
+    
 }
 
-internal struct UserModel {
-    let id      : Int
-    let email   : String
-    let username    : String
-//    let avatarUrl  : String
-//    let token       : String
-//    let rtKey       : String
-//    let pnIOSConfig  : Bool
-}
-
-extension UserModel : Decodable {
-    private enum UserModelCodingKey: String, CodingKey {
-        case id
-        case email
-        case username
-        case avatarUrl     = "avatar_url"
-        case token
-        case rtKey
-        case pnIOSConfig    = "pn_ios_configured"
+struct Results : Codable {
+    let user : User
+    
+    enum CodingKeys: String, CodingKey {
+        
+        case user = "user"
     }
     
     init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: UserModelCodingKey.self)
-        
-        id          = try container.decode(Int.self, forKey: UserModelCodingKey.id)
-        email       = try container.decode(String.self, forKey: UserModelCodingKey.email)
-        username    = try container.decode(String.self, forKey: UserModelCodingKey.username)
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        user = try values.decode(User.self, forKey: .user)
     }
+    
+}
+
+struct User : Codable {
+    let app : App
+    let avatarUrl : String
+    let email : String
+    let id : Int
+    let idStr : String
+    let lastCommentId : Int
+    let lastCommentIdStr : String
+    let lastSyncEventId : Int
+    let pnAndroidConfigured : Bool
+    let pnIosConfigured : Bool
+    let rtKey : String
+    let token : String
+    let username : String
+    
+    enum CodingKeys: String, CodingKey {
+        
+        case app = "app"
+        case avatarUrl = "avatar_url"
+        case email = "email"
+        case id = "id"
+        case idStr = "id_str"
+        case lastCommentId = "last_comment_id"
+        case lastCommentIdStr = "last_comment_id_str"
+        case lastSyncEventId = "last_sync_event_id"
+        case pnAndroidConfigured = "pn_android_configured"
+        case pnIosConfigured = "pn_ios_configured"
+        case rtKey = "rtKey"
+        case token = "token"
+        case username = "username"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        app = try values.decode(App.self, forKey: .app)
+        avatarUrl = try values.decode(String.self, forKey: .avatarUrl)
+        email = try values.decode(String.self, forKey: .email)
+        id = try values.decode(Int.self, forKey: .id)
+        idStr = try values.decode(String.self, forKey: .idStr)
+        lastCommentId = try values.decode(Int.self, forKey: .lastCommentId)
+        lastCommentIdStr = try values.decode(String.self, forKey: .lastCommentIdStr)
+        lastSyncEventId = try values.decode(Int.self, forKey: .lastSyncEventId)
+        pnAndroidConfigured = try values.decode(Bool.self, forKey: .pnAndroidConfigured)
+        pnIosConfigured = try values.decode(Bool.self, forKey: .pnIosConfigured)
+        rtKey = try values.decode(String.self, forKey: .rtKey)
+        token = try values.decode(String.self, forKey: .token)
+        username = try values.decode(String.self, forKey: .username)
+    }
+    
+}
+
+
+struct App : Codable {
+    let code : String
+    let id : Int
+    let idStr : String
+    let name : String
+    
+    enum CodingKeys: String, CodingKey {
+        
+        case code = "code"
+        case id = "id"
+        case idStr = "id_str"
+        case name = "name"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        code = try values.decode(String.self, forKey: .code)
+        id = try values.decode(Int.self, forKey: .id)
+        idStr = try values.decode(String.self, forKey: .idStr)
+        name = try values.decode(String.self, forKey: .name)
+    }
+    
 }

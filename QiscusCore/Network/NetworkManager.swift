@@ -62,11 +62,13 @@ extension NetworkManager {
                         return
                     }
                     do {
-                        let jsondata = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
-                        print("json: \(jsondata)")
-                        let apiResponse = try JSONDecoder().decode(UserAPIResponse.self, from: responseData)
-                        completion(String(apiResponse.status), nil)
+                        let jsonString = String(data: responseData, encoding: .utf8)
+                        print("JSON String : ", jsonString!)
+                        let apiResponse = try JSONDecoder().decode(UserApiResponse.self, from: responseData)
+                        print("user \(apiResponse.results)")
+                        completion(String(describing: apiResponse.status), nil)
                     }catch {
+                        print(error)
                         completion(nil, NetworkResponse.unableToDecode.rawValue)
                     }
                 case .failure(let errorMessage):
