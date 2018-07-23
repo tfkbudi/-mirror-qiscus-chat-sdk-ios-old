@@ -165,7 +165,7 @@ extension APIClient : EndPoint {
             if let avatarurl = avatarUrl{
                 param["avatar_url"] = avatarurl
             }
-            return .requestParametersAndHeaders(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil, additionHeaders: header)
+            return .requestParametersAndHeaders(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil, additionHeaders: header)
         case .loginRegisterJWT(let identityToken):
             let param = [
                 "identity_token"                       : identityToken
