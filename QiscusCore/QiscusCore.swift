@@ -11,12 +11,13 @@ import UIKit
 public class QiscusCore: NSObject {
     
     public static let shared : QiscusCore = QiscusCore()
+    public static var appId: String = ""
   
     /// added your app Qiscus APP ID
     ///
     /// - Parameter WithAppID: Qiscus SDK App ID
-    public class func setup(WithAppID : String) {
-        
+    public class func setup(WithAppID appId: String) {
+        self.appId = appId
     }
     
     // MARK : Auth

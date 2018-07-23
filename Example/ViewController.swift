@@ -22,7 +22,7 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     @IBAction func clickLogin(_ sender: Any) {
-        QiscusCore.connect(userID: "", userKey: "") { (user, error) in
+        QiscusCore.connect(userID: "hadeeh", userKey: "1234") { (user, error) in
             //
         }
     }

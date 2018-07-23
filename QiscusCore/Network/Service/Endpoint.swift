@@ -49,6 +49,8 @@ var HEADERS : [String: String] {
     get {
         return [
             "QISCUS_SDK_APP_ID" : "sampleapp-65ghcsaysse",
+            "QISCUS_SDK_PLATFORM": "iOS",
+            "QISCUS_SDK_DEVICE_BRAND": "Apple",
         ]
     }
 }
@@ -163,7 +165,7 @@ extension APIClient : EndPoint {
             if let avatarurl = avatarUrl{
                 param["avatar_url"] = avatarurl
             }
-            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+            return .requestParametersAndHeaders(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil, additionHeaders: header)
         case .loginRegisterJWT(let identityToken):
             let param = [
                 "identity_token"                       : identityToken

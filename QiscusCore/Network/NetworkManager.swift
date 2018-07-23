@@ -71,6 +71,13 @@ extension NetworkManager {
                     }
                 case .failure(let errorMessage):
                     // MARK: Todo print error message
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        print("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    
                     completion(nil,errorMessage)
                 }
             }

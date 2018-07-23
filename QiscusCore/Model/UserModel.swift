@@ -32,7 +32,7 @@ import UIKit
 */
 struct UserAPIResponse {
     let status  : Int
-    let results : [UserModel]
+    let results : UserModel
 }
 
 extension UserAPIResponse : Decodable {
@@ -45,7 +45,7 @@ extension UserAPIResponse : Decodable {
         let container = try decoder.container(keyedBy: UserAPIResponseCodingKey.self)
         
         status  = try container.decode(Int.self, forKey: .status)
-        results  = try container.decode([UserModel].self, forKey: .results)
+        results  = try container.decode(UserModel.self, forKey: .results)
     }
 }
 
