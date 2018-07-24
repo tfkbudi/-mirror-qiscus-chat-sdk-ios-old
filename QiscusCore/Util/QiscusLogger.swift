@@ -14,4 +14,8 @@ class QiscusLogger {
             print("[QiscusCore] \(text)")
         }
     }
+    
+    static func errorPrint(_ text: String) {
+        print("[QiscusCore] Error: \(text)")
+    }
 }

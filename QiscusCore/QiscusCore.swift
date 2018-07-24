@@ -23,6 +23,19 @@ public class QiscusCore: NSObject {
     
     // MARK : Auth
     
+    
+    /// Get Nonce from SDK server. use when login with JWT
+    ///
+    /// - Parameter completion: @escaping with Optional(QNonce) and String Optional(error)
+    public class func getNonce(completion: @escaping (QNonce?, String?) -> Void) {
+        if self.appId.isEmpty {
+            QiscusLogger.errorPrint("please call setup() first")
+            return
+        }
+        
+        NetworkManager().getNonce(completion: completion)
+    }
+    
     /// SDK Connect with userId. The handler to be called once the request has finished.
     ///
     /// - parameter userID              : must be unique per appid, exm: email, phonenumber, udid.
@@ -37,7 +50,7 @@ public class QiscusCore: NSObject {
     /// - userKey                       : user password
     /// - parameter completion          : The code to be executed once the request has finished, also give a user object and error.
     ///
-    public class func connect(userID: String, userKey: String, completion: @escaping (User?, String?) -> Void) {
+    public class func connect(userID: String, userKey: String, completion: @escaping (QUser?, String?) -> Void) {
         NetworkManager().login(email: userID, password: userKey, username: nil, avatarUrl: nil) { (results, error) in
             completion(results, error)
         }

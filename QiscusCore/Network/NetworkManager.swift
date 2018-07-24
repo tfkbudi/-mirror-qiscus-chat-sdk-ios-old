@@ -57,7 +57,7 @@ extension NetworkManager {
     ///   - username: user display name
     ///   - avatarUrl: user avatar url
     ///   - completion: @escaping on 
-    public func login(email: String, password: String ,username : String? ,avatarUrl : String?, completion: @escaping (User?, String?) -> Void) {
+    public func login(email: String, password: String ,username : String? ,avatarUrl : String?, completion: @escaping (QUser?, String?) -> Void) {
         clientRouter.request(.loginRegister(user: email, password: password,username: username,avatarUrl: avatarUrl)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -73,6 +73,41 @@ extension NetworkManager {
                     do {
                         let apiResponse = try JSONDecoder().decode(UserApiResponse.self, from: responseData)
                         completion(apiResponse.results.user, nil)
+                    } catch {
+                        print(error)
+                        completion(nil, NetworkResponse.unableToDecode.rawValue)
+                    }
+                case .failure(let errorMessage):
+                    // MARK: Todo print error message
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        print("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    
+                    completion(nil,errorMessage)
+                }
+            }
+        }
+    }
+    
+    public func getNonce(completion: @escaping (QNonce?, String?)->Void) {
+        clientRouter.request(.nonce) { (data, response, error) in
+            if error != nil {
+                completion(nil, "Please check your network connection.")
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, NetworkResponse.noData.rawValue)
+                        return
+                    }
+                    do {
+                        let apiResponse = try JSONDecoder().decode(NonceApiResponse.self, from: responseData)
+                        completion(apiResponse.results, nil)
                     } catch {
                         print(error)
                         completion(nil, NetworkResponse.unableToDecode.rawValue)

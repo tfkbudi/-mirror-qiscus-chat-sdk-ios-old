@@ -49,7 +49,7 @@ public struct UserApiResponse : Codable {
 }
 
 public struct Results : Codable {
-    let user : User
+    let user : QUser
     
     enum CodingKeys: String, CodingKey {
         
@@ -58,12 +58,12 @@ public struct Results : Codable {
     
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        user = try values.decode(User.self, forKey: .user)
+        user = try values.decode(QUser.self, forKey: .user)
     }
     
 }
 
-public struct User : Codable {
+public struct QUser : Codable {
     let app : App
     let avatarUrl : String
     let email : String
