@@ -62,8 +62,7 @@ extension NetworkManager {
                         return
                     }
                     do {
-                        let jsonString = String(data: responseData, encoding: .utf8)
-                        print("JSON String : ", jsonString!)
+                        print("JSON String : ", responseData.toJsonString())
                         let apiResponse = try JSONDecoder().decode(UserApiResponse.self, from: responseData)
                         print("user \(apiResponse.results)")
                         completion(String(describing: apiResponse.status), nil)
