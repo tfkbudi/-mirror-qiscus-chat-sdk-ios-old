@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         QiscusCore.setup(WithAppID: "sampleapp-65ghcsaysse")
+        QiscusCore.enableDebugPrint = true
         
     }
 
@@ -23,7 +24,7 @@ class ViewController: UIViewController {
     }
     @IBAction func clickLogin(_ sender: Any) {
         QiscusCore.connect(userID: "hadeeh", userKey: "1234") { (user, error) in
-            //
+            print("result:: \(user!)")
         }
     }
     

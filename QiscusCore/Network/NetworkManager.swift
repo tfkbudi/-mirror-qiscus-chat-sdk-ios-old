@@ -48,7 +48,16 @@ public class NetworkManager: NSObject {
 
 // MARK : Client
 extension NetworkManager {
-    public func login(email: String, password: String ,username : String? ,avatarUrl : String?, completion: @escaping (String?, String?) -> Void) {
+    
+    /// login
+    ///
+    /// - Parameters:
+    ///   - email: username or email identifier
+    ///   - password: user password to login to qiscus sdk
+    ///   - username: user display name
+    ///   - avatarUrl: user avatar url
+    ///   - completion: @escaping on 
+    public func login(email: String, password: String ,username : String? ,avatarUrl : String?, completion: @escaping (User?, String?) -> Void) {
         clientRouter.request(.loginRegister(user: email, password: password,username: username,avatarUrl: avatarUrl)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -62,11 +71,9 @@ extension NetworkManager {
                         return
                     }
                     do {
-                        print("JSON String : ", responseData.toJsonString())
                         let apiResponse = try JSONDecoder().decode(UserApiResponse.self, from: responseData)
-                        print("user \(apiResponse.results)")
-                        completion(String(describing: apiResponse.status), nil)
-                    }catch {
+                        completion(apiResponse.results.user, nil)
+                    } catch {
                         print(error)
                         completion(nil, NetworkResponse.unableToDecode.rawValue)
                     }

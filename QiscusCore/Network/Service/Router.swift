@@ -25,6 +25,10 @@ class Router<endpoint: EndPoint>: NetworkRouter {
             let request = try self.buildRequest(from: route)
             //NetworkLogger.log(request: request)
             task = session.dataTask(with: request, completionHandler: { data, response, error in
+                if let responseData = data {
+                    //TODO replace print with configurable debug print
+                    QiscusLogger.debugPrint("response for \(route.baseURL.appendingPathComponent(route.path)) : \(responseData.toJsonString())")
+                }
                 completion(data, response, error)
             })
         }catch {

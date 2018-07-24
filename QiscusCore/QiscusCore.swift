@@ -12,6 +12,7 @@ public class QiscusCore: NSObject {
     
     public static let shared : QiscusCore = QiscusCore()
     public static var appId: String = ""
+    public static var enableDebugPrint: Bool = false
   
     /// added your app Qiscus APP ID
     ///
@@ -36,9 +37,9 @@ public class QiscusCore: NSObject {
     /// - userKey                       : user password
     /// - parameter completion          : The code to be executed once the request has finished, also give a user object and error.
     ///
-    public class func connect(userID: String, userKey: String, completion: @escaping (SDKUser, Error) -> Void) {
+    public class func connect(userID: String, userKey: String, completion: @escaping (User?, String?) -> Void) {
         NetworkManager().login(email: userID, password: userKey, username: nil, avatarUrl: nil) { (results, error) in
-            print("results \(results ?? "no result") \nerror: \(error ?? "undefined error")")
+            completion(results, error)
         }
     }
     

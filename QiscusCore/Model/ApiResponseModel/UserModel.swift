@@ -30,7 +30,7 @@ import UIKit
     }
  }
 */
-struct UserApiResponse : Codable {
+public struct UserApiResponse : Codable {
     let results : Results
     let status : Int
     
@@ -40,7 +40,7 @@ struct UserApiResponse : Codable {
         case status = "status"
     }
     
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         results = try values.decode(Results.self, forKey: .results)
         status = try values.decode(Int.self, forKey: .status)
@@ -48,7 +48,7 @@ struct UserApiResponse : Codable {
     
 }
 
-struct Results : Codable {
+public struct Results : Codable {
     let user : User
     
     enum CodingKeys: String, CodingKey {
@@ -56,14 +56,14 @@ struct Results : Codable {
         case user = "user"
     }
     
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         user = try values.decode(User.self, forKey: .user)
     }
     
 }
 
-struct User : Codable {
+public struct User : Codable {
     let app : App
     let avatarUrl : String
     let email : String
@@ -95,7 +95,7 @@ struct User : Codable {
         case username = "username"
     }
     
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         app = try values.decode(App.self, forKey: .app)
         avatarUrl = try values.decode(String.self, forKey: .avatarUrl)
@@ -115,7 +115,7 @@ struct User : Codable {
 }
 
 
-struct App : Codable {
+public struct App : Codable {
     let code : String
     let id : Int
     let idStr : String
@@ -129,7 +129,7 @@ struct App : Codable {
         case name = "name"
     }
     
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         code = try values.decode(String.self, forKey: .code)
         id = try values.decode(Int.self, forKey: .id)
