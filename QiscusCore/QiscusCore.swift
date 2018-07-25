@@ -13,6 +13,7 @@ public class QiscusCore: NSObject {
     public static let shared : QiscusCore = QiscusCore()
     public static var appId: String = ""
     public static var enableDebugPrint: Bool = false
+    public static var networkManager: NetworkManager = NetworkManager()
   
     /// added your app Qiscus APP ID
     ///
@@ -67,7 +68,7 @@ public class QiscusCore: NSObject {
     /// - Parameters:
     ///   - withParticipants: Qiscus user id.
     ///   - completion: Qiscus Room Object and error if exist. error exm:
-    func newRoom(withParticipants: [String], completion: @escaping (QiscusRoom, Error) -> Void) {
+    public class func newRoom(withParticipants: [String], completion: @escaping (QiscusRoom, Error) -> Void) {
         
     }
     
@@ -76,8 +77,11 @@ public class QiscusCore: NSObject {
     /// - Parameters:
     ///   - withID: existing roomID from server or local db.
     ///   - completionHandler: Response Qiscus Room Object and error if exist.
-    func getRoom(withID: [String], completion: @escaping (QiscusRoom, Error) -> Void) {
+    public class func getRoom(withID: [String], completion: @escaping (QiscusRoom, Error) -> Void) {
     
     }
+    
+    // MARK : Notification
+//    func
 
 }

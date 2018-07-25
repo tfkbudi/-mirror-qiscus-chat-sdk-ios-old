@@ -35,7 +35,7 @@ internal enum APIClient {
 // MARK: TODO Manage This
 var AUTHTOKEN : String {
     get {
-        return ""
+        return NetworkManager.token
     }
 }
 
@@ -47,11 +47,20 @@ var BASEURL : String {
 
 var HEADERS : [String: String] {
     get {
-        return [
+        var headers = [
             "QISCUS_SDK_APP_ID" : "sampleapp-65ghcsaysse",
             "QISCUS_SDK_PLATFORM": "iOS",
             "QISCUS_SDK_DEVICE_BRAND": "Apple",
-        ]
+            ]
+        
+        if NetworkManager.token != "" {
+            headers["QISCUS_SDK_TOKEN"] = NetworkManager.token
+        }
+        if NetworkManager.userEmail != "" {
+            headers["QISCUS_SDK_USER_ID"] = NetworkManager.userEmail
+        }
+        
+        return headers
     }
 }
 /////
@@ -84,9 +93,9 @@ extension APIClient : EndPoint {
         case .unread:
             return "/total_unread_count"
         case .myProfile:
-            return "my_profile"
+            return "/my_profile"
         case .updateMyProfile :
-            return "my_profile"
+            return "/my_profile"
         case .upload:
             return "/upload"
         }
@@ -186,6 +195,7 @@ extension APIClient : EndPoint {
                return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
         case .updateMyProfile(let name,let avatarUrl) :
             let param = [
+                "token"                       : AUTHTOKEN,
                 "name"                        : name,
                 "avatarUrl"                   : avatarUrl,
             ]

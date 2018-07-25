@@ -8,6 +8,6 @@
 
 import UIKit
 
-class QiscusRoom: NSObject {
+public class QiscusRoom: NSObject {
     
 }
