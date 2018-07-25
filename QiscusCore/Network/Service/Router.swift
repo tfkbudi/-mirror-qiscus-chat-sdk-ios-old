@@ -23,7 +23,7 @@ class Router<endpoint: EndPoint>: NetworkRouter {
     func request(_ route: endpoint, completion: @escaping NetworkRouterCompletion) {
         do {
             let request = try self.buildRequest(from: route)
-            //NetworkLogger.log(request: request)
+            QiscusLogger.networkLogger(request: request)
             task = session.dataTask(with: request, completionHandler: { data, response, error in
                 if let responseData = data {
                     //TODO replace print with configurable debug print

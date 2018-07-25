@@ -44,6 +44,7 @@ public class NetworkManager: NSObject {
         default: return .failure(NetworkResponse.failed.rawValue)
         }
     }
+
 }
 
 // MARK : Client

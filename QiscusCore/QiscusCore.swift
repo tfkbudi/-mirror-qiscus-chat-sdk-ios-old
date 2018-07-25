@@ -6,30 +6,32 @@
 //  Copyright © 2018 Qiscus. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 public class QiscusCore: NSObject {
     
     public static let shared : QiscusCore = QiscusCore()
-    public static var appId: String = ""
+    
+    static var appId: String = ""
+    static var customURL : URL? = nil
     public static var enableDebugPrint: Bool = false
   
     /// added your app Qiscus APP ID
     ///
     /// - Parameter WithAppID: Qiscus SDK App ID
-    public class func setup(WithAppID appId: String) {
+    public class func setup(WithAppID appId: String, customURL: URL? = nil) {
         self.appId = appId
+        //self.customURL = customURL
     }
     
-    // MARK : Auth
-    
-    
+    // MARK: Auth
+
     /// Get Nonce from SDK server. use when login with JWT
     ///
     /// - Parameter completion: @escaping with Optional(QNonce) and String Optional(error)
     public class func getNonce(completion: @escaping (QNonce?, String?) -> Void) {
         if self.appId.isEmpty {
-            QiscusLogger.errorPrint("please call setup() first")
+             QiscusLogger.errorPrint("please call setup() first")
             return
         }
         
@@ -60,24 +62,4 @@ public class QiscusCore: NSObject {
         
     }
     
-    // MARK : Room Management
-    
-    /// Get or create room with participant
-    ///
-    /// - Parameters:
-    ///   - withParticipants: Qiscus user id.
-    ///   - completion: Qiscus Room Object and error if exist. error exm:
-    func newRoom(withParticipants: [String], completion: @escaping (QiscusRoom, Error) -> Void) {
-        
-    }
-    
-    /// Get
-    ///
-    /// - Parameters:
-    ///   - withID: existing roomID from server or local db.
-    ///   - completionHandler: Response Qiscus Room Object and error if exist.
-    func getRoom(withID: [String], completion: @escaping (QiscusRoom, Error) -> Void) {
-    
-    }
-
 }
