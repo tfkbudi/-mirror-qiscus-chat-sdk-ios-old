@@ -15,6 +15,7 @@ public class QiscusCore: NSObject {
     static var appId: String = ""
     static var customURL : URL? = nil
     public static var enableDebugPrint: Bool = false
+    public static var networkManager: NetworkManager = NetworkManager()
   
     /// added your app Qiscus APP ID
     ///
@@ -61,5 +62,4 @@ public class QiscusCore: NSObject {
     public class func disconnect(completionHandler: @escaping () -> Void) {
         
     }
-    
 }

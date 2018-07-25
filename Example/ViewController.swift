@@ -23,13 +23,19 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     @IBAction func clickLogin(_ sender: Any) {
-//        QiscusCore.connect(userID: "hadeeh", userKey: "1234") { (user, error) in
-//            print("result:: \(user!)")
-//        }
-        
-        QiscusCore.getNonce { (qNonce, error) in
-            print("result:: \(qNonce)")
+        QiscusCore.connect(userID: "amsibsan", userKey: "12345678") { (user, error) in
+            print("result:: \(user!)")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                QiscusCore.networkManager.updateProfile(displayName: "amsibsan2018", avatarUrl: "") { user, error in
+                    print("user result:: \(user!)")
+                }
+            })
+            
         }
+        
+//        QiscusCore.getNonce { (qNonce, error) in
+//            print("result:: \(qNonce)")
+//        }
     }
     
 
