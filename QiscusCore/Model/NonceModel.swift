@@ -8,24 +8,6 @@
 
 import Foundation
 
-public struct NonceApiResponse : Codable {
-    let results : QNonce
-    let status : Int
-    
-    enum CodingKeys: String, CodingKey {
-        
-        case results = "results"
-        case status = "status"
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        results = try values.decode(QNonce.self, forKey: .results)
-        status = try values.decode(Int.self, forKey: .status)
-    }
-    
-}
-
 public struct QNonce : Codable {
     let expiredAt : Int
     let nonce : String

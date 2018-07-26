@@ -63,3 +63,9 @@ public class QiscusCore: NSObject {
         
     }
 }
+
+public enum RoomType: String {
+    case Single = "single"
+    case Group = "group"
+    case PublicChannel = "public_channel"
+}

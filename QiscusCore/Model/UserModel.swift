@@ -8,47 +8,7 @@
 
 import UIKit
 
-/**
- {
- "status": 200,
- "results": {
-         "user": {
-             "id": 1,
-             "email": "email@qiscus.com",
-             "username": "Johnny Cage",
-             "avatar": {
-                 "avatar": {
-                    "url": "http://imagebucket.com/image.jpg"
-                 }
-             },
-             "avatar_url": "https://myimagebucket.com/image.jpg",
-             "token": "abcde1234defgh",
-             "rtKey": "RT_KEY_HERE",
-             "pn_ios_configured": true,
-             "pn_android_configured": true
-         }
-    }
- }
-*/
-public struct UserApiResponse : Codable {
-    let results : Results
-    let status : Int
-    
-    enum CodingKeys: String, CodingKey {
-        
-        case results = "results"
-        case status = "status"
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        results = try values.decode(Results.self, forKey: .results)
-        status = try values.decode(Int.self, forKey: .status)
-    }
-    
-}
-
-public struct Results : Codable {
+public struct UserResults : Codable {
     let user : QUser
     
     enum CodingKeys: String, CodingKey {

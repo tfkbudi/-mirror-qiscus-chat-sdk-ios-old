@@ -21,14 +21,14 @@ internal enum APIClient {
     case sync(lastReceivedCommentId: Int, order: String, limit: Int)
     case syncEvent(startEventId : Int)
     case search(keyword: String, roomId: Int?, lastCommentId: Int?)
-    case registerDeviceToken(token: String)
-    case removeDeviceToken(token: String)
-    case loginRegister(user: String, password: String , username: String?, avatarUrl: String?)
-    case loginRegisterJWT(identityToken: String)
-    case nonce
+    case registerDeviceToken(token: String) //
+    case removeDeviceToken(token: String) //
+    case loginRegister(user: String, password: String , username: String?, avatarUrl: String?) //
+    case loginRegisterJWT(identityToken: String) //
+    case nonce //
     case unread
-    case myProfile
-    case updateMyProfile(name: String, avatarUrl: String)
+    case myProfile //
+    case updateMyProfile(name: String?, avatarUrl: String?) //
     case upload
  }
 
@@ -94,7 +94,7 @@ extension APIClient : EndPoint {
             return "/total_unread_count"
         case .myProfile:
             return "/my_profile"
-        case .updateMyProfile :
+        case .updateMyProfile( _, _) :
             return "/my_profile"
         case .upload:
             return "/upload"
@@ -192,14 +192,21 @@ extension APIClient : EndPoint {
             let param = [
                 "token"                       : AUTHTOKEN
             ]
-               return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+               return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: param)
         case .updateMyProfile(let name,let avatarUrl) :
-            let param = [
+            var param = [
                 "token"                       : AUTHTOKEN,
-                "name"                        : name,
-                "avatarUrl"                   : avatarUrl,
             ]
-            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+            
+            if let newName = name {
+                param["name"] = newName
+            }
+            
+            if let newAvatarUrl = avatarUrl {
+                param["avatar_url"] = newAvatarUrl
+            }
+            
+            return .requestParameters(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil)
         default:
             return .request
         }
@@ -371,8 +378,8 @@ extension APIMessage : EndPoint {
 
 // MARK: Room API
 internal enum APIRoom {
-    case roomList(showParticipants: Bool,limit: Int, page: Int?)
-    case roomInfo(roomId: [String]?, roomUniqueId: [String]?, showParticipants: Bool)
+    case roomList(showParticipants: Bool, limit: Int, page: Int?, roomType: RoomType? , showRemoved: Bool, showEmpty: Bool)
+    case roomInfo(roomId: [String]?, roomUniqueId: [String]?, showParticipants: Bool, showRemoved: Bool)
     case createNewRoom(name: String,participants: [String],avatarUrl: String?)
     case updateRoom(id: Int, roomName: String?, avatarUrl: String?)
     case roomWithParticipant(email: String, avatarUrl: String?)
@@ -390,9 +397,9 @@ extension APIRoom : EndPoint {
     
     var path: String {
         switch self {
-        case .roomList( _, _, _):
+        case .roomList( _, _, _, _, _, _):
             return "/user_rooms"
-        case .roomInfo( _, _, _):
+        case .roomInfo( _, _, _, _):
             return "/rooms_info"
         case .createNewRoom( _, _, _):
             return "/create_room"
@@ -421,36 +428,44 @@ extension APIRoom : EndPoint {
     }
     
     var header: HTTPHeaders? {
-        return nil
+        return HEADERS
     }
     
     var task: HTTPTask {
         switch self {
-        case .roomList(let showParticipants,let limit,let page):
+        case .roomList(let showParticipants,let limit, let page, let roomType, let showRemoved, let showEmpty):
             var params = [
                 "token"                      : AUTHTOKEN,
                 "show_participants"          : showParticipants,
-                "limit"                      : limit
-            ]as [String : Any]
+                "limit"                      : limit,
+                "show_removed"               : showRemoved,
+                "show_empty"                 : showEmpty
+                
+            ] as [String : Any]
             
             if let pages = page {
                 params["page"] = pages
             }
-            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
-        case .roomInfo(let roomId, let roomUniqueId ,let showParticipants) :
+            
+            if let roomTypeParams = roomType {
+                params["room_type"] = roomTypeParams
+            }
+            return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: params)
+        case .roomInfo(let roomId, let roomUniqueId ,let showParticipants, let showRemoved):
             var params = [
                 "token"                      : AUTHTOKEN,
                 "show_participants"          : showParticipants,
+                "show_removed"               : showRemoved
                 ]as [String : Any]
             
-            if let roomid = roomId {
-                params["room_id"] = roomid
+            if let id = roomId {
+                params["room_id"] = id
             }
             
-            if let roomuniqueid = roomUniqueId{
-                params["room_unique_id"] = roomuniqueid
+            if let uniqueId = roomUniqueId{
+                params["room_unique_id"] = uniqueId
             }
-            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
+            return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: params)
         case .createNewRoom(let name,let participants,let avatarUrl):
             var params = [
                 "token"                      : AUTHTOKEN,
@@ -461,7 +476,7 @@ extension APIRoom : EndPoint {
             if let avatarurl = avatarUrl{
                 params["avatar_url"] = avatarurl
             }
-            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
+            return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
         case .updateRoom(let id,let roomName,let avatarUrl) :
             var params = [
                 "token"                      : AUTHTOKEN,

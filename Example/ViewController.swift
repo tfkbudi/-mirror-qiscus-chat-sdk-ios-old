@@ -25,17 +25,10 @@ class ViewController: UIViewController {
     @IBAction func clickLogin(_ sender: Any) {
         QiscusCore.connect(userID: "amsibsan", userKey: "12345678") { (user, error) in
             print("result:: \(user!)")
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-                QiscusCore.networkManager.updateProfile(displayName: "amsibsan2018", avatarUrl: "") { user, error in
-                    print("user result:: \(user!)")
-                }
-            })
-            
+//            QiscusCore.networkManager.getRoomList(page: 1, completion: { (room, meta, error) in
+//                print("result room:: \(room) \nmeta:: \(meta)")
+//            })
         }
-        
-//        QiscusCore.getNonce { (qNonce, error) in
-//            print("result:: \(qNonce)")
-//        }
     }
     
 
