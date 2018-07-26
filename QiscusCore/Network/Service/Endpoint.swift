@@ -381,12 +381,12 @@ internal enum APIRoom {
     case roomList(showParticipants: Bool, limit: Int, page: Int?, roomType: RoomType? , showRemoved: Bool, showEmpty: Bool)
     case roomInfo(roomId: [String]?, roomUniqueId: [String]?, showParticipants: Bool, showRemoved: Bool)
     case createNewRoom(name: String,participants: [String],avatarUrl: String?)
-    case updateRoom(id: Int, roomName: String?, avatarUrl: String?)
+    case updateRoom(roomId: String, roomName: String?, avatarUrl: String?, options: String?)
     case roomWithParticipant(email: String, avatarUrl: String?)
     case roomWithID(uniqueId: String,name: String?, avatarUrl: String?)
     case addParticipant(roomId: String, emails: [String])
     case removeParticipant(roomId: String, emails: [String])
-    case getRoomById(roomId: Int)
+    case getRoomById(roomId: String)
 }
 
 extension APIRoom : EndPoint {
@@ -403,7 +403,7 @@ extension APIRoom : EndPoint {
             return "/rooms_info"
         case .createNewRoom( _, _, _):
             return "/create_room"
-        case .updateRoom( _, _, _):
+        case .updateRoom( _, _, _, _):
             return "/update_room"
         case .roomWithParticipant( _, _):
             return "/get_or_create_room_with_target"
@@ -477,7 +477,7 @@ extension APIRoom : EndPoint {
                 params["avatar_url"] = avatarurl
             }
             return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
-        case .updateRoom(let id,let roomName,let avatarUrl) :
+        case .updateRoom(let id,let roomName,let avatarUrl, let options) :
             var params = [
                 "token"                      : AUTHTOKEN,
                 "id"                         : id,
@@ -490,6 +490,11 @@ extension APIRoom : EndPoint {
             if let avatarurl = avatarUrl {
                 params["avatar_url"] = avatarurl
             }
+            
+            if let optionsParam = options {
+                params["options"] = optionsParam
+            }
+            
             return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
         case .roomWithParticipant(let email, let avatarUrl) :
             var params = [

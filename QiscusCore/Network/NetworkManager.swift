@@ -455,7 +455,7 @@ extension NetworkManager {
                         return
                     }
                     do {
-                        let apiResponse = try JSONDecoder().decode(ApiResponse<RoomCreateResults>.self, from: responseData)
+                        let apiResponse = try JSONDecoder().decode(ApiResponse<RoomCreateGetUpdateResult>.self, from: responseData)
                         completion(apiResponse.results.room, nil)
                     } catch {
                         print(error)
@@ -470,6 +470,50 @@ extension NetworkManager {
 
                     }
 
+                    completion(nil, errorMessage)
+                }
+            }
+        }
+    }
+    
+    
+    /// update existing room
+    ///
+    /// - Parameters:
+    ///   - roomId: room id
+    ///   - roomName: new room name
+    ///   - avatarUrl: new room avatar
+    ///   - options: new room options
+    ///   - completion: @escaping when success update room, return created Optional(QRoom), Optional(String error message)
+    func updateRoom(roomId: String, roomName: String?, avatarUrl: String?, options: String?, completion: @escaping (QRoom?, String?) -> Void) {
+        roomRouter.request(.updateRoom(roomId: roomId, roomName: roomName, avatarUrl: avatarUrl, options: options)) { (data, response, error) in
+            if error != nil {
+                completion(nil, "Please check your network connection.")
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, NetworkResponse.noData.rawValue)
+                        return
+                    }
+                    do {
+                        let apiResponse = try JSONDecoder().decode(ApiResponse<RoomCreateGetUpdateResult>.self, from: responseData)
+                        completion(apiResponse.results.room, nil)
+                    } catch {
+                        print(error)
+                        completion(nil, NetworkResponse.unableToDecode.rawValue)
+                    }
+                case .failure(let errorMessage):
+                    // MARK: Todo print error message
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        print("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    
                     completion(nil, errorMessage)
                 }
             }

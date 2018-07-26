@@ -7,17 +7,20 @@
 //
 import Foundation
 
-public struct RoomCreateResults : Codable {
+public struct RoomCreateGetUpdateResult : Codable {
+    let changed: Bool?
     let room : QRoom
     let comments : [QComment]
     
     enum CodingKeys: String, CodingKey {
+        case changed = "changed"
         case room = "room"
         case comments = "comments"
     }
     
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
+        changed = try values.decodeIfPresent(Bool.self, forKey: .changed)
         room = try values.decode(QRoom.self, forKey: .room)
         comments = try values.decode([QComment].self, forKey: .comments)
     }
