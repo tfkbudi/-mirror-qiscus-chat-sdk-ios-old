@@ -433,25 +433,33 @@ extension NetworkManager {
         }
     }
     
-    func createRoom(name: String, participants: [String], avatarUrl: String? = nil, completion: @escaping (QRoom?, [QComment]?, String?) -> Void) {
+    
+    /// create group room
+    ///
+    /// - Parameters:
+    ///   - name: room name
+    ///   - participants: array of participant's sdk email
+    ///   - avatarUrl: room avatar url
+    ///   - completion: @escaping when success create room, return created Optional(QRoom), Optional(String error message)
+    func createRoom(name: String, participants: [String], avatarUrl: String? = nil, completion: @escaping (QRoom?, String?) -> Void) {
         roomRouter.request(.createNewRoom(name: name, participants: participants, avatarUrl: avatarUrl)) { (data, response, error) in
             if error != nil {
-                completion(nil, nil, "Please check your network connection.")
+                completion(nil, "Please check your network connection.")
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(nil, nil, NetworkResponse.noData.rawValue)
+                        completion(nil, NetworkResponse.noData.rawValue)
                         return
                     }
                     do {
                         let apiResponse = try JSONDecoder().decode(ApiResponse<RoomCreateResults>.self, from: responseData)
-                        completion(apiResponse.results.room, apiResponse.results.comments,  nil)
+                        completion(apiResponse.results.room, nil)
                     } catch {
                         print(error)
-                        completion(nil, nil, NetworkResponse.unableToDecode.rawValue)
+                        completion(nil, NetworkResponse.unableToDecode.rawValue)
                     }
                 case .failure(let errorMessage):
                     // MARK: Todo print error message
@@ -462,7 +470,7 @@ extension NetworkManager {
 
                     }
 
-                    completion(nil, nil, errorMessage)
+                    completion(nil, errorMessage)
                 }
             }
         }
