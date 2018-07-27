@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
 s.name         = "QiscusCore"
-s.version      = "2.8.0"
+s.version      = "0.1.0"
 s.summary      = "Qiscus Core SDK for iOS"
 
 s.description  = <<-DESC
@@ -24,7 +24,6 @@ s.resource_bundles = {
 s.platform      = :ios, "9.0"
 
 s.dependency 'RealmSwift', '~> 3.0.2'
-s.dependency 'SwiftyJSON', '~> 3.1.4'
 s.dependency 'CocoaMQTT', '1.1.1'
 
 end

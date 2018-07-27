@@ -14,8 +14,8 @@ public class QiscusCore: NSObject {
     
     static var appId: String = ""
     static var customURL : URL? = nil
+    static var network : NetworkManager = NetworkManager()
     public static var enableDebugPrint: Bool = false
-    public static var networkManager: NetworkManager = NetworkManager()
   
     /// added your app Qiscus APP ID
     ///
@@ -35,17 +35,7 @@ public class QiscusCore: NSObject {
              QiscusLogger.errorPrint("please call setup() first")
             return
         }
-        
-        NetworkManager().getNonce(completion: completion)
-    }
-    
-    /// SDK Connect with userId. The handler to be called once the request has finished.
-    ///
-    /// - parameter userID              : must be unique per appid, exm: email, phonenumber, udid.
-    /// - parameter completion          : The code to be executed once the request has finished, also give a user object and error.
-    ///
-    public class func connect(userID: String, completion: @escaping (SDKUser, Error) -> Void) {
-        
+        network.getNonce(completion: completion)
     }
     
     /// SDK Connect with userId and passkey. The handler to be called once the request has finished.
@@ -54,12 +44,24 @@ public class QiscusCore: NSObject {
     /// - parameter completion          : The code to be executed once the request has finished, also give a user object and error.
     ///
     public class func connect(userID: String, userKey: String, completion: @escaping (QUser?, String?) -> Void) {
-        NetworkManager().login(email: userID, password: userKey, username: nil, avatarUrl: nil) { (results, error) in
+        network.login(email: userID, password: userKey, username: nil, avatarUrl: nil) { (results, error) in
             completion(results, error)
         }
     }
     
-    public class func disconnect(completionHandler: @escaping () -> Void) {
+    /// connect with identityToken, after use nonce and JWT
+    ///
+    /// - Parameters:
+    ///   - token: identity token from your server, when you implement Nonce or JWT
+    ///   - completion: The code to be executed once the request has finished, also give a user object and error.
+    public class func connect(withIdentityToken token: String, completion: @escaping (QUser?, String?) -> Void) {
+        network.login(identityToken: token, completion: completion)
+    }
+    
+    /// Disconnect or logout
+    ///
+    /// - Parameter completionHandler: The code to be executed once the request has finished, also give a user object and error.
+    public class func disconnect(completion: @escaping (Error?) -> Void) {
         
     }
 }

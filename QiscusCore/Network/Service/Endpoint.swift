@@ -380,10 +380,10 @@ extension APIMessage : EndPoint {
 internal enum APIRoom {
     case roomList(showParticipants: Bool, limit: Int, page: Int?, roomType: RoomType? , showRemoved: Bool, showEmpty: Bool)
     case roomInfo(roomId: [String]?, roomUniqueId: [String]?, showParticipants: Bool, showRemoved: Bool)
-    case createNewRoom(name: String,participants: [String],avatarUrl: String?)
-    case updateRoom(roomId: String, roomName: String?, avatarUrl: String?, options: String?)
-    case roomWithParticipant(email: String, avatarUrl: String?)
-    case roomWithID(uniqueId: String,name: String?, avatarUrl: String?)
+    case createNewRoom(name: String,participants: [String],avatarUrl: URL?)
+    case updateRoom(roomId: String, roomName: String?, avatarUrl: URL?, options: String?)
+    case roomWithParticipant(email: String, avatarUrl: URL?)
+    case roomWithID(uniqueId: String,name: String?, avatarUrl: URL?)
     case addParticipant(roomId: String, emails: [String])
     case removeParticipant(roomId: String, emails: [String])
     case getRoomById(roomId: String)
@@ -502,7 +502,7 @@ extension APIRoom : EndPoint {
                 "email"                      : email
                 ]
             
-            if let avatarurl = avatarUrl {
+            if let avatarurl = avatarUrl?.absoluteString {
                 params["avatar_url"] = avatarurl
             }
             return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
@@ -516,7 +516,7 @@ extension APIRoom : EndPoint {
                 params["name"] = nm
             }
             
-            if let avatarurl = avatarUrl {
+            if let avatarurl = avatarUrl?.absoluteString {
                 params["avatar_url"] = avatarurl
             }
             

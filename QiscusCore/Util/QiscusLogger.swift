@@ -20,8 +20,12 @@ class QiscusLogger {
     }
     
     static func networkLogger(request: URLRequest) {
-        QiscusLogger.debugPrint("\n - - - - - - - - - - OUTGOING - - - - - - - - - - \n")
-        defer { QiscusLogger.debugPrint("\n - - - - - - - - - -  END - - - - - - - - - - \n") }
+        if !QiscusCore.enableDebugPrint {
+            return
+        }
+        
+        print("\n ====================> REQUEST <============ \n")
+        defer { print("\n ====================> END <============ \n") }
         
         let urlAsString = request.url?.absoluteString ?? ""
         let urlComponents = NSURLComponents(string: urlAsString)
@@ -43,6 +47,23 @@ class QiscusLogger {
             logOutput += "\n \(NSString(data: body, encoding: String.Encoding.utf8.rawValue) ?? "")"
         }
         
-        QiscusLogger.debugPrint(logOutput)
+        print(logOutput)
+    }
+    
+    static func networkLogger(request: URLRequest, response: Data?) {
+        if !QiscusCore.enableDebugPrint {
+            return
+        }
+        
+        print("\n ====================> RESPONSE <============ \n")
+        defer { print("\n ====================> END <============ \n") }
+        
+        let urlAsString = request.url?.absoluteString ?? ""
+        
+        let logOutput = """
+        URL: \(urlAsString) \n
+        Response: \(response?.toJsonString())
+        """
+        print(logOutput)
     }
 }

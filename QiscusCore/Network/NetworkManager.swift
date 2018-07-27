@@ -441,7 +441,7 @@ extension NetworkManager {
     ///   - participants: array of participant's sdk email
     ///   - avatarUrl: room avatar url
     ///   - completion: @escaping when success create room, return created Optional(QRoom), Optional(String error message)
-    func createRoom(name: String, participants: [String], avatarUrl: String? = nil, completion: @escaping (QRoom?, String?) -> Void) {
+    func createRoom(name: String, participants: [String], avatarUrl: URL? = nil, completion: @escaping (QRoom?, String?) -> Void) {
         roomRouter.request(.createNewRoom(name: name, participants: participants, avatarUrl: avatarUrl)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -485,7 +485,7 @@ extension NetworkManager {
     ///   - avatarUrl: new room avatar
     ///   - options: new room options
     ///   - completion: @escaping when success update room, return created Optional(QRoom), Optional(String error message)
-    func updateRoom(roomId: String, roomName: String?, avatarUrl: String?, options: String?, completion: @escaping (QRoom?, String?) -> Void) {
+    func updateRoom(roomId: String, roomName: String?, avatarUrl: URL?, options: String?, completion: @escaping (QRoom?, String?) -> Void) {
         roomRouter.request(.updateRoom(roomId: roomId, roomName: roomName, avatarUrl: avatarUrl, options: options)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")

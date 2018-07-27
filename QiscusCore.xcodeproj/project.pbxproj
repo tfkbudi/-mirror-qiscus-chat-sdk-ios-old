@@ -36,12 +36,20 @@
 		3D5593B320FF1EE300AE35E5 /* ParameterEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5593B220FF1EE200AE35E5 /* ParameterEncoder.swift */; };
 		3D5593B720FF1FDA00AE35E5 /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5593B620FF1FDA00AE35E5 /* ParameterEncoding.swift */; };
 		3D5593BA2100609400AE35E5 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5593B92100609400AE35E5 /* UserModel.swift */; };
+		3DE57529210AD44900655DDE /* QiscusCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D55936420FC89CD00AE35E5 /* QiscusCore.framework */; };
 		3DF5122A210826F200868266 /* QiscusComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF51229210826F200868266 /* QiscusComment.swift */; };
 		F116692197E20D674B69897F /* Pods_QiscusCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 560FF1F83A73EA20444892C4 /* Pods_QiscusCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		3D55936F20FC89CE00AE35E5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3D55935B20FC89CD00AE35E5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3D55936320FC89CD00AE35E5;
+			remoteInfo = QiscusCore;
+		};
+		3DE57527210AD43D00655DDE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3D55935B20FC89CD00AE35E5 /* Project object */;
 			proxyType = 1;
@@ -117,6 +125,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DE57529210AD44900655DDE /* QiscusCore.framework in Frameworks */,
 				1A9AE35F987E498A4394B208 /* Pods_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -353,6 +362,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				3DE57528210AD43D00655DDE /* PBXTargetDependency */,
 			);
 			name = Example;
 			productName = Example;
@@ -463,7 +473,6 @@
 				"${BUILT_PRODUCTS_DIR}/QiscusCore/QiscusCore.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyTimer/SwiftyTimer.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -473,7 +482,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/QiscusCore.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyTimer.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -630,6 +638,11 @@
 			isa = PBXTargetDependency;
 			target = 3D55936320FC89CD00AE35E5 /* QiscusCore */;
 			targetProxy = 3D55936F20FC89CE00AE35E5 /* PBXContainerItemProxy */;
+		};
+		3DE57528210AD43D00655DDE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3D55936320FC89CD00AE35E5 /* QiscusCore */;
+			targetProxy = 3DE57527210AD43D00655DDE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
