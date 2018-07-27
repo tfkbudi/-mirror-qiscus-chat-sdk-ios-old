@@ -9,8 +9,8 @@
 import Foundation
 
 public struct QNonce : Codable {
-    let expiredAt : Int
-    let nonce : String
+    public let expiredAt : Int
+    public let nonce : String
     
     enum CodingKeys: String, CodingKey {
         

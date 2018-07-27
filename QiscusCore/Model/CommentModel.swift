@@ -17,22 +17,22 @@ public struct Extras: Codable {
 }
 
 public struct QComment : Codable {
-    let commentBeforeId : Int
-    let disableLinkPreview : Bool
-    let email : String
-    let id : Int
-    let message: String
-    let payload : Payload?
-    let extras : Extras?
-    let roomId : Int
-    let timestamp : String
-    let topicId : Int
-    let type : String
-    let uniqueTempId : String
-    let unixTimestamp : Int
-    let userAvatarUrl : String
-    let userId : Int
-    let username : String
+    public let commentBeforeId : Int
+    public let disableLinkPreview : Bool
+    public let email : String
+    public let id : Int
+    public let message: String
+    public let payload : Payload?
+    public let extras : Extras?
+    public let roomId : Int
+    public let timestamp : String
+    public let topicId : Int
+    public let type : String
+    public let uniqueTempId : String
+    public let unixTimestamp : Int
+    public let userAvatarUrl : String
+    public let userId : Int
+    public let username : String
     
     enum CodingKeys: String, CodingKey {
         
