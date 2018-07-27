@@ -398,7 +398,7 @@ extension NetworkManager {
     ///   - showRemoved: Bool (true = include room that has been removed, false = exclude room that has been removed)
     ///   - showEmpty: Bool (true = it will show all rooms that have been created event there are no messages, default is false where only room that have at least one message will be shown)
     ///   - completion: @escaping when success get room list returning Optional([QRoom]), Optional(Meta) contain page, total_room per page, Optional(String error message)
-    func getRoomInfo(roomIds: [String]? = [], roomUniqueIds: [String]? = [], showParticipant: Bool = false, showRemoved: Bool = false, completion: @escaping ([QRoom]?, String?) -> Void) {
+    func getRoomInfo(roomIds: [Int]? = [], roomUniqueIds: [String]? = [], showParticipant: Bool = false, showRemoved: Bool = false, completion: @escaping ([QRoom]?, String?) -> Void) {
         roomRouter.request(.roomInfo(roomId: roomIds, roomUniqueId: roomUniqueIds, showParticipants: showParticipant, showRemoved: showRemoved)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -485,7 +485,7 @@ extension NetworkManager {
     ///   - avatarUrl: new room avatar
     ///   - options: new room options
     ///   - completion: @escaping when success update room, return created Optional(QRoom), Optional(String error message)
-    func updateRoom(roomId: String, roomName: String?, avatarUrl: URL?, options: String?, completion: @escaping (QRoom?, String?) -> Void) {
+    func updateRoom(roomId: Int, roomName: String?, avatarUrl: URL?, options: String?, completion: @escaping (QRoom?, String?) -> Void) {
         roomRouter.request(.updateRoom(roomId: roomId, roomName: roomName, avatarUrl: avatarUrl, options: options)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -529,7 +529,7 @@ extension NetworkManager {
     ///   - distincId: distinc id
     ///   - options: room options (string json)
     ///   - completion: @escaping when success update room, return created Optional(QRoom), Optional([QComment]), Optional(String error message)
-    func getOrCreateRoomWithTarget(targetSdkEmail: String, avatarUrl: String? = nil, distincId: String? = nil, options: String? = nil, completion: @escaping (QRoom?, [QComment]?, String?) -> Void) {
+    func getOrCreateRoomWithTarget(targetSdkEmail: String, avatarUrl: URL? = nil, distincId: String? = nil, options: String? = nil, completion: @escaping (QRoom?, [QComment]?, String?) -> Void) {
         roomRouter.request(.roomWithTarget(email: [targetSdkEmail], avatarUrl: avatarUrl, distincId: distincId, options: options)) { (data, response, error) in
             if error != nil {
                 completion(nil, nil, "Please check your network connection.")
@@ -573,7 +573,7 @@ extension NetworkManager {
     ///   - avatarUrl: channel avatar
     ///   - options: channel options
     ///   - completion: @escaping when success get or create channel, return Optional(QRoom), Optional([QComment]), Optional(String error)
-    func getOrCreateChannel(uniqueId: String, name: String? = nil, avatarUrl: String? = nil, options: String? = nil, completion: @escaping (QRoom?, [QComment]?, String?) -> Void) {
+    func getOrCreateChannel(uniqueId: String, name: String? = nil, avatarUrl: URL? = nil, options: String? = nil, completion: @escaping (QRoom?, [QComment]?, String?) -> Void) {
         roomRouter.request(.channelWithUniqueId(uniqueId: uniqueId, name: name, avatarUrl: avatarUrl, options: options)) { (data, response, error) in
             if error != nil {
                 completion(nil, nil, "Please check your network connection.")

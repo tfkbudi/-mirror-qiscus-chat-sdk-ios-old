@@ -17,7 +17,7 @@ extension QiscusCore {
     ///   - completion: Qiscus Room Object and error if exist.
     public func getRoom(withUsers users: [String], completion: @escaping (String, Error) -> Void) {
         // call api get_or_create_room_with_target
-        QiscusCore.network.createRoom(name: <#T##String#>, participants: <#T##[String]#>, avatarUrl: <#T##URL?#>, completion: <#T##(QRoom?, String?) -> Void#>)
+//        QiscusCore.network.createRoom(name: <#T##String#>, participants: <#T##[String]#>, avatarUrl: <#T##URL?#>, completion: <#T##(QRoom?, String?) -> Void#>)
     }
     
     /// Get room with room id
