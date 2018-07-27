@@ -57,8 +57,8 @@ public struct AddParticipantsResult : Codable {
 }
 
 public struct Meta : Codable {
-    let currentPage : Int?
-    let totalRoom : Int?
+    public let currentPage : Int?
+    public let totalRoom : Int?
     
     enum CodingKeys: String, CodingKey {
         
@@ -75,15 +75,15 @@ public struct Meta : Codable {
 }
 
 public struct QRoom : Codable {
-    let id : Int
-    let roomName : String
-    let uniqueId : String
-    let avatarUrl : String
-    let chatType : String
-    let options : String?
-    let lastComment : QComment?
-    let participants : [QParticipant]?
-    let unreadCount : Int
+    public let id : Int
+    public let roomName : String
+    public let uniqueId : String
+    public let avatarUrl : String
+    public let chatType : String
+    public let options : String?
+    public let lastComment : QComment?
+    public let participants : [QParticipant]?
+    public let unreadCount : Int
     
     enum CodingKeys: String, CodingKey {
         
@@ -112,13 +112,13 @@ public struct QRoom : Codable {
     }
 }
 
-struct QParticipant : Codable {
-    let avatarUrl : String?
-    let email : String?
-    let id : Int?
-    let lastCommentReadId : Int?
-    let lastCommentReceivedId : Int?
-    let username : String?
+public struct QParticipant : Codable {
+    public let avatarUrl : String
+    public let email : String
+    public let id : Int
+    public let lastCommentReadId : Int
+    public let lastCommentReceivedId : Int
+    public let username : String
     
     enum CodingKeys: String, CodingKey {
         
@@ -130,14 +130,14 @@ struct QParticipant : Codable {
         case username = "username"
     }
     
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        avatarUrl = try values.decodeIfPresent(String.self, forKey: .avatarUrl)
-        email = try values.decodeIfPresent(String.self, forKey: .email)
-        id = try values.decodeIfPresent(Int.self, forKey: .id)
-        lastCommentReadId = try values.decodeIfPresent(Int.self, forKey: .lastCommentReadId)
-        lastCommentReceivedId = try values.decodeIfPresent(Int.self, forKey: .lastCommentReceivedId)
-        username = try values.decodeIfPresent(String.self, forKey: .username)
+        avatarUrl = try values.decode(String.self, forKey: .avatarUrl)
+        email = try values.decode(String.self, forKey: .email)
+        id = try values.decode(Int.self, forKey: .id)
+        lastCommentReadId = try values.decode(Int.self, forKey: .lastCommentReadId)
+        lastCommentReceivedId = try values.decode(Int.self, forKey: .lastCommentReceivedId)
+        username = try values.decode(String.self, forKey: .username)
     }
     
 }

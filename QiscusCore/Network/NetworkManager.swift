@@ -354,7 +354,7 @@ extension NetworkManager {
     ///   - showRemoved: Bool (true = include room that has been removed, false = exclude room that has been removed)
     ///   - showEmpty: Bool (true = it will show all rooms that have been created event there are no messages, default is false where only room that have at least one message will be shown)
     ///   - completion: @escaping when success get room list returning Optional([QRoom]), Optional(Meta) contain page, total_room per page, Optional(String error message)
-    func getRoomList(showParticipant: Bool = false, limit: Int = 20, page: Int, roomType: RoomType? = nil, showRemoved: Bool = false, showEmpty: Bool = false, completion: @escaping([QRoom]?, Meta?, String?) -> Void) {
+    public func getRoomList(showParticipant: Bool = false, limit: Int = 20, page: Int, roomType: RoomType? = nil, showRemoved: Bool = false, showEmpty: Bool = true, completion: @escaping([QRoom]?, Meta?, String?) -> Void) {
         roomRouter.request(.roomList(showParticipants: showParticipant, limit: limit, page: page, roomType: roomType, showRemoved: showRemoved, showEmpty: showEmpty)) { (data, response, error) in
             if error != nil {
                 completion(nil, nil, "Please check your network connection.")
@@ -614,7 +614,7 @@ extension NetworkManager {
     /// - Parameters:
     ///   - roomId: room id
     ///   - completion: @escaping when success get room, return Optional(QRoom), Optional([QComment]), Optional(String error message)
-    func getRoomById(roomId: String, completion: @escaping (QRoom?, [QComment]?, String?) -> Void) {
+    func getRoomById(roomId: Int, completion: @escaping (QRoom?, [QComment]?, String?) -> Void) {
         roomRouter.request(.getRoomById(roomId: roomId)) { (data, response, error) in
             if error != nil {
                 completion(nil, nil, "Please check your network connection.")
@@ -656,7 +656,7 @@ extension NetworkManager {
     ///   - roomId: chat room id
     ///   - userSdkEmail: array of user's sdk email
     ///   - completion: @escaping when success add participant to room, return added participants Optional([QParticipant]), Optional(String error message)
-    func addParticipants(roomId: String, userSdkEmail: [String], completion: @escaping ([QParticipant]?, String?) -> Void) {
+    public func addParticipants(roomId: String, userSdkEmail: [String], completion: @escaping ([QParticipant]?, String?) -> Void) {
         roomRouter.request(.addParticipant(roomId: roomId, emails: userSdkEmail)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -692,7 +692,7 @@ extension NetworkManager {
     }
     
     
-    func removeParticipants(roomId: String, userSdkEmail: [String], completion: @escaping(Bool, String?) -> Void) {
+    public func removeParticipants(roomId: Int, userSdkEmail: [String], completion: @escaping(Bool, String?) -> Void) {
         roomRouter.request(.removeParticipant(roomId: roomId, emails: userSdkEmail)) { (data, response, error) in
             if error != nil {
                 completion(false, "Please check your network connection.")

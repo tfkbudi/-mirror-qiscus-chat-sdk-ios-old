@@ -24,19 +24,19 @@ public struct UserResults : Codable {
 }
 
 public struct QUser : Codable {
-    let app : App
-    let avatarUrl : String
-    let email : String
-    let id : Int
-    let idStr : String
-    let lastCommentId : Int
-    let lastCommentIdStr : String
-    let lastSyncEventId : Int
-    let pnAndroidConfigured : Bool
-    let pnIosConfigured : Bool
-    let rtKey : String
-    let token : String
-    let username : String
+    public let app : App
+    public let avatarUrl : String
+    public let email : String
+    public let id : Int
+    public let idStr : String
+    public let lastCommentId : Int
+    public let lastCommentIdStr : String
+    public let lastSyncEventId : Int
+    public let pnAndroidConfigured : Bool
+    public let pnIosConfigured : Bool
+    public let rtKey : String
+    public let token : String
+    public let username : String
     
     enum CodingKeys: String, CodingKey {
         
@@ -76,10 +76,10 @@ public struct QUser : Codable {
 
 
 public struct App : Codable {
-    let code : String
-    let id : Int
-    let idStr : String
-    let name : String
+    public let code : String
+    public let id : Int
+    public let idStr : String
+    public let name : String
     
     enum CodingKeys: String, CodingKey {
         
