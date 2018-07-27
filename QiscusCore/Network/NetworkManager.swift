@@ -519,4 +519,210 @@ extension NetworkManager {
             }
         }
     }
+    
+    
+    /// get room with target sdk email or create if not exist yet
+    ///
+    /// - Parameters:
+    ///   - targetSdkEmail: user's target sdk email
+    ///   - avatarUrl: room avatar url
+    ///   - distincId: distinc id
+    ///   - options: room options (string json)
+    ///   - completion: @escaping when success update room, return created Optional(QRoom), Optional([QComment]), Optional(String error message)
+    func getOrCreateRoomWithTarget(targetSdkEmail: String, avatarUrl: String? = nil, distincId: String? = nil, options: String? = nil, completion: @escaping (QRoom?, [QComment]?, String?) -> Void) {
+        roomRouter.request(.roomWithTarget(email: [targetSdkEmail], avatarUrl: avatarUrl, distincId: distincId, options: options)) { (data, response, error) in
+            if error != nil {
+                completion(nil, nil, "Please check your network connection.")
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, nil, NetworkResponse.noData.rawValue)
+                        return
+                    }
+                    do {
+                        let apiResponse = try JSONDecoder().decode(ApiResponse<RoomCreateGetUpdateResult>.self, from: responseData)
+                        completion(apiResponse.results.room, apiResponse.results.comments, nil)
+                    } catch {
+                        print(error)
+                        completion(nil, nil, NetworkResponse.unableToDecode.rawValue)
+                    }
+                case .failure(let errorMessage):
+                    // MARK: Todo print error message
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        print("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    
+                    completion(nil, nil, errorMessage)
+                }
+            }
+        }
+    }
+    
+    
+    /// get room with channel type behavior
+    ///
+    /// - Parameters:
+    ///   - uniqueId: channel uniqueId
+    ///   - name: channel name (if not defined it will use unique id as default)
+    ///   - avatarUrl: channel avatar
+    ///   - options: channel options
+    ///   - completion: @escaping when success get or create channel, return Optional(QRoom), Optional([QComment]), Optional(String error)
+    func getOrCreateChannel(uniqueId: String, name: String? = nil, avatarUrl: String? = nil, options: String? = nil, completion: @escaping (QRoom?, [QComment]?, String?) -> Void) {
+        roomRouter.request(.channelWithUniqueId(uniqueId: uniqueId, name: name, avatarUrl: avatarUrl, options: options)) { (data, response, error) in
+            if error != nil {
+                completion(nil, nil, "Please check your network connection.")
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, nil, NetworkResponse.noData.rawValue)
+                        return
+                    }
+                    do {
+                        let apiResponse = try JSONDecoder().decode(ApiResponse<RoomCreateGetUpdateResult>.self, from: responseData)
+                        completion(apiResponse.results.room, apiResponse.results.comments, nil)
+                    } catch {
+                        print(error)
+                        completion(nil, nil, NetworkResponse.unableToDecode.rawValue)
+                    }
+                case .failure(let errorMessage):
+                    // MARK: Todo print error message
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        print("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    
+                    completion(nil, nil, errorMessage)
+                }
+            }
+        }
+    }
+    
+    
+    /// get chat room by id
+    ///
+    /// - Parameters:
+    ///   - roomId: room id
+    ///   - completion: @escaping when success get room, return Optional(QRoom), Optional([QComment]), Optional(String error message)
+    func getRoomById(roomId: String, completion: @escaping (QRoom?, [QComment]?, String?) -> Void) {
+        roomRouter.request(.getRoomById(roomId: roomId)) { (data, response, error) in
+            if error != nil {
+                completion(nil, nil, "Please check your network connection.")
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, nil, NetworkResponse.noData.rawValue)
+                        return
+                    }
+                    do {
+                        let apiResponse = try JSONDecoder().decode(ApiResponse<RoomCreateGetUpdateResult>.self, from: responseData)
+                        completion(apiResponse.results.room, apiResponse.results.comments, nil)
+                    } catch {
+                        print(error)
+                        completion(nil, nil, NetworkResponse.unableToDecode.rawValue)
+                    }
+                case .failure(let errorMessage):
+                    // MARK: Todo print error message
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        print("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    
+                    completion(nil, nil, errorMessage)
+                }
+            }
+        }
+    }
+    
+    
+    /// add participants to a chat room
+    ///
+    /// - Parameters:
+    ///   - roomId: chat room id
+    ///   - userSdkEmail: array of user's sdk email
+    ///   - completion: @escaping when success add participant to room, return added participants Optional([QParticipant]), Optional(String error message)
+    func addParticipants(roomId: String, userSdkEmail: [String], completion: @escaping ([QParticipant]?, String?) -> Void) {
+        roomRouter.request(.addParticipant(roomId: roomId, emails: userSdkEmail)) { (data, response, error) in
+            if error != nil {
+                completion(nil, "Please check your network connection.")
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, NetworkResponse.noData.rawValue)
+                        return
+                    }
+                    do {
+                        let apiResponse = try JSONDecoder().decode(ApiResponse<AddParticipantsResult>.self, from: responseData)
+                        completion(apiResponse.results.participantsAdded, nil)
+                    } catch {
+                        print(error)
+                        completion(nil, NetworkResponse.unableToDecode.rawValue)
+                    }
+                case .failure(let errorMessage):
+                    // MARK: Todo print error message
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        print("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    
+                    completion(nil, errorMessage)
+                }
+            }
+        }
+    }
+    
+    
+    func removeParticipants(roomId: String, userSdkEmail: [String], completion: @escaping(Bool, String?) -> Void) {
+        roomRouter.request(.removeParticipant(roomId: roomId, emails: userSdkEmail)) { (data, response, error) in
+            if error != nil {
+                completion(false, "Please check your network connection.")
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(false, NetworkResponse.noData.rawValue)
+                        return
+                    }
+                    do {
+                        completion(true, nil)
+                    } catch {
+                        print(error)
+                        completion(false, NetworkResponse.unableToDecode.rawValue)
+                    }
+                case .failure(let errorMessage):
+                    // MARK: Todo print error message
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        print("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    
+                    completion(false, errorMessage)
+                }
+            }
+        }
+    }
 }
