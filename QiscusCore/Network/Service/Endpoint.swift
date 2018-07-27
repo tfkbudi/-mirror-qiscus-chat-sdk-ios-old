@@ -125,42 +125,42 @@ extension APIClient : EndPoint {
                 "order"                       : order,
                 "limit"                       : limit //found in sdk qiscus not from documentation
                 ] as [String : Any]
-            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+            return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: param)
         case .syncEvent(let startEventId):
             let param = [
                 "token"                       : AUTHTOKEN,
                 "start_event_id"              : startEventId
                 ] as [String : Any]
-            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+            return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: param)
         case .search(let keyword,let roomId,let lastCommentId) :
             var param = [
                 "token"                       : AUTHTOKEN,
                 "query"                       : keyword
                 ] as [String : Any]
             
-            if let roomid = roomId{
+            if let roomid = roomId {
                 param["room_id"] = roomid
             }
             
-            if let lastcommentid = lastCommentId{
+            if let lastcommentid = lastCommentId {
                 param["last_comment_id"] = lastcommentid
             }
             
-            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+            return .requestParameters(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil)
         case .registerDeviceToken(let token):
             let param = [
                 "token"                       : AUTHTOKEN,
                 "device_token"                : token,
                 "device_platform"             : "ios",
                 ]
-            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+            return .requestParameters(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil)
         case .removeDeviceToken(let token):
             let param = [
                 "token"                       : AUTHTOKEN,
                 "device_token"                : token,
                 "device_platform"             : "ios",
                 ]
-            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+            return .requestParameters(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil)
         case .loginRegister(let user, let password, let username, let avatarUrl):
             var param = [
                 "email"                       : user,
@@ -378,15 +378,15 @@ extension APIMessage : EndPoint {
 
 // MARK: Room API
 internal enum APIRoom {
-    case roomList(showParticipants: Bool, limit: Int, page: Int?, roomType: RoomType? , showRemoved: Bool, showEmpty: Bool)
-    case roomInfo(roomId: [String]?, roomUniqueId: [String]?, showParticipants: Bool, showRemoved: Bool)
-    case createNewRoom(name: String,participants: [String],avatarUrl: String?)
-    case updateRoom(roomId: String, roomName: String?, avatarUrl: String?, options: String?)
-    case roomWithParticipant(email: String, avatarUrl: String?)
-    case roomWithID(uniqueId: String,name: String?, avatarUrl: String?)
-    case addParticipant(roomId: String, emails: [String])
-    case removeParticipant(roomId: String, emails: [String])
-    case getRoomById(roomId: String)
+    case roomList(showParticipants: Bool, limit: Int, page: Int?, roomType: RoomType? , showRemoved: Bool, showEmpty: Bool)//
+    case roomInfo(roomId: [String]?, roomUniqueId: [String]?, showParticipants: Bool, showRemoved: Bool)//
+    case createNewRoom(name: String,participants: [String],avatarUrl: String?)//
+    case updateRoom(roomId: String, roomName: String?, avatarUrl: String?, options: String?)//
+    case roomWithTarget(email: [String], avatarUrl: String?, distincId: String?, options: String?)//
+    case channelWithUniqueId(uniqueId: String,name: String?, avatarUrl: String?, options: String?)//
+    case addParticipant(roomId: String, emails: [String])//
+    case removeParticipant(roomId: String, emails: [String])//
+    case getRoomById(roomId: String)//
 }
 
 extension APIRoom : EndPoint {
@@ -405,9 +405,9 @@ extension APIRoom : EndPoint {
             return "/create_room"
         case .updateRoom( _, _, _, _):
             return "/update_room"
-        case .roomWithParticipant( _, _):
+        case .roomWithTarget( _, _, _, _):
             return "/get_or_create_room_with_target"
-        case .roomWithID( _, _, _):
+        case .channelWithUniqueId( _, _, _, _):
             return "/get_or_create_room_with_unique_id"
         case .addParticipant( _, _):
             return "/add_room_participants"
@@ -422,7 +422,7 @@ extension APIRoom : EndPoint {
         switch self {
         case .roomList, .getRoomById:
             return .get
-        case .roomInfo, .createNewRoom, .updateRoom, .roomWithParticipant, .roomWithID, .addParticipant, .removeParticipant:
+        case .roomInfo, .createNewRoom, .updateRoom, .roomWithTarget, .channelWithUniqueId, .addParticipant, .removeParticipant:
             return .post
         }
     }
@@ -495,18 +495,26 @@ extension APIRoom : EndPoint {
                 params["options"] = optionsParam
             }
             
-            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
-        case .roomWithParticipant(let email, let avatarUrl) :
+            return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
+        case .roomWithTarget(let email, let avatarUrl, let distincId, let options) :
             var params = [
                 "token"                      : AUTHTOKEN,
                 "email"                      : email
-                ]
+                ] as [String : Any]
             
             if let avatarurl = avatarUrl {
                 params["avatar_url"] = avatarurl
             }
-            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
-        case .roomWithID(let uniqueId,let name,let avatarUrl):
+            
+            if let distincid = distincId {
+                params["distinc_id"] = distincid
+            }
+            
+            if let optionsParams = options {
+                params["options"] = optionsParams
+            }
+            return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
+        case .channelWithUniqueId(let uniqueId, let name, let avatarUrl, let options):
             var params = [
                 "token"                      : AUTHTOKEN,
                 "email"                      : uniqueId
@@ -520,7 +528,11 @@ extension APIRoom : EndPoint {
                 params["avatar_url"] = avatarurl
             }
             
-            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
+            if let optionsParams = options {
+                params["options"] = optionsParams
+            }
+            
+            return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
         
         case .addParticipant(let roomId,let emails) :
             let params = [
@@ -528,21 +540,21 @@ extension APIRoom : EndPoint {
                 "room_id"                    : roomId,
                 "emails"                     : emails
                 ] as [String : Any]
-            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
+            return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
         case .removeParticipant(let roomId,let emails) :
             let params = [
                 "token"                      : AUTHTOKEN,
                 "room_id"                    : roomId,
                 "emails"                     : emails
                 ] as [String : Any]
-            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
+            return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
         case .getRoomById(let roomId):
             let params = [
                 "token"                      : AUTHTOKEN,
                 "room_id"                    : roomId
                 ] as [String : Any]
 
-            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
+            return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: params)
         }
     }
 }

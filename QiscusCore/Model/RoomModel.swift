@@ -43,6 +43,19 @@ public struct RoomsResults : Codable {
     }
 }
 
+public struct AddParticipantsResult : Codable {
+    let participantsAdded : [QParticipant]
+    
+    enum CodingKeys: String, CodingKey {
+        case participantsAdded = "participants_added"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        participantsAdded = try values.decode([QParticipant].self, forKey: .participantsAdded)
+    }
+}
+
 public struct Meta : Codable {
     let currentPage : Int?
     let totalRoom : Int?
@@ -69,7 +82,7 @@ public struct QRoom : Codable {
     let chatType : String
     let options : String?
     let lastComment : QComment?
-    let participants : [Participants]?
+    let participants : [QParticipant]?
     let unreadCount : Int
     
     enum CodingKeys: String, CodingKey {
@@ -94,12 +107,12 @@ public struct QRoom : Codable {
         chatType = try values.decode(String.self, forKey: .chatType)
         options = try values.decodeIfPresent(String.self, forKey: .options)
         lastComment = try values.decodeIfPresent(QComment.self, forKey: .lastComment)
-        participants = try values.decodeIfPresent([Participants].self, forKey: .participants)
+        participants = try values.decodeIfPresent([QParticipant].self, forKey: .participants)
         unreadCount = try values.decode(Int.self, forKey: .unreadCount)
     }
 }
 
-struct Participants : Codable {
+struct QParticipant : Codable {
     let avatarUrl : String?
     let email : String?
     let id : Int?
