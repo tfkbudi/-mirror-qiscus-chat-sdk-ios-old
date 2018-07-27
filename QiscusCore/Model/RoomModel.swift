@@ -75,7 +75,7 @@ public struct Meta : Codable {
 }
 
 public struct QRoom : Codable {
-    public let id : Int
+    public let id : String
     public let roomName : String
     public let uniqueId : String
     public let avatarUrl : String
@@ -100,7 +100,7 @@ public struct QRoom : Codable {
     
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        id = try values.decode(Int.self, forKey: .id)
+        id = "\(try values.decode(Int.self, forKey: .id))"
         roomName = try values.decode(String.self, forKey: .roomName)
         uniqueId = try values.decode(String.self, forKey: .uniqueId)
         avatarUrl = try values.decode(String.self, forKey: .avatarUrl)
@@ -115,7 +115,7 @@ public struct QRoom : Codable {
 public struct QParticipant : Codable {
     public let avatarUrl : String
     public let email : String
-    public let id : Int
+    public let id : String
     public let lastCommentReadId : Int
     public let lastCommentReceivedId : Int
     public let username : String
@@ -134,7 +134,7 @@ public struct QParticipant : Codable {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         avatarUrl = try values.decode(String.self, forKey: .avatarUrl)
         email = try values.decode(String.self, forKey: .email)
-        id = try values.decode(Int.self, forKey: .id)
+        id = "\(try values.decode(Int.self, forKey: .id))"
         lastCommentReadId = try values.decode(Int.self, forKey: .lastCommentReadId)
         lastCommentReceivedId = try values.decode(Int.self, forKey: .lastCommentReceivedId)
         username = try values.decode(String.self, forKey: .username)

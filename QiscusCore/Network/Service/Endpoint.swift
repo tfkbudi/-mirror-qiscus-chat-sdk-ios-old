@@ -379,14 +379,14 @@ extension APIMessage : EndPoint {
 // MARK: Room API
 internal enum APIRoom {
     case roomList(showParticipants: Bool, limit: Int, page: Int?, roomType: RoomType? , showRemoved: Bool, showEmpty: Bool)
-    case roomInfo(roomId: [Int]?, roomUniqueId: [String]?, showParticipants: Bool, showRemoved: Bool)
+    case roomInfo(roomId: [String]?, roomUniqueId: [String]?, showParticipants: Bool, showRemoved: Bool)
     case createNewRoom(name: String,participants: [String],avatarUrl: URL?)
-    case updateRoom(roomId: Int, roomName: String?, avatarUrl: URL?, options: String?)
+    case updateRoom(roomId: String, roomName: String?, avatarUrl: URL?, options: String?)
     case roomWithTarget(email: [String], avatarUrl: URL?, distincId: String?, options: String?)
     case channelWithUniqueId(uniqueId: String,name: String?, avatarUrl: URL?, options: String?)
     case addParticipant(roomId: String, emails: [String])
-    case removeParticipant(roomId: Int, emails: [String])
-    case getRoomById(roomId: Int)
+    case removeParticipant(roomId: String, emails: [String])
+    case getRoomById(roomId: String)
 }
 
 extension APIRoom : EndPoint {

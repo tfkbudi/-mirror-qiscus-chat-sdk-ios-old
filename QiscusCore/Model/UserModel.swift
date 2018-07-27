@@ -27,7 +27,7 @@ public struct QUser : Codable {
     public let app : App
     public let avatarUrl : String
     public let email : String
-    public let id : Int
+    public let id : String
     public let idStr : String
     public let lastCommentId : Int
     public let lastCommentIdStr : String
@@ -60,7 +60,7 @@ public struct QUser : Codable {
         app = try values.decode(App.self, forKey: .app)
         avatarUrl = try values.decode(String.self, forKey: .avatarUrl)
         email = try values.decode(String.self, forKey: .email)
-        id = try values.decode(Int.self, forKey: .id)
+        id = "\(try values.decode(Int.self, forKey: .id))"
         idStr = try values.decode(String.self, forKey: .idStr)
         lastCommentId = try values.decode(Int.self, forKey: .lastCommentId)
         lastCommentIdStr = try values.decode(String.self, forKey: .lastCommentIdStr)

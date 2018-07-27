@@ -20,7 +20,7 @@ public struct QComment : Codable {
     public let commentBeforeId : Int
     public let disableLinkPreview : Bool
     public let email : String
-    public let id : Int
+    public let id : String
     public let message: String
     public let payload : Payload?
     public let extras : Extras?
@@ -59,7 +59,7 @@ public struct QComment : Codable {
         commentBeforeId = try values.decode(Int.self, forKey: .commentBeforeId)
         disableLinkPreview = try values.decode(Bool.self, forKey: .disableLinkPreview)
         email = try values.decode(String.self, forKey: .email)
-        id = try values.decode(Int.self, forKey: .id)
+        id = "\(try values.decode(Int.self, forKey: .id))"
         message = try values.decode(String.self, forKey: .message)
         payload = try values.decodeIfPresent(Payload.self, forKey: .payload)
         extras = try values.decodeIfPresent(Extras.self, forKey: .extras)

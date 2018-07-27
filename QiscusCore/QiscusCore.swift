@@ -14,7 +14,7 @@ public class QiscusCore: NSObject {
     
     static var appId: String = ""
     static var customURL : URL? = nil
-    static var network : NetworkManager = NetworkManager()
+    public static var network : NetworkManager = NetworkManager()
     public static var enableDebugPrint: Bool = false
   
     /// added your app Qiscus APP ID

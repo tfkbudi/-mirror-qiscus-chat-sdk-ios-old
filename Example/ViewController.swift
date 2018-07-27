@@ -25,11 +25,11 @@ class ViewController: UIViewController {
     @IBAction func clickLogin(_ sender: Any) {
         QiscusCore.connect(userID: "amsibsan", userKey: "12345678") { (user, error) in
             print("result:: \(user!)")
-//            QiscusCore.network.getRoomList(page: 1, completion: { (rooms, meta, error) in
-//                if let roomList = rooms {
-//                    print("room list result \(roomList)")
-//                }
-//            })
+            QiscusCore.network.getRoomList(page: 1, completion: { (rooms, meta, error) in
+                if let roomList = rooms {
+                    print("room list result \(roomList)")
+                }
+            })
 //            QiscusCore.networkManager.createRoom(name: "room kacang ini", participants: ["amsibsam", "jiwa"], completion: { (room, error) in
 //                if let qRoom = room {
 //                    print("room result \(qRoom)")
