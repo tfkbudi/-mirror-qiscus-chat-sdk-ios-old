@@ -274,16 +274,16 @@ extension APIUser : EndPoint {
     }
 }
 
-// MARK: Message API
-internal enum APIMessage {
-    case postComment(topicId: String,type: String,comment: String, uniqueTempId: String?) // without payload
-    case loadComment(topicId: Int,lastCommentId: Int?,timestamp: String?,after: Bool?,limit: Int?)
+// MARK: Comment API
+internal enum APIComment {
+    case postComment(topicId: String, type: String, comment: String, payload: String?, extras: String?, uniqueTempId: String?) // without payload
+    case loadComment(topicId: Int, lastCommentId: Int?, timestamp: String?, after: Bool?, limit: Int?)
     case delete(id: String)
     case updateStatus(roomId: Int,lastCommentReadId: Int?, lastCommentReceivedId: Int?)
     case clear(roomChannelIds: [String])
 }
 
-extension APIMessage : EndPoint {
+extension APIComment : EndPoint {
     var baseURL: URL {
         guard let url = URL(string: BASEURL) else { fatalError("baseURL could not be configured.")}
         return url
@@ -292,7 +292,7 @@ extension APIMessage : EndPoint {
     var path: String {
         switch self {
         case .postComment:
-            return "/post_comment"
+            return "/post_comments"
         case .loadComment:
             return "/load_comments"
         case .delete( _):
@@ -305,16 +305,23 @@ extension APIMessage : EndPoint {
     }
     
     var httpMethod: HTTPMethod {
-        return .get
+        switch self {
+        case .loadComment:
+            return .get
+        case .postComment, .updateStatus:
+            return .post
+        case .delete, .clear( _):
+            return .delete
+        }
     }
     
     var header: HTTPHeaders? {
-        return nil
+        return HEADERS
     }
     
     var task: HTTPTask {
         switch self {
-        case .postComment(let topicId,let type,let comment,let uniqueTempId):
+        case .postComment(let topicId, let type, let comment, let payload, let extras, let uniqueTempId):
             var params = [
                 "token"                      : AUTHTOKEN,
                 "topic_id"                   : topicId,
@@ -322,10 +329,18 @@ extension APIMessage : EndPoint {
                 "comment"                    : comment
                 ] as [String : Any]
             
+            if let payloadParams = payload {
+                params["payload"] = payloadParams
+            }
+            
+            if let extrasParams = extras {
+                params["extras"] = extrasParams
+            }
+            
             if let uniquetempid = uniqueTempId {
                 params["unique_temp_id"] = uniquetempid
             }
-            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
+            return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
         case .loadComment(let topicId, let lastCommentId ,let timestamp,let after,let limit):
             var params = [
                 "token"                      : AUTHTOKEN,
@@ -344,7 +359,7 @@ extension APIMessage : EndPoint {
             if let limt = limit {
                 params["limit"] = limt
             }
-            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
+            return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: params)
         case .delete(let id):
             let params = [
                 "token"                     : AUTHTOKEN,

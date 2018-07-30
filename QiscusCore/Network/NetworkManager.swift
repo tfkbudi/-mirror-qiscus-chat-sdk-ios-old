@@ -37,6 +37,7 @@ public class NetworkManager: NSObject {
     static var userEmail    : String = ""
     let clientRouter    = Router<APIClient>()
     let roomRouter      = Router<APIRoom>()
+    let commentRouter   = Router<APIComment>()
     
     fileprivate func handleNetworkResponse(_ response: HTTPURLResponse) -> Result<String>{
         print("response code \(response.statusCode)")
@@ -257,7 +258,7 @@ extension NetworkManager {
     /// get user profile
     ///
     /// - Parameter completion: @escaping when success get user profile, return Optional(QUser) and Optional(String error)
-    public func getProfile(completion: @escaping (QUser?, String?) -> Void) {
+    func getProfile(completion: @escaping (QUser?, String?) -> Void) {
         clientRouter.request(.myProfile) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -354,7 +355,7 @@ extension NetworkManager {
     ///   - showRemoved: Bool (true = include room that has been removed, false = exclude room that has been removed)
     ///   - showEmpty: Bool (true = it will show all rooms that have been created event there are no messages, default is false where only room that have at least one message will be shown)
     ///   - completion: @escaping when success get room list returning Optional([QRoom]), Optional(Meta) contain page, total_room per page, Optional(String error message)
-    public func getRoomList(showParticipant: Bool = false, limit: Int = 20, page: Int, roomType: RoomType? = nil, showRemoved: Bool = false, showEmpty: Bool = true, completion: @escaping([QRoom]?, Meta?, String?) -> Void) {
+public func getRoomList(showParticipant: Bool = false, limit: Int = 20, page: Int, roomType: RoomType? = nil, showRemoved: Bool = false, showEmpty: Bool = true, completion: @escaping([QRoom]?, Meta?, String?) -> Void) {
         roomRouter.request(.roomList(showParticipants: showParticipant, limit: limit, page: page, roomType: roomType, showRemoved: showRemoved, showEmpty: showEmpty)) { (data, response, error) in
             if error != nil {
                 completion(nil, nil, "Please check your network connection.")
@@ -656,7 +657,7 @@ extension NetworkManager {
     ///   - roomId: chat room id
     ///   - userSdkEmail: array of user's sdk email
     ///   - completion: @escaping when success add participant to room, return added participants Optional([QParticipant]), Optional(String error message)
-    public func addParticipants(roomId: String, userSdkEmail: [String], completion: @escaping ([QParticipant]?, String?) -> Void) {
+    func addParticipants(roomId: String, userSdkEmail: [String], completion: @escaping ([QParticipant]?, String?) -> Void) {
         roomRouter.request(.addParticipant(roomId: roomId, emails: userSdkEmail)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -692,7 +693,7 @@ extension NetworkManager {
     }
     
     
-    public func removeParticipants(roomId: String, userSdkEmail: [String], completion: @escaping(Bool, String?) -> Void) {
+    func removeParticipants(roomId: String, userSdkEmail: [String], completion: @escaping(Bool, String?) -> Void) {
         roomRouter.request(.removeParticipant(roomId: roomId, emails: userSdkEmail)) { (data, response, error) in
             if error != nil {
                 completion(false, "Please check your network connection.")
@@ -701,16 +702,12 @@ extension NetworkManager {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
-                    guard let responseData = data else {
+                    guard data != nil else {
                         completion(false, NetworkResponse.noData.rawValue)
                         return
                     }
-                    do {
-                        completion(true, nil)
-                    } catch {
-                        print(error)
-                        completion(false, NetworkResponse.unableToDecode.rawValue)
-                    }
+                    
+                    completion(true, nil)
                 case .failure(let errorMessage):
                     // MARK: Todo print error message
                     do {
@@ -724,5 +721,57 @@ extension NetworkManager {
                 }
             }
         }
+    }
+}
+
+// MARK: Comment
+extension NetworkManager {
+    
+    /// load comments on a room or channel
+    ///
+    /// - Parameters:
+    ///   - roomId: room id or unique id
+    ///   - lastCommentId: last recieved comment id
+    ///   - timestamp: timestamp
+    ///   - after: if true returns comments with id >= last_comment_id. if false and last_comment_id is specified, returns last 20 comments with id < last_comment_id. if false and last_comment_id is not specified, returns last 20 comments
+    ///   - limit: limit for the result default value is 20, max value is 100
+    ///   - completion: @escaping when success load comments, return Optional([QComment]) and Optional(String error message)
+    public func loadComments(roomId: Int, lastCommentId: Int? = nil, timestamp: String? = nil, after: Bool? = nil, limit: Int? = nil, completion: @escaping ([QComment]?, String?) -> Void) {
+        commentRouter.request(.loadComment(topicId: roomId, lastCommentId: lastCommentId, timestamp: timestamp, after: after, limit: limit)) { (data, response, error) in
+            if error != nil {
+                completion(nil, "Please check your network connection.")
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, NetworkResponse.noData.rawValue)
+                        return
+                    }
+                    do {
+                        let apiResponse = try JSONDecoder().decode(ApiResponse<CommentsResults>.self, from: responseData)
+                        completion(apiResponse.results.comments, nil)
+                    } catch {
+                        print(error)
+                        completion(nil, NetworkResponse.unableToDecode.rawValue)
+                    }
+                case .failure(let errorMessage):
+                    // MARK: Todo print error message
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        print("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    
+                    completion(nil, errorMessage)
+                }
+            }
+        }
+    }
+    
+    public func postComment() {
+        
     }
 }

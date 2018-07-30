@@ -8,6 +8,20 @@
 
 import Foundation
 
+struct CommentsResults : Codable {
+    let comments : [QComment]
+    
+    enum CodingKeys: String, CodingKey {
+        case comments = "comments"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        comments = try values.decode([QComment].self, forKey: .comments)
+    }
+    
+}
+
 public struct Payload: Codable {
     // MARK: todo make sure payload structure
 }
