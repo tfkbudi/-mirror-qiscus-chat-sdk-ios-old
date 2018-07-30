@@ -276,9 +276,9 @@ extension APIUser : EndPoint {
 
 // MARK: Comment API
 internal enum APIComment {
-    case postComment(topicId: String, type: String, comment: String, payload: String?, extras: String?, uniqueTempId: String?) // without payload
-    case loadComment(topicId: Int, lastCommentId: Int?, timestamp: String?, after: Bool?, limit: Int?)
-    case delete(id: String)
+    case postComment(topicId: String, type: CommentType, comment: String, payload: String?, extras: String?, uniqueTempId: String?) // without payload
+    case loadComment(topicId: String, lastCommentId: Int?, timestamp: String?, after: Bool?, limit: Int?)
+    case delete(commentId: String)
     case updateStatus(roomId: Int,lastCommentReadId: Int?, lastCommentReceivedId: Int?)
     case clear(roomChannelIds: [String])
 }
@@ -292,7 +292,7 @@ extension APIComment : EndPoint {
     var path: String {
         switch self {
         case .postComment:
-            return "/post_comments"
+            return "/post_comment"
         case .loadComment:
             return "/load_comments"
         case .delete( _):
@@ -325,7 +325,7 @@ extension APIComment : EndPoint {
             var params = [
                 "token"                      : AUTHTOKEN,
                 "topic_id"                   : topicId,
-                "type"                       : type,
+                "type"                       : type.rawValue,
                 "comment"                    : comment
                 ] as [String : Any]
             

@@ -8,6 +8,21 @@
 
 import Foundation
 
+struct PostCommentResults : Codable {
+    let comment : QComment
+    
+    enum CodingKeys: String, CodingKey {
+        
+        case comment = "comment"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        comment = try values.decode(QComment.self, forKey: .comment)
+    }
+    
+}
+
 struct CommentsResults : Codable {
     let comments : [QComment]
     
@@ -87,4 +102,9 @@ public struct QComment : Codable {
         userId = try values.decode(Int.self, forKey: .userId)
         username = try values.decode(String.self, forKey: .username)
     }
+}
+
+public enum CommentType: String, Codable {
+    case text = "text"
+    case image = "image"
 }
