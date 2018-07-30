@@ -13,7 +13,7 @@ public class QiscusCore: NSObject {
     public static let shared : QiscusCore = QiscusCore()
     
     static var appId: String = ""
-    static var customURL : URL? = nil
+    var customURL : Int? = nil
     public static var network : NetworkManager = NetworkManager()
     public static var enableDebugPrint: Bool = false
   
@@ -23,6 +23,7 @@ public class QiscusCore: NSObject {
     public class func setup(WithAppID appId: String, customURL: URL? = nil) {
         self.appId = appId
         //self.customURL = customURL
+        
     }
     
     // MARK: Auth

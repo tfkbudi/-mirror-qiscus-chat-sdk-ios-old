@@ -37,6 +37,7 @@
 		3D5593B720FF1FDA00AE35E5 /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5593B620FF1FDA00AE35E5 /* ParameterEncoding.swift */; };
 		3D5593BA2100609400AE35E5 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5593B92100609400AE35E5 /* UserModel.swift */; };
 		3DE57529210AD44900655DDE /* QiscusCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D55936420FC89CD00AE35E5 /* QiscusCore.framework */; };
+		3DE5752B210B07DC00655DDE /* QError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE5752A210B07DC00655DDE /* QError.swift */; };
 		3DF5122A210826F200868266 /* QiscusComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF51229210826F200868266 /* QiscusComment.swift */; };
 		F116692197E20D674B69897F /* Pods_QiscusCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 560FF1F83A73EA20444892C4 /* Pods_QiscusCore.framework */; };
 /* End PBXBuildFile section */
@@ -91,6 +92,7 @@
 		3D5593B220FF1EE200AE35E5 /* ParameterEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterEncoder.swift; sourceTree = "<group>"; };
 		3D5593B620FF1FDA00AE35E5 /* ParameterEncoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParameterEncoding.swift; sourceTree = "<group>"; };
 		3D5593B92100609400AE35E5 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		3DE5752A210B07DC00655DDE /* QError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QError.swift; sourceTree = "<group>"; };
 		3DF51229210826F200868266 /* QiscusComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiscusComment.swift; sourceTree = "<group>"; };
 		560FF1F83A73EA20444892C4 /* Pods_QiscusCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QiscusCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		64802D245F1D9AD426A11FD8 /* Pods-QiscusCore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QiscusCore.release.xcconfig"; path = "Pods/Target Support Files/Pods-QiscusCore/Pods-QiscusCore.release.xcconfig"; sourceTree = "<group>"; };
@@ -232,6 +234,7 @@
 				115FBE812107009C00FA693E /* NonceModel.swift */,
 				11535DB02109449400066100 /* RoomModel.swift */,
 				11535DB22109B0CB00066100 /* CommentModel.swift */,
+				3DE5752A210B07DC00655DDE /* QError.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -316,7 +319,6 @@
 				3D55936020FC89CD00AE35E5 /* Frameworks */,
 				3D55936120FC89CD00AE35E5 /* Headers */,
 				3D55936220FC89CD00AE35E5 /* Resources */,
-				B9183FCB65E7088B86B0EE44 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -335,8 +337,6 @@
 				3D55936920FC89CE00AE35E5 /* Sources */,
 				3D55936A20FC89CE00AE35E5 /* Frameworks */,
 				3D55936B20FC89CE00AE35E5 /* Resources */,
-				A3C1401960693A1079449B8D /* [CP] Embed Pods Frameworks */,
-				360FF8E4953B44FD447B19E4 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -357,7 +357,6 @@
 				3D55937F20FC8A0300AE35E5 /* Frameworks */,
 				3D55938020FC8A0300AE35E5 /* Resources */,
 				0E5F1B28937BBEE8836F078E /* [CP] Embed Pods Frameworks */,
-				B98641258186BDC84930A7BE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -468,40 +467,15 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Example/Pods-Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
-				"${BUILT_PRODUCTS_DIR}/CocoaMQTT/CocoaMQTT.framework",
 				"${BUILT_PRODUCTS_DIR}/QiscusCore/QiscusCore.framework",
-				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
-				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyTimer/SwiftyTimer.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaMQTT.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/QiscusCore.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyTimer.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Example/Pods-Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		360FF8E4953B44FD447B19E4 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QiscusCoreTests/Pods-QiscusCoreTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		40A34891979EE22D967B3F4F /* [CP] Check Pods Manifest.lock */ = {
@@ -520,51 +494,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A3C1401960693A1079449B8D /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QiscusCoreTests/Pods-QiscusCoreTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B9183FCB65E7088B86B0EE44 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QiscusCore/Pods-QiscusCore-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B98641258186BDC84930A7BE /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Example/Pods-Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F7556BF04363ABDDDEE9CCF1 /* [CP] Check Pods Manifest.lock */ = {
@@ -598,6 +527,7 @@
 				115FBE7D2106DCB200FA693E /* Data+Json.swift in Sources */,
 				11535DB12109449400066100 /* RoomModel.swift in Sources */,
 				3D5593AB20FEF46400AE35E5 /* HTTPUtil.swift in Sources */,
+				3DE5752B210B07DC00655DDE /* QError.swift in Sources */,
 				3D55939C20FC995300AE35E5 /* SDKUser.swift in Sources */,
 				11535DB32109B0CB00066100 /* CommentModel.swift in Sources */,
 				3D5593B320FF1EE300AE35E5 /* ParameterEncoder.swift in Sources */,
