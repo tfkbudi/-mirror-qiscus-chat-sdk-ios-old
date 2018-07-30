@@ -67,6 +67,9 @@ extension QiscusCore {
         // call api update_room
     }
     
+    /// getAllRoom
+    ///
+    /// - Parameter completion: Response new Qiscus Room Object and error if exist.
     public func getAllRoom(completion: @escaping ([QRoom]?, QError?) -> Void) {
         // api get room list
         QiscusCore.network.getRoomList(page: 1) { (rooms, meta, error) in
