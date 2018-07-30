@@ -37,6 +37,7 @@
 		3D5593B720FF1FDA00AE35E5 /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5593B620FF1FDA00AE35E5 /* ParameterEncoding.swift */; };
 		3D5593BA2100609400AE35E5 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5593B92100609400AE35E5 /* UserModel.swift */; };
 		3DE57529210AD44900655DDE /* QiscusCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D55936420FC89CD00AE35E5 /* QiscusCore.framework */; };
+		3DE5752B210B07DC00655DDE /* QError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE5752A210B07DC00655DDE /* QError.swift */; };
 		3DF5122A210826F200868266 /* QiscusComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF51229210826F200868266 /* QiscusComment.swift */; };
 		F116692197E20D674B69897F /* Pods_QiscusCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 560FF1F83A73EA20444892C4 /* Pods_QiscusCore.framework */; };
 /* End PBXBuildFile section */
@@ -91,6 +92,7 @@
 		3D5593B220FF1EE200AE35E5 /* ParameterEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterEncoder.swift; sourceTree = "<group>"; };
 		3D5593B620FF1FDA00AE35E5 /* ParameterEncoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParameterEncoding.swift; sourceTree = "<group>"; };
 		3D5593B92100609400AE35E5 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		3DE5752A210B07DC00655DDE /* QError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QError.swift; sourceTree = "<group>"; };
 		3DF51229210826F200868266 /* QiscusComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiscusComment.swift; sourceTree = "<group>"; };
 		560FF1F83A73EA20444892C4 /* Pods_QiscusCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QiscusCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		64802D245F1D9AD426A11FD8 /* Pods-QiscusCore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QiscusCore.release.xcconfig"; path = "Pods/Target Support Files/Pods-QiscusCore/Pods-QiscusCore.release.xcconfig"; sourceTree = "<group>"; };
@@ -232,6 +234,7 @@
 				115FBE812107009C00FA693E /* NonceModel.swift */,
 				11535DB02109449400066100 /* RoomModel.swift */,
 				11535DB22109B0CB00066100 /* CommentModel.swift */,
+				3DE5752A210B07DC00655DDE /* QError.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -524,6 +527,7 @@
 				115FBE7D2106DCB200FA693E /* Data+Json.swift in Sources */,
 				11535DB12109449400066100 /* RoomModel.swift in Sources */,
 				3D5593AB20FEF46400AE35E5 /* HTTPUtil.swift in Sources */,
+				3DE5752B210B07DC00655DDE /* QError.swift in Sources */,
 				3D55939C20FC995300AE35E5 /* SDKUser.swift in Sources */,
 				11535DB32109B0CB00066100 /* CommentModel.swift in Sources */,
 				3D5593B320FF1EE300AE35E5 /* ParameterEncoder.swift in Sources */,

@@ -25,7 +25,7 @@ class QiscusLogger {
         }
         
         print("\n ====================> REQUEST <============ \n")
-        defer { print("\n ====================> END <============ \n") }
+        defer { print("\n ====================> END REQUEST <============ \n") }
         
         let urlAsString = request.url?.absoluteString ?? ""
         let urlComponents = NSURLComponents(string: urlAsString)
@@ -56,13 +56,16 @@ class QiscusLogger {
         }
         
         print("\n ====================> RESPONSE <============ \n")
-        defer { print("\n ====================> END <============ \n") }
+        defer { print("\n ====================> END RESPONSE <============ \n") }
         
         let urlAsString = request.url?.absoluteString ?? ""
-        
+        var responseMessage = ""
+        if let responseData = response {
+            responseMessage = responseData.toJsonString()
+        }
         let logOutput = """
         URL: \(urlAsString) \n
-        Response: \(response?.toJsonString())
+        Response: \(responseMessage)
         """
         print(logOutput)
     }

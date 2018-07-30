@@ -15,9 +15,11 @@ extension QiscusCore {
     /// - Parameters:
     ///   - withUsers: Qiscus user emaial.
     ///   - completion: Qiscus Room Object and error if exist.
-    public func getRoom(withUsers users: [String], completion: @escaping (String, Error) -> Void) {
+    public func getRoom(withUser user: String, completion: @escaping (QRoom?, QError?) -> Void) {
         // call api get_or_create_room_with_target
-//        QiscusCore.network.createRoom(name: <#T##String#>, participants: <#T##[String]#>, avatarUrl: <#T##URL?#>, completion: <#T##(QRoom?, String?) -> Void#>)
+        QiscusCore.network.getOrCreateRoomWithTarget(targetSdkEmail: user) { (room, comments, error) in
+            completion(room, nil)
+        }
     }
     
     /// Get room with room id
@@ -25,8 +27,11 @@ extension QiscusCore {
     /// - Parameters:
     ///   - withID: existing roomID from server or local db.
     ///   - completion: Response Qiscus Room Object and error if exist.
-    public func getRoom(withID id: String, completion: @escaping (String, Error) -> Void) {
+    public func getRoom(withID id: String, completion: @escaping (QRoom?, QError?) -> Void) {
         // call api get_room_by_id
+        QiscusCore.network.getRoomById(roomId: id) { (room, comments, error) in
+            completion(room, nil)
+        }
         // or Load from storage
     }
     
