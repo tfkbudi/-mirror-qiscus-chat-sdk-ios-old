@@ -736,7 +736,7 @@ extension NetworkManager {
     ///   - after: if true returns comments with id >= last_comment_id. if false and last_comment_id is specified, returns last 20 comments with id < last_comment_id. if false and last_comment_id is not specified, returns last 20 comments
     ///   - limit: limit for the result default value is 20, max value is 100
     ///   - completion: @escaping when success load comments, return Optional([QComment]) and Optional(String error message)
-    public func loadComments(roomId: Int, lastCommentId: Int? = nil, timestamp: String? = nil, after: Bool? = nil, limit: Int? = nil, completion: @escaping ([QComment]?, String?) -> Void) {
+    public func loadComments(roomId: String, lastCommentId: Int? = nil, timestamp: String? = nil, after: Bool? = nil, limit: Int? = nil, completion: @escaping ([QComment]?, String?) -> Void) {
         commentRouter.request(.loadComment(topicId: roomId, lastCommentId: lastCommentId, timestamp: timestamp, after: after, limit: limit)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -771,7 +771,49 @@ extension NetworkManager {
         }
     }
     
-    public func postComment() {
-        
+    
+    /// post comment
+    ///
+    /// - Parameters:
+    ///   - roomId: chat room id
+    ///   - type: comment type
+    ///   - comment: comment text (required when type == text)
+    ///   - payload: comment payload (string on json format)
+    ///   - extras: comment extras (string on json format)
+    ///   - uniqueTempId: -
+    ///   - completion: @escaping when success post comment, return Optional(QComment) and Optional(String error message)
+    public func postComment(roomId: String, type: CommentType = .text, comment: String, payload: String = "", extras: String = "", uniqueTempId: String = "", completion: @escaping(QComment?, String?) -> Void) {
+        commentRouter.request(.postComment(topicId: roomId, type: type, comment: comment, payload: payload, extras: extras, uniqueTempId: uniqueTempId)) { (data, response, error) in
+            if error != nil {
+                completion(nil, "Please check your network connection.")
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, NetworkResponse.noData.rawValue)
+                        return
+                    }
+                    do {
+                        let apiResponse = try JSONDecoder().decode(ApiResponse<PostCommentResults>.self, from: responseData)
+                        completion(apiResponse.results.comment, nil)
+                    } catch {
+                        print(error)
+                        completion(nil, NetworkResponse.unableToDecode.rawValue)
+                    }
+                case .failure(let errorMessage):
+                    // MARK: Todo print error message
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        print("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    
+                    completion(nil, errorMessage)
+                }
+            }
+        }
     }
 }
