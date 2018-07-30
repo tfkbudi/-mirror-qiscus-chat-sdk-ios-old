@@ -276,10 +276,10 @@ extension APIUser : EndPoint {
 
 // MARK: Comment API
 internal enum APIComment {
-    case postComment(topicId: String, type: CommentType, comment: String, payload: String?, extras: String?, uniqueTempId: String?) // without payload
-    case loadComment(topicId: String, lastCommentId: Int?, timestamp: String?, after: Bool?, limit: Int?)
-    case delete(commentId: String)
-    case updateStatus(roomId: Int,lastCommentReadId: Int?, lastCommentReceivedId: Int?)
+    case postComment(topicId: String, type: CommentType, comment: String, payload: String?, extras: String?, uniqueTempId: String?) // without payload//
+    case loadComment(topicId: String, lastCommentId: Int?, timestamp: String?, after: Bool?, limit: Int?)//
+    case delete(commentUniqueId: [String])//
+    case updateStatus(roomId: String,lastCommentReadId: Int?, lastCommentReceivedId: Int?)
     case clear(roomChannelIds: [String])
 }
 
@@ -364,8 +364,8 @@ extension APIComment : EndPoint {
             let params = [
                 "token"                     : AUTHTOKEN,
                 "unique_ids"                : id
-            ]
-            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
+                ] as [String : Any]
+            return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
         case .updateStatus(let roomId,let lastCommentReadId,let lastCommentReceivedId):
             var params = [
                 "token"                     : AUTHTOKEN,
@@ -380,13 +380,13 @@ extension APIComment : EndPoint {
                 params["last_comment_received_id"] = lastcommentreceivedid
             }
             
-            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
+            return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
         case .clear(let roomChannelIds):
             let params = [
                 "token"                      : AUTHTOKEN,
-                "unique_ids"                 : roomChannelIds
+                "room_channel_ids"           : roomChannelIds
                 ] as [String : Any]
-            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
+            return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
         }
     }
 }

@@ -736,7 +736,7 @@ extension NetworkManager {
     ///   - after: if true returns comments with id >= last_comment_id. if false and last_comment_id is specified, returns last 20 comments with id < last_comment_id. if false and last_comment_id is not specified, returns last 20 comments
     ///   - limit: limit for the result default value is 20, max value is 100
     ///   - completion: @escaping when success load comments, return Optional([QComment]) and Optional(String error message)
-    public func loadComments(roomId: String, lastCommentId: Int? = nil, timestamp: String? = nil, after: Bool? = nil, limit: Int? = nil, completion: @escaping ([QComment]?, String?) -> Void) {
+    func loadComments(roomId: String, lastCommentId: Int? = nil, timestamp: String? = nil, after: Bool? = nil, limit: Int? = nil, completion: @escaping ([QComment]?, String?) -> Void) {
         commentRouter.request(.loadComment(topicId: roomId, lastCommentId: lastCommentId, timestamp: timestamp, after: after, limit: limit)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -782,7 +782,7 @@ extension NetworkManager {
     ///   - extras: comment extras (string on json format)
     ///   - uniqueTempId: -
     ///   - completion: @escaping when success post comment, return Optional(QComment) and Optional(String error message)
-    public func postComment(roomId: String, type: CommentType = .text, comment: String, payload: String = "", extras: String = "", uniqueTempId: String = "", completion: @escaping(QComment?, String?) -> Void) {
+    func postComment(roomId: String, type: CommentType = .text, comment: String, payload: String = "", extras: String = "", uniqueTempId: String = "", completion: @escaping(QComment?, String?) -> Void) {
         commentRouter.request(.postComment(topicId: roomId, type: type, comment: comment, payload: payload, extras: extras, uniqueTempId: uniqueTempId)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -815,5 +815,86 @@ extension NetworkManager {
                 }
             }
         }
+    }
+    
+    
+    /// delete comments
+    ///
+    /// - Parameters:
+    ///   - commentUniqueId: comment unique id or you can use comment.uniqueTempId
+    ///   - completion: @escaping when success delete comments, return deleted comment Optional([QComment]) and Optional(String error message)
+    func deleteComment(commentUniqueId: [String], completion: @escaping ([QComment]?, String?) -> Void) {
+        commentRouter.request(.delete(commentUniqueId: commentUniqueId)) { (data, response, error) in
+            if error != nil {
+                completion(nil, "Please check your network connection.")
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, NetworkResponse.noData.rawValue)
+                        return
+                    }
+                    do {
+                        let apiResponse = try JSONDecoder().decode(ApiResponse<CommentsResults>.self, from: responseData)
+                        completion(apiResponse.results.comments, nil)
+                    } catch {
+                        print(error)
+                        completion(nil, NetworkResponse.unableToDecode.rawValue)
+                    }
+                case .failure(let errorMessage):
+                    // MARK: Todo print error message
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        print("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    
+                    completion(nil, errorMessage)
+                }
+            }
+        }
+    }
+    
+    
+    /// clear all comments on room
+    ///
+    /// - Parameters:
+    ///   - roomUniqueIds: room unique ids
+    ///   - completion: @escaping when success clear all comments on a room, return (Bool: true = success, false = failed) and Optional(String error message)
+    func clearComments(roomUniqueIds: [String], completion: @escaping(Bool, String?) -> Void) {
+        commentRouter.request(.clear(roomChannelIds: roomUniqueIds)) { (data, response, error) in
+            if error != nil {
+                completion(false, "Please check your network connection.")
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard data != nil else {
+                        completion(false, NetworkResponse.noData.rawValue)
+                        return
+                    }
+                    
+                    completion(true, nil)
+                case .failure(let errorMessage):
+                    // MARK: Todo print error message
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        print("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    
+                    completion(false, errorMessage)
+                }
+            }
+        }
+    }
+    
+    func updateCommentStatus(roomId: String, lastCommentReadId: String? = nil, ) {
+//        commentRouter.request(.updateStatus(roomId: <#T##Int#>, lastCommentReadId: <#T##Int?#>, lastCommentReceivedId: <#T##Int?#>), completion: <#T##NetworkRouterCompletion##NetworkRouterCompletion##(Data?, URLResponse?, Error?) -> ()#>)
     }
 }
