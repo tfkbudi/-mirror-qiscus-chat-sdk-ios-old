@@ -26,10 +26,10 @@ class Router<endpoint: EndPoint>: NetworkRouter {
             QiscusLogger.networkLogger(request: request)
             task = session.dataTask(with: request, completionHandler: { data, response, error in
                 QiscusLogger.networkLogger(request: request, response: data)
-                completion(data, response, error)
+                DispatchQueue.main.async { completion(data, response, error) }
             })
         }catch {
-            completion(nil, nil, error)
+            DispatchQueue.main.async { completion(nil, nil, error) }
         }
         self.task?.resume()
     }

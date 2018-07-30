@@ -66,4 +66,14 @@ extension QiscusCore {
     public func updateRoom(withID id: String, name: String?, avatarURL: URL?, options: String?, completion: @escaping (QRoom?, String?) -> Void) {
         // call api update_room
     }
+    
+    /// getAllRoom
+    ///
+    /// - Parameter completion: Response new Qiscus Room Object and error if exist.
+    public func getAllRoom(completion: @escaping ([QRoom]?, QError?) -> Void) {
+        // api get room list
+        QiscusCore.network.getRoomList(page: 1) { (rooms, meta, error) in
+            completion(rooms,nil)
+        }
+    }
 }
