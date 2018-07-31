@@ -23,6 +23,24 @@ struct PostCommentResults : Codable {
     
 }
 
+public struct SyncResults : Codable {
+    public let comments : [QComment]
+    public let meta : SyncMeta
+    
+    enum CodingKeys: String, CodingKey {
+        
+        case comments = "comments"
+        case meta = "meta"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        comments = try values.decode([QComment].self, forKey: .comments)
+        meta = try values.decode(SyncMeta.self, forKey: .meta)
+    }
+    
+}
+
 struct CommentsResults : Codable {
     let comments : [QComment]
     
@@ -36,6 +54,25 @@ struct CommentsResults : Codable {
     }
     
 }
+
+public struct SyncMeta : Codable {
+    public let last_received_comment_id : Int?
+    public let need_clear : Bool?
+    
+    enum CodingKeys: String, CodingKey {
+        
+        case last_received_comment_id = "last_received_comment_id"
+        case need_clear = "need_clear"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        last_received_comment_id = try values.decodeIfPresent(Int.self, forKey: .last_received_comment_id)
+        need_clear = try values.decodeIfPresent(Bool.self, forKey: .need_clear)
+    }
+    
+}
+
 
 public struct Payload: Codable {
     // MARK: todo make sure payload structure
