@@ -894,7 +894,9 @@ extension NetworkManager {
         }
     }
     
-    func updateCommentStatus(roomId: String, lastCommentReadId: String? = nil, ) {
-//        commentRouter.request(.updateStatus(roomId: <#T##Int#>, lastCommentReadId: <#T##Int?#>, lastCommentReceivedId: <#T##Int?#>), completion: <#T##NetworkRouterCompletion##NetworkRouterCompletion##(Data?, URLResponse?, Error?) -> ()#>)
+    func updateCommentStatus(roomId: String, lastCommentReadId: String? = nil, lastCommentReceivedId: String? = nil) {
+        commentRouter.request(.updateStatus(roomId: roomId, lastCommentReadId: lastCommentReadId, lastCommentReceivedId: lastCommentReceivedId)) { (data, response, error) in
+            
+        }
     }
 }
