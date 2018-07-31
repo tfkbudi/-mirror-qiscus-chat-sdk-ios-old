@@ -83,22 +83,23 @@ public struct Extras: Codable {
 }
 
 public struct QComment : Codable {
-    public let commentBeforeId : Int
-    public let disableLinkPreview : Bool
-    public let email : String
-    public let id : String
-    public let message: String
-    public let payload : Payload?
-    public let extras : Extras?
-    public let roomId : Int
-    public let timestamp : String
-    public let topicId : Int
-    public let type : String
-    public let uniqueTempId : String
-    public let unixTimestamp : Int
-    public let userAvatarUrl : String
-    public let userId : Int
-    public let username : String
+    public var commentBeforeId : Int = 0
+    public var disableLinkPreview : Bool = false
+    public var email : String = ""
+    public var id : String = ""
+    public var message: String = ""
+    public var payload : Payload? = nil
+    public var extras : Extras? = nil
+    public var roomId : Int = 0
+    public var timestamp : String = ""
+    public var topicId : Int = 0
+    public var type : String = ""
+    public var uniqueTempId : String = ""
+    public var unixTimestamp : Int = 0
+    public var userAvatarUrl : String = ""
+    public var userId : Int = 0
+    public var username : String = ""
+
     
     enum CodingKeys: String, CodingKey {
         
@@ -118,6 +119,9 @@ public struct QComment : Codable {
         case userAvatarUrl = "user_avatar_url"
         case userId = "user_id"
         case username = "username"
+    }
+    public init() {
+        
     }
     
     public init(from decoder: Decoder) throws {
