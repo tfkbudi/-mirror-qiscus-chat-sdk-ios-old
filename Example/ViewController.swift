@@ -43,9 +43,11 @@ class ViewController: UIViewController {
 //            QiscusCore.network.deleteComment(commentUniqueId: ["ios-15324189369190"], completion: { comments, error in
 //
 //            })
-            QiscusCore.network.loadComments(roomId: "926962", completion: { comments, error in
-                print("comment result \(comments)")
-            })
+//            QiscusCore.network.sync
+            QiscusCore.network.updateCommentStatus(roomId: "926962", lastCommentReadId: "5147992")
+//            QiscusCore.network.loadComments(roomId: "926962", completion: { comments, error in
+//                print("comment result \(comments)")
+//            })
 //            QiscusCore.networkManager.createRoom(name: "room kacang ini", participants: ["amsibsam", "jiwa"], completion: { (room, error) in
 //                if let qRoom = room {
 //                    print("room result \(qRoom)")

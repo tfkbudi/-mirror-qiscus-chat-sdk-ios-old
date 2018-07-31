@@ -18,9 +18,9 @@ protocol EndPoint {
 
 // MARK: General API
 internal enum APIClient {
-    case sync(lastReceivedCommentId: Int, order: String, limit: Int)
+    case sync(lastReceivedCommentId: String, order: String, limit: Int)
     case syncEvent(startEventId : Int)
-    case search(keyword: String, roomId: Int?, lastCommentId: Int?)
+    case search(keyword: String, roomId: String?, lastCommentId: Int?)
     case registerDeviceToken(token: String) //
     case removeDeviceToken(token: String) //
     case loginRegister(user: String, password: String , username: String?, avatarUrl: String?) //
@@ -94,7 +94,7 @@ extension APIClient : EndPoint {
             return "/total_unread_count"
         case .myProfile:
             return "/my_profile"
-        case .updateMyProfile( _, _) :
+        case .updateMyProfile( _, _):
             return "/my_profile"
         case .upload:
             return "/upload"

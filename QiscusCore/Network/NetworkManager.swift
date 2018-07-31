@@ -339,6 +339,12 @@ extension NetworkManager {
             }
         }
     }
+    
+    public func sync(lastCommentReceivedId: String, order: String = "", limit: Int = 20) {
+        clientRouter.request(.sync(lastReceivedCommentId: lastCommentReceivedId, order: order, limit: limit)) { (data, response, error) in
+            
+        }
+    }
 }
 
 // MARK: Room
@@ -736,7 +742,7 @@ extension NetworkManager {
     ///   - after: if true returns comments with id >= last_comment_id. if false and last_comment_id is specified, returns last 20 comments with id < last_comment_id. if false and last_comment_id is not specified, returns last 20 comments
     ///   - limit: limit for the result default value is 20, max value is 100
     ///   - completion: @escaping when success load comments, return Optional([QComment]) and Optional(String error message)
-    func loadComments(roomId: String, lastCommentId: Int? = nil, timestamp: String? = nil, after: Bool? = nil, limit: Int? = nil, completion: @escaping ([QComment]?, String?) -> Void) {
+    public func loadComments(roomId: String, lastCommentId: Int? = nil, timestamp: String? = nil, after: Bool? = nil, limit: Int? = nil, completion: @escaping ([QComment]?, String?) -> Void) {
         commentRouter.request(.loadComment(topicId: roomId, lastCommentId: lastCommentId, timestamp: timestamp, after: after, limit: limit)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -894,7 +900,7 @@ extension NetworkManager {
         }
     }
     
-    func updateCommentStatus(roomId: String, lastCommentReadId: String? = nil, lastCommentReceivedId: String? = nil) {
+    public func updateCommentStatus(roomId: String, lastCommentReadId: String? = nil, lastCommentReceivedId: String? = nil) {
         commentRouter.request(.updateStatus(roomId: roomId, lastCommentReadId: lastCommentReadId, lastCommentReceivedId: lastCommentReceivedId)) { (data, response, error) in
             
         }
