@@ -48,7 +48,7 @@ public class CommentsResults : Codable {
         case comments = "comments"
     }
     
-    required init(from decoder: Decoder) throws {
+    required public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         comments = try values.decode([QComment].self, forKey: .comments)
     }
