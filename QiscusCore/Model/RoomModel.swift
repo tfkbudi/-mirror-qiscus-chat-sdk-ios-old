@@ -7,7 +7,7 @@
 //
 import Foundation
 
-public struct RoomCreateGetUpdateResult : Codable {
+public class RoomCreateGetUpdateResult : Codable {
     let changed: Bool?
     let room : QRoom
     let comments : [QComment]
@@ -18,7 +18,7 @@ public struct RoomCreateGetUpdateResult : Codable {
         case comments = "comments"
     }
     
-    public init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         changed = try values.decodeIfPresent(Bool.self, forKey: .changed)
         room = try values.decode(QRoom.self, forKey: .room)
@@ -26,7 +26,7 @@ public struct RoomCreateGetUpdateResult : Codable {
     }
 }
 
-public struct RoomsResults : Codable {
+public class RoomsResults : Codable {
     let meta : Meta?
     let roomsInfo : [QRoom]
     
@@ -36,27 +36,27 @@ public struct RoomsResults : Codable {
         case roomsInfo = "rooms_info"
     }
     
-    public init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         meta = try values.decodeIfPresent(Meta.self, forKey: .meta)
         roomsInfo = try values.decode([QRoom].self, forKey: .roomsInfo)
     }
 }
 
-public struct AddParticipantsResult : Codable {
+public class AddParticipantsResult : Codable {
     let participantsAdded : [QParticipant]
     
     enum CodingKeys: String, CodingKey {
         case participantsAdded = "participants_added"
     }
     
-    public init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         participantsAdded = try values.decode([QParticipant].self, forKey: .participantsAdded)
     }
 }
 
-public struct Meta : Codable {
+public class Meta : Codable {
     public let currentPage : Int?
     public let totalRoom : Int?
     
@@ -66,7 +66,7 @@ public struct Meta : Codable {
         case totalRoom = "total_room"
     }
     
-    public init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         currentPage = try values.decodeIfPresent(Int.self, forKey: .currentPage)
         totalRoom = try values.decodeIfPresent(Int.self, forKey: .totalRoom)
@@ -74,7 +74,7 @@ public struct Meta : Codable {
     
 }
 
-public struct QRoom : Codable {
+public class QRoom : Codable {
     public let id : String
     public let roomName : String
     public let uniqueId : String
@@ -98,7 +98,7 @@ public struct QRoom : Codable {
         case unreadCount = "unread_count"
     }
     
-    public init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = "\(try values.decode(Int.self, forKey: .id))"
         roomName = try values.decode(String.self, forKey: .roomName)
@@ -112,7 +112,7 @@ public struct QRoom : Codable {
     }
 }
 
-public struct QParticipant : Codable {
+public class QParticipant : Codable {
     public let avatarUrl : String
     public let email : String
     public let id : String
@@ -130,7 +130,7 @@ public struct QParticipant : Codable {
         case username = "username"
     }
     
-    public init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         avatarUrl = try values.decode(String.self, forKey: .avatarUrl)
         email = try values.decode(String.self, forKey: .email)

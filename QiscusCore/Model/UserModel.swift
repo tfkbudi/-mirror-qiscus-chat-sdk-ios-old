@@ -8,7 +8,7 @@
 
 import UIKit
 
-public struct UserResults : Codable {
+public class UserResults : Codable {
     let user : QUser
     
     enum CodingKeys: String, CodingKey {
@@ -16,14 +16,14 @@ public struct UserResults : Codable {
         case user = "user"
     }
     
-    public init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         user = try values.decode(QUser.self, forKey: .user)
     }
     
 }
 
-public struct QUser : Codable {
+public class QUser : Codable {
     public let app : App
     public let avatarUrl : String
     public let email : String
@@ -55,7 +55,7 @@ public struct QUser : Codable {
         case username = "username"
     }
     
-    public init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         app = try values.decode(App.self, forKey: .app)
         avatarUrl = try values.decode(String.self, forKey: .avatarUrl)
@@ -75,7 +75,7 @@ public struct QUser : Codable {
 }
 
 
-public struct App : Codable {
+public class App : Codable {
     public let code : String
     public let id : Int
     public let idStr : String
@@ -89,7 +89,7 @@ public struct App : Codable {
         case name = "name"
     }
     
-    public init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         code = try values.decode(String.self, forKey: .code)
         id = try values.decode(Int.self, forKey: .id)

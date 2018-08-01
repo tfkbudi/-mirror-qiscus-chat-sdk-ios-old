@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct PostCommentResults : Codable {
+class PostCommentResults : Codable {
     let comment : QComment
     
     enum CodingKeys: String, CodingKey {
@@ -16,14 +16,14 @@ struct PostCommentResults : Codable {
         case comment = "comment"
     }
     
-    init(from decoder: Decoder) throws {
+    required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         comment = try values.decode(QComment.self, forKey: .comment)
     }
     
 }
 
-public struct SyncResults : Codable {
+public class SyncResults : Codable {
     public let comments : [QComment]
     public let meta : SyncMeta
     
@@ -33,7 +33,7 @@ public struct SyncResults : Codable {
         case meta = "meta"
     }
     
-    public init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         comments = try values.decode([QComment].self, forKey: .comments)
         meta = try values.decode(SyncMeta.self, forKey: .meta)
@@ -41,21 +41,21 @@ public struct SyncResults : Codable {
     
 }
 
-struct CommentsResults : Codable {
+public class CommentsResults : Codable {
     let comments : [QComment]
     
     enum CodingKeys: String, CodingKey {
         case comments = "comments"
     }
     
-    init(from decoder: Decoder) throws {
+    required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         comments = try values.decode([QComment].self, forKey: .comments)
     }
     
 }
 
-public struct SyncMeta : Codable {
+public class SyncMeta : Codable {
     public let last_received_comment_id : Int?
     public let need_clear : Bool?
     
@@ -65,7 +65,7 @@ public struct SyncMeta : Codable {
         case need_clear = "need_clear"
     }
     
-    public init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         last_received_comment_id = try values.decodeIfPresent(Int.self, forKey: .last_received_comment_id)
         need_clear = try values.decodeIfPresent(Bool.self, forKey: .need_clear)
@@ -74,12 +74,12 @@ public struct SyncMeta : Codable {
 }
 
 
-public struct Payload: Codable {
-    // MARK: todo make sure payload structure
+public class Payload: Codable {
+    // MARK: todo make sure payload classure
 }
 
-public struct Extras: Codable {
-    // MARK: todo make sure extras structure
+public class Extras: Codable {
+    // MARK: todo make sure extras classure
 }
 
 public class QComment : Codable {

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct QNonce : Codable {
+public class QNonce : Codable {
     public let expiredAt : Int
     public let nonce : String
     
@@ -18,7 +18,7 @@ public struct QNonce : Codable {
         case nonce = "nonce"
     }
     
-    public init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         expiredAt = try values.decode(Int.self, forKey: .expiredAt)
         nonce = try values.decode(String.self, forKey: .nonce)
