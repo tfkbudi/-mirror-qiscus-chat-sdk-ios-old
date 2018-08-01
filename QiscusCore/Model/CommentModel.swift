@@ -93,7 +93,7 @@ open class QComment : Codable {
     public var roomId : Int = 0
     public var timestamp : String = ""
     public var topicId : Int = 0
-    public var type : String = ""
+    public var type : CommentType = .text
     public var uniqueTempId : String = ""
     public var unixTimestamp : Int = 0
     public var userAvatarUrl : String = ""
@@ -134,12 +134,18 @@ open class QComment : Codable {
         roomId = try values.decode(Int.self, forKey: .roomId)
         timestamp = try values.decode(String.self, forKey: .timestamp)
         topicId = try values.decode(Int.self, forKey: .topicId)
-        type = try values.decode(String.self, forKey: .type)
         uniqueTempId = try values.decode(String.self, forKey: .uniqueTempId)
         unixTimestamp = try values.decode(Int.self, forKey: .unixTimestamp)
         userAvatarUrl = try values.decode(String.self, forKey: .userAvatarUrl)
         userId = try values.decode(Int.self, forKey: .userId)
         username = try values.decode(String.self, forKey: .username)
+        
+        let typeString = try values.decode(String.self, forKey: .type)
+        for i in CommentType.all {
+            if i.rawValue == typeString {
+                type = i
+            }
+        }
     }
 
 }
@@ -147,4 +153,6 @@ open class QComment : Codable {
 public enum CommentType: String, Codable {
     case text = "text"
     case image = "image"
+    
+    static let all = [text,image]
 }
