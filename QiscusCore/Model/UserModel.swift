@@ -25,18 +25,18 @@ public class UserResults : Codable {
 
 public class QUser : Codable {
     public let app : App
-    public let avatarUrl : String
-    public let email : String
-    public let id : String
-    public let idStr : String
-    public let lastCommentId : Int
-    public let lastCommentIdStr : String
-    public let lastSyncEventId : Int
-    public let pnAndroidConfigured : Bool
-    public let pnIosConfigured : Bool
-    public let rtKey : String
-    public let token : String
-    public let username : String
+    public var avatarUrl : String           = "http://"
+    public var email : String               = ""
+    public var id : String                  = ""
+    public var idStr : String               = ""
+    public var lastCommentId : Int32        = -1
+    public var lastCommentIdStr : String    = ""
+    public var lastSyncEventId : Int64      = -1
+    public var pnAndroidConfigured : Bool    = false
+    public var pnIosConfigured : Bool        = false
+    public var rtKey : String               = ""
+    public var token : String               = ""
+    public var username : String            = ""
     
     enum CodingKeys: String, CodingKey {
         
@@ -60,11 +60,11 @@ public class QUser : Codable {
         app = try values.decode(App.self, forKey: .app)
         avatarUrl = try values.decode(String.self, forKey: .avatarUrl)
         email = try values.decode(String.self, forKey: .email)
-        id = "\(try values.decode(Int.self, forKey: .id))"
+        id = "\(try values.decode(Int32.self, forKey: .id))"
         idStr = try values.decode(String.self, forKey: .idStr)
-        lastCommentId = try values.decode(Int.self, forKey: .lastCommentId)
+        lastCommentId = try values.decode(Int32.self, forKey: .lastCommentId)
         lastCommentIdStr = try values.decode(String.self, forKey: .lastCommentIdStr)
-        lastSyncEventId = try values.decode(Int.self, forKey: .lastSyncEventId)
+        lastSyncEventId = try values.decode(Int64.self, forKey: .lastSyncEventId)
         pnAndroidConfigured = try values.decode(Bool.self, forKey: .pnAndroidConfigured)
         pnIosConfigured = try values.decode(Bool.self, forKey: .pnIosConfigured)
         rtKey = try values.decode(String.self, forKey: .rtKey)
@@ -76,10 +76,10 @@ public class QUser : Codable {
 
 
 public class App : Codable {
-    public let code : String
-    public let id : Int
-    public let idStr : String
-    public let name : String
+    public var code : String    = ""
+    public var id : Int         = -1
+    public var idStr : String   = ""
+    public var name : String    = ""
     
     enum CodingKeys: String, CodingKey {
         
