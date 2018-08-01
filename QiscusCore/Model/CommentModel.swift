@@ -82,7 +82,7 @@ public struct Extras: Codable {
     // MARK: todo make sure extras structure
 }
 
-public struct QComment : Codable {
+public class QComment : Codable {
     public var commentBeforeId : Int = 0
     public var disableLinkPreview : Bool = false
     public var email : String = ""
@@ -99,7 +99,7 @@ public struct QComment : Codable {
     public var userAvatarUrl : String = ""
     public var userId : Int = 0
     public var username : String = ""
-
+    public var onChange : (QComment) -> Void = {_ in }
     
     enum CodingKeys: String, CodingKey {
         
@@ -124,7 +124,7 @@ public struct QComment : Codable {
         
     }
     
-    public init(from decoder: Decoder) throws {
+    public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         commentBeforeId = try values.decode(Int.self, forKey: .commentBeforeId)
         disableLinkPreview = try values.decode(Bool.self, forKey: .disableLinkPreview)
@@ -143,6 +143,7 @@ public struct QComment : Codable {
         userId = try values.decode(Int.self, forKey: .userId)
         username = try values.decode(String.self, forKey: .username)
     }
+
 }
 
 public enum CommentType: String, Codable {

@@ -817,7 +817,7 @@ extension NetworkManager {
     ///   - extras: comment extras (string on json format)
     ///   - uniqueTempId: -
     ///   - completion: @escaping when success post comment, return Optional(QComment) and Optional(String error message)
-    func postComment(roomId: String, type: CommentType = .text, comment: String, payload: String = "", extras: String = "", uniqueTempId: String = "", completion: @escaping(QComment?, String?) -> Void) {
+    public func postComment(roomId: String, type: CommentType = .text, comment: String, payload: String = "", extras: String = "", uniqueTempId: String = "", completion: @escaping(QComment?, String?) -> Void) {
         commentRouter.request(.postComment(topicId: roomId, type: type, comment: comment, payload: payload, extras: extras, uniqueTempId: uniqueTempId)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -842,11 +842,12 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         print("json: \(jsondata)")
+                        completion(nil, errorMessage)
                     } catch {
-                        
+                        completion(nil, errorMessage)
                     }
                     
-                    completion(nil, errorMessage)
+                    
                 }
             }
         }
