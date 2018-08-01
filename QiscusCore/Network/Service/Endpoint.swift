@@ -328,15 +328,16 @@ extension APIComment : EndPoint {
                 "type"                       : type.rawValue,
                 "comment"                    : comment
                 ] as [String : Any]
-            
             if let payloadParams = payload {
-                params["payload"] = payloadParams
+                if !payloadParams.isEmpty {
+                    params["payload"] = payloadParams
+                }
             }
-            
             if let extrasParams = extras {
-                params["extras"] = extrasParams
+                if !extrasParams.isEmpty {
+                    params["extras"] = extrasParams
+                }
             }
-            
             if let uniquetempid = uniqueTempId {
                 params["unique_temp_id"] = uniquetempid
             }

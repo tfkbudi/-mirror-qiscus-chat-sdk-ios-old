@@ -14,7 +14,7 @@ extension QiscusCore {
     public func sendMessage(roomID id: String, comment: QComment, completion: @escaping (QComment?, QError?) -> Void) {
         
         QiscusCore.network.postComment(roomId: id, comment: comment.message) { (result, error) in
-            if let newComment = result {
+            if result != nil {
                 completion(comment,nil)
             }else {
                 completion(nil,QError.init(message: error ?? "Failed to send message"))

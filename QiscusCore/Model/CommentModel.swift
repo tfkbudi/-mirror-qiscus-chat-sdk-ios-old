@@ -119,9 +119,8 @@ open class QComment : Codable {
         case userId = "user_id"
         case username = "username"
     }
-    public init() {
-        
-    }
+    
+    public init() { }
     
     public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)

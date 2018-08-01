@@ -84,7 +84,7 @@ extension NetworkManager {
                     } catch {
                         
                     }
-                    
+
                     completion(nil,errorMessage)
                 }
             }
