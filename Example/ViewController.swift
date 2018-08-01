@@ -37,9 +37,9 @@ class ViewController: UIViewController {
 //            QiscusCore.network.clearComments(roomUniqueIds: ["e4acd029322accc8322a1a786bbe991f"])
 
             
-//            QiscusCore.network.postComment(roomId: "5120175", comment: "halo cuy, from core", completion: { comment, error in
-//
-//            })
+            QiscusCore.network.postComment(roomId: "926962", comment: "halo cuy, from core", completion: { comment, error in
+
+            })
 //            QiscusCore.network.deleteComment(commentUniqueId: ["ios-15324189369190"], completion: { comments, error in
 //
 //            })

@@ -99,7 +99,7 @@ public class QComment : Codable {
     public var userAvatarUrl : String = ""
     public var userId : Int = 0
     public var username : String = ""
-
+    public var onChange : (QComment) -> Void = {_ in }
     
     enum CodingKeys: String, CodingKey {
         
@@ -143,6 +143,7 @@ public class QComment : Codable {
         userId = try values.decode(Int.self, forKey: .userId)
         username = try values.decode(String.self, forKey: .username)
     }
+
 }
 
 public enum CommentType: String, Codable {
