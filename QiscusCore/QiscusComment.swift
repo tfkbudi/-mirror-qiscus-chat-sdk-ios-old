@@ -12,6 +12,9 @@ import Foundation
 extension QiscusCore {
     
     public func sendMessage(roomID id: String, comment: QComment, completion: @escaping (QComment?, QError?) -> Void) {
+        // send message to server
+        //QiscusCore.network.postComment(roomId: id, type: comment.type, comment: <#T##String#>, payload: <#T##String#>, extras: <#T##String#>, uniqueTempId: <#T##String#>, completion: <#T##(QComment?, String?) -> Void#>)
+        
         
         QiscusCore.network.postComment(roomId: id, comment: comment.message) { (result, error) in
             if result != nil {
@@ -27,5 +30,6 @@ extension QiscusCore {
             completion(comments,nil)
         }
     }
+    
     
 }

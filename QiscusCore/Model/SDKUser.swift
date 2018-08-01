@@ -8,6 +8,6 @@
 
 import UIKit
 
-public class SDKUser: NSObject {
-
+public class SDKUser: QUser {
+    
 }

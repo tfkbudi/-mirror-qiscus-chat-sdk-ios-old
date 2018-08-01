@@ -65,6 +65,10 @@ public class QiscusCore: NSObject {
     public class func disconnect(completion: @escaping (Error?) -> Void) {
         
     }
+    
+    public func whoami() -> QUser? {
+        return 
+    }
 }
 
 public enum RoomType: String {
