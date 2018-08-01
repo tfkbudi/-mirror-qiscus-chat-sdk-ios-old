@@ -82,7 +82,7 @@ public class Extras: Codable {
     // MARK: todo make sure extras classure
 }
 
-public class QComment : Codable {
+open class QComment : Codable {
     public var commentBeforeId : Int = 0
     public var disableLinkPreview : Bool = false
     public var email : String = ""
@@ -99,7 +99,6 @@ public class QComment : Codable {
     public var userAvatarUrl : String = ""
     public var userId : Int = 0
     public var username : String = ""
-    public var onChange : (QComment) -> Void = {_ in }
     
     enum CodingKeys: String, CodingKey {
         

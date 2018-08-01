@@ -15,7 +15,6 @@ extension QiscusCore {
         
         QiscusCore.network.postComment(roomId: id, comment: comment.message) { (result, error) in
             if let newComment = result {
-                comment.onChange(newComment)
                 completion(comment,nil)
             }else {
                 completion(nil,QError.init(message: error ?? "Failed to send message"))
