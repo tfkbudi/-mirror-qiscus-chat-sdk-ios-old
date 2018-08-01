@@ -34,7 +34,7 @@ public class NetworkManager: NSObject {
     static let environment  : NetworkEnvironment = .production
     static let APPID        : String = ""
     static var token        : String = ""
-    static var userEmail    : String = ""
+    public static var userEmail    : String = ""
     let clientRouter    = Router<APIClient>()
     let roomRouter      = Router<APIRoom>()
     let commentRouter   = Router<APIComment>()
