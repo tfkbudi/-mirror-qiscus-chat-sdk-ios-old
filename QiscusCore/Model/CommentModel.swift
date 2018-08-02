@@ -87,6 +87,9 @@ open class QComment : Codable {
     public var disableLinkPreview : Bool = false
     public var email : String = ""
     public var id : String = ""
+    public var isDeleted: Bool = false
+    public var isPublicChannel: Bool = false
+    public var status: String = ""
     public var message: String = ""
     public var payload : Payload? = nil
     public var extras : Extras? = nil
@@ -101,11 +104,13 @@ open class QComment : Codable {
     public var username : String = ""
     
     enum CodingKeys: String, CodingKey {
-        
         case commentBeforeId = "comment_before_id"
         case disableLinkPreview = "disable_link_preview"
         case email = "email"
         case id = "id"
+        case isDeleted = "is_deleted"
+        case isPublicChannel = "is_public_channel"
+        case status = "status"
         case message = "message"
         case payload = "payload"
         case extras = "extras"
@@ -128,6 +133,9 @@ open class QComment : Codable {
         disableLinkPreview = try values.decode(Bool.self, forKey: .disableLinkPreview)
         email = try values.decode(String.self, forKey: .email)
         id = "\(try values.decode(Int.self, forKey: .id))"
+        isDeleted = try values.decode(Bool.self, forKey: .isDeleted)
+        isPublicChannel = try values.decode(Bool.self, forKey: .isPublicChannel)
+        status = try values.decode(String.self, forKey: .status)
         message = try values.decode(String.self, forKey: .message)
         payload = try values.decodeIfPresent(Payload.self, forKey: .payload)
         extras = try values.decodeIfPresent(Extras.self, forKey: .extras)
