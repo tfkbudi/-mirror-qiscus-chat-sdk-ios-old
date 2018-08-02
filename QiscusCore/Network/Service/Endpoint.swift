@@ -515,7 +515,7 @@ extension APIRoom : EndPoint {
         case .roomWithTarget(let email, let avatarUrl, let distincId, let options) :
             var params = [
                 "token"                      : AUTHTOKEN,
-                "email"                      : email
+                "emails"                      : email
                 ] as [String : Any]
             
             if let avatarurl = avatarUrl?.absoluteString {
