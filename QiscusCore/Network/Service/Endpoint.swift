@@ -276,7 +276,7 @@ extension APIUser : EndPoint {
 
 // MARK: Comment API
 internal enum APIComment {
-    case postComment(topicId: String, type: CommentType, comment: String, payload: String?, extras: String?, uniqueTempId: String?) // without payload//
+    case postComment(topicId: String, type: CommentType, message: String, payload: String?, extras: String?, uniqueTempId: String?) // without payload//
     case loadComment(topicId: String, lastCommentId: Int?, timestamp: String?, after: Bool?, limit: Int?)//
     case delete(commentUniqueId: [String])//
     case updateStatus(roomId: String,lastCommentReadId: String?, lastCommentReceivedId: String?)
@@ -321,12 +321,12 @@ extension APIComment : EndPoint {
     
     var task: HTTPTask {
         switch self {
-        case .postComment(let topicId, let type, let comment, let payload, let extras, let uniqueTempId):
+        case .postComment(let topicId, let type, let message, let payload, let extras, let uniqueTempId):
             var params = [
                 "token"                      : AUTHTOKEN,
                 "topic_id"                   : topicId,
                 "type"                       : type.rawValue,
-                "comment"                    : comment
+                "comment"                    : message
                 ] as [String : Any]
             if let payloadParams = payload {
                 if !payloadParams.isEmpty {

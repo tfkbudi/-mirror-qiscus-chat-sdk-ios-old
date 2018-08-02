@@ -817,8 +817,8 @@ extension NetworkManager {
     ///   - extras: comment extras (string on json format)
     ///   - uniqueTempId: -
     ///   - completion: @escaping when success post comment, return Optional(QComment) and Optional(String error message)
-    public func postComment(roomId: String, type: CommentType = .text, comment: String, payload: String = "", extras: String = "", uniqueTempId: String = "", completion: @escaping(QComment?, String?) -> Void) {
-        commentRouter.request(.postComment(topicId: roomId, type: type, comment: comment, payload: payload, extras: extras, uniqueTempId: uniqueTempId)) { (data, response, error) in
+    public func postComment(roomId: String, type: CommentType = .text, message: String, payload: String = "", extras: String = "", uniqueTempId: String = "", completion: @escaping(QComment?, String?) -> Void) {
+        commentRouter.request(.postComment(topicId: roomId, type: type, message: message, payload: payload, extras: extras, uniqueTempId: uniqueTempId)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
             }
