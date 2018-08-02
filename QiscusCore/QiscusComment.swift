@@ -13,13 +13,13 @@ extension QiscusCore {
     
     public func sendMessage(roomID id: String, comment: QComment, completion: @escaping (QComment?, QError?) -> Void) {
         // send message to server
-        QiscusCore.network.postComment(roomId: id, type: comment.type, message: comment.message, payload: comment.payload, extras: comment.extras, uniqueTempId: comment.uniqueTempId) { (result, error) in
-            if result != nil {
-                completion(comment,nil)
-            }else {
-                completion(nil,QError.init(message: error ?? "Failed to send message"))
-            }
-        }
+//        QiscusCore.network.postComment(roomId: id, type: comment.type, message: comment.message, payload: comment.payload, extras: comment.extras, uniqueTempId: comment.uniqueTempId) { (result, error) in
+//            if result != nil {
+//                completion(comment,nil)
+//            }else {
+//                completion(nil,QError.init(message: error ?? "Failed to send message"))
+//            }
+//        }
     }
     
     /// Load Comment by room
