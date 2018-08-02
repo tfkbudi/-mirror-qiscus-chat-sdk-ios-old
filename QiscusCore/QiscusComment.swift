@@ -25,10 +25,14 @@ extension QiscusCore {
         }
     }
     
-    public func loadComments(roomID id: String, completion: @escaping ([QComment]?, QError?) -> Void) {
-        QiscusCore.network.loadComments(roomId: id) { (comments, error) in
-            completion(comments,nil)
-        }
+    public func loadComments(roomID id: String, lastCommentId: Int? = nil, timestamp: String? = nil, after: Bool = false, limit: Int? = nil, completion: @escaping ([QComment]?, QError?) -> Void) {
+        QiscusCore.network.loadComments(roomId: id, lastCommentId: lastCommentId, timestamp: timestamp, after: after, limit: limit, completion: { comments, error in
+            if comments != nil {
+                completion(comments, nil)
+            } else {
+                completion(comments, QError.init(message: error ?? "Failed to load comment"))
+            }
+        })
     }
     
     

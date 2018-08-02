@@ -766,7 +766,7 @@ extension NetworkManager {
     ///
     /// - Parameters:
     ///   - roomId: room id or unique id
-    ///   - lastCommentId: last recieved comment id
+    ///   - lastCommentId: last recieved comment id before loadmore
     ///   - timestamp: timestamp
     ///   - after: if true returns comments with id >= last_comment_id. if false and last_comment_id is specified, returns last 20 comments with id < last_comment_id. if false and last_comment_id is not specified, returns last 20 comments
     ///   - limit: limit for the result default value is 20, max value is 100
