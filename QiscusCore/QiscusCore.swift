@@ -66,9 +66,6 @@ public class QiscusCore: NSObject {
         
     }
     
-//    public func whoami() -> QUser? {
-//        return 
-//    }
 }
 
 public enum RoomType: String {
