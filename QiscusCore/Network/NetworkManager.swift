@@ -766,7 +766,7 @@ extension NetworkManager {
     ///
     /// - Parameters:
     ///   - roomId: room id or unique id
-    ///   - lastCommentId: last recieved comment id
+    ///   - lastCommentId: last recieved comment id before loadmore
     ///   - timestamp: timestamp
     ///   - after: if true returns comments with id >= last_comment_id. if false and last_comment_id is specified, returns last 20 comments with id < last_comment_id. if false and last_comment_id is not specified, returns last 20 comments
     ///   - limit: limit for the result default value is 20, max value is 100
@@ -817,8 +817,8 @@ extension NetworkManager {
     ///   - extras: comment extras (string on json format)
     ///   - uniqueTempId: -
     ///   - completion: @escaping when success post comment, return Optional(QComment) and Optional(String error message)
-    public func postComment(roomId: String, type: CommentType = .text, comment: String, payload: String = "", extras: String = "", uniqueTempId: String = "", completion: @escaping(QComment?, String?) -> Void) {
-        commentRouter.request(.postComment(topicId: roomId, type: type, comment: comment, payload: payload, extras: extras, uniqueTempId: uniqueTempId)) { (data, response, error) in
+    public func postComment(roomId: String, type: CommentType = .text, message: String, payload: String? = "", extras: String? = "", uniqueTempId: String = "", completion: @escaping(QComment?, String?) -> Void) {
+        commentRouter.request(.postComment(topicId: roomId, type: type, message: message, payload: payload, extras: extras, uniqueTempId: uniqueTempId)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
             }

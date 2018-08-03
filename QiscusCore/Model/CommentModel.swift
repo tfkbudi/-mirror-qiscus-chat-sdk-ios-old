@@ -159,8 +159,18 @@ open class QComment : Codable {
 }
 
 public enum CommentType: String, Codable {
-    case text = "text"
-    case image = "image"
+    case text                       = "text"
+    case image                      = "image"
+    case accountLink                = "account_linking"
+    case buttons                    = "buttons"
+    case buttonPostbackResponse     = "button_postback_response"
+    case reply                      = "replay"
+    case systemEvent                = "system_event"
+    case card                       = "card"
+    case custom                     = "custom"
+    case location                   = "location"
+    case contactPerson              = "contactPerson"
+    case carousel                   = "carousel"
     
-    static let all = [text,image]
+    static let all = [text,image,accountLink,buttons,buttonPostbackResponse,reply,systemEvent,card,custom,location,contactPerson,carousel]
 }
