@@ -157,12 +157,12 @@ open class QComment : Codable {
         }
         
         switch type {
-        case .image:
+        case .fileAttachment:
             payload = try values.decodeIfPresent(PayloadFile.self, forKey: .payload)
         case .location:
             payload = try values.decodeIfPresent(PayloadLocation.self, forKey: .payload)
         case .contactPerson:
-            payload = try values.decodeIfPresent(PayloadLocation.self, forKey: .payload)
+            payload = try values.decodeIfPresent(PayloadContact.self, forKey: .payload)
         default:
             break
         }
@@ -175,7 +175,7 @@ open class QComment : Codable {
 
 public enum CommentType: String, Codable {
     case text                       = "text"
-    case image                      = "file_attachment"
+    case fileAttachment              = "file_attachment"
     case accountLink                = "account_linking"
     case buttons                    = "buttons"
     case buttonPostbackResponse     = "button_postback_response"
@@ -187,5 +187,5 @@ public enum CommentType: String, Codable {
     case contactPerson              = "contactPerson"
     case carousel                   = "carousel"
     
-    static let all = [text,image,accountLink,buttons,buttonPostbackResponse,reply,systemEvent,card,custom,location,contactPerson,carousel]
+    static let all = [text,fileAttachment,accountLink,buttons,buttonPostbackResponse,reply,systemEvent,card,custom,location,contactPerson,carousel]
 }
