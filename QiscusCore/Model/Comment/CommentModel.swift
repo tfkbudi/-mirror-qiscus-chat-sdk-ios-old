@@ -91,7 +91,7 @@ open class QComment : Codable {
     public var isPublicChannel: Bool = false
     public var status: String = ""
     public var message: String = ""
-    public var payload : JSONValue? = nil
+    public var payload : Payload? = nil
     public var extras : Extras? = nil
     public var roomId : Int = 0
     public var timestamp : String = ""
@@ -138,7 +138,7 @@ open class QComment : Codable {
         isPublicChannel = try values.decode(Bool.self, forKey: .isPublicChannel)
         status = try values.decode(String.self, forKey: .status)
         message = try values.decode(String.self, forKey: .message)
-        payload = try values.decodeIfPresent(JSONValue.self, forKey: .payload)
+        
         extras = try values.decodeIfPresent(Extras.self, forKey: .extras)
         roomId = try values.decode(Int.self, forKey: .roomId)
         timestamp = try values.decode(String.self, forKey: .timestamp)
@@ -155,6 +155,19 @@ open class QComment : Codable {
                 type = i
             }
         }
+        
+        switch type {
+        case .image:
+            payload = try values.decodeIfPresent(PayloadFile.self, forKey: .payload)
+        case .location:
+            payload = try values.decodeIfPresent(PayloadLocation.self, forKey: .payload)
+        case .contactPerson:
+            payload = try values.decodeIfPresent(PayloadLocation.self, forKey: .payload)
+        default:
+            break
+        }
+        
+        
         coder = decoders
     }
 
@@ -162,7 +175,7 @@ open class QComment : Codable {
 
 public enum CommentType: String, Codable {
     case text                       = "text"
-    case image                      = "image"
+    case image                      = "file_attachment"
     case accountLink                = "account_linking"
     case buttons                    = "buttons"
     case buttonPostbackResponse     = "button_postback_response"
