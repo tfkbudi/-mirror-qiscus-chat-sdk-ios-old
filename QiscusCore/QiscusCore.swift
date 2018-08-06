@@ -26,6 +26,16 @@ public class QiscusCore: NSObject {
         
     }
     
+    /// Setup custom server, when you use Qiscus on premise
+    ///
+    /// - Parameters:
+    ///   - customServer: your custom server host
+    ///   - realtimeServer: your qiscus realtime host, without port
+    ///   - realtimePort: your qiscus realtime port
+    public class func set(customServer: URL, realtimeServer: String, realtimePort: Int) {
+        
+    }
+    
     // MARK: Auth
 
     /// Get Nonce from SDK server. use when login with JWT
