@@ -76,7 +76,7 @@ public class Meta : Codable {
 
 public class QRoom : Codable {
     public let id : String
-    public let roomName : String
+    public let name : String
     public let uniqueId : String
     public let avatarUrl : String
     public let chatType : String
@@ -88,7 +88,7 @@ public class QRoom : Codable {
     enum CodingKeys: String, CodingKey {
         
         case id = "id"
-        case roomName = "room_name"
+        case name = "room_name"
         case uniqueId = "unique_id"
         case avatarUrl = "avatar_url"
         case chatType = "chat_type"
@@ -101,7 +101,7 @@ public class QRoom : Codable {
     public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = "\(try values.decode(Int.self, forKey: .id))"
-        roomName = try values.decode(String.self, forKey: .roomName)
+        name = try values.decode(String.self, forKey: .name)
         uniqueId = try values.decode(String.self, forKey: .uniqueId)
         avatarUrl = try values.decode(String.self, forKey: .avatarUrl)
         chatType = try values.decode(String.self, forKey: .chatType)
