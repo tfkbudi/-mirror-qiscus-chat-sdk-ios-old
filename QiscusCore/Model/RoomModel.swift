@@ -74,7 +74,7 @@ public class Meta : Codable {
     
 }
 
-public class RoomModel : Codable {
+open class RoomModel : Codable {
     public let id : String
     public let name : String
     public let uniqueId : String
