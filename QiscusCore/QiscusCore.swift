@@ -11,19 +11,16 @@ import Foundation
 public class QiscusCore: NSObject {
     
     public static let shared : QiscusCore = QiscusCore()
-    
-    static var appId: String = ""
-    var customURL : Int? = nil
+    private static var config : ConfigManager = ConfigManager.shared
     public static var network : NetworkManager = NetworkManager()
     public static var enableDebugPrint: Bool = false
   
     /// added your app Qiscus APP ID
     ///
     /// - Parameter WithAppID: Qiscus SDK App ID
-    public class func setup(WithAppID appId: String, customURL: URL? = nil) {
-        self.appId = appId
-        //self.customURL = customURL
-        
+    public class func setup(WithAppID id: String) {
+        config.appID = id
+        config.server = ServerConfig(url: URL.init(string: "https://api.qiscus.com/api/v2/mobile")!, realtimeURL: nil, realtimePort: nil)
     }
     
     /// Setup custom server, when you use Qiscus on premise
@@ -32,8 +29,8 @@ public class QiscusCore: NSObject {
     ///   - customServer: your custom server host
     ///   - realtimeServer: your qiscus realtime host, without port
     ///   - realtimePort: your qiscus realtime port
-    public class func set(customServer: URL, realtimeServer: String, realtimePort: Int) {
-        
+    public class func set(customServer: URL, realtimeServer: String, realtimePort port: Int) {
+        config.server = ServerConfig(url: customServer, realtimeURL: realtimeServer, realtimePort: port)
     }
     
     // MARK: Auth
@@ -42,7 +39,7 @@ public class QiscusCore: NSObject {
     ///
     /// - Parameter completion: @escaping with Optional(QNonce) and String Optional(error)
     public class func getNonce(completion: @escaping (QNonce?, String?) -> Void) {
-        if self.appId.isEmpty {
+        if config.appID != nil {
              QiscusLogger.errorPrint("please call setup() first")
             return
         }

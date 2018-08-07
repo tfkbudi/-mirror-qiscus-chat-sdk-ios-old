@@ -35,32 +35,42 @@ internal enum APIClient {
 // MARK: TODO Manage This
 var AUTHTOKEN : String {
     get {
-        return NetworkManager.token
+        if let user = ConfigManager.shared.user {
+            return user.token
+        }else {
+            return ""
+        }
+        
     }
 }
 
-var BASEURL : String {
+var BASEURL : URL {
     get {
-        return "https://api.qiscus.com/api/v2/mobile"
+        if let server = ConfigManager.shared.server {
+            return server.url
+        }else {
+            return URL.init(string: "https://api.qiscus.com/api/v2/mobile")!
+        }
     }
 }
 
 var HEADERS : [String: String] {
     get {
         var headers = [
-            "QISCUS_SDK_APP_ID" : "sampleapp-65ghcsaysse",
+            "QISCUS_SDK_APP_ID" : ConfigManager.shared.appID,
             "QISCUS_SDK_PLATFORM": "iOS",
             "QISCUS_SDK_DEVICE_BRAND": "Apple",
             ]
-        
-        if NetworkManager.token != "" {
-            headers["QISCUS_SDK_TOKEN"] = NetworkManager.token
+        if let user = ConfigManager.shared.user {
+            if NetworkManager.token != "" {
+                headers["QISCUS_SDK_TOKEN"] = user.token
+            }
+            if NetworkManager.userEmail != "" {
+                headers["QISCUS_SDK_USER_ID"] = user.email
+            }
         }
-        if NetworkManager.userEmail != "" {
-            headers["QISCUS_SDK_USER_ID"] = NetworkManager.userEmail
-        }
-        
-        return headers
+
+        return headers as! [String : String]
     }
 }
 /////
@@ -68,8 +78,7 @@ var HEADERS : [String: String] {
 
 extension APIClient : EndPoint {
     var baseURL: URL {
-        guard let url = URL(string: BASEURL) else { fatalError("baseURL could not be configured.")}
-        return url
+       return BASEURL
     }
     
     var path: String {
@@ -222,8 +231,7 @@ internal enum APIUser {
 
 extension APIUser : EndPoint {
     var baseURL: URL {
-        guard let url = URL(string: BASEURL) else { fatalError("baseURL could not be configured.")}
-        return url
+       return BASEURL
     }
     
     var path: String {
@@ -285,8 +293,7 @@ internal enum APIComment {
 
 extension APIComment : EndPoint {
     var baseURL: URL {
-        guard let url = URL(string: BASEURL) else { fatalError("baseURL could not be configured.")}
-        return url
+       return BASEURL
     }
     
     var path: String {
@@ -407,8 +414,7 @@ internal enum APIRoom {
 
 extension APIRoom : EndPoint {
     var baseURL: URL {
-        guard let url = URL(string: BASEURL) else { fatalError("baseURL could not be configured.")}
-        return url
+       return BASEURL
     }
     
     var path: String {
