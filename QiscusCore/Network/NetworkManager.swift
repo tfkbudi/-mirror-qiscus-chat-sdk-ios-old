@@ -340,7 +340,7 @@ extension NetworkManager {
         }
     }
     
-    func sync(lastCommentReceivedId: String, order: String = "", limit: Int = 20, completion: @escaping ([QComment]?, SyncMeta?, String?) -> Void) {
+    func sync(lastCommentReceivedId: String, order: String = "", limit: Int = 20, completion: @escaping ([CommentModel]?, SyncMeta?, String?) -> Void) {
         clientRouter.request(.sync(lastReceivedCommentId: lastCommentReceivedId, order: order, limit: limit)) { (data, response, error) in
             if error != nil {
                 completion(nil, nil, "Please check your network connection.")
@@ -389,8 +389,8 @@ extension NetworkManager {
     ///   - roomType: (single, group, public_channel) by default returning all type
     ///   - showRemoved: Bool (true = include room that has been removed, false = exclude room that has been removed)
     ///   - showEmpty: Bool (true = it will show all rooms that have been created event there are no messages, default is false where only room that have at least one message will be shown)
-    ///   - completion: @escaping when success get room list returning Optional([QRoom]), Optional(Meta) contain page, total_room per page, Optional(String error message)
-    func getRoomList(showParticipant: Bool = false, limit: Int = 20, page: Int, roomType: RoomType? = nil, showRemoved: Bool = false, showEmpty: Bool = true, completion: @escaping([QRoom]?, Meta?, String?) -> Void) {
+    ///   - completion: @escaping when success get room list returning Optional([RoomModel]), Optional(Meta) contain page, total_room per page, Optional(String error message)
+    func getRoomList(showParticipant: Bool = false, limit: Int = 20, page: Int, roomType: RoomType? = nil, showRemoved: Bool = false, showEmpty: Bool = true, completion: @escaping([RoomModel]?, Meta?, String?) -> Void) {
         roomRouter.request(.roomList(showParticipants: showParticipant, limit: limit, page: page, roomType: roomType, showRemoved: showRemoved, showEmpty: showEmpty)) { (data, response, error) in
             if error != nil {
                 completion(nil, nil, "Please check your network connection.")
@@ -433,8 +433,8 @@ extension NetworkManager {
     ///   - roomUniqueIds: array of room unique id
     ///   - showRemoved: Bool (true = include room that has been removed, false = exclude room that has been removed)
     ///   - showEmpty: Bool (true = it will show all rooms that have been created event there are no messages, default is false where only room that have at least one message will be shown)
-    ///   - completion: @escaping when success get room list returning Optional([QRoom]), Optional(Meta) contain page, total_room per page, Optional(String error message)
-    func getRoomInfo(roomIds: [String]? = [], roomUniqueIds: [String]? = [], showParticipant: Bool = false, showRemoved: Bool = false, completion: @escaping ([QRoom]?, String?) -> Void) {
+    ///   - completion: @escaping when success get room list returning Optional([RoomModel]), Optional(Meta) contain page, total_room per page, Optional(String error message)
+    func getRoomInfo(roomIds: [String]? = [], roomUniqueIds: [String]? = [], showParticipant: Bool = false, showRemoved: Bool = false, completion: @escaping ([RoomModel]?, String?) -> Void) {
         roomRouter.request(.roomInfo(roomId: roomIds, roomUniqueId: roomUniqueIds, showParticipants: showParticipant, showRemoved: showRemoved)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -476,8 +476,8 @@ extension NetworkManager {
     ///   - name: room name
     ///   - participants: array of participant's sdk email
     ///   - avatarUrl: room avatar url
-    ///   - completion: @escaping when success create room, return created Optional(QRoom), Optional(String error message)
-    func createRoom(name: String, participants: [String], avatarUrl: URL? = nil, completion: @escaping (QRoom?, String?) -> Void) {
+    ///   - completion: @escaping when success create room, return created Optional(RoomModel), Optional(String error message)
+    func createRoom(name: String, participants: [String], avatarUrl: URL? = nil, completion: @escaping (RoomModel?, String?) -> Void) {
         roomRouter.request(.createNewRoom(name: name, participants: participants, avatarUrl: avatarUrl)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -520,8 +520,8 @@ extension NetworkManager {
     ///   - roomName: new room name
     ///   - avatarUrl: new room avatar
     ///   - options: new room options
-    ///   - completion: @escaping when success update room, return created Optional(QRoom), Optional(String error message)
-    func updateRoom(roomId: String, roomName: String?, avatarUrl: URL?, options: String?, completion: @escaping (QRoom?, String?) -> Void) {
+    ///   - completion: @escaping when success update room, return created Optional(RoomModel), Optional(String error message)
+    func updateRoom(roomId: String, roomName: String?, avatarUrl: URL?, options: String?, completion: @escaping (RoomModel?, String?) -> Void) {
         roomRouter.request(.updateRoom(roomId: roomId, roomName: roomName, avatarUrl: avatarUrl, options: options)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -564,8 +564,8 @@ extension NetworkManager {
     ///   - avatarUrl: room avatar url
     ///   - distincId: distinc id
     ///   - options: room options (string json)
-    ///   - completion: @escaping when success update room, return created Optional(QRoom), Optional([QComment]), Optional(String error message)
-    func getOrCreateRoomWithTarget(targetSdkEmail: String, avatarUrl: URL? = nil, distincId: String? = nil, options: String? = nil, completion: @escaping (QRoom?, [QComment]?, String?) -> Void) {
+    ///   - completion: @escaping when success update room, return created Optional(RoomModel), Optional([CommentModel]), Optional(String error message)
+    func getOrCreateRoomWithTarget(targetSdkEmail: String, avatarUrl: URL? = nil, distincId: String? = nil, options: String? = nil, completion: @escaping (RoomModel?, [CommentModel]?, String?) -> Void) {
         roomRouter.request(.roomWithTarget(email: [targetSdkEmail], avatarUrl: avatarUrl, distincId: distincId, options: options)) { (data, response, error) in
             if error != nil {
                 completion(nil, nil, "Please check your network connection.")
@@ -608,8 +608,8 @@ extension NetworkManager {
     ///   - name: channel name (if not defined it will use unique id as default)
     ///   - avatarUrl: channel avatar
     ///   - options: channel options
-    ///   - completion: @escaping when success get or create channel, return Optional(QRoom), Optional([QComment]), Optional(String error)
-    func getOrCreateChannel(uniqueId: String, name: String? = nil, avatarUrl: URL? = nil, options: String? = nil, completion: @escaping (QRoom?, [QComment]?, String?) -> Void) {
+    ///   - completion: @escaping when success get or create channel, return Optional(RoomModel), Optional([CommentModel]), Optional(String error)
+    func getOrCreateChannel(uniqueId: String, name: String? = nil, avatarUrl: URL? = nil, options: String? = nil, completion: @escaping (RoomModel?, [CommentModel]?, String?) -> Void) {
         roomRouter.request(.channelWithUniqueId(uniqueId: uniqueId, name: name, avatarUrl: avatarUrl, options: options)) { (data, response, error) in
             if error != nil {
                 completion(nil, nil, "Please check your network connection.")
@@ -649,8 +649,8 @@ extension NetworkManager {
     ///
     /// - Parameters:
     ///   - roomId: room id
-    ///   - completion: @escaping when success get room, return Optional(QRoom), Optional([QComment]), Optional(String error message)
-    func getRoomById(roomId: String, completion: @escaping (QRoom?, [QComment]?, String?) -> Void) {
+    ///   - completion: @escaping when success get room, return Optional(RoomModel), Optional([CommentModel]), Optional(String error message)
+    func getRoomById(roomId: String, completion: @escaping (RoomModel?, [CommentModel]?, String?) -> Void) {
         roomRouter.request(.getRoomById(roomId: roomId)) { (data, response, error) in
             if error != nil {
                 completion(nil, nil, "Please check your network connection.")
@@ -770,8 +770,8 @@ extension NetworkManager {
     ///   - timestamp: timestamp
     ///   - after: if true returns comments with id >= last_comment_id. if false and last_comment_id is specified, returns last 20 comments with id < last_comment_id. if false and last_comment_id is not specified, returns last 20 comments
     ///   - limit: limit for the result default value is 20, max value is 100
-    ///   - completion: @escaping when success load comments, return Optional([QComment]) and Optional(String error message)
-    func loadComments(roomId: String, lastCommentId: Int? = nil, timestamp: String? = nil, after: Bool? = nil, limit: Int? = nil, completion: @escaping ([QComment]?, String?) -> Void) {
+    ///   - completion: @escaping when success load comments, return Optional([CommentModel]) and Optional(String error message)
+    func loadComments(roomId: String, lastCommentId: Int? = nil, timestamp: String? = nil, after: Bool? = nil, limit: Int? = nil, completion: @escaping ([CommentModel]?, String?) -> Void) {
         commentRouter.request(.loadComment(topicId: roomId, lastCommentId: lastCommentId, timestamp: timestamp, after: after, limit: limit)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -816,8 +816,8 @@ extension NetworkManager {
     ///   - payload: comment payload (string on json format)
     ///   - extras: comment extras (string on json format)
     ///   - uniqueTempId: -
-    ///   - completion: @escaping when success post comment, return Optional(QComment) and Optional(String error message)
-    public func postComment(roomId: String, type: CommentType = .text, message: String, payload: String? = "", extras: String? = "", uniqueTempId: String = "", completion: @escaping(QComment?, String?) -> Void) {
+    ///   - completion: @escaping when success post comment, return Optional(CommentModel) and Optional(String error message)
+    public func postComment(roomId: String, type: CommentType = .text, message: String, payload: String? = "", extras: String? = "", uniqueTempId: String = "", completion: @escaping(CommentModel?, String?) -> Void) {
         commentRouter.request(.postComment(topicId: roomId, type: type, message: message, payload: payload, extras: extras, uniqueTempId: uniqueTempId)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -858,8 +858,8 @@ extension NetworkManager {
     ///
     /// - Parameters:
     ///   - commentUniqueId: comment unique id or you can use comment.uniqueTempId
-    ///   - completion: @escaping when success delete comments, return deleted comment Optional([QComment]) and Optional(String error message)
-    func deleteComment(commentUniqueId: [String], completion: @escaping ([QComment]?, String?) -> Void) {
+    ///   - completion: @escaping when success delete comments, return deleted comment Optional([CommentModel]) and Optional(String error message)
+    func deleteComment(commentUniqueId: [String], completion: @escaping ([CommentModel]?, String?) -> Void) {
         commentRouter.request(.delete(commentUniqueId: commentUniqueId)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")

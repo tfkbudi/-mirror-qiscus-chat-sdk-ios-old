@@ -9,7 +9,7 @@
 import Foundation
 
 class PostCommentResults : Codable {
-    let comment : QComment
+    let comment : CommentModel
     
     enum CodingKeys: String, CodingKey {
         
@@ -18,13 +18,13 @@ class PostCommentResults : Codable {
     
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        comment = try values.decode(QComment.self, forKey: .comment)
+        comment = try values.decode(CommentModel.self, forKey: .comment)
     }
     
 }
 
 public class SyncResults : Codable {
-    public let comments : [QComment]
+    public let comments : [CommentModel]
     public let meta : SyncMeta
     
     enum CodingKeys: String, CodingKey {
@@ -35,14 +35,14 @@ public class SyncResults : Codable {
     
     public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        comments = try values.decode([QComment].self, forKey: .comments)
+        comments = try values.decode([CommentModel].self, forKey: .comments)
         meta = try values.decode(SyncMeta.self, forKey: .meta)
     }
     
 }
 
 public class CommentsResults : Codable {
-    let comments : [QComment]
+    let comments : [CommentModel]
     
     enum CodingKeys: String, CodingKey {
         case comments = "comments"
@@ -50,7 +50,7 @@ public class CommentsResults : Codable {
     
     required public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        comments = try values.decode([QComment].self, forKey: .comments)
+        comments = try values.decode([CommentModel].self, forKey: .comments)
     }
     
 }
@@ -82,7 +82,7 @@ public class Extras: Codable {
     // MARK: todo make sure extras classure
 }
 
-open class QComment : Codable {
+open class CommentModel : Codable {
     public var commentBeforeId : Int = 0
     public var disableLinkPreview : Bool = false
     public var email : String = ""

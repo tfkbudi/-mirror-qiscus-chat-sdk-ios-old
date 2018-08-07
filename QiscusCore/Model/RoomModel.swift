@@ -9,8 +9,8 @@ import Foundation
 
 public class RoomCreateGetUpdateResult : Codable {
     let changed: Bool?
-    let room : QRoom
-    let comments : [QComment]
+    let room : RoomModel
+    let comments : [CommentModel]
     
     enum CodingKeys: String, CodingKey {
         case changed = "changed"
@@ -21,14 +21,14 @@ public class RoomCreateGetUpdateResult : Codable {
     public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         changed = try values.decodeIfPresent(Bool.self, forKey: .changed)
-        room = try values.decode(QRoom.self, forKey: .room)
-        comments = try values.decode([QComment].self, forKey: .comments)
+        room = try values.decode(RoomModel.self, forKey: .room)
+        comments = try values.decode([CommentModel].self, forKey: .comments)
     }
 }
 
 public class RoomsResults : Codable {
     let meta : Meta?
-    let roomsInfo : [QRoom]
+    let roomsInfo : [RoomModel]
     
     enum CodingKeys: String, CodingKey {
         
@@ -39,7 +39,7 @@ public class RoomsResults : Codable {
     public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         meta = try values.decodeIfPresent(Meta.self, forKey: .meta)
-        roomsInfo = try values.decode([QRoom].self, forKey: .roomsInfo)
+        roomsInfo = try values.decode([RoomModel].self, forKey: .roomsInfo)
     }
 }
 
@@ -74,14 +74,14 @@ public class Meta : Codable {
     
 }
 
-public class QRoom : Codable {
+public class RoomModel : Codable {
     public let id : String
     public let name : String
     public let uniqueId : String
     public let avatarUrl : String
     public let chatType : String
     public let options : String?
-    public let lastComment : QComment?
+    public let lastComment : CommentModel?
     public let participants : [QParticipant]?
     public let unreadCount : Int
     
@@ -106,7 +106,7 @@ public class QRoom : Codable {
         avatarUrl = try values.decode(String.self, forKey: .avatarUrl)
         chatType = try values.decode(String.self, forKey: .chatType)
         options = try values.decodeIfPresent(String.self, forKey: .options)
-        lastComment = try values.decodeIfPresent(QComment.self, forKey: .lastComment)
+        lastComment = try values.decodeIfPresent(CommentModel.self, forKey: .lastComment)
         participants = try values.decodeIfPresent([QParticipant].self, forKey: .participants)
         unreadCount = try values.decode(Int.self, forKey: .unreadCount)
     }
