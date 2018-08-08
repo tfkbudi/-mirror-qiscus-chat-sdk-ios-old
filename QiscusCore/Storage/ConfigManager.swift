@@ -9,11 +9,16 @@ import Foundation
 
 class ConfigManager : NSObject {
     static let shared = ConfigManager()
-    
+    private let prefix = "qcu_"
+    fileprivate var userCache : UserModel? = nil
     var appID   : String? = nil
-    var user    : SDKUser? {
+    var user    : UserModel? {
         get {
-            return loadUser()
+            if let user = userCache {
+                return user
+            }else {
+                return loadUser()
+            }
         }
         set {
             if let value = newValue {
@@ -23,12 +28,20 @@ class ConfigManager : NSObject {
     }
     var server  : ServerConfig? = nil
     
-    private func saveUser(_ data: SDKUser) {
-        // save nsuserdefault
+    fileprivate func filename(_ name: String) -> String {
+        return name + ".json"
     }
     
-    private func loadUser() -> SDKUser? {
-        return nil
+    private func saveUser(_ data: UserModel) {
+        // save in file
+        Storage.save(data, to: .document, as: filename("userdata"))
+    }
+    
+    private func loadUser() -> UserModel? {
+        // save in cache
+        let user = Storage.find(filename("userdata"), in: .document, as: UserModel.self)
+        self.userCache = user
+        return user
     }
     
 }

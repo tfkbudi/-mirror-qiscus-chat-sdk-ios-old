@@ -9,7 +9,7 @@
 import UIKit
 
 public class UserResults : Codable {
-    let user : QUser
+    let user : UserModel
     
     enum CodingKeys: String, CodingKey {
         
@@ -18,12 +18,12 @@ public class UserResults : Codable {
     
     public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        user = try values.decode(QUser.self, forKey: .user)
+        user = try values.decode(UserModel.self, forKey: .user)
     }
     
 }
 
-public class QUser : Codable {
+public class UserModel : Codable {
     public let app : App
     public var avatarUrl : String           = "http://"
     public var email : String               = ""
@@ -71,6 +71,7 @@ public class QUser : Codable {
         token = try values.decode(String.self, forKey: .token)
         username = try values.decode(String.self, forKey: .username)
     }
+    
     
 }
 

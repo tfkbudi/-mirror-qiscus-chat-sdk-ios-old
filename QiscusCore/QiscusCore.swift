@@ -51,8 +51,12 @@ public class QiscusCore: NSObject {
     /// - userKey                       : user password
     /// - parameter completion          : The code to be executed once the request has finished, also give a user object and error.
     ///
-    public class func connect(userID: String, userKey: String, completion: @escaping (QUser?, String?) -> Void) {
+    public class func connect(userID: String, userKey: String, completion: @escaping (UserModel?, String?) -> Void) {
         network.login(email: userID, password: userKey, username: nil, avatarUrl: nil) { (results, error) in
+            if let user = results {
+                // save user in local
+                ConfigManager.shared.user = user
+            }
             completion(results, error)
         }
     }
@@ -62,17 +66,36 @@ public class QiscusCore: NSObject {
     /// - Parameters:
     ///   - token: identity token from your server, when you implement Nonce or JWT
     ///   - completion: The code to be executed once the request has finished, also give a user object and error.
-    public class func connect(withIdentityToken token: String, completion: @escaping (QUser?, String?) -> Void) {
-        network.login(identityToken: token, completion: completion)
+    public class func connect(withIdentityToken token: String, completion: @escaping (UserModel?, String?) -> Void) {
+        network.login(identityToken: token) { (results, error) in
+            if let user = results {
+                // save user in local
+                ConfigManager.shared.user = user
+            }
+            completion(results, error)
+        }
+    }
+    
+    /// get qiscus user
+    ///
+    /// - Returns: return nil when client not logined, and return object user when already logined
+    public static func getUserLogin() -> UserModel? {
+        return ConfigManager.shared.user
     }
     
     /// Disconnect or logout
     ///
     /// - Parameter completionHandler: The code to be executed once the request has finished, also give a user object and error.
-    public class func disconnect(completion: @escaping (Error?) -> Void) {
+    public static func logout(completion: @escaping (Error?) -> Void) {
         
     }
     
+    /// check already logined
+    ///
+    /// - Returns: return true if already login
+    public static func isLogined() -> Bool {
+        return (ConfigManager.shared.user != nil)
+    }
 }
 
 public enum RoomType: String {

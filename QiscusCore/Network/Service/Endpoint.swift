@@ -62,10 +62,10 @@ var HEADERS : [String: String] {
             "QISCUS_SDK_DEVICE_BRAND": "Apple",
             ]
         if let user = ConfigManager.shared.user {
-            if NetworkManager.token != "" {
+            if !user.token.isEmpty {
                 headers["QISCUS_SDK_TOKEN"] = user.token
             }
-            if NetworkManager.userEmail != "" {
+            if !user.email.isEmpty {
                 headers["QISCUS_SDK_USER_ID"] = user.email
             }
         }

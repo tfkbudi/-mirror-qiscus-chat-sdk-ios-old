@@ -32,9 +32,6 @@ enum NetworkEnvironment : String {
 // TODO remove public, this class should not be accessed from outside qiscusCore
 public class NetworkManager: NSObject {
     static let environment  : NetworkEnvironment = .production
-    static let APPID        : String = ""
-    static var token        : String = ""
-    public static var userEmail    : String = ""
     let clientRouter    = Router<APIClient>()
     let roomRouter      = Router<APIRoom>()
     let commentRouter   = Router<APIComment>()
@@ -96,8 +93,8 @@ extension NetworkManager {
     ///
     /// - Parameters:
     ///   - identityToken: identity token from your server after verify the nonce
-    ///   - completion: @escaping when success login retrun Optional(QUser) and Optional(String error message)
-    func login(identityToken: String, completion: @escaping (QUser?, String?) -> Void) {
+    ///   - completion: @escaping when success login retrun Optional(UserModel) and Optional(String error message)
+    func login(identityToken: String, completion: @escaping (UserModel?, String?) -> Void) {
         clientRouter.request(.loginRegisterJWT(identityToken: identityToken)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -114,8 +111,6 @@ extension NetworkManager {
                     
                     do {
                         let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
-                        NetworkManager.token = apiResponse.results.user.token
-                        NetworkManager.userEmail = apiResponse.results.user.email
                         completion(apiResponse.results.user, nil)
                     } catch {
                         print(error)
@@ -144,7 +139,7 @@ extension NetworkManager {
     ///   - username: user display name
     ///   - avatarUrl: user avatar url
     ///   - completion: @escaping on 
-    func login(email: String, password: String ,username : String? ,avatarUrl : String?, completion: @escaping (QUser?, String?) -> Void) {
+    func login(email: String, password: String ,username : String? ,avatarUrl : String?, completion: @escaping (UserModel?, String?) -> Void) {
         clientRouter.request(.loginRegister(user: email, password: password,username: username,avatarUrl: avatarUrl)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -159,8 +154,6 @@ extension NetworkManager {
                     }
                     do {
                         let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
-                        NetworkManager.token = apiResponse.results.user.token
-                        NetworkManager.userEmail = apiResponse.results.user.email
                         completion(apiResponse.results.user, nil)
                     } catch {
                         print(error)
@@ -257,8 +250,8 @@ extension NetworkManager {
     
     /// get user profile
     ///
-    /// - Parameter completion: @escaping when success get user profile, return Optional(QUser) and Optional(String error)
-    func getProfile(completion: @escaping (QUser?, String?) -> Void) {
+    /// - Parameter completion: @escaping when success get user profile, return Optional(UserModel) and Optional(String error)
+    func getProfile(completion: @escaping (UserModel?, String?) -> Void) {
         clientRouter.request(.myProfile) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -273,8 +266,6 @@ extension NetworkManager {
                     }
                     do {
                         let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
-                        NetworkManager.token = apiResponse.results.user.token
-                        NetworkManager.userEmail = apiResponse.results.user.email
                         completion(apiResponse.results.user, nil)
                     } catch {
                         print(error)
@@ -300,8 +291,8 @@ extension NetworkManager {
     /// - Parameters:
     ///   - displayName: user new displayname
     ///   - avatarUrl: user new avatar url
-    ///   - completion: @escaping when finish updating user profile return update Optional(QUser) and Optional(String error message)
-    func updateProfile(displayName: String = "", avatarUrl: String = "", completion: @escaping (QUser?, String?) -> Void) {
+    ///   - completion: @escaping when finish updating user profile return update Optional(UserModel) and Optional(String error message)
+    func updateProfile(displayName: String = "", avatarUrl: String = "", completion: @escaping (UserModel?, String?) -> Void) {
         if displayName.isEmpty && avatarUrl.isEmpty {
             return
         }
