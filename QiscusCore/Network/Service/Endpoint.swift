@@ -57,11 +57,17 @@ var BASEURL : URL {
 var HEADERS : [String: String] {
     get {
         var headers = [
-            "QISCUS_SDK_APP_ID" : ConfigManager.shared.appID,
             "QISCUS_SDK_PLATFORM": "iOS",
             "QISCUS_SDK_DEVICE_BRAND": "Apple",
             ]
+        if let appID = ConfigManager.shared.appID {
+            headers["QISCUS_SDK_APP_ID"] = appID
+        }
+        
         if let user = ConfigManager.shared.user {
+            if !user.app.code.isEmpty {
+                headers["QISCUS_SDK_APP_ID"] = user.app.code
+            }
             if !user.token.isEmpty {
                 headers["QISCUS_SDK_TOKEN"] = user.token
             }
@@ -70,7 +76,7 @@ var HEADERS : [String: String] {
             }
         }
 
-        return headers as! [String : String]
+        return headers
     }
 }
 /////

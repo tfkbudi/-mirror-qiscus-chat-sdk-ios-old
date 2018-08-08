@@ -29,7 +29,7 @@ class ConfigManager : NSObject {
     var server  : ServerConfig? = nil
     
     fileprivate func filename(_ name: String) -> String {
-        return name + ".json"
+        return prefix + name + ".json"
     }
     
     private func saveUser(_ data: UserModel) {

@@ -27,9 +27,9 @@ public class UserModel : Codable {
     public let app : App
     public var avatarUrl : String           = "http://"
     public var email : String               = ""
-    public var id : String                  = ""
+    public var id : Int64                   = -1
     public var idStr : String               = ""
-    public var lastCommentId : Int32        = -1
+    public var lastCommentId : Int64        = -1
     public var lastCommentIdStr : String    = ""
     public var lastSyncEventId : Int64      = -1
     public var pnAndroidConfigured : Bool    = false
@@ -60,9 +60,9 @@ public class UserModel : Codable {
         app = try values.decode(App.self, forKey: .app)
         avatarUrl = try values.decode(String.self, forKey: .avatarUrl)
         email = try values.decode(String.self, forKey: .email)
-        id = "\(try values.decode(Int32.self, forKey: .id))"
+        id = (try values.decode(Int64.self, forKey: .id))
         idStr = try values.decode(String.self, forKey: .idStr)
-        lastCommentId = try values.decode(Int32.self, forKey: .lastCommentId)
+        lastCommentId = try values.decode(Int64.self, forKey: .lastCommentId)
         lastCommentIdStr = try values.decode(String.self, forKey: .lastCommentIdStr)
         lastSyncEventId = try values.decode(Int64.self, forKey: .lastSyncEventId)
         pnAndroidConfigured = try values.decode(Bool.self, forKey: .pnAndroidConfigured)
@@ -71,8 +71,6 @@ public class UserModel : Codable {
         token = try values.decode(String.self, forKey: .token)
         username = try values.decode(String.self, forKey: .username)
     }
-    
-    
 }
 
 

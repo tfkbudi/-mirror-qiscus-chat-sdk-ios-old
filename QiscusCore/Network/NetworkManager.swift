@@ -154,6 +154,7 @@ extension NetworkManager {
                     }
                     do {
                         let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
+                        debugPrint(apiResponse)
                         completion(apiResponse.results.user, nil)
                     } catch {
                         print(error)

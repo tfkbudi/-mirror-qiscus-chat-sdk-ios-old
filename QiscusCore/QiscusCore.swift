@@ -93,8 +93,10 @@ public class QiscusCore: NSObject {
     /// check already logined
     ///
     /// - Returns: return true if already login
-    public static func isLogined() -> Bool {
-        return (ConfigManager.shared.user != nil)
+    public static var isLogined : Bool {
+        get {
+            return (ConfigManager.shared.user != nil)
+        }
     }
 }
 
