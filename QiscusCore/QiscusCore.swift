@@ -39,9 +39,8 @@ public class QiscusCore: NSObject {
     ///
     /// - Parameter completion: @escaping with Optional(QNonce) and String Optional(error)
     public class func getNonce(completion: @escaping (QNonce?, String?) -> Void) {
-        if config.appID != nil {
-             QiscusLogger.errorPrint("please call setup() first")
-            return
+        if config.appID == nil {
+            fatalError("please call setup() first")
         }
         network.getNonce(completion: completion)
     }

@@ -195,7 +195,7 @@ extension APIClient : EndPoint {
                 "identity_token"                       : identityToken
                 ]
             
-            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+            return .requestParameters(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil)
         case .nonce :
             return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: nil)
         case .unread :
