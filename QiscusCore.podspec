@@ -23,7 +23,7 @@ s.resource_bundles = {
 
 s.platform      = :ios, "9.0"
 
+s.dependency 'QiscusRealtime'
 #s.dependency 'RealmSwift', '~> 3.0.2'
-#s.dependency 'CocoaMQTT', '1.1.1'
 
 end

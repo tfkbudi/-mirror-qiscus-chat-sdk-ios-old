@@ -12,15 +12,25 @@ public class QiscusCore: NSObject {
     
     public static let shared : QiscusCore = QiscusCore()
     private static var config : ConfigManager = ConfigManager.shared
-    public static var network : NetworkManager = NetworkManager()
+    private static var realtime : RealtimeManager?
+    static var network : NetworkManager = NetworkManager()
     public static var enableDebugPrint: Bool = false
   
-    /// added your app Qiscus APP ID
+    /// set your app Qiscus APP ID, always set app ID everytime your app lounch
     ///
     /// - Parameter WithAppID: Qiscus SDK App ID
     public class func setup(WithAppID id: String) {
-        config.appID = id
-        config.server = ServerConfig(url: URL.init(string: "https://api.qiscus.com/api/v2/mobile")!, realtimeURL: nil, realtimePort: nil)
+        config.appID    = id
+        config.server   = ServerConfig(url: URL.init(string: "https://api.qiscus.com/api/v2/mobile")!, realtimeURL: nil, realtimePort: nil)
+        realtime        = RealtimeManager.init(appName: id)
+        QiscusCore.connect()
+    }
+    
+    static func connect() {
+        // check user login
+        if let user = getUserLogin() {
+            realtime?.connect(username: user.email, password: user.token)
+        }
     }
     
     /// Setup custom server, when you use Qiscus on premise
@@ -40,7 +50,7 @@ public class QiscusCore: NSObject {
     /// - Parameter completion: @escaping with Optional(QNonce) and String Optional(error)
     public class func getNonce(completion: @escaping (QNonce?, String?) -> Void) {
         if config.appID == nil {
-            fatalError("please call setup() first")
+            fatalError("You need to set App ID")
         }
         network.getNonce(completion: completion)
     }
@@ -51,10 +61,14 @@ public class QiscusCore: NSObject {
     /// - parameter completion          : The code to be executed once the request has finished, also give a user object and error.
     ///
     public class func connect(userID: String, userKey: String, completion: @escaping (UserModel?, String?) -> Void) {
+        if config.appID == nil {
+            fatalError("You need to set App ID")
+        }
         network.login(email: userID, password: userKey, username: nil, avatarUrl: nil) { (results, error) in
-            if let user = results {
+            if let user = results, let client = realtime {
                 // save user in local
                 ConfigManager.shared.user = user
+                client.connect(username: user.email, password: user.token)
             }
             completion(results, error)
         }
@@ -66,6 +80,9 @@ public class QiscusCore: NSObject {
     ///   - token: identity token from your server, when you implement Nonce or JWT
     ///   - completion: The code to be executed once the request has finished, also give a user object and error.
     public class func connect(withIdentityToken token: String, completion: @escaping (UserModel?, String?) -> Void) {
+        if config.appID == nil {
+            fatalError("You need to set App ID")
+        }
         network.login(identityToken: token) { (results, error) in
             if let user = results {
                 // save user in local
