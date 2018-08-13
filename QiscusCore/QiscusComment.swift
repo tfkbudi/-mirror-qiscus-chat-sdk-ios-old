@@ -48,4 +48,6 @@ extension QiscusCore {
             completion(comments,nil)
         }
     }
+    
+    public func delete
 }

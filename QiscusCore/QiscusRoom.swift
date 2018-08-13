@@ -40,8 +40,15 @@ extension QiscusCore {
     /// - Parameters:
     ///   - channel: channel name or channel id
     ///   - completion: Response Qiscus Room Object and error if exist.
-    public func getRoom(withChannel channel: String, completion: @escaping (String, Error) -> Void) {
+    public func getRoom(withChannel channel: String, completion: @escaping (RoomModel?, QError?) -> Void) {
         // call api get_room_by_id
+        QiscusCore.network.getRoomInfo(roomIds: nil, roomUniqueIds: [channel], showParticipant: true, showRemoved: false) { (rooms, error) in
+            if let room = rooms {
+                completion(room.first,nil)
+            }else {
+                completion(nil,error)
+            }
+        }
     }
     
     /// Create new Group room
@@ -63,8 +70,9 @@ extension QiscusCore {
     ///   - avatarURL: new room Avatar
     ///   - options: String, and JSON string is approved
     ///   - completion: Response new Qiscus Room Object and error if exist.
-    public func updateRoom(withID id: String, name: String?, avatarURL: URL?, options: String?, completion: @escaping (RoomModel?, String?) -> Void) {
+    public func updateRoom(withID id: String, name: String?, avatarURL url: URL?, options: String?, completion: @escaping (RoomModel?, QError?) -> Void) {
         // call api update_room
+        QiscusCore.network.updateRoom(roomId: id, roomName: name, avatarUrl: url, options: options, completion: completion)
     }
     
     /// Get Room info

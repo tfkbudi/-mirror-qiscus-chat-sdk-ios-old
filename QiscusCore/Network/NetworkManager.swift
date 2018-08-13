@@ -939,12 +939,17 @@ extension NetworkManager {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
-                    guard data != nil else {
+                    guard let responseData = data else {
                         completion(0, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
-                    
-                    completion(0, nil)
+                    do {
+                        let apiResponse = try JSONDecoder().decode(ApiResponse<UnreadModel>.self, from: responseData)
+                        completion(apiResponse.results.unread, nil)
+                    } catch {
+                        print(error)
+                        completion(0, QError(message: NetworkResponse.unableToDecode.rawValue))
+                    }
                 case .failure(let errorMessage):
                     // MARK: Todo print error message
                     do {
