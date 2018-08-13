@@ -13,7 +13,6 @@ public class QNonce : Codable {
     public let nonce : String
     
     enum CodingKeys: String, CodingKey {
-        
         case expiredAt = "expired_at"
         case nonce = "nonce"
     }

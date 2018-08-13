@@ -7,6 +7,11 @@
 
 import Foundation
 
+public enum DeleteType {
+    case forMe
+    case forEveryone
+}
+
 public class UnreadModel : Codable {
     public let unread : Int
     

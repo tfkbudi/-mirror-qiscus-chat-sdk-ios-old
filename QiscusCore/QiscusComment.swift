@@ -49,5 +49,13 @@ extension QiscusCore {
         }
     }
     
-//    public func delete
+    /// Delete message by id
+    ///
+    /// - Parameters:
+    ///   - uniqueID: comment unique id
+    ///   - type: forMe or ForEveryone
+    ///   - completion: Response Comments your deleted
+    public func delete(uniqueIDs id: [String], type: DeleteType, completion: @escaping ([CommentModel]?, QError?) -> Void) {
+        QiscusCore.network.deleteComment(commentUniqueId: id, type: type, completion: completion)
+    }
 }

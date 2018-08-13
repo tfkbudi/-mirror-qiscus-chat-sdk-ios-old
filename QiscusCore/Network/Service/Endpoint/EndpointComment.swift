@@ -11,7 +11,7 @@ import Foundation
 internal enum APIComment {
     case postComment(topicId: String, type: CommentType, message: String, payload: String?, extras: String?, uniqueTempId: String?) // without payload//
     case loadComment(topicId: String, lastCommentId: Int?, timestamp: String?, after: Bool?, limit: Int?)//
-    case delete(commentUniqueId: [String])//
+    case delete(commentUniqueId: [String], type: DeleteType)//
     case updateStatus(roomId: String,lastCommentReadId: String?, lastCommentReceivedId: String?)
     case clear(roomChannelIds: [String])
 }

@@ -71,14 +71,13 @@ extension NetworkManager {
                         let apiResponse = try JSONDecoder().decode(ApiResponse<QNonce>.self, from: responseData)
                         completion(apiResponse.results, nil)
                     } catch {
-                        print(error)
+                        QiscusLogger.errorPrint(error as! String)
                         completion(nil, NetworkResponse.unableToDecode.rawValue)
                     }
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -114,15 +113,15 @@ extension NetworkManager {
                         let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
                         completion(apiResponse.results.user, nil)
                     } catch {
-                        print(error)
+                        QiscusLogger.errorPrint(error as! String)
                         completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
-                        print(error)
+                        QiscusLogger.errorPrint(error as! String)
                         completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                     
@@ -158,14 +157,13 @@ extension NetworkManager {
                         debugPrint(apiResponse)
                         completion(apiResponse.results.user, nil)
                     } catch {
-                        print(error)
+                        QiscusLogger.errorPrint(error as! String)
                         completion(nil, NetworkResponse.unableToDecode.rawValue)
                     }
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -199,10 +197,9 @@ extension NetworkManager {
                     completion(true, QError(message: "Success register device token"))
                 
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -235,10 +232,9 @@ extension NetworkManager {
                     completion(true, QError(message: "Success register device token"))
                     
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -270,14 +266,13 @@ extension NetworkManager {
                         let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
                         completion(apiResponse.results.user, nil)
                     } catch {
-                        print(error)
+                        QiscusLogger.errorPrint(error as! String)
                         completion(nil, NetworkResponse.unableToDecode.rawValue)
                     }
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -315,14 +310,13 @@ extension NetworkManager {
                         let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
                         completion(apiResponse.results.user, nil)
                     } catch {
-                        print(error)
+                        QiscusLogger.errorPrint(error as! String)
                         completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -350,14 +344,13 @@ extension NetworkManager {
                         let apiResponse = try JSONDecoder().decode(ApiResponse<SyncResults>.self, from: responseData)
                         completion(apiResponse.results.comments, apiResponse.results.meta, nil)
                     } catch {
-                        print(error)
+                        QiscusLogger.errorPrint(error as! String)
                         completion(nil, nil, NetworkResponse.unableToDecode.rawValue)
                     }
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -400,14 +393,13 @@ extension NetworkManager {
                         let apiResponse = try JSONDecoder().decode(ApiResponse<RoomsResults>.self, from: responseData)
                         completion(apiResponse.results.roomsInfo, apiResponse.results.meta, nil)
                     } catch {
-                        print(error)
+                        QiscusLogger.errorPrint(error as! String)
                         completion(nil, nil, NetworkResponse.unableToDecode.rawValue)
                     }
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -444,14 +436,13 @@ extension NetworkManager {
                         let apiResponse = try JSONDecoder().decode(ApiResponse<RoomsResults>.self, from: responseData)
                         completion(apiResponse.results.roomsInfo, nil)
                     } catch {
-                        print(error)
+                        QiscusLogger.errorPrint(error as! String)
                         completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -487,14 +478,13 @@ extension NetworkManager {
                         let apiResponse = try JSONDecoder().decode(ApiResponse<RoomCreateGetUpdateResult>.self, from: responseData)
                         completion(apiResponse.results.room, nil)
                     } catch {
-                        print(error)
+                        QiscusLogger.errorPrint(error as! String)
                         completion(nil, NetworkResponse.unableToDecode.rawValue)
                     }
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
 
                     }
@@ -531,14 +521,13 @@ extension NetworkManager {
                         let apiResponse = try JSONDecoder().decode(ApiResponse<RoomCreateGetUpdateResult>.self, from: responseData)
                         completion(apiResponse.results.room, nil)
                     } catch {
-                        print(error)
+                        QiscusLogger.errorPrint(error as! String)
                         completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -575,14 +564,13 @@ extension NetworkManager {
                         let apiResponse = try JSONDecoder().decode(ApiResponse<RoomCreateGetUpdateResult>.self, from: responseData)
                         completion(apiResponse.results.room, apiResponse.results.comments, nil)
                     } catch {
-                        print(error)
+                        QiscusLogger.errorPrint(error as! String)
                         completion(nil, nil, NetworkResponse.unableToDecode.rawValue)
                     }
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -619,14 +607,13 @@ extension NetworkManager {
                         let apiResponse = try JSONDecoder().decode(ApiResponse<RoomCreateGetUpdateResult>.self, from: responseData)
                         completion(apiResponse.results.room, apiResponse.results.comments, nil)
                     } catch {
-                        print(error)
+                        QiscusLogger.errorPrint(error as! String)
                         completion(nil, nil, NetworkResponse.unableToDecode.rawValue)
                     }
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -660,14 +647,13 @@ extension NetworkManager {
                         let apiResponse = try JSONDecoder().decode(ApiResponse<RoomCreateGetUpdateResult>.self, from: responseData)
                         completion(apiResponse.results.room, apiResponse.results.comments, nil)
                     } catch {
-                        print(error)
+                        QiscusLogger.errorPrint(error as! String)
                         completion(nil, nil, NetworkResponse.unableToDecode.rawValue)
                     }
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -706,10 +692,9 @@ extension NetworkManager {
                         completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -737,10 +722,9 @@ extension NetworkManager {
                     
                     completion(true, nil)
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -785,10 +769,9 @@ extension NetworkManager {
                         completion(nil, NetworkResponse.unableToDecode.rawValue)
                     }
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -831,16 +814,13 @@ extension NetworkManager {
                         completion(nil, NetworkResponse.unableToDecode.rawValue)
                     }
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                         completion(nil, errorMessage)
                     } catch {
                         completion(nil, errorMessage)
                     }
-                    
-                    
                 }
             }
         }
@@ -852,17 +832,17 @@ extension NetworkManager {
     /// - Parameters:
     ///   - commentUniqueId: comment unique id or you can use comment.uniqueTempId
     ///   - completion: @escaping when success delete comments, return deleted comment Optional([CommentModel]) and Optional(String error message)
-    func deleteComment(commentUniqueId: [String], completion: @escaping ([CommentModel]?, String?) -> Void) {
-        commentRouter.request(.delete(commentUniqueId: commentUniqueId)) { (data, response, error) in
+    func deleteComment(commentUniqueId: [String], type: DeleteType, completion: @escaping ([CommentModel]?, QError?) -> Void) {
+        commentRouter.request(.delete(commentUniqueId: commentUniqueId, type: type)) { (data, response, error) in
             if error != nil {
-                completion(nil, "Please check your network connection.")
+                completion(nil, QError(message: "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(nil, NetworkResponse.noData.rawValue)
+                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     do {
@@ -870,18 +850,17 @@ extension NetworkManager {
                         completion(apiResponse.results.comments, nil)
                     } catch {
                         print(error)
-                        completion(nil, NetworkResponse.unableToDecode.rawValue)
+                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
                     
-                    completion(nil, errorMessage)
+                    completion(nil, QError(message: errorMessage))
                 }
             }
         }
@@ -909,10 +888,9 @@ extension NetworkManager {
                     
                     completion(true, nil)
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
@@ -951,10 +929,9 @@ extension NetworkManager {
                         completion(0, QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 case .failure(let errorMessage):
-                    // MARK: Todo print error message
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        print("json: \(jsondata)")
+                        QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         
                     }
