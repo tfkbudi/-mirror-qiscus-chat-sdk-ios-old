@@ -44,7 +44,7 @@ public class RoomsResults : Codable {
 }
 
 public class AddParticipantsResult : Codable {
-    let participantsAdded : [QParticipant]
+    let participantsAdded : [ParticipantModel]
     
     enum CodingKeys: String, CodingKey {
         case participantsAdded = "participants_added"
@@ -52,7 +52,7 @@ public class AddParticipantsResult : Codable {
     
     public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        participantsAdded = try values.decode([QParticipant].self, forKey: .participantsAdded)
+        participantsAdded = try values.decode([ParticipantModel].self, forKey: .participantsAdded)
     }
 }
 
@@ -82,7 +82,7 @@ open class RoomModel : Codable {
     public let chatType : String
     public let options : String?
     public let lastComment : CommentModel?
-    public let participants : [QParticipant]?
+    public let participants : [ParticipantModel]?
     public let unreadCount : Int
     
     enum CodingKeys: String, CodingKey {
@@ -107,12 +107,12 @@ open class RoomModel : Codable {
         chatType = try values.decode(String.self, forKey: .chatType)
         options = try values.decodeIfPresent(String.self, forKey: .options)
         lastComment = try values.decodeIfPresent(CommentModel.self, forKey: .lastComment)
-        participants = try values.decodeIfPresent([QParticipant].self, forKey: .participants)
+        participants = try values.decodeIfPresent([ParticipantModel].self, forKey: .participants)
         unreadCount = try values.decode(Int.self, forKey: .unreadCount)
     }
 }
 
-public class QParticipant : Codable {
+public class ParticipantModel : Codable {
     public let avatarUrl : String
     public let email : String
     public let id : String

@@ -148,6 +148,20 @@ public class QiscusCore: NSObject {
             }
         }
     }
+    
+    /// Update user profile
+    ///
+    /// - Parameters:
+    ///   - displayName: nick name
+    ///   - url: user avatar url
+    ///   - completion: The code to be executed once the request has finished
+    public func updateProfile(displayName: String = "", avatarUrl url: URL? = nil, completion: @escaping (UserModel?, QError?) -> Void) {
+        QiscusCore.network.updateProfile(displayName: displayName, avatarUrl: url, completion: completion)
+    }
+    
+    public func unreadCount(completion: @escaping (Int, QError?) -> Void) {
+        QiscusCore.network.unre
+    }
 }
 
 public enum RoomType: String {

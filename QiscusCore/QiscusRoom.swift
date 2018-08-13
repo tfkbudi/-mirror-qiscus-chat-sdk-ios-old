@@ -67,6 +67,24 @@ extension QiscusCore {
         // call api update_room
     }
     
+    /// Get Room info
+    ///
+    /// - Parameters:
+    ///   - withId: array of room id
+    ///   - completion: Response new Qiscus Room Object and error if exist.
+    public func getRooms(withId ids: [String], completion: @escaping ([RoomModel]?, QError?) -> Void) {
+        QiscusCore.network.getRoomInfo(roomIds: ids, roomUniqueIds: nil, showParticipant: false, showRemoved: false, completion: completion)
+    }
+    
+    /// Get Room info
+    ///
+    /// - Parameters:
+    ///   - ids: Unique room id
+    ///   - completion: Response new Qiscus Room Object and error if exist.
+    public func getRooms(withUniqueId ids: [String], completion: @escaping ([RoomModel]?, QError?) -> Void) {
+        QiscusCore.network.getRoomInfo(roomIds: nil, roomUniqueIds: ids, showParticipant: false, showRemoved: false, completion: completion)
+    }
+    
     /// getAllRoom
     ///
     /// - Parameter completion: Response new Qiscus Room Object and error if exist.
@@ -76,4 +94,36 @@ extension QiscusCore {
             completion(rooms,nil)
         }
     }
+    
+    /// Update Room
+    ///
+    /// - Parameters:
+    ///   - name: room name
+    ///   - avatarUrl: room avatar
+    ///   - options: options, string or json string
+    ///   - completion: Response new Qiscus Room Object and error if exist.
+    public func updateRoom(roomId id: String, name: String?, avatarUrl url: URL?, options: String? = nil, completion: @escaping (RoomModel?, QError?) -> Void) {
+        QiscusCore.network.updateRoom(roomId: id, roomName: name, avatarUrl: url, options: options, completion: completion)
+    }
+    
+    /// Add new participant in room(Group)
+    ///
+    /// - Parameters:
+    ///   - userEmails: qiscus user email
+    ///   - roomId: room id
+    ///   - completion:  Response new Qiscus Participant Object and error if exist.
+    public func addParticipant(userEmails emails: [String], roomId: String, completion: @escaping ([ParticipantModel]?, QError?) -> Void) {
+        QiscusCore.network.addParticipants(roomId: roomId, userSdkEmail: emails, completion: completion)
+    }
+    
+    /// remove users from room(Group)
+    ///
+    /// - Parameters:
+    ///   - emails: array qiscus email
+    ///   - roomId: room id (group)
+    ///   - completion: Response true if success and error if exist
+    public func removeParticipant(userEmails emails: [String], roomId: String, completion: @escaping (Bool, QError?) -> Void) {
+        QiscusCore.network.removeParticipants(roomId: roomId, userSdkEmail: emails, completion: completion)
+    }
+    
 }

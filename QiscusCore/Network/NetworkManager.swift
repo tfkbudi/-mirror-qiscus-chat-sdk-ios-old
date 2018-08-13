@@ -293,21 +293,21 @@ extension NetworkManager {
     ///   - displayName: user new displayname
     ///   - avatarUrl: user new avatar url
     ///   - completion: @escaping when finish updating user profile return update Optional(UserModel) and Optional(String error message)
-    func updateProfile(displayName: String = "", avatarUrl: String = "", completion: @escaping (UserModel?, String?) -> Void) {
-        if displayName.isEmpty && avatarUrl.isEmpty {
+    func updateProfile(displayName: String = "", avatarUrl: URL? = nil, completion: @escaping (UserModel?, QError?) -> Void) {
+        if displayName.isEmpty && avatarUrl == nil {
             return
         }
         
-        clientRouter.request(.updateMyProfile(name: displayName, avatarUrl: avatarUrl)) { (data, response, error) in
+        clientRouter.request(.updateMyProfile(name: displayName, avatarUrl: avatarUrl?.absoluteString)) { (data, response, error) in
             if error != nil {
-                completion(nil, "Please check your network connection.")
+                completion(nil, QError(message: "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(nil, NetworkResponse.noData.rawValue)
+                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     do {
@@ -315,7 +315,7 @@ extension NetworkManager {
                         completion(apiResponse.results.user, nil)
                     } catch {
                         print(error)
-                        completion(nil, NetworkResponse.unableToDecode.rawValue)
+                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 case .failure(let errorMessage):
                     // MARK: Todo print error message
@@ -326,7 +326,7 @@ extension NetworkManager {
                         
                     }
                     
-                    completion(nil,errorMessage)
+                    completion(nil, QError(message: errorMessage))
                 }
             }
         }
@@ -426,17 +426,17 @@ extension NetworkManager {
     ///   - showRemoved: Bool (true = include room that has been removed, false = exclude room that has been removed)
     ///   - showEmpty: Bool (true = it will show all rooms that have been created event there are no messages, default is false where only room that have at least one message will be shown)
     ///   - completion: @escaping when success get room list returning Optional([RoomModel]), Optional(Meta) contain page, total_room per page, Optional(String error message)
-    func getRoomInfo(roomIds: [String]? = [], roomUniqueIds: [String]? = [], showParticipant: Bool = false, showRemoved: Bool = false, completion: @escaping ([RoomModel]?, String?) -> Void) {
+    func getRoomInfo(roomIds: [String]? = [], roomUniqueIds: [String]? = [], showParticipant: Bool = false, showRemoved: Bool = false, completion: @escaping ([RoomModel]?, QError?) -> Void) {
         roomRouter.request(.roomInfo(roomId: roomIds, roomUniqueId: roomUniqueIds, showParticipants: showParticipant, showRemoved: showRemoved)) { (data, response, error) in
             if error != nil {
-                completion(nil, "Please check your network connection.")
+                completion(nil, QError(message: "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(nil, NetworkResponse.noData.rawValue)
+                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     do {
@@ -444,7 +444,7 @@ extension NetworkManager {
                         completion(apiResponse.results.roomsInfo, nil)
                     } catch {
                         print(error)
-                        completion(nil, NetworkResponse.unableToDecode.rawValue)
+                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 case .failure(let errorMessage):
                     // MARK: Todo print error message
@@ -455,7 +455,7 @@ extension NetworkManager {
                         
                     }
                     
-                    completion(nil, errorMessage)
+                    completion(nil, QError(message: errorMessage))
                 }
             }
         }
@@ -513,17 +513,17 @@ extension NetworkManager {
     ///   - avatarUrl: new room avatar
     ///   - options: new room options
     ///   - completion: @escaping when success update room, return created Optional(RoomModel), Optional(String error message)
-    func updateRoom(roomId: String, roomName: String?, avatarUrl: URL?, options: String?, completion: @escaping (RoomModel?, String?) -> Void) {
+    func updateRoom(roomId: String, roomName: String?, avatarUrl: URL?, options: String?, completion: @escaping (RoomModel?, QError?) -> Void) {
         roomRouter.request(.updateRoom(roomId: roomId, roomName: roomName, avatarUrl: avatarUrl, options: options)) { (data, response, error) in
             if error != nil {
-                completion(nil, "Please check your network connection.")
+                completion(nil, QError(message: "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(nil, NetworkResponse.noData.rawValue)
+                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     do {
@@ -531,7 +531,7 @@ extension NetworkManager {
                         completion(apiResponse.results.room, nil)
                     } catch {
                         print(error)
-                        completion(nil, NetworkResponse.unableToDecode.rawValue)
+                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 case .failure(let errorMessage):
                     // MARK: Todo print error message
@@ -542,7 +542,7 @@ extension NetworkManager {
                         
                     }
                     
-                    completion(nil, errorMessage)
+                    completion(nil, QError(message: errorMessage))
                 }
             }
         }
@@ -683,18 +683,18 @@ extension NetworkManager {
     /// - Parameters:
     ///   - roomId: chat room id
     ///   - userSdkEmail: array of user's sdk email
-    ///   - completion: @escaping when success add participant to room, return added participants Optional([QParticipant]), Optional(String error message)
-    func addParticipants(roomId: String, userSdkEmail: [String], completion: @escaping ([QParticipant]?, String?) -> Void) {
+    ///   - completion: @escaping when success add participant to room, return added participants Optional([ParticipantModel]), Optional(String error message)
+    func addParticipants(roomId: String, userSdkEmail: [String], completion: @escaping ([ParticipantModel]?, QError?) -> Void) {
         roomRouter.request(.addParticipant(roomId: roomId, emails: userSdkEmail)) { (data, response, error) in
             if error != nil {
-                completion(nil, "Please check your network connection.")
+                completion(nil, QError(message: "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(nil, NetworkResponse.noData.rawValue)
+                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     do {
@@ -702,7 +702,7 @@ extension NetworkManager {
                         completion(apiResponse.results.participantsAdded, nil)
                     } catch {
                         print(error)
-                        completion(nil, NetworkResponse.unableToDecode.rawValue)
+                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 case .failure(let errorMessage):
                     // MARK: Todo print error message
@@ -713,24 +713,24 @@ extension NetworkManager {
                         
                     }
                     
-                    completion(nil, errorMessage)
+                    completion(nil, QError(message: errorMessage))
                 }
             }
         }
     }
     
     
-    func removeParticipants(roomId: String, userSdkEmail: [String], completion: @escaping(Bool, String?) -> Void) {
+    func removeParticipants(roomId: String, userSdkEmail: [String], completion: @escaping(Bool, QError?) -> Void) {
         roomRouter.request(.removeParticipant(roomId: roomId, emails: userSdkEmail)) { (data, response, error) in
             if error != nil {
-                completion(false, "Please check your network connection.")
+                completion(false, QError(message: "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard data != nil else {
-                        completion(false, NetworkResponse.noData.rawValue)
+                        completion(false, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     
@@ -744,7 +744,7 @@ extension NetworkManager {
                         
                     }
                     
-                    completion(false, errorMessage)
+                    completion(false, QError(message: errorMessage))
                 }
             }
         }
@@ -927,5 +927,9 @@ extension NetworkManager {
         commentRouter.request(.updateStatus(roomId: roomId, lastCommentReadId: lastCommentReadId, lastCommentReceivedId: lastCommentReceivedId)) { (data, response, error) in
             
         }
+    }
+    
+    func unreadCount(completion: @escaping(Int, QError?) -> Void) {
+        
     }
 }
