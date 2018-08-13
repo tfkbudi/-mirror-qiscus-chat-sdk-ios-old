@@ -112,7 +112,7 @@ open class RoomModel : Codable {
     }
 }
 
-public class ParticipantModel : Codable {
+open class ParticipantModel : Codable {
     public let avatarUrl : String
     public let email : String
     public let id : String

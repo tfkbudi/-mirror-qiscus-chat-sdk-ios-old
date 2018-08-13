@@ -49,5 +49,5 @@ extension QiscusCore {
         }
     }
     
-    public func delete
+//    public func delete
 }
