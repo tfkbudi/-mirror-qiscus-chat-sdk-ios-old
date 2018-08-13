@@ -15,7 +15,13 @@ class RealtimeManager {
     // mock
     
     init(appName: String) {
-        let config = QiscusRealtimeConfig(appName: appName)
+        let bundle = Bundle.main.infoDictionary![kCFBundleNameKey as String] as! String
+        var deviceID = "000"
+        if let vendorIdentifier = UIDevice.current.identifierForVendor {
+            deviceID = vendorIdentifier.uuidString
+        }
+        let clientID = "iosMQTT-\(bundle)-\(deviceID)"
+        let config = QiscusRealtimeConfig(appName: appName, clientID: clientID)
         client = QiscusRealtime.init(withConfig: config)
     }
     
@@ -25,7 +31,27 @@ class RealtimeManager {
     
 }
 
-extension RealtimeManager: QiscusRealtimeConnectionDelegate {
+extension RealtimeManager: QiscusRealtimeDelegate {
+    func didReceiveUserStatus(roomId: String, userEmail: String, timeString: String, timeToken: Double) {
+        //
+    }
+    
+    func didReceiveMessageEvent(roomId: String, message: String) {
+        //
+    }
+    
+    func didReceiveMessageComment(roomId: String, message: String) {
+        //
+    }
+    
+    func didReceiveMessageStatus(roomId: String, commentId: Int, Status: MessageStatus) {
+        //
+    }
+    
+    func updateUserTyping(roomId: String, userEmail: String) {
+        //
+    }
+    
     func disconnect(withError err: Error?) {
         QiscusLogger.debugPrint("Qiscus realtime disconnect")
     }
