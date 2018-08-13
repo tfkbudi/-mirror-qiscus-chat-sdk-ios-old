@@ -28,7 +28,7 @@ public class QiscusCore: NSObject {
     
     static func connect() {
         // check user login
-        if let user = getUserLogin() {
+        if let user = getProfile() {
             realtime?.connect(username: user.email, password: user.token)
         }
     }
@@ -79,7 +79,7 @@ public class QiscusCore: NSObject {
     /// - Parameters:
     ///   - token: identity token from your server, when you implement Nonce or JWT
     ///   - completion: The code to be executed once the request has finished, also give a user object and error.
-    public class func connect(withIdentityToken token: String, completion: @escaping (UserModel?, String?) -> Void) {
+    public class func connect(withIdentityToken token: String, completion: @escaping (UserModel?, QError?) -> Void) {
         if config.appID == nil {
             fatalError("You need to set App ID")
         }
@@ -92,17 +92,10 @@ public class QiscusCore: NSObject {
         }
     }
     
-    /// get qiscus user
-    ///
-    /// - Returns: return nil when client not logined, and return object user when already logined
-    public static func getUserLogin() -> UserModel? {
-        return ConfigManager.shared.user
-    }
-    
     /// Disconnect or logout
     ///
     /// - Parameter completionHandler: The code to be executed once the request has finished, also give a user object and error.
-    public static func logout(completion: @escaping (Error?) -> Void) {
+    public static func logout(completion: @escaping (QError?) -> Void) {
         
     }
     
@@ -120,7 +113,7 @@ public class QiscusCore: NSObject {
     /// - Parameters:
     ///   - deviceToken: device token
     ///   - completion: The code to be executed once the request has finished
-    public func register(deviceToken : String, completion: @escaping (Bool, String) -> Void) {
+    public func register(deviceToken : String, completion: @escaping (Bool, QError?) -> Void) {
         QiscusCore.network.registerDeviceToken(deviceToken: deviceToken, completion: completion)
     }
     
@@ -129,12 +122,32 @@ public class QiscusCore: NSObject {
     /// - Parameters:
     ///   - deviceToken: device token
     ///   - completion: The code to be executed once the request has finished
-    public func remove(deviceToken : String, completion: @escaping (Bool, String) -> Void) {
+    public func remove(deviceToken : String, completion: @escaping (Bool, QError?) -> Void) {
         QiscusCore.network.removeDeviceToken(deviceToken: deviceToken, completion: completion)
     }
     
-    // MARK: Profile
-    public func getProfile()
+    // MARK: User Profile
+    
+    /// get qiscus user from local storage
+    ///
+    /// - Returns: return nil when client not logined, and return object user when already logined
+    public static func getProfile() -> UserModel? {
+        return ConfigManager.shared.user
+    }
+    
+    /// Get Profile from server
+    ///
+    /// - Parameter completion: The code to be executed once the request has finished
+    public func getProfile(completion: @escaping (UserModel?, QError?) -> Void) {
+        QiscusCore.network.getProfile { (user, error) in
+            if let profile = user{
+                completion(profile,nil)
+            }
+            if let message = error {
+                completion(nil,QError.init(message: message))
+            }
+        }
+    }
 }
 
 public enum RoomType: String {

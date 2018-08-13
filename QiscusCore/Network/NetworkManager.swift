@@ -94,10 +94,10 @@ extension NetworkManager {
     /// - Parameters:
     ///   - identityToken: identity token from your server after verify the nonce
     ///   - completion: @escaping when success login retrun Optional(UserModel) and Optional(String error message)
-    func login(identityToken: String, completion: @escaping (UserModel?, String?) -> Void) {
+    func login(identityToken: String, completion: @escaping (UserModel?, QError?) -> Void) {
         clientRouter.request(.loginRegisterJWT(identityToken: identityToken)) { (data, response, error) in
             if error != nil {
-                completion(nil, "Please check your network connection.")
+                completion(nil, QError(message: "Please check your network connection."))
             }
             
             if let response = response as? HTTPURLResponse {
@@ -105,7 +105,7 @@ extension NetworkManager {
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(nil, NetworkResponse.noData.rawValue)
+                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     
@@ -114,7 +114,7 @@ extension NetworkManager {
                         completion(apiResponse.results.user, nil)
                     } catch {
                         print(error)
-                        completion(nil, NetworkResponse.unableToDecode.rawValue)
+                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 case .failure(let errorMessage):
                     do {
@@ -122,10 +122,10 @@ extension NetworkManager {
                         print("json: \(jsondata)")
                     } catch {
                         print(error)
-                        completion(nil, NetworkResponse.unableToDecode.rawValue)
+                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                     
-                    completion(nil,errorMessage)
+                    completion(nil,QError(message: errorMessage))
                 }
             }
         }
@@ -181,21 +181,21 @@ extension NetworkManager {
     /// - Parameters:
     ///   - deviceToken: string device token for push notification
     ///   - completion: @escaping when success register device token to sdk server returning value bool(success or not) and Optional String(error message)
-    func registerDeviceToken(deviceToken: String, completion: @escaping (Bool, String) -> Void) {
+    func registerDeviceToken(deviceToken: String, completion: @escaping (Bool, QError?) -> Void) {
         clientRouter.request(.registerDeviceToken(token: deviceToken)) { (data, response, error) in
             if error != nil {
-                completion(false, "Please check your network connection.")
+                completion(false, QError(message: "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let _ = data else {
-                        completion(false, NetworkResponse.noData.rawValue)
+                        completion(false, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     
-                    completion(true, "Success register device token")
+                    completion(true, QError(message: "Success register device token"))
                 
                 case .failure(let errorMessage):
                     // MARK: Todo print error message
@@ -206,7 +206,7 @@ extension NetworkManager {
                         
                     }
                     
-                    completion(false,errorMessage)
+                    completion(false,QError(message: errorMessage))
                 }
             }
         }
@@ -217,21 +217,21 @@ extension NetworkManager {
     /// - Parameters:
     ///   - deviceToken: string device token to be remove from server
     ///   - completion: @escaping when success remove device token to sdk server returning value bool(success or not) and Optional String(error message)
-    func removeDeviceToken(deviceToken: String, completion: @escaping (Bool, String) -> Void) {
+    func removeDeviceToken(deviceToken: String, completion: @escaping (Bool, QError?) -> Void) {
         clientRouter.request(.removeDeviceToken(token: deviceToken)) { (data, response, error) in
             if error != nil {
-                completion(false, "Please check your network connection.")
+                completion(false, QError(message: "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let _ = data else {
-                        completion(false, NetworkResponse.noData.rawValue)
+                        completion(false, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     
-                    completion(true, "Success register device token")
+                    completion(true, QError(message: "Success register device token"))
                     
                 case .failure(let errorMessage):
                     // MARK: Todo print error message
@@ -242,7 +242,7 @@ extension NetworkManager {
                         
                     }
                     
-                    completion(false,errorMessage)
+                    completion(false,QError(message: errorMessage))
                 }
             }
         }
