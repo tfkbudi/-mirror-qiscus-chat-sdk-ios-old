@@ -29,7 +29,7 @@ extension APIUser : EndPoint {
         case .listBloked( _, _):
             return "/get_blocked_users"
         case .unread:
-            return ""
+            return "/total_unread_count"
         }
     }
     
@@ -37,10 +37,8 @@ extension APIUser : EndPoint {
         switch self {
         case .block, .unblock :
             return .post
-        case .listBloked :
+        case .listBloked, .unread:
             return .get
-        case .unread:
-            <#code#>
         }
     }
     var header: HTTPHeaders? {
@@ -67,6 +65,11 @@ extension APIUser : EndPoint {
                 "page"                        : page,
                 "limit"                       : limit
                 ] as [String : Any]
+            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+        case .unread:
+            let param = [
+                "token"                       : AUTHTOKEN
+            ]
             return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
         }
     }

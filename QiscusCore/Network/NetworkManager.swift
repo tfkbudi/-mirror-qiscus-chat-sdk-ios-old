@@ -35,6 +35,7 @@ public class NetworkManager: NSObject {
     let clientRouter    = Router<APIClient>()
     let roomRouter      = Router<APIRoom>()
     let commentRouter   = Router<APIComment>()
+    let userRouter      = Router<APIUser>()
     
     fileprivate func handleNetworkResponse(_ response: HTTPURLResponse) -> Result<String>{
         print("response code \(response.statusCode)")
@@ -930,6 +931,32 @@ extension NetworkManager {
     }
     
     func unreadCount(completion: @escaping(Int, QError?) -> Void) {
-        
+        userRouter.request(.unread()) { (data, response, error) in
+            if error != nil {
+                completion(0, QError(message: "Please check your network connection."))
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard data != nil else {
+                        completion(0, QError(message: NetworkResponse.noData.rawValue))
+                        return
+                    }
+                    
+                    completion(0, nil)
+                case .failure(let errorMessage):
+                    // MARK: Todo print error message
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        print("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    
+                    completion(0, QError(message: errorMessage))
+                }
+            }
+        }
     }
 }

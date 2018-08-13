@@ -160,7 +160,7 @@ public class QiscusCore: NSObject {
     }
     
     public func unreadCount(completion: @escaping (Int, QError?) -> Void) {
-        QiscusCore.network.unre
+        QiscusCore.network.unreadCount(completion: completion)
     }
 }
 
