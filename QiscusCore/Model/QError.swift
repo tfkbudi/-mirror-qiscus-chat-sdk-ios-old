@@ -9,7 +9,7 @@
 import UIKit
 
 public class QError {
-    var message : String = ""
+    public var message : String = ""
     
     init(message: String) {
         self.message = message

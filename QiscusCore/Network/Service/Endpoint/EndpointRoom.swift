@@ -181,7 +181,7 @@ extension APIRoom : EndPoint {
         case .getRoomById(let roomId):
             let params = [
                 "token"                      : AUTHTOKEN,
-                "room_id"                    : roomId
+                "id"                    : Int64(roomId) ?? 0
                 ] as [String : Any]
             
             return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: params)

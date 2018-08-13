@@ -18,7 +18,15 @@ extension QiscusCore {
     public func getRoom(withUser user: String, completion: @escaping (RoomModel?, QError?) -> Void) {
         // call api get_or_create_room_with_target
         QiscusCore.network.getOrCreateRoomWithTarget(targetSdkEmail: user) { (room, comments, error) in
-            completion(room, nil)
+            if let r = room {
+                completion(r, nil)
+            }else {
+                if let e = error {
+                    completion(nil, QError.init(message: e))
+                }else {
+                    completion(nil, QError.init(message: "Unexpectend results"))
+                }
+            }
         }
     }
     
@@ -30,7 +38,15 @@ extension QiscusCore {
     public func getRoom(withID id: String, completion: @escaping (RoomModel?, QError?) -> Void) {
         // call api get_room_by_id
         QiscusCore.network.getRoomById(roomId: id) { (room, comments, error) in
-            completion(room, nil)
+            if let r = room {
+                completion(r, nil)
+            }else {
+                if let e = error {
+                    completion(nil, QError.init(message: e))
+                }else {
+                    completion(nil, QError.init(message: "Unexpectend results"))
+                }
+            }
         }
         // or Load from storage
     }
