@@ -114,6 +114,27 @@ public class QiscusCore: NSObject {
             return (ConfigManager.shared.user != nil)
         }
     }
+    
+    /// Register device token Apns or Pushkit
+    ///
+    /// - Parameters:
+    ///   - deviceToken: device token
+    ///   - completion: The code to be executed once the request has finished
+    public func register(deviceToken : String, completion: @escaping (Bool, String) -> Void) {
+        QiscusCore.network.registerDeviceToken(deviceToken: deviceToken, completion: completion)
+    }
+    
+    /// Remove device token
+    ///
+    /// - Parameters:
+    ///   - deviceToken: device token
+    ///   - completion: The code to be executed once the request has finished
+    public func remove(deviceToken : String, completion: @escaping (Bool, String) -> Void) {
+        QiscusCore.network.removeDeviceToken(deviceToken: deviceToken, completion: completion)
+    }
+    
+    // MARK: Profile
+    public func getProfile()
 }
 
 public enum RoomType: String {
