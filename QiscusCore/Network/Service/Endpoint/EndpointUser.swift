@@ -11,7 +11,7 @@ import Foundation
 internal enum APIUser {
     case block(email: String)
     case unblock(email: String)
-    case listBloked(page: Int, limit: Int)
+    case listBloked(page: Int?, limit: Int?)
     case unread()
 }
 
@@ -60,12 +60,16 @@ extension APIUser : EndPoint {
             ]
             return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
         case .listBloked(let page,let limit):
-            let param = [
+            var params = [
                 "token"                       : AUTHTOKEN,
-                "page"                        : page,
-                "limit"                       : limit
                 ] as [String : Any]
-            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+            if let p = page {
+                params["page"] = p
+            }
+            if let l = limit {
+                params["limit"] = l
+            }
+            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
         case .unread:
             let param = [
                 "token"                       : AUTHTOKEN

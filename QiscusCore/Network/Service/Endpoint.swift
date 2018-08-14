@@ -16,22 +16,6 @@ protocol EndPoint {
     var task        : HTTPTask { get }
 }
 
-// MARK: General API
-internal enum APIClient {
-    case sync(lastReceivedCommentId: String, order: String, limit: Int)
-    case syncEvent(startEventId : Int)
-    case search(keyword: String, roomId: String?, lastCommentId: Int?)
-    case registerDeviceToken(token: String) //
-    case removeDeviceToken(token: String) //
-    case loginRegister(user: String, password: String , username: String?, avatarUrl: String?) //
-    case loginRegisterJWT(identityToken: String) //
-    case nonce //
-    case unread
-    case myProfile //
-    case updateMyProfile(name: String?, avatarUrl: String?) //
-    case upload
- }
-
 // MARK: TODO Manage This
 var AUTHTOKEN : String {
     get {
@@ -82,6 +66,22 @@ var HEADERS : [String: String] {
 /////
 
 
+// MARK: General API
+internal enum APIClient {
+    case sync(lastReceivedCommentId: String, order: String, limit: Int)
+    case syncEvent(startEventId : Int)
+    case search(keyword: String, roomId: String?, lastCommentId: Int?)
+    case registerDeviceToken(token: String) //
+    case removeDeviceToken(token: String) //
+    case loginRegister(user: String, password: String , username: String?, avatarUrl: String?) //
+    case loginRegisterJWT(identityToken: String) //
+    case nonce //
+    case unread
+    case myProfile //
+    case updateMyProfile(name: String?, avatarUrl: String?) //
+    case upload
+}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 extension APIClient : EndPoint {
     var baseURL: URL {
        return BASEURL

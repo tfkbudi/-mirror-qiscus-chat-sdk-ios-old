@@ -55,12 +55,26 @@ extension QiscusCore {
     ///   - uniqueID: comment unique id
     ///   - type: forMe or ForEveryone
     ///   - completion: Response Comments your deleted
-    public func delete(uniqueIDs id: [String], type: DeleteType, completion: @escaping ([CommentModel]?, QError?) -> Void) {
+    public func deleteMessage(uniqueIDs id: [String], type: DeleteType, completion: @escaping ([CommentModel]?, QError?) -> Void) {
         QiscusCore.network.deleteComment(commentUniqueId: id, type: type, completion: completion)
     }
     
-    public func deleteAll(roomID: String, completion: @escaping (Bool, QError?) -> Void) {
-        // MARK: TODO
-        
+    /// Delete all message in room
+    ///
+    /// - Parameters:
+    ///   - roomID: array of room id
+    ///   - completion: Response error if exist
+    public func deleteAllMessage(roomID: [String], completion: @escaping (QError?) -> Void) {
+        QiscusCore.network.clearMessage(roomsID: roomID, completion: completion)
+    }
+    
+    /// Search message
+    ///
+    /// - Parameters:
+    ///   - keyword: required, keyword to search
+    ///   - roomID: optional, search on specific room by room id
+    ///   - lastCommentId: optional, will get comments aafter this id
+    public func searchMessage(keyword: String, roomID: String?, lastCommentId: Int?, completion: @escaping ([CommentModel]?, QError?) -> Void) {
+        QiscusCore.network.searchMessage(keyword: keyword, roomID: roomID, lastCommentId: lastCommentId, completion: completion)
     }
 }
