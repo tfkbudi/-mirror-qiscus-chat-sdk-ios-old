@@ -13,23 +13,44 @@ public class QiscusCore: NSObject {
     public static let shared : QiscusCore = QiscusCore()
     private static var config : ConfigManager = ConfigManager.shared
     private static var realtime : RealtimeManager?
+    static var eventManager : QiscusEventManager = QiscusEventManager.shared
     static var network : NetworkManager = NetworkManager()
+    static var delegate : QiscusCoreDelegate? {
+        get {
+            return eventManager.delegate
+        }
+        set {
+            eventManager.delegate = newValue
+        }
+    }
     public static var enableDebugPrint: Bool = false
   
-    /// set your app Qiscus APP ID, always set app ID everytime your app lounch
+    /// set your app Qiscus APP ID, always set app ID everytime your app lounch. \nAfter login successculy, no need to setup again
     ///
     /// - Parameter WithAppID: Qiscus SDK App ID
     public class func setup(WithAppID id: String) {
         config.appID    = id
         config.server   = ServerConfig(url: URL.init(string: "https://api.qiscus.com/api/v2/mobile")!, realtimeURL: nil, realtimePort: nil)
-        realtime        = RealtimeManager.init(appName: id)
-        QiscusCore.connect()
+        realtime       = RealtimeManager.init(appName: id)
     }
     
-    static func connect() {
+    
+    /// Connect to qiscus server
+    ///
+    /// - Parameter delegate: qiscuscore delegate to listen the event
+    /// - Returns: true if success connect, please make sure you already login before connect.
+    public class func connect(delegate: QiscusConnectionDelegate) -> Bool {
         // check user login
         if let user = getProfile() {
+            // setup configuration
+            QiscusCore.setup(WithAppID: user.app.code)
+            // set delegate
+            eventManager.connectionDelegate = delegate
+            // connect qiscus realtime server
             realtime?.connect(username: user.email, password: user.token)
+            return true
+        }else {
+            return false
         }
     }
     
