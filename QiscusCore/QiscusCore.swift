@@ -159,8 +159,23 @@ public class QiscusCore: NSObject {
         QiscusCore.network.updateProfile(displayName: displayName, avatarUrl: url, completion: completion)
     }
     
+    /// Get total unreac count by user
+    ///
+    /// - Parameter completion: number of unread cout for all room
     public func unreadCount(completion: @escaping (Int, QError?) -> Void) {
         QiscusCore.network.unreadCount(completion: completion)
+    }
+    
+    public func blockUser(email: String, completion: @escaping (Bool, QError?) -> Void) {
+//        QiscusCore.network.
+    }
+    
+    public func unblockUser(email: String, completion: @escaping (Bool, QError?) -> Void) {
+        
+    }
+    
+    public func listBlocked() {
+        
     }
 }
 

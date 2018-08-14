@@ -58,4 +58,9 @@ extension QiscusCore {
     public func delete(uniqueIDs id: [String], type: DeleteType, completion: @escaping ([CommentModel]?, QError?) -> Void) {
         QiscusCore.network.deleteComment(commentUniqueId: id, type: type, completion: completion)
     }
+    
+    public func deleteAll(roomID: String, completion: @escaping (Bool, QError?) -> Void) {
+        // MARK: TODO
+        
+    }
 }

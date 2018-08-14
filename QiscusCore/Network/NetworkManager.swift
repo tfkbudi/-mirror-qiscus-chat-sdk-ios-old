@@ -941,4 +941,9 @@ extension NetworkManager {
             }
         }
     }
+    
+    func searchMessage(keyword: String, roomID: String, lastCommentId: Int, completion: @escaping ([CommentModel]?, QError?) -> Void) {
+        
+    }
+    
 }

@@ -12,5 +12,3 @@ struct ServerConfig {
     let realtimeURL : String?
     let realtimePort : Int?
 }
-
-

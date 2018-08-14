@@ -14,6 +14,7 @@ internal enum APIComment {
     case delete(commentUniqueId: [String], type: DeleteType)//
     case updateStatus(roomId: String,lastCommentReadId: String?, lastCommentReceivedId: String?)
     case clear(roomChannelIds: [String])
+    case search(keyword: String, roomID: String?, lastCommentID: Int?)
 }
 
 extension APIComment : EndPoint {
@@ -33,6 +34,8 @@ extension APIComment : EndPoint {
             return "/update_comment_status"
         case .clear( _):
             return "/clear_room_messages"
+        case .search:
+            return "/search_messages"
         }
     }
     
@@ -40,7 +43,7 @@ extension APIComment : EndPoint {
         switch self {
         case .loadComment:
             return .get
-        case .postComment, .updateStatus:
+        case .postComment, .updateStatus, .search( _, _, _):
             return .post
         case .delete, .clear( _):
             return .delete
@@ -93,11 +96,14 @@ extension APIComment : EndPoint {
                 params["limit"] = limt
             }
             return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: params)
-        case .delete(let id):
-            let params = [
+        case .delete(let id, let type):
+            var params = [
                 "token"                     : AUTHTOKEN,
                 "unique_ids"                : id
                 ] as [String : Any]
+            if type == .forEveryone {
+                params["is_delete_for_everyone"] = true
+            }
             return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
         case .updateStatus(let roomId,let lastCommentReadId,let lastCommentReceivedId):
             var params = [
@@ -119,6 +125,18 @@ extension APIComment : EndPoint {
                 "token"                      : AUTHTOKEN,
                 "room_channel_ids"           : roomChannelIds
                 ] as [String : Any]
+            return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
+        case .search(let keyword, let roomID, let lastCommentID):
+            var params = [
+                "token"                     : AUTHTOKEN,
+                "query"                     : keyword,
+            ] as [String : Any]
+            if let id = roomID {
+                params["room_id"] = id
+            }
+            if let commentID = lastCommentID {
+                params["last_comment_id"] = commentID
+            }
             return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
         }
     }
