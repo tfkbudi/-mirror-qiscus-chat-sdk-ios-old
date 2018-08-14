@@ -7,6 +7,10 @@
 //
 import Foundation
 
+protocol RoomEvent {
+    var delegate : QiscusCoreRoomDelegate? { set get }
+}
+
 public class RoomCreateGetUpdateResult : Codable {
     let changed: Bool?
     let room : RoomModel
@@ -74,7 +78,7 @@ public class Meta : Codable {
     
 }
 
-open class RoomModel : Codable {
+open class RoomModel : Codable, RoomEvent {
     public let id : String
     public let name : String
     public let uniqueId : String
@@ -109,6 +113,15 @@ open class RoomModel : Codable {
         lastComment = try values.decodeIfPresent(CommentModel.self, forKey: .lastComment)
         participants = try values.decodeIfPresent([ParticipantModel].self, forKey: .participants)
         unreadCount = try values.decode(Int.self, forKey: .unreadCount)
+    }
+    
+    var delegate: QiscusCoreRoomDelegate? {
+        set {
+            QiscusEventManager.shared.roomDelegate = newValue
+        }
+        get {
+            return QiscusEventManager.shared.roomDelegate
+        }
     }
 }
 

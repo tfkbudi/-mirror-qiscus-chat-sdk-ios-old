@@ -23,12 +23,23 @@ class RealtimeManager {
         let clientID = "iosMQTT-\(bundle)-\(deviceID)"
         let config = QiscusRealtimeConfig(appName: appName, clientID: clientID)
         client = QiscusRealtime.init(withConfig: config)
+        
     }
     
     func connect(username: String, password: String) {
         client.connect(username: username, password: password, delegate: self)
+        // subcribe user token to get new comment
+        subscribeComment(token: password)
     }
     
+    func subscribeRoom(id: String) {
+        // subscribe comment deliverd receipt
+        // subscribe comment read
+    }
+    
+    private func subscribeComment(token: String) {
+        client.setupParticipantSubcribe()
+    }
 }
 
 extension RealtimeManager: QiscusRealtimeDelegate {

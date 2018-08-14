@@ -115,6 +115,9 @@ extension QiscusCore {
     public func getAllRoom(completion: @escaping ([RoomModel]?, QError?) -> Void) {
         // api get room list
         QiscusCore.network.getRoomList(page: 1) { (rooms, meta, error) in
+            // listen room event
+            // subscribe room
+            QiscusCore.realtime.
             completion(rooms,nil)
         }
     }

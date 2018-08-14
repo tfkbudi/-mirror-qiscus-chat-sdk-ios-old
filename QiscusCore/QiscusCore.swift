@@ -12,10 +12,10 @@ public class QiscusCore: NSObject {
     
     public static let shared : QiscusCore = QiscusCore()
     private static var config : ConfigManager = ConfigManager.shared
-    private static var realtime : RealtimeManager?
+    static var realtime : RealtimeManager?
     static var eventManager : QiscusEventManager = QiscusEventManager.shared
     static var network : NetworkManager = NetworkManager()
-    static var delegate : QiscusCoreDelegate? {
+    public static var delegate : QiscusCoreDelegate? {
         get {
             return eventManager.delegate
         }
