@@ -23,6 +23,21 @@ public class UserResults : Codable {
     
 }
 
+public class BlokedUserResults : Codable {
+    let user : [UserModel]
+    
+    enum CodingKeys: String, CodingKey {
+        
+        case user = "blocked_user"
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        user = try values.decode([UserModel].self, forKey: .user)
+    }
+    
+}
+
 public class UserModel : Codable {
     public let app : App
     public var avatarUrl : String           = "http://"

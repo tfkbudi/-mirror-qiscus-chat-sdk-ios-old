@@ -363,19 +363,112 @@ extension NetworkManager {
     
     func blockUser(email: String, completion: @escaping (UserModel?, QError?) -> Void) {
         userRouter.request(.block(email: email)) { (data, response, error) in
+            if error != nil {
+                completion(nil, QError(message: "Please check your network connection."))
+            }
             
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
+                        return
+                    }
+                    
+                    do {
+                        let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
+                        completion(apiResponse.results.user, nil)
+                    } catch {
+                        QiscusLogger.errorPrint(error as! String)
+                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
+                    }
+                case .failure(let errorMessage):
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        QiscusLogger.errorPrint("json: \(jsondata)")
+                    } catch {
+                        QiscusLogger.errorPrint(error as! String)
+                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
+                    }
+                    
+                    completion(nil,QError(message: errorMessage))
+                }
+            }
         }
     }
     
     func unblockUser(email: String, completion: @escaping (UserModel?, QError?) -> Void) {
         userRouter.request(.unblock(email: email)) { (data, response, error) in
+            if error != nil {
+                completion(nil, QError(message: "Please check your network connection."))
+            }
             
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
+                        return
+                    }
+                    
+                    do {
+                        let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
+                        completion(apiResponse.results.user, nil)
+                    } catch {
+                        QiscusLogger.errorPrint(error as! String)
+                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
+                    }
+                case .failure(let errorMessage):
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        QiscusLogger.errorPrint("json: \(jsondata)")
+                    } catch {
+                        QiscusLogger.errorPrint(error as! String)
+                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
+                    }
+                    
+                    completion(nil,QError(message: errorMessage))
+                }
+            }
         }
     }
     
     func getBlokedUser(page: Int?, limit: Int?, completion: @escaping ([UserModel]?, QError?) -> Void) {
         userRouter.request(.listBloked(page: page, limit: limit)) { (data, response, error) in
-            //
+            if error != nil {
+                completion(nil, QError(message: "Please check your network connection."))
+            }
+            
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
+                        return
+                    }
+                    
+                    do {
+                        let apiResponse = try JSONDecoder().decode(ApiResponse<BlokedUserResults>.self, from: responseData)
+                        completion(apiResponse.results.user, nil)
+                    } catch {
+                        QiscusLogger.errorPrint(error as! String)
+                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
+                    }
+                case .failure(let errorMessage):
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        QiscusLogger.errorPrint("json: \(jsondata)")
+                    } catch {
+                        QiscusLogger.errorPrint(error as! String)
+                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
+                    }
+                    
+                    completion(nil,QError(message: errorMessage))
+                }
+            }
         }
     }
 }

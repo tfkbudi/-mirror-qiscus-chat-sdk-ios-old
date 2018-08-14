@@ -166,16 +166,32 @@ public class QiscusCore: NSObject {
         QiscusCore.network.unreadCount(completion: completion)
     }
     
-    public func blockUser(email: String, completion: @escaping (Bool, QError?) -> Void) {
-//        QiscusCore.network.
+    /// Block Qiscus User
+    ///
+    /// - Parameters:
+    ///   - email: qiscus email user
+    ///   - completion: Response object user and error if exist
+    public func blockUser(email: String, completion: @escaping (UserModel?, QError?) -> Void) {
+        QiscusCore.network.blockUser(email: email, completion: completion)
     }
     
-    public func unblockUser(email: String, completion: @escaping (Bool, QError?) -> Void) {
-        
+    /// Unblock Qiscus User
+    ///
+    /// - Parameters:
+    ///   - email: qiscus email user
+    ///   - completion: Response object user and error if exist
+    public func unblockUser(email: String, completion: @escaping (UserModel?, QError?) -> Void) {
+        QiscusCore.network.blockUser(email: email, completion: completion)
     }
     
-    public func listBlocked() {
-        
+    /// Get blocked user
+    ///
+    /// - Parameters:
+    ///   - page: page for pagination
+    ///   - limit: limit per page
+    ///   - completion: Response array of object user and error if exist
+    public func listBlocked(page: Int?, limit:Int?, completion: @escaping ([UserModel]?, QError?) -> Void) {
+        QiscusCore.network.getBlokedUser(page: page, limit: limit, completion: completion)
     }
 }
 
