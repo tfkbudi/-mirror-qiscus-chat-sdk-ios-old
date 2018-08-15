@@ -39,7 +39,7 @@ public class QiscusCore: NSObject {
     ///
     /// - Parameter delegate: qiscuscore delegate to listen the event
     /// - Returns: true if success connect, please make sure you already login before connect.
-    public class func connect(delegate: QiscusConnectionDelegate) -> Bool {
+    public class func connect(delegate: QiscusConnectionDelegate? = nil) -> Bool {
         // check user login
         if let user = getProfile() {
             // setup configuration
@@ -125,7 +125,8 @@ public class QiscusCore: NSObject {
     /// - Returns: return true if already login
     public static var isLogined : Bool {
         get {
-            return (ConfigManager.shared.user != nil)
+            
+            return QiscusCore.connect()
         }
     }
     
@@ -169,6 +170,24 @@ public class QiscusCore: NSObject {
             }
         }
     }
+    
+    
+    /// Start or stop typing in room,
+    ///
+    /// - Parameters:
+    ///   - value: set true if user start typing, and false when finish
+    ///   - roomID: room id where you typing
+    ///   - keepTyping: automatic false after n second
+    public func isTyping(_ value: Bool, roomID: String, keepTyping: UInt16) {
+        
+    }
+    
+    /// Set Online or offline
+    ///
+    /// - Parameter value: true if user online and false if offline
+//    public func isOnline(_ value: Bool) {
+//
+//    }
     
     /// Update user profile
     ///

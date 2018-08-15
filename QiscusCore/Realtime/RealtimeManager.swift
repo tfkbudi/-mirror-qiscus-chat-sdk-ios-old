@@ -11,9 +11,7 @@ import QiscusRealtime
 class RealtimeManager {
 //    private var
     private var client : QiscusRealtime
-    
-    // mock
-    
+
     init(appName: String) {
         let bundle = Bundle.main.infoDictionary![kCFBundleNameKey as String] as! String
         var deviceID = "000"
@@ -23,23 +21,30 @@ class RealtimeManager {
         let clientID = "iosMQTT-\(bundle)-\(deviceID)"
         let config = QiscusRealtimeConfig(appName: appName, clientID: clientID)
         client = QiscusRealtime.init(withConfig: config)
-        
+        QiscusRealtime.enableDebugPrint = QiscusCore.enableDebugPrint
     }
     
     func connect(username: String, password: String) {
         client.connect(username: username, password: password, delegate: self)
         // subcribe user token to get new comment
-        subscribeComment(token: password)
+        //subscribeComment(token: password)
+        client.subscribe(endpoint: .comment(token: password))
     }
     
-    func subscribeRoom(id: String) {
-        // subscribe comment deliverd receipt
-        // subscribe comment read
+    func subscribeRooms(rooms: [RoomModel]) {
+        for room in rooms {
+            // subscribe comment deliverd receipt
+            client.subscribe(endpoint: .delivery(roomID: room.id))
+            // subscribe comment read
+            client.subscribe(endpoint: .read(roomID: room.id))
+        }
+        
     }
     
-    private func subscribeComment(token: String) {
-        client.setupParticipantSubcribe()
+    func isTyping(_ value: Bool, roomID: String, keepTyping: UInt16? = nil){
+        
     }
+    
 }
 
 extension RealtimeManager: QiscusRealtimeDelegate {

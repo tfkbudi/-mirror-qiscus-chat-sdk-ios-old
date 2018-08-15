@@ -113,12 +113,15 @@ extension QiscusCore {
     ///
     /// - Parameter completion: Response new Qiscus Room Object and error if exist.
     public func getAllRoom(completion: @escaping ([RoomModel]?, QError?) -> Void) {
+        // listen room event
+        // set delegate
         // api get room list
-        QiscusCore.network.getRoomList(page: 1) { (rooms, meta, error) in
-            // listen room event
-            // subscribe room
-            QiscusCore.realtime.
-            completion(rooms,nil)
+        QiscusCore.network.getRoomList(page: 1) { (data, meta, error) in
+            if let rooms = data {
+                // subscribe room
+                QiscusCore.realtime?.subscribeRooms(rooms: rooms)
+            }
+            completion(data,nil)
         }
     }
     
