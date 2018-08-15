@@ -12,4 +12,12 @@ class QiscusEventManager {
     var connectionDelegate : QiscusConnectionDelegate? = nil
     var delegate : QiscusCoreDelegate? = nil
     var roomDelegate : QiscusCoreRoomDelegate? = nil
+    var room : RoomModel? = nil
+    
+    func gotNewMessage(room: RoomModel?, comment: CommentModel) {
+        //delegate?.onRoom(room, gotNewComment: comment)
+        if let r = room {
+            roomDelegate?.onRoom(r, gotNewComment: comment)
+        }
+    }
 }

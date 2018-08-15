@@ -23,14 +23,7 @@ public class QiscusCore: NSObject {
             eventManager.delegate = newValue
         }
     }
-    public static var enableDebugPrint: Bool {
-        set {
-            config.enableDebugPrint = newValue
-        }
-        get {
-            return config.enableDebugPrint
-        }
-    }
+    public static var enableDebugPrint: Bool = false
   
     /// set your app Qiscus APP ID, always set app ID everytime your app lounch. \nAfter login successculy, no need to setup again
     ///

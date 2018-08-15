@@ -10,13 +10,13 @@ import Foundation
 
 class QiscusLogger {
     static func debugPrint(_ text: String) {
-        if ConfigManager.shared.enableDebugPrint {
+        if QiscusCore.enableDebugPrint {
             print("[QiscusCore] \(text)")
         }
     }
     
     static func errorPrint(_ text: String) {
-        if ConfigManager.shared.enableDebugPrint {
+        if QiscusCore.enableDebugPrint {
             print("[QiscusCore] Error: \(text)")
         }
     }

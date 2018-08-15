@@ -115,9 +115,10 @@ open class RoomModel : Codable, RoomEvent {
         unreadCount = try values.decode(Int.self, forKey: .unreadCount)
     }
     
-    var delegate: QiscusCoreRoomDelegate? {
+    public var delegate: QiscusCoreRoomDelegate? {
         set {
             QiscusEventManager.shared.roomDelegate = newValue
+            QiscusEventManager.shared.room  = self
         }
         get {
             return QiscusEventManager.shared.roomDelegate
