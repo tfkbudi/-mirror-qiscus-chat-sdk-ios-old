@@ -21,7 +21,7 @@ class RealtimeManager {
         let clientID = "iosMQTT-\(bundle)-\(deviceID)"
         let config = QiscusRealtimeConfig(appName: appName, clientID: clientID)
         client = QiscusRealtime.init(withConfig: config)
-        QiscusRealtime.enableDebugPrint = QiscusCore.enableDebugPrint
+        client.enableDebugPrint = true
     }
     
     func connect(username: String, password: String) {

@@ -10,6 +10,7 @@ import Foundation
 class ConfigManager : NSObject {
     static let shared = ConfigManager()
     private let prefix = "qcu_"
+    var enableDebugPrint: Bool = false
     fileprivate var userCache : UserModel? = nil
     var appID   : String? = nil
     var user    : UserModel? {

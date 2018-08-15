@@ -10,13 +10,15 @@ import Foundation
 
 class QiscusLogger {
     static func debugPrint(_ text: String) {
-        if QiscusCore.enableDebugPrint {
+        if ConfigManager.shared.enableDebugPrint {
             print("[QiscusCore] \(text)")
         }
     }
     
     static func errorPrint(_ text: String) {
-        print("[QiscusCore] Error: \(text)")
+        if ConfigManager.shared.enableDebugPrint {
+            print("[QiscusCore] Error: \(text)")
+        }
     }
     
     static func networkLogger(request: URLRequest) {
