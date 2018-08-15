@@ -12,7 +12,7 @@ public class QiscusCore: NSObject {
     
     public static let shared : QiscusCore = QiscusCore()
     private static var config : ConfigManager = ConfigManager.shared
-    static var realtime : RealtimeManager?
+    static var realtime : RealtimeManager = RealtimeManager.shared
     static var eventManager : QiscusEventManager = QiscusEventManager.shared
     static var network : NetworkManager = NetworkManager()
     public static var delegate : QiscusCoreDelegate? {
@@ -31,7 +31,7 @@ public class QiscusCore: NSObject {
     public class func setup(WithAppID id: String) {
         config.appID    = id
         config.server   = ServerConfig(url: URL.init(string: "https://api.qiscus.com/api/v2/mobile")!, realtimeURL: nil, realtimePort: nil)
-        realtime       = RealtimeManager.init(appName: id)
+        realtime.setup(appName: id)
     }
     
     
@@ -47,7 +47,7 @@ public class QiscusCore: NSObject {
             // set delegate
             eventManager.connectionDelegate = delegate
             // connect qiscus realtime server
-            realtime?.connect(username: user.email, password: user.token)
+            realtime.connect(username: user.email, password: user.token)
             return true
         }else {
             return false
@@ -86,10 +86,10 @@ public class QiscusCore: NSObject {
             fatalError("You need to set App ID")
         }
         network.login(email: userID, password: userKey, username: nil, avatarUrl: nil) { (results, error) in
-            if let user = results, let client = realtime {
+            if let user = results {
                 // save user in local
                 ConfigManager.shared.user = user
-                client.connect(username: user.email, password: user.token)
+                realtime.connect(username: user.email, password: user.token)
             }
             completion(results, error)
         }

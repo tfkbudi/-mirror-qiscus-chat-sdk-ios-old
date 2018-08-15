@@ -9,11 +9,12 @@ import Foundation
 import QiscusRealtime
 
 class RealtimeManager {
-//    private var
-    private var client : QiscusRealtime
+    static var shared : RealtimeManager = RealtimeManager()
+    private var client : QiscusRealtime? = nil
     private var pendingSubscribeTopic : [RealtimeSubscribeEndpoint] = [RealtimeSubscribeEndpoint]()
-
-    init(appName: String) {
+    
+    func setup(appName: String) {
+        if client != nil { return }
         let bundle = Bundle.main.infoDictionary![kCFBundleNameKey as String] as! String
         var deviceID = "000"
         if let vendorIdentifier = UIDevice.current.identifierForVendor {
@@ -26,6 +27,9 @@ class RealtimeManager {
     }
     
     func connect(username: String, password: String) {
+        guard let client = client else {
+            return
+        }
         client.connect(username: username, password: password, delegate: self)
         // subcribe user token to get new comment
         if !client.subscribe(endpoint: .comment(token: password)) {
@@ -35,6 +39,9 @@ class RealtimeManager {
     }
     
     func subscribeRooms(rooms: [RoomModel]) {
+        guard let client = client else {
+            return
+        }
         for room in rooms {
             // subscribe comment deliverd receipt
             if !client.subscribe(endpoint: .delivery(roomID: room.id)){
@@ -53,11 +60,14 @@ class RealtimeManager {
     }
     
     func resumePendingSubscribeTopic() {
+        guard let client = client else {
+            return
+        }
         // resume pending subscribe
         if !pendingSubscribeTopic.isEmpty {
             for (i,t) in pendingSubscribeTopic.enumerated() {
                 // check if success subscribe
-                if self.client.subscribe(endpoint: t) {
+                if client.subscribe(endpoint: t) {
                     // remove from pending list
                    self.pendingSubscribeTopic.remove(at: i)
                 }
