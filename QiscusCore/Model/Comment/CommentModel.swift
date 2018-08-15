@@ -134,9 +134,9 @@ open class CommentModel : Codable {
         disableLinkPreview = try values.decode(Bool.self, forKey: .disableLinkPreview)
         email = try values.decode(String.self, forKey: .email)
         id = "\(try values.decode(Int.self, forKey: .id))"
-        isDeleted = try values.decode(Bool.self, forKey: .isDeleted)
+        isDeleted = try values.decodeIfPresent(Bool.self, forKey: .isDeleted) ?? false
         isPublicChannel = try values.decode(Bool.self, forKey: .isPublicChannel)
-        status = try values.decode(String.self, forKey: .status)
+        status = try values.decodeIfPresent(String.self, forKey: .status) ?? ""
         message = try values.decode(String.self, forKey: .message)
         
         extras = try values.decodeIfPresent(Extras.self, forKey: .extras)

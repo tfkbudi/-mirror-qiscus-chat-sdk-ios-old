@@ -16,7 +16,7 @@ class QiscusEventManager {
     
     func gotNewMessage(room: RoomModel?, comment: CommentModel) {
         //delegate?.onRoom(room, gotNewComment: comment)
-        if let r = room {
+        if let r = QiscusEventManager.shared.room {
             roomDelegate?.onRoom(r, gotNewComment: comment)
         }
     }
