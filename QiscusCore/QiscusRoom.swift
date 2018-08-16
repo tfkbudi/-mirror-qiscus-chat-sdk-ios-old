@@ -107,7 +107,7 @@ extension QiscusCore {
         QiscusCore.network.getRoomList(limit: limit, page: page) { (data, meta, error) in
             if let rooms = data {
                 // clear local data
-                QiscusCore.storage.clearRoom()
+//                QiscusCore.storage.clearRoom()
                 // save room
                 QiscusCore.storage.saveRoom(rooms)
                 let roomLocal = QiscusCore.storage.getRooms()

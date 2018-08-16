@@ -45,6 +45,7 @@ class RoomStorage {
                 delegate?.gotNew(room: room)
             }
         }
+        data = sort(data)
         // mark Todo update last comment
         QiscusLogger.debugPrint("number of room in local temp : \(data.count)")
     }
@@ -69,17 +70,16 @@ class RoomStorage {
     }
     
     // MARK: TODO Sorting not work
-    private func sort() -> [RoomModel] {
-        let sort = data
-        sort.sorted { (room1, room2) -> Bool in
+    func sort(_ data: [RoomModel]) -> [RoomModel]{
+        var result = data
+        result.sort { (room1, room2) -> Bool in
             if let comment1 = room1.lastComment, let comment2 = room2.lastComment {
                 return comment1.unixTimestamp > comment2.unixTimestamp
             }else {
-                return true
+                return false
             }
         }
-        
-        return sort
+        return result
     }
     
     /// Update last comment in room
@@ -91,6 +91,7 @@ class RoomStorage {
             let new = r
             new.lastComment = comment
             new.unreadCount = new.unreadCount + 1
+            data = sort(data)
             return updateRoomDataEvent(old: r, new: new)
         }else {
             return false
