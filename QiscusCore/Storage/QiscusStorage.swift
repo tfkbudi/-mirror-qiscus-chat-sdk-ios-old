@@ -15,7 +15,7 @@ public class QiscusStorage {
         room = RoomStorage()
     }
     
-    /// Get room from local storage
+    /// Get rooms from local storage
     ///
     /// - Returns: Array of Rooms
     public func getRooms() -> [RoomModel] {
