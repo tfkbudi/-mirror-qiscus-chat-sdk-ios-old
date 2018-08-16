@@ -77,4 +77,22 @@ extension QiscusCore {
     public func searchMessage(keyword: String, roomID: String?, lastCommentId: Int?, completion: @escaping ([CommentModel]?, QError?) -> Void) {
         QiscusCore.network.searchMessage(keyword: keyword, roomID: roomID, lastCommentId: lastCommentId, completion: completion)
     }
+    
+    /// Mark Comment as read, include comment before
+    ///
+    /// - Parameters:
+    ///   - roomId: room id, where comment cooming
+    ///   - lastCommentReadId: comment id
+    public func updateCommentRead(roomId: String, lastCommentReadId commentID: String) {
+        QiscusCore.network.updateCommentStatus(roomId: roomId, lastCommentReadId: commentID, lastCommentReceivedId: nil)
+    }
+    
+    /// Mark Comment as received or deliverd, include comment before
+    ///
+    /// - Parameters:
+    ///   - roomId: room id, where comment cooming
+    ///   - lastCommentReceivedId: comment id
+    public func updateCommentReceive(roomId: String, lastCommentReceivedId commentID: String) {
+        QiscusCore.network.updateCommentStatus(roomId: roomId, lastCommentReadId: nil, lastCommentReceivedId: commentID)
+    }
 }
