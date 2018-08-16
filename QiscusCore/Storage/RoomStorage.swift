@@ -93,6 +93,7 @@ class RoomStorage {
         }
     }
     
+    // improve unread count, handle multiple login
     func readComments(_ comment : [CommentModel]) {
         // calculate
         
