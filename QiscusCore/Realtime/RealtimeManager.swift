@@ -14,9 +14,10 @@ class RealtimeManager {
     private var pendingSubscribeTopic : [RealtimeSubscribeEndpoint] = [RealtimeSubscribeEndpoint]()
     
     func setup(appName: String) {
+        // make sure realtime client still single object
         if client != nil { return }
         let bundle = Bundle.main.infoDictionary![kCFBundleNameKey as String] as! String
-        var deviceID = "000"
+        var deviceID = "00000000"
         if let vendorIdentifier = UIDevice.current.identifierForVendor {
             deviceID = vendorIdentifier.uuidString
         }
