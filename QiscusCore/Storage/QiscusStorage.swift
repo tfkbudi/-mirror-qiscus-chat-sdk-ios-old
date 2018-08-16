@@ -19,7 +19,7 @@ public class QiscusStorage {
     ///
     /// - Returns: Array of Rooms
     public func getRooms() -> [RoomModel] {
-        return room.data
+        return room.data.reversed()
     }
     
     func saveRoom(_ data: RoomModel) {
