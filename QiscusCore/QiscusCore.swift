@@ -10,12 +10,13 @@ import Foundation
 
 public class QiscusCore: NSObject {
     
-    public static let shared : QiscusCore = QiscusCore()
-    private static var config : ConfigManager = ConfigManager.shared
-    static var realtime : RealtimeManager = RealtimeManager.shared
-    static var eventManager : QiscusEventManager = QiscusEventManager.shared
-    static var network : NetworkManager = NetworkManager()
-    public static var delegate : QiscusCoreDelegate? {
+    public static let shared    : QiscusCore            = QiscusCore()
+    private static var config    : ConfigManager          = ConfigManager.shared
+    static var realtime         : RealtimeManager       = RealtimeManager.shared
+    static var eventManager     : QiscusEventManager    = QiscusEventManager.shared
+    static var storage          : QiscusStorage         = QiscusStorage.shared
+    static var network          : NetworkManager        = NetworkManager()
+    public static var delegate  : QiscusCoreDelegate? {
         get {
             return eventManager.delegate
         }

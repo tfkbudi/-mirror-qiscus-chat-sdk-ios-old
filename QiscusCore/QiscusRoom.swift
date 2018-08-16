@@ -30,27 +30,6 @@ extension QiscusCore {
         }
     }
     
-    /// Get room with room id
-    ///
-    /// - Parameters:
-    ///   - withID: existing roomID from server or local db.
-    ///   - completion: Response Qiscus Room Object and error if exist.
-    public func getRoom(withID id: String, completion: @escaping (RoomModel?, QError?) -> Void) {
-        // call api get_room_by_id
-        QiscusCore.network.getRoomById(roomId: id) { (room, comments, error) in
-            if let r = room {
-                completion(r, nil)
-            }else {
-                if let e = error {
-                    completion(nil, QError.init(message: e))
-                }else {
-                    completion(nil, QError.init(message: "Unexpectend results"))
-                }
-            }
-        }
-        // or Load from storage
-    }
-    
     /// Get room by channel name
     ///
     /// - Parameters:
@@ -64,6 +43,77 @@ extension QiscusCore {
             }else {
                 completion(nil,error)
             }
+        }
+    }
+    
+    /// Get room with room id
+    ///
+    /// - Parameters:
+    ///   - withID: existing roomID from server or local db.
+    ///   - completion: Response Qiscus Room Object and error if exist.
+    public func getRoom(withID id: String, completion: @escaping (RoomModel?, QError?) -> Void) {
+        // call api get_room_by_id
+        QiscusCore.network.getRoomById(roomId: id) { (room, comments, error) in
+            if let r = room {
+                // save room
+                QiscusCore.storage.saveRoom(r)
+                completion(r, nil)
+            }else {
+                if let e = error {
+                    completion(nil, QError.init(message: e))
+                }else {
+                    completion(nil, QError.init(message: "Unexpectend results"))
+                }
+            }
+        }
+        // or Load from storage
+    }
+    
+    /// Get Room info
+    ///
+    /// - Parameters:
+    ///   - withId: array of room id
+    ///   - completion: Response new Qiscus Room Object and error if exist.
+    public func getRooms(withId ids: [String], completion: @escaping ([RoomModel]?, QError?) -> Void) {
+        QiscusCore.network.getRoomInfo(roomIds: ids, roomUniqueIds: nil, showParticipant: false, showRemoved: false){ (rooms, error) in
+            if let data = rooms {
+                // save room
+                QiscusCore.storage.saveRoom(data)
+            }
+            completion(rooms,error)
+        }
+    }
+    
+    /// Get Room info
+    ///
+    /// - Parameters:
+    ///   - ids: Unique room id
+    ///   - completion: Response new Qiscus Room Object and error if exist.
+    public func getRooms(withUniqueId ids: [String], completion: @escaping ([RoomModel]?, QError?) -> Void) {
+        QiscusCore.network.getRoomInfo(roomIds: nil, roomUniqueIds: ids, showParticipant: false, showRemoved: false){ (rooms, error) in
+            if let data = rooms {
+                // save room
+                QiscusCore.storage.saveRoom(data)
+            }
+            completion(rooms,error)
+        }
+    }
+    
+    /// getAllRoom
+    ///
+    /// - Parameter completion: Response new Qiscus Room Object and error if exist.
+    public func getAllRoom(limit: Int = 20, page: Int = 1, delegate: QiscusCoreDelegate? = nil,completion: @escaping ([RoomModel]?, QError?) -> Void) {
+        // listen room event
+        // set delegate
+        // api get room list
+        QiscusCore.network.getRoomList(limit: limit, page: page) { (data, meta, error) in
+            if let rooms = data {
+                // save room
+                QiscusCore.storage.saveRoom(rooms)
+                // subscribe room
+                QiscusCore.realtime.subscribeRooms(rooms: rooms)
+            }
+            completion(data,nil)
         }
     }
     
@@ -90,41 +140,7 @@ extension QiscusCore {
         // call api update_room
         QiscusCore.network.updateRoom(roomId: id, roomName: name, avatarUrl: url, options: options, completion: completion)
     }
-    
-    /// Get Room info
-    ///
-    /// - Parameters:
-    ///   - withId: array of room id
-    ///   - completion: Response new Qiscus Room Object and error if exist.
-    public func getRooms(withId ids: [String], completion: @escaping ([RoomModel]?, QError?) -> Void) {
-        QiscusCore.network.getRoomInfo(roomIds: ids, roomUniqueIds: nil, showParticipant: false, showRemoved: false, completion: completion)
-    }
-    
-    /// Get Room info
-    ///
-    /// - Parameters:
-    ///   - ids: Unique room id
-    ///   - completion: Response new Qiscus Room Object and error if exist.
-    public func getRooms(withUniqueId ids: [String], completion: @escaping ([RoomModel]?, QError?) -> Void) {
-        QiscusCore.network.getRoomInfo(roomIds: nil, roomUniqueIds: ids, showParticipant: false, showRemoved: false, completion: completion)
-    }
-    
-    /// getAllRoom
-    ///
-    /// - Parameter completion: Response new Qiscus Room Object and error if exist.
-    public func getAllRoom(completion: @escaping ([RoomModel]?, QError?) -> Void) {
-        // listen room event
-        // set delegate
-        // api get room list
-        QiscusCore.network.getRoomList(page: 1) { (data, meta, error) in
-            if let rooms = data {
-                // subscribe room
-                QiscusCore.realtime.subscribeRooms(rooms: rooms)
-            }
-            completion(data,nil)
-        }
-    }
-    
+
     /// Update Room
     ///
     /// - Parameters:
