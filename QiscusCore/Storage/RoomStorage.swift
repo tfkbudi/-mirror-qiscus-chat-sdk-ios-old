@@ -13,7 +13,7 @@ import Foundation
 
 class RoomStorage {
     var data : [RoomModel] = [RoomModel]()
-    
+    var delegate = QiscusCore.eventManager.delegate
     init() {
         // MARK: TODO load data rooms from local storage to var data
     }
@@ -25,13 +25,18 @@ class RoomStorage {
                 // update/replace === identical object
                 if let index = data.index(where: { $0 === r }) {
                     data[index] = room
+                    delegate?.onroom(change: r, withNew: room)
                 }else {
                     // add new room
                     data.insert(room, at: 0)
+                    // publish event add new room
+                    delegate?.gotNew(room: room)
                 }
             }else {
                 // add new room
                 data.insert(room, at: 0)
+                // publish event add new room
+                delegate?.gotNew(room: room)
             }
         }
         // mark Todo update last comment

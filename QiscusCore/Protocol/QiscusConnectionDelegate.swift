@@ -53,7 +53,7 @@ public protocol QiscusCoreDelegate {
     func onChangeUser(_ user: UserModel, onlineStatus status: Bool, whenTime time: Date)
     
     func gotNew(room: RoomModel)
-    func onroom(change: RoomModel)
+    func onroom(change: RoomModel, withNew room: RoomModel)
     func remove(room: RoomModel)
 }
 

@@ -14,18 +14,23 @@ class QiscusEventManager {
     var roomDelegate : QiscusCoreRoomDelegate? = nil
     var room : RoomModel? = nil
     
-    func gotNewMessage(room: RoomModel?, comment: CommentModel) {
+    func gotNewMessage(comment: CommentModel) {
         //delegate?.onRoom(room, gotNewComment: comment)
         if let r = QiscusEventManager.shared.room {
             if r.id == String(comment.roomId) {
+                // publish event new comment inside room
                 roomDelegate?.onRoom(r, gotNewComment: comment)
             }else {
                 // got new comment for other room
-                
+                if let room = QiscusCore.storage.findRoom(byID: String(comment.roomId)) {
+                    delegate?.onRoom(room, gotNewComment: comment)
+                }
             }
         }else {
             // got new comment for other room
-//            let room = 
+            if let room = QiscusCore.storage.findRoom(byID: String(comment.roomId)) {
+                delegate?.onRoom(room, gotNewComment: comment)
+            }
         }
     }
 }

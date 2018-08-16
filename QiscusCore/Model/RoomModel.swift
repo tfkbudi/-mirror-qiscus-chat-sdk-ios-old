@@ -118,7 +118,7 @@ open class RoomModel : Codable, RoomEvent {
     public var delegate: QiscusCoreRoomDelegate? {
         set {
             QiscusEventManager.shared.roomDelegate = newValue
-            QiscusEventManager.shared.room  = self
+            ; QiscusEventManager.shared.room  = self
         }
         get {
             return QiscusEventManager.shared.roomDelegate
