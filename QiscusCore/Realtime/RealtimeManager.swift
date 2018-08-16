@@ -66,7 +66,7 @@ class RealtimeManager {
         }
         // resume pending subscribe
         if !pendingSubscribeTopic.isEmpty {
-            for (i,t) in pendingSubscribeTopic.enumerated() {
+            for (i,t) in pendingSubscribeTopic.enumerated().reversed() {
                 // check if success subscribe
                 if client.subscribe(endpoint: t) {
                     // remove from pending list
