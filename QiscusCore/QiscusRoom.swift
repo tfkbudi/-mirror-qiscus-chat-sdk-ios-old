@@ -106,11 +106,13 @@ extension QiscusCore {
         // api get room list
         QiscusCore.network.getRoomList(limit: limit, page: page) { (data, meta, error) in
             if let rooms = data {
+                // clear local data
+                QiscusCore.storage.clearRoom()
                 // save room
                 QiscusCore.storage.saveRoom(rooms)
                 let roomLocal = QiscusCore.storage.getRooms()
                 // subscribe room from local
-                QiscusCore.realtime.subscribeRooms(rooms: roomLocal)
+                QiscusCore.realtime.subscribeRooms(rooms: rooms)
             }
             completion(data,nil)
         }

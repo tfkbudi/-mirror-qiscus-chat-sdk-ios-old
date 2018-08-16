@@ -12,10 +12,20 @@
 import Foundation
 
 class RoomStorage {
-    var data : [RoomModel] = [RoomModel]()
+    private var data : [RoomModel] = [RoomModel]()
     var delegate = QiscusCore.eventManager.delegate
+    
     init() {
         // MARK: TODO load data rooms from local storage to var data
+    }
+    
+    func removeAll() {
+        data.removeAll()
+    }
+    
+    func all() -> [RoomModel] {
+//        return sort()
+        return data
     }
     
     func add(_ value: [RoomModel]) {
@@ -24,13 +34,13 @@ class RoomStorage {
             if let r = find(byID: room.id)  {
                 if !updateRoomDataEvent(old: r, new: room) {
                     // add new room
-                    data.insert(room, at: 0)
+                    data.append(room)
                     // publish event add new room
                     delegate?.gotNew(room: room)
                 }
             }else {
                 // add new room
-                data.insert(room, at: 0)
+                data.append(room)
                 // publish event add new room
                 delegate?.gotNew(room: room)
             }
@@ -56,6 +66,20 @@ class RoomStorage {
         }else {
             return data.filter{ $0.id == id }.first
         }
+    }
+    
+    // MARK: TODO Sorting not work
+    private func sort() -> [RoomModel] {
+        let sort = data
+        sort.sorted { (room1, room2) -> Bool in
+            if let comment1 = room1.lastComment, let comment2 = room2.lastComment {
+                return comment1.unixTimestamp > comment2.unixTimestamp
+            }else {
+                return true
+            }
+        }
+        
+        return sort
     }
     
     /// Update last comment in room

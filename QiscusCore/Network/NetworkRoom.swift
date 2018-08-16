@@ -17,7 +17,7 @@ extension NetworkManager {
     ///   - showRemoved: Bool (true = include room that has been removed, false = exclude room that has been removed)
     ///   - showEmpty: Bool (true = it will show all rooms that have been created event there are no messages, default is false where only room that have at least one message will be shown)
     ///   - completion: @escaping when success get room list returning Optional([RoomModel]), Optional(Meta) contain page, total_room per page, Optional(String error message)
-    func getRoomList(showParticipant: Bool = false, limit: Int = 20, page: Int = 1, roomType: RoomType? = nil, showRemoved: Bool = false, showEmpty: Bool = true, completion: @escaping([RoomModel]?, Meta?, String?) -> Void) {
+    func getRoomList(showParticipant: Bool = false, limit: Int = 20, page: Int = 1, roomType: RoomType? = nil, showRemoved: Bool = false, showEmpty: Bool = false, completion: @escaping([RoomModel]?, Meta?, String?) -> Void) {
         roomRouter.request(.roomList(showParticipants: showParticipant, limit: limit, page: page, roomType: roomType, showRemoved: showRemoved, showEmpty: showEmpty)) { (data, response, error) in
             if error != nil {
                 completion(nil, nil, "Please check your network connection.")

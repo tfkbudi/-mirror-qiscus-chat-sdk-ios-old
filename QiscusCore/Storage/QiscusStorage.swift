@@ -19,7 +19,7 @@ public class QiscusStorage {
     ///
     /// - Returns: Array of Rooms
     public func getRooms() -> [RoomModel] {
-        return room.data
+        return room.all()
     }
     
     func saveRoom(_ data: RoomModel) {
@@ -31,7 +31,7 @@ public class QiscusStorage {
     }
     
     func clearRoom() {
-        room.data.removeAll()
+        room.removeAll()
     }
     
     func findRoom(byID id: String) -> RoomModel? {
