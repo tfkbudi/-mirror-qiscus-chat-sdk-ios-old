@@ -108,8 +108,9 @@ extension QiscusCore {
             if let rooms = data {
                 // save room
                 QiscusCore.storage.saveRoom(rooms)
-                // subscribe room
-                QiscusCore.realtime.subscribeRooms(rooms: rooms)
+                let roomLocal = QiscusCore.storage.getRooms()
+                // subscribe room from local
+                QiscusCore.realtime.subscribeRooms(rooms: roomLocal)
             }
             completion(data,nil)
         }

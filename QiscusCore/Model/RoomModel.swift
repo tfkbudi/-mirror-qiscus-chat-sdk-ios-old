@@ -85,9 +85,9 @@ open class RoomModel : Codable, RoomEvent {
     public let avatarUrl : String
     public let chatType : String
     public let options : String?
-    public let lastComment : CommentModel?
+    public var lastComment : CommentModel? // can be update after got new comment
     public let participants : [ParticipantModel]?
-    public let unreadCount : Int
+    public var unreadCount : Int
     
     enum CodingKeys: String, CodingKey {
         
@@ -115,10 +115,15 @@ open class RoomModel : Codable, RoomEvent {
         unreadCount = try values.decode(Int.self, forKey: .unreadCount)
     }
     
+    /// set room delegate to get event, and make sure set nil to disable event
     public var delegate: QiscusCoreRoomDelegate? {
         set {
             QiscusEventManager.shared.roomDelegate = newValue
-            ; QiscusEventManager.shared.room  = self
+            if newValue != nil {
+                QiscusEventManager.shared.room  = self
+            }else {
+                QiscusEventManager.shared.room  = nil
+            }
         }
         get {
             return QiscusEventManager.shared.roomDelegate
