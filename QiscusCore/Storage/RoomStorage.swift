@@ -12,10 +12,20 @@
 import Foundation
 
 class RoomStorage {
-    var data : [RoomModel] = [RoomModel]()
+    private var data : [RoomModel] = [RoomModel]()
     var delegate = QiscusCore.eventManager.delegate
+    
     init() {
         // MARK: TODO load data rooms from local storage to var data
+    }
+    
+    func removeAll() {
+        data.removeAll()
+    }
+    
+    func all() -> [RoomModel] {
+//        return sort()
+        return data
     }
     
     func add(_ value: [RoomModel]) {
@@ -24,17 +34,18 @@ class RoomStorage {
             if let r = find(byID: room.id)  {
                 if !updateRoomDataEvent(old: r, new: room) {
                     // add new room
-                    data.insert(room, at: 0)
+                    data.append(room)
                     // publish event add new room
                     delegate?.gotNew(room: room)
                 }
             }else {
                 // add new room
-                data.insert(room, at: 0)
+                data.append(room)
                 // publish event add new room
                 delegate?.gotNew(room: room)
             }
         }
+        data = sort(data)
         // mark Todo update last comment
         QiscusLogger.debugPrint("number of room in local temp : \(data.count)")
     }
@@ -58,6 +69,19 @@ class RoomStorage {
         }
     }
     
+    // MARK: TODO Sorting not work
+    func sort(_ data: [RoomModel]) -> [RoomModel]{
+        var result = data
+        result.sort { (room1, room2) -> Bool in
+            if let comment1 = room1.lastComment, let comment2 = room2.lastComment {
+                return comment1.unixTimestamp > comment2.unixTimestamp
+            }else {
+                return false
+            }
+        }
+        return result
+    }
+    
     /// Update last comment in room
     ///
     /// - Parameter comment: new comment object
@@ -67,6 +91,7 @@ class RoomStorage {
             let new = r
             new.lastComment = comment
             new.unreadCount = new.unreadCount + 1
+            data = sort(data)
             return updateRoomDataEvent(old: r, new: new)
         }else {
             return false
