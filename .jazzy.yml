@@ -1,0 +1,9 @@
+author: Ashari Juang
+author_url: http://qiscus.com
+github_url: https://github.com/qiscus/qiscus-sdk-ios
+root_url: https://github.com/qiscus/qiscus-sdk-ios/Documentations
+module: QiscusCore
+output: Documentations
+theme: apple
+xcodebuild_arguments: [-workspace, 'QiscusCore.xcworkspace', -scheme, 'QiscusCore']
+exclude: ["QiscusCore/Network/*/**.swift"]

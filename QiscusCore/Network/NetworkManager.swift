@@ -29,8 +29,7 @@ enum NetworkEnvironment : String {
     case staging
 }
 
-// TODO remove public, this class should not be accessed from outside qiscusCore
-public class NetworkManager: NSObject {
+class NetworkManager: NSObject {
     static let environment  : NetworkEnvironment = .production
     let clientRouter    = Router<APIClient>()
     let roomRouter      = Router<APIRoom>()

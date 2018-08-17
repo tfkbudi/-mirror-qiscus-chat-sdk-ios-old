@@ -7,8 +7,8 @@
 
 import UIKit
 
-public struct URLParameterEncoder: ParameterEncoder {
-    public func encode(urlRequest: inout URLRequest, with parameters: Parameters) throws {
+struct URLParameterEncoder: ParameterEncoder {
+    func encode(urlRequest: inout URLRequest, with parameters: Parameters) throws {
         
         guard let url = urlRequest.url else { throw NetworkError.missingURL }
         
@@ -32,8 +32,8 @@ public struct URLParameterEncoder: ParameterEncoder {
     }
 }
 
-public struct JSONParameterEncoder: ParameterEncoder {
-    public func encode(urlRequest: inout URLRequest, with parameters: Parameters) throws {
+struct JSONParameterEncoder: ParameterEncoder {
+    func encode(urlRequest: inout URLRequest, with parameters: Parameters) throws {
         do {
             let jsonAsData = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
             urlRequest.httpBody = jsonAsData
