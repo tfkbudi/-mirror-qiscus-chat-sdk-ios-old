@@ -57,7 +57,7 @@ class RealtimeManager {
     }
     
     func isTyping(_ value: Bool, roomID: String, keepTyping: UInt16? = nil){
-        
+        client?.setupRealtimeRoomPublic()
     }
     
     func resumePendingSubscribeTopic() {
