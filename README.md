@@ -13,11 +13,20 @@
 |-----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Lite Version Chat SDK**                   | Qiscus Chat SDK without UI.                                       |
 | **Realtime Event**                          | QiscusCore handle realtime event like publish typing or online status and Automatic subscribe all Qiscus Messaging Event(incoming message, change message status, etc). |
+| **Local Database**                       | InProgress, already cache api response. |
 | **Local Storage**                       | Not Yet. |
 
 ## Features
 
-- [x] Post Comment
+- [x] Create Chat Room, 1 on 1, group, and channel
+- [x] List Chat Room
+- [x] Receive Message
+- [x] Debuger true or false
+- [x] Set AppID
+- [x] Login or Register
+- [x] Login with JWT
+- [x] Register DeviceToken Apns nor Pushkit
+- [x] Receive Realtime Event(new message, message status, etc)
 - [x] [Complete Documentation](https://qiscus.com)
 
 ## Component Libraries
@@ -45,7 +54,7 @@ platform :ios, '10.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-    pod 'QiccusCore',
+    pod 'QiscusCore',
 end
 ```
 
