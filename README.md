@@ -29,3 +29,42 @@ In order to keep QiscusCore focused specifically on core messaging implementatio
 * [Qiscus](https://github.com/qiscus) - An chat sdk with complete feature, simple, easy to integrate.
 
 
+## Installation
+
+[CocoaPods](https://cocoapods.org) is a dependency manager for Cocoa projects. You can install it with the following command:
+
+```bash
+$ gem install cocoapods
+```
+
+To integrate QiscusCore into your Xcode project using CocoaPods, specify it in your `Podfile`:
+
+```ruby
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '10.0'
+use_frameworks!
+
+target '<Your Target Name>' do
+    pod 'QiccusCore',
+end
+```
+
+Then, run the following command:
+
+```bash
+$ pod install
+```
+
+
+### Security Disclosure
+
+If you believe you have identified a security vulnerability with QiscusCore, you should report it as soon as possible via email to juang@qiscus.co. Please do not post it to a public issue.
+
+
+## FAQ
+
+### When we use QiscusCore intead Qiscus?
+
+QiscusCore is lite version chat sdk, if you wan't to build your own chat ui best option is use QiscusCore. But, if you need in App chat quickly use Qiscus Chat SDK(build in UI and simple configuration). please visit [Qiscus](https://github.com/qiscus/qiscus-sdk-ios) to use qiscus chat sdk.
+
+
