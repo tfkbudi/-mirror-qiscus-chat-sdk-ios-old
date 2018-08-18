@@ -25,6 +25,7 @@ class RealtimeManager {
         let config = QiscusRealtimeConfig(appName: appName, clientID: clientID)
         client = QiscusRealtime.init(withConfig: config)
         QiscusRealtime.enableDebugPrint = QiscusCore.enableDebugPrint
+        print("debug \(QiscusCore.enableDebugPrint) : \(QiscusRealtime.enableDebugPrint)")
     }
     
     func connect(username: String, password: String) {
@@ -54,6 +55,12 @@ class RealtimeManager {
             }
             if !c.subscribe(endpoint: .typing(roomID: room.id)) {
                 QiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name)")
+            }
+            guard let participants = room.participants else { return }
+            for u in participants {
+                if !c.subscribe(endpoint: .onlineStatus(user: u.email)) {
+                    QiscusLogger.errorPrint("failed to subscribe online status user \(u.email)")
+                }
             }
             
         }
