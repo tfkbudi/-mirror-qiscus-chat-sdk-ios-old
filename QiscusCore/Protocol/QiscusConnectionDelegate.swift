@@ -81,10 +81,9 @@ public protocol QiscusCoreRoomDelegate {
     /// User Typing Indicator
     ///
     /// - Parameters:
-    ///   - room: room where event happen
     ///   - user: object user or participant
     ///   - typing: true if user start typing and false when finish typing. typing time avarange is 5-10s, we assume user typing is finish after that
-    func onRoom(_ room: RoomModel, thisParticipant user: ParticipantModel, isTyping typing: Bool)
+    func onRoom(thisParticipant user: ParticipantModel, isTyping typing: Bool)
     
     /// User Online status
     ///

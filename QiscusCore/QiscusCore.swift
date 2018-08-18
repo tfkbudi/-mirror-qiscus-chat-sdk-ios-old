@@ -179,8 +179,8 @@ public class QiscusCore: NSObject {
     ///   - value: set true if user start typing, and false when finish
     ///   - roomID: room id where you typing
     ///   - keepTyping: automatic false after n second
-    public func isTyping(_ value: Bool, roomID: String, keepTyping: UInt16) {
-        
+    public func isTyping(_ value: Bool, roomID: String, keepTyping: UInt16? = nil) {
+        QiscusCore.realtime.isTyping(value, roomID: roomID)
     }
     
     /// Set Online or offline

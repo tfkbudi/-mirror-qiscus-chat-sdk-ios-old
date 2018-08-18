@@ -28,36 +28,45 @@ class RealtimeManager {
     }
     
     func connect(username: String, password: String) {
-        guard let client = client else {
+        guard let c = client else {
             return
         }
-        client.connect(username: username, password: password, delegate: self)
+        c.connect(username: username, password: password, delegate: self)
         // subcribe user token to get new comment
-        if !client.subscribe(endpoint: .comment(token: password)) {
+        if !c.subscribe(endpoint: .comment(token: password)) {
             // subscribeNewComment(token: token)
             self.pendingSubscribeTopic.append(.comment(token: password))
         }
     }
     
     func subscribeRooms(rooms: [RoomModel]) {
-        guard let client = client else {
+        guard let c = client else {
             return
         }
         for room in rooms {
             // subscribe comment deliverd receipt
-            if !client.subscribe(endpoint: .delivery(roomID: room.id)){
+            if !c.subscribe(endpoint: .delivery(roomID: room.id)){
                 QiscusLogger.errorPrint("failed to subscribe event deliver event from room \(room.name)")
             }
             // subscribe comment read
-            if !client.subscribe(endpoint: .read(roomID: room.id)) {
+            if !c.subscribe(endpoint: .read(roomID: room.id)) {
                 QiscusLogger.errorPrint("failed to subscribe event read from room \(room.name)")
             }
+            if !c.subscribe(endpoint: .typing(roomID: room.id)) {
+                QiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name)")
+            }
+            
         }
         
     }
     
     func isTyping(_ value: Bool, roomID: String, keepTyping: UInt16? = nil){
-        client?.setupRealtimeRoomPublic()
+        guard let c = client else {
+            return
+        }
+        if !c.publish(endpoint: .isTyping(value: value, roomID: roomID)) {
+            QiscusLogger.errorPrint("failed to send typing to roomID \(roomID)")
+        }
     }
     
     func resumePendingSubscribeTopic() {
@@ -102,8 +111,8 @@ extension RealtimeManager: QiscusRealtimeDelegate {
         //
     }
     
-    func updateUserTyping(roomId: String, userEmail: String) {
-        //
+    func updateUser(typing: Bool, roomId: String, userEmail: String) {
+        QiscusEventManager.shared.gotTyping(roomID: roomId, user: userEmail, value: typing)
     }
     
     func disconnect(withError err: Error?) {
