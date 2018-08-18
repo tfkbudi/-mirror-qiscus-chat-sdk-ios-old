@@ -37,14 +37,14 @@ class QiscusEventManager {
         // filter event for room or qiscuscore
         if let r = QiscusEventManager.shared.room {
             if r.id == roomID {
-//                let m = MemberModel()
-//                
-//                roomDelegate?.onRoom(thisParticipant: m, isTyping: value)
+                guard let member = QiscusCore.storage.getMember(byEmail: user) else { return }
+                roomDelegate?.onRoom(thisParticipant: member, isTyping: value)
             }
         }
         // got typing event for other room
         if let room = QiscusCore.storage.findRoom(byID: roomID) {
-            
+            guard let member = QiscusCore.storage.getMember(byEmail: user, inRoom: room) else { return }
+            delegate?.onRoom(room, thisParticipant: member, isTyping: value)
         }
     }
     

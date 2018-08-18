@@ -9,10 +9,10 @@ import Foundation
 
 public class QiscusStorage {
     static var shared : QiscusStorage = QiscusStorage()
-    private var room : RoomStorage!
+    private var room    : RoomStorage!
     
     init() {
-        room = RoomStorage()
+        room    = RoomStorage()
     }
     
     /// Get rooms from local storage
@@ -50,5 +50,29 @@ public class QiscusStorage {
         if !room.updateUnreadComment(data) {
             QiscusLogger.errorPrint("filed to update unread count, mybe room not exist")
         }
+    }
+    
+    // take time, coz search in all rooms
+    func getMember(byEmail email: String) -> MemberModel? {
+        let rooms = self.getRooms()
+        for room in rooms {
+            guard let participants = room.participants else { return nil }
+            for p in participants {
+                if p.email == email {
+                    return p
+                }
+            }
+        }
+        return nil
+    }
+    
+    func getMember(byEmail email: String, inRoom room: RoomModel) -> MemberModel? {
+        guard let participants = room.participants else { return nil }
+        for p in participants {
+            if p.email == email {
+                return p
+            }
+        }
+        return nil
     }
 }
