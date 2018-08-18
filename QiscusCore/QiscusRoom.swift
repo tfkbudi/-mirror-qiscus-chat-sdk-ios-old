@@ -159,7 +159,7 @@ extension QiscusCore {
     ///   - userEmails: qiscus user email
     ///   - roomId: room id
     ///   - completion:  Response new Qiscus Participant Object and error if exist.
-    public func addParticipant(userEmails emails: [String], roomId: String, completion: @escaping ([ParticipantModel]?, QError?) -> Void) {
+    public func addParticipant(userEmails emails: [String], roomId: String, completion: @escaping ([MemberModel]?, QError?) -> Void) {
         QiscusCore.network.addParticipants(roomId: roomId, userSdkEmail: emails, completion: completion)
     }
     

@@ -42,7 +42,7 @@ public protocol QiscusCoreDelegate {
     ///   - room: room where event happen
     ///   - user: object user or participant
     ///   - typing: true if user start typing and false when finish typing. typing time avarange is 5-10s, we assume user typing is finish after that
-    func onRoom(_ room: RoomModel, thisParticipant user: ParticipantModel, isTyping typing: Bool)
+    func onRoom(_ room: RoomModel, thisParticipant user: MemberModel, isTyping typing: Bool)
     
     /// User Online status
     ///
@@ -83,7 +83,7 @@ public protocol QiscusCoreRoomDelegate {
     /// - Parameters:
     ///   - user: object user or participant
     ///   - typing: true if user start typing and false when finish typing. typing time avarange is 5-10s, we assume user typing is finish after that
-    func onRoom(thisParticipant user: ParticipantModel, isTyping typing: Bool)
+    func onRoom(thisParticipant user: MemberModel, isTyping typing: Bool)
     
     /// User Online status
     ///

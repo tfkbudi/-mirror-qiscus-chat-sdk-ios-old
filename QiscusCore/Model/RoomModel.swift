@@ -48,7 +48,7 @@ public class RoomsResults : Codable {
 }
 
 public class AddParticipantsResult : Codable {
-    let participantsAdded : [ParticipantModel]
+    let participantsAdded : [MemberModel]
     
     enum CodingKeys: String, CodingKey {
         case participantsAdded = "participants_added"
@@ -56,7 +56,7 @@ public class AddParticipantsResult : Codable {
     
     public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        participantsAdded = try values.decode([ParticipantModel].self, forKey: .participantsAdded)
+        participantsAdded = try values.decode([MemberModel].self, forKey: .participantsAdded)
     }
 }
 
@@ -86,7 +86,7 @@ open class RoomModel : Codable, RoomEvent {
     public let chatType : String
     public let options : String?
     public var lastComment : CommentModel? // can be update after got new comment
-    public let participants : [ParticipantModel]?
+    public let participants : [MemberModel]?
     public var unreadCount : Int
     
     enum CodingKeys: String, CodingKey {
@@ -111,7 +111,7 @@ open class RoomModel : Codable, RoomEvent {
         chatType = try values.decode(String.self, forKey: .chatType)
         options = try values.decodeIfPresent(String.self, forKey: .options)
         lastComment = try values.decodeIfPresent(CommentModel.self, forKey: .lastComment)
-        participants = try values.decodeIfPresent([ParticipantModel].self, forKey: .participants)
+        participants = try values.decodeIfPresent([MemberModel].self, forKey: .participants)
         unreadCount = try values.decode(Int.self, forKey: .unreadCount)
     }
     
@@ -131,32 +131,4 @@ open class RoomModel : Codable, RoomEvent {
     }
 }
 
-open class ParticipantModel : Codable {
-    public let avatarUrl : String
-    public let email : String
-    public let id : String
-    public let lastCommentReadId : Int
-    public let lastCommentReceivedId : Int
-    public let username : String
-    
-    enum CodingKeys: String, CodingKey {
-        
-        case avatarUrl = "avatar_url"
-        case email = "email"
-        case id = "id"
-        case lastCommentReadId = "last_comment_read_id"
-        case lastCommentReceivedId = "last_comment_received_id"
-        case username = "username"
-    }
-    
-    public required init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        avatarUrl = try values.decode(String.self, forKey: .avatarUrl)
-        email = try values.decode(String.self, forKey: .email)
-        id = "\(try values.decode(Int.self, forKey: .id))"
-        lastCommentReadId = try values.decode(Int.self, forKey: .lastCommentReadId)
-        lastCommentReceivedId = try values.decode(Int.self, forKey: .lastCommentReceivedId)
-        username = try values.decode(String.self, forKey: .username)
-    }
-    
-}
+

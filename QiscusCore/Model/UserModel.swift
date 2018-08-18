@@ -112,3 +112,33 @@ public class App : Codable {
     }
     
 }
+
+open class MemberModel : Codable {
+    public let avatarUrl : String
+    public let email : String
+    public let id : String
+    public let lastCommentReadId : Int
+    public let lastCommentReceivedId : Int
+    public let username : String
+    
+    enum CodingKeys: String, CodingKey {
+        
+        case avatarUrl = "avatar_url"
+        case email = "email"
+        case id = "id"
+        case lastCommentReadId = "last_comment_read_id"
+        case lastCommentReceivedId = "last_comment_received_id"
+        case username = "username"
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        avatarUrl = try values.decode(String.self, forKey: .avatarUrl)
+        email = try values.decode(String.self, forKey: .email)
+        id = "\(try values.decode(Int.self, forKey: .id))"
+        lastCommentReadId = try values.decode(Int.self, forKey: .lastCommentReadId)
+        lastCommentReceivedId = try values.decode(Int.self, forKey: .lastCommentReceivedId)
+        username = try values.decode(String.self, forKey: .username)
+    }
+    
+}

@@ -311,8 +311,8 @@ extension NetworkManager {
     /// - Parameters:
     ///   - roomId: chat room id
     ///   - userSdkEmail: array of user's sdk email
-    ///   - completion: @escaping when success add participant to room, return added participants Optional([ParticipantModel]), Optional(String error message)
-    func addParticipants(roomId: String, userSdkEmail: [String], completion: @escaping ([ParticipantModel]?, QError?) -> Void) {
+    ///   - completion: @escaping when success add participant to room, return added participants Optional([MemberModel]), Optional(String error message)
+    func addParticipants(roomId: String, userSdkEmail: [String], completion: @escaping ([MemberModel]?, QError?) -> Void) {
         roomRouter.request(.addParticipant(roomId: roomId, emails: userSdkEmail)) { (data, response, error) in
             if error != nil {
                 completion(nil, QError(message: "Please check your network connection."))

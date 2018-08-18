@@ -186,9 +186,9 @@ public class QiscusCore: NSObject {
     /// Set Online or offline
     ///
     /// - Parameter value: true if user online and false if offline
-//    public func isOnline(_ value: Bool) {
-//
-//    }
+    public func isOnline(_ value: Bool) {
+        QiscusCore.realtime.isOnline(value)
+    }
     
     /// Update user profile
     ///

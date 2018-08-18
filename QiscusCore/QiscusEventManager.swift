@@ -37,7 +37,7 @@ class QiscusEventManager {
         // filter event for room or qiscuscore
         if let r = QiscusEventManager.shared.room {
             if r.id == roomID {
-//                let m = ParticipantModel()
+//                let m = MemberModel()
 //                
 //                roomDelegate?.onRoom(thisParticipant: m, isTyping: value)
             }
@@ -50,11 +50,17 @@ class QiscusEventManager {
     
     func gotEvent(email: String, isOnline: Bool, timestamp time: String) {
 //        let user = UserModel()
-//        let date = getDate(timestampUTC: time)
+        let date = getDate(timestampUTC: time)
 //        self.delegate?.onChange(user: user, isOnline: isOnline, at: date)
     }
     
     private func getDate(timestampUTC: String) -> Date {
-        return Date()
+        let date = Date(timeIntervalSince1970: Double(timestampUTC) ?? 0.0)
+//        date.tim
+//        let df = DateFormatter()
+//        df.timeStyle    = DateFormatter.Style.medium
+//        df.dateStyle    = DateFormatter.Style.medium
+//        df.timeZone     = TimeZone.current
+        return date
     }
 }

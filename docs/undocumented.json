@@ -150,49 +150,49 @@
     {
       "file": "/Users/qicus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
       "line": 134,
-      "symbol": "ParticipantModel",
+      "symbol": "MemberModel",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
     },
     {
       "file": "/Users/qicus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
       "line": 135,
-      "symbol": "ParticipantModel.avatarUrl",
+      "symbol": "MemberModel.avatarUrl",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/qicus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
       "line": 136,
-      "symbol": "ParticipantModel.email",
+      "symbol": "MemberModel.email",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/qicus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
       "line": 137,
-      "symbol": "ParticipantModel.id",
+      "symbol": "MemberModel.id",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/qicus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
       "line": 138,
-      "symbol": "ParticipantModel.lastCommentReadId",
+      "symbol": "MemberModel.lastCommentReadId",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/qicus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
       "line": 139,
-      "symbol": "ParticipantModel.lastCommentReceivedId",
+      "symbol": "MemberModel.lastCommentReceivedId",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/qicus/iOS/SDK/QiscusCore/QiscusCore/Model/RoomModel.swift",
       "line": 140,
-      "symbol": "ParticipantModel.username",
+      "symbol": "MemberModel.username",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
