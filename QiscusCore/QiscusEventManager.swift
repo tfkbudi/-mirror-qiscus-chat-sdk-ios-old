@@ -47,4 +47,14 @@ class QiscusEventManager {
             
         }
     }
+    
+    func gotEvent(email: String, isOnline: Bool, timestamp time: String) {
+//        let user = UserModel()
+//        let date = getDate(timestampUTC: time)
+//        self.delegate?.onChange(user: user, isOnline: isOnline, at: date)
+    }
+    
+    private func getDate(timestampUTC: String) -> Date {
+        return Date()
+    }
 }

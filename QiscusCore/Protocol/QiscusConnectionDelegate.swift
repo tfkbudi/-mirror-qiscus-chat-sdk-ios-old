@@ -50,7 +50,7 @@ public protocol QiscusCoreDelegate {
     ///   - user: object user
     ///   - status: true if user login
     ///   - time: millisecond UTC
-    func onChangeUser(_ user: UserModel, onlineStatus status: Bool, whenTime time: Date)
+    func onChange(user: UserModel, isOnline online: Bool, at time: Date)
     
     func gotNew(room: RoomModel)
 //    func onroom(change: RoomModel, withNew room: RoomModel)

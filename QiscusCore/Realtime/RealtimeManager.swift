@@ -60,12 +60,21 @@ class RealtimeManager {
         
     }
     
-    func isTyping(_ value: Bool, roomID: String, keepTyping: UInt16? = nil){
+    func isTyping(_ value: Bool, roomID: String){
         guard let c = client else {
             return
         }
         if !c.publish(endpoint: .isTyping(value: value, roomID: roomID)) {
             QiscusLogger.errorPrint("failed to send typing to roomID \(roomID)")
+        }
+    }
+    
+    func isOnline(_ value: Bool) {
+        guard let c = client else {
+            return
+        }
+        if !c.publish(endpoint: .onlineStatus(value: value)) {
+            QiscusLogger.errorPrint("failed to send Online status")
         }
     }
     
@@ -88,11 +97,12 @@ class RealtimeManager {
 }
 
 extension RealtimeManager: QiscusRealtimeDelegate {
-    func didReceiveUserStatus(roomId: String, userEmail: String, timeString: String, timeToken: Double) {
+    func didReceiveUser(userEmail: String, isOnline: Bool, timestamp: String) {
         //
     }
+
     
-    func didReceiveMessageEvent(roomId: String, message: String) {
+    func didReceiveMessageStatus(roomId: String, commentId: String, commentUniqueId: String, Status: MessageStatus) {
         //
     }
     
@@ -107,26 +117,15 @@ extension RealtimeManager: QiscusRealtimeDelegate {
         }
     }
     
-    func didReceiveMessageStatus(roomId: String, commentId: Int, Status: MessageStatus) {
-        //
-    }
-    
-    func updateUser(typing: Bool, roomId: String, userEmail: String) {
+    func didReceiveUser(typing: Bool, roomId: String, userEmail: String) {
         QiscusEventManager.shared.gotTyping(roomID: roomId, user: userEmail, value: typing)
-    }
-    
-    func disconnect(withError err: Error?) {
-        QiscusLogger.debugPrint("Qiscus realtime disconnect")
-    }
-    
-    func connected() {
-        QiscusLogger.debugPrint("Qiscus realtime connected")
     }
     
     func connectionState(change state: QiscusRealtimeConnectionState) {
         QiscusLogger.debugPrint("Qiscus realtime connection state \(state.rawValue)")
         if state == .connected {
             resumePendingSubscribeTopic()
+            QiscusLogger.debugPrint("Qiscus realtime connected")
         }
     }
 }
