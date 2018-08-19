@@ -17,6 +17,7 @@ class RoomStorage {
     
     init() {
         // MARK: TODO load data rooms from local storage to var data
+        self.data = loadFromLocal()
     }
     
     func removeAll() {
@@ -124,4 +125,13 @@ class RoomStorage {
         
     }
     
+}
+
+// MARK: Local Storage
+extension RoomStorage {
+    func loadFromLocal() -> [RoomModel] {
+        // load from file
+        // parsing to model
+        return [RoomModel]()
+    }
 }
