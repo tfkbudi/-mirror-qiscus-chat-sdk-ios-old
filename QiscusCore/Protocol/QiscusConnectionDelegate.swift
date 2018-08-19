@@ -47,10 +47,10 @@ public protocol QiscusCoreDelegate {
     /// User Online status
     ///
     /// - Parameters:
-    ///   - user: object user
+    ///   - user: object member
     ///   - status: true if user login
     ///   - time: millisecond UTC
-    func onChange(user: UserModel, isOnline online: Bool, at time: Date)
+    func onChange(user: MemberModel, isOnline online: Bool, at time: Date)
     
     func gotNew(room: RoomModel)
 //    func onroom(change: RoomModel, withNew room: RoomModel)
@@ -88,10 +88,10 @@ public protocol QiscusCoreRoomDelegate {
     /// User Online status
     ///
     /// - Parameters:
-    ///   - user: object user
+    ///   - user: object member
     ///   - status: true if user login
     ///   - time: millisecond UTC
-    func onChangeUser(_ user: UserModel, onlineStatus status: Bool, whenTime time: Date)
+    func onChangeUser(_ user: MemberModel, onlineStatus status: Bool, whenTime time: Date)
 }
 
 public enum CommentStatus {

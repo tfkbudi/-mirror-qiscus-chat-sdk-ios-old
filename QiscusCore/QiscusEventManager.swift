@@ -49,9 +49,15 @@ class QiscusEventManager {
     }
     
     func gotEvent(email: String, isOnline: Bool, timestamp time: String) {
-//        let user = UserModel()
+        // filter event for room or qiscuscore
+        if let r = QiscusEventManager.shared.room {
+            guard let member = QiscusCore.storage.getMember(byEmail: email, inRoom: r) else { return }
+            let date = getDate(timestampUTC: time)
+            self.roomDelegate?.onChangeUser(member, onlineStatus: isOnline, whenTime: date)
+        }
+        guard let user = QiscusCore.storage.getMember(byEmail: email) else { return }
         let date = getDate(timestampUTC: time)
-//        self.delegate?.onChange(user: user, isOnline: isOnline, at: date)
+        self.delegate?.onChange(user: user, isOnline: isOnline, at: date)
     }
     
     private func getDate(timestampUTC: String) -> Date {
