@@ -63,18 +63,16 @@ public protocol QiscusCoreRoomDelegate {
     /// new comment is comming
     ///
     /// - Parameters:
-    ///   - room: room where event happen
     ///   - comment: new comment object
-    func onRoom(_ room: RoomModel, gotNewComment comment: CommentModel)
+    func gotNewComment(comment: CommentModel)
     
     /// comment status change
     ///
     /// - Parameters:
-    ///   - room: room where event happen
     ///   - comment: new comment where status is change, you can compare from local data
     ///   - status: comment status, exp: deliverd, receipt, or read.
     ///     special case for read, for example we have message 1,2,3,4,5 then you got status change for message 5 it's mean message 1-4 has been read
-    func onRoom(_ room: RoomModel, didChangeComment comment: CommentModel, changeStatus status: CommentStatus)
+    func didComment(comment: CommentModel, changeStatus status: CommentStatus)
     
     // MARK: User Event in Room
     

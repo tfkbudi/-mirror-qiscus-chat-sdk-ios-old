@@ -16,13 +16,15 @@ class QiscusEventManager {
     var room : RoomModel? = nil
     
     func gotNewMessage(comment: CommentModel) {
+        // check comment already in local, if true should be update comment status(not new comment for this device)
+        if !self.checkNewComment(comment) { return }
         // update last comment and increase unread
         QiscusCore.storage.saveComment(comment)
         // filter event for room or qiscuscore
         if let r = QiscusEventManager.shared.room {
             if r.id == String(comment.roomId) {
                 // publish event new comment inside room
-                roomDelegate?.onRoom(r, gotNewComment: comment)
+                roomDelegate?.gotNewComment(comment: comment)
                 // read comment, assume you read from this room
                 QiscusCore.storage.readComment(comment)
             }
@@ -68,5 +70,23 @@ class QiscusEventManager {
 //        df.dateStyle    = DateFormatter.Style.medium
 //        df.timeZone     = TimeZone.current
         return date
+    }
+    
+    /// check comment exist in local
+    ///
+    /// - Parameter data: comment object
+    /// - Returns: return true if comment is new or not exist in local
+    private func checkNewComment(_ data: CommentModel) -> Bool {
+        return !(QiscusCore.storage.findCommentbyUniqueID(id: data.uniqueTempId) != nil)
+    }
+    
+    // MARK: TODO comment status change
+    func onComment(_ comment: CommentModel, statusChange status: CommentStatus) {
+        // filter event for room or qiscuscore
+        if let r = QiscusEventManager.shared.room {
+            if r.id == String(comment.roomId) {
+                self.roomDelegate?.didComment(comment: comment, changeStatus: status)
+            }
+        }
     }
 }

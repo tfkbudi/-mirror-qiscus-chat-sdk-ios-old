@@ -97,7 +97,7 @@ open class CommentModel : Codable {
     public var timestamp : String = ""
     public var topicId : Int = 0
     public var type : CommentType = .text
-    public var uniqueTempId : String = ""
+    public var uniqueTempId : String = "ios_"
     public var unixTimestamp : Int = 0
     public var userAvatarUrl : URL? = nil
     public var userId : Int = 0

@@ -12,6 +12,8 @@ import Foundation
 extension QiscusCore {
     
     public func sendMessage(roomID id: String, comment: CommentModel, completion: @escaping (CommentModel?, QError?) -> Void) {
+        // save in local
+        QiscusCore.storage.saveComment(comment)
         // send message to server
         QiscusCore.network.postComment(roomId: id, type: comment.type, message: comment.message, payload: nil, extras: nil, uniqueTempId: comment.uniqueTempId) { (result, error) in
             if result != nil {
