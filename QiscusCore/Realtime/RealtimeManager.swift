@@ -105,7 +105,7 @@ class RealtimeManager {
 
 extension RealtimeManager: QiscusRealtimeDelegate {
     func didReceiveUser(userEmail: String, isOnline: Bool, timestamp: String) {
-        //
+        QiscusEventManager.shared.gotEvent(email: userEmail, isOnline: isOnline, timestamp: timestamp)
     }
 
     
