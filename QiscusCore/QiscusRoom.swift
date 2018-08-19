@@ -103,6 +103,10 @@ extension QiscusCore {
     ///
     /// - Parameter completion: Response new Qiscus Room Object and error if exist.
     public func getAllRoom(limit: Int = 20, page: Int = 1,completion: @escaping ([RoomModel]?, QError?) -> Void) {
+        let localRooms = QiscusCore.storage.getRooms()
+        if !localRooms.isEmpty {
+            completion(localRooms, nil)
+        }
         // api get room list
         QiscusCore.network.getRoomList(limit: limit, page: page) { (data, meta, error) in
             if let rooms = data {

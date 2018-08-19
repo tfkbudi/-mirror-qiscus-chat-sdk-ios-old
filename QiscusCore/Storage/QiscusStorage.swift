@@ -83,7 +83,7 @@ public class QiscusStorage {
 //  MARK: Room Storage
 extension QiscusStorage : QCRoomManager {
     // MARK: remove public next
-    public func getRooms() -> [RoomModel] {
+    func getRooms() -> [RoomModel] {
         return room.all()
     }
     
