@@ -4,52 +4,55 @@
 //
 //  Created by Qiscus on 16/08/18.
 //
+//  Next to be handle all blueprint function by other model, like QiscusStorage/DB
 
 import Foundation
 
-public class QiscusStorage {
-    static var shared : QiscusStorage = QiscusStorage()
-    private var room    : RoomStorage!
-    
-    init() {
-        room    = RoomStorage()
-    }
-    
+// Blueprint Comment Function
+protocol QCCommentManager {
+    func saveComment(_ data: CommentModel)
+    func saveComments(_ data: [CommentModel])
+    func readComment(_ data: CommentModel)
+    func findCommentbyRoomID(id: String) -> [CommentModel]?
+    func findCommentbyID(id: String) -> CommentModel?
+    func findCommentbyUniqueID(id: String) -> CommentModel?
+}
+
+// Blueprint room function
+protocol QCRoomManager {
     /// Get rooms from local storage
     ///
     /// - Returns: Array of Rooms
-    public func getRooms() -> [RoomModel] {
-        return room.all()
-    }
+    func getRooms() -> [RoomModel]
+    /// Save Room
+    ///
+    /// - Parameter data: room data
+    /// - Returns: Void
+    func saveRoom(_ data: RoomModel)
+    /// save rooms, more than one room data
+    ///
+    /// - Parameter data: object room
+    /// - Returns: Void
+    func saveRooms(_ data: [RoomModel])
+    /// Remove all room from storage
+    ///
+    /// - Returns: Void
+    func clearRoom()
+    /// Find Room
+    ///
+    /// - Parameter id: room id
+    /// - Returns: return Object Room if exist
+    func findRoom(byID id: String) -> RoomModel?
+}
+
+public class QiscusStorage {
+    static var shared   : QiscusStorage = QiscusStorage()
+    private var room    : RoomStorage!
+    private var comment : CommentStorage!
     
-    func saveRoom(_ data: RoomModel) {
-        room.add([data])
-    }
-    
-    func saveRoom(_ data: [RoomModel]) {
-        room.add(data)
-    }
-    
-    func clearRoom() {
-        room.removeAll()
-    }
-    
-    func findRoom(byID id: String) -> RoomModel? {
-        return room.find(byID: id)
-    }
-    
-    func saveComment(_ data: CommentModel) {
-        // update last comment in room
-        if !room.updateLastComment(data) {
-            QiscusLogger.errorPrint("filed to update last comment, mybe room not exist")
-        }
-    }
-    
-    func readComment(_ data: CommentModel) {
-        // update unread count in room
-        if !room.updateUnreadComment(data) {
-            QiscusLogger.errorPrint("filed to update unread count, mybe room not exist")
-        }
+    init() {
+        room    = RoomStorage()
+        comment = CommentStorage()
     }
     
     // take time, coz search in all rooms
@@ -74,5 +77,62 @@ public class QiscusStorage {
             }
         }
         return nil
+    }
+}
+
+//  MARK: Room Storage
+extension QiscusStorage : QCRoomManager {
+    public func getRooms() -> [RoomModel] {
+        return room.all()
+    }
+    
+    func saveRoom(_ data: RoomModel) {
+        room.add([data])
+    }
+    
+    func saveRooms(_ data: [RoomModel]) {
+        room.add(data)
+    }
+    
+    func clearRoom() {
+        room.removeAll()
+    }
+    
+    func findRoom(byID id: String) -> RoomModel? {
+        return room.find(byID: id)
+    }
+}
+
+// MARK: Comment Storage
+extension QiscusStorage : QCCommentManager {
+    func saveComments(_ data: [CommentModel]) {
+        comment.add(data)
+    }
+    
+    func findCommentbyRoomID(id: String) -> [CommentModel]? {
+        return comment.find(byRoomID: id)
+    }
+    
+    func saveComment(_ data: CommentModel) {
+        comment.add([data])
+        // update last comment in room, mean comment where you send
+        if !room.updateLastComment(data) {
+            QiscusLogger.errorPrint("filed to update last comment, mybe room not exist")
+        }
+    }
+    
+    func readComment(_ data: CommentModel) {
+        // update unread count in room
+        if !room.updateUnreadComment(data) {
+            QiscusLogger.errorPrint("filed to update unread count, mybe room not exist")
+        }
+    }
+    
+    func findCommentbyID(id: String) -> CommentModel? {
+        return comment.find(byID: id)
+    }
+    
+    func findCommentbyUniqueID(id: String) -> CommentModel? {
+        return comment.find(byUniqueID: id)
     }
 }

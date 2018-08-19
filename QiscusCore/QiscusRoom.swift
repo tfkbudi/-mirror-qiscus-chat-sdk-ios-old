@@ -78,7 +78,7 @@ extension QiscusCore {
         QiscusCore.network.getRoomInfo(roomIds: ids, roomUniqueIds: nil, showParticipant: false, showRemoved: false){ (rooms, error) in
             if let data = rooms {
                 // save room
-                QiscusCore.storage.saveRoom(data)
+                QiscusCore.storage.saveRooms(data)
             }
             completion(rooms,error)
         }
@@ -93,7 +93,7 @@ extension QiscusCore {
         QiscusCore.network.getRoomInfo(roomIds: nil, roomUniqueIds: ids, showParticipant: false, showRemoved: false){ (rooms, error) in
             if let data = rooms {
                 // save room
-                QiscusCore.storage.saveRoom(data)
+                QiscusCore.storage.saveRooms(data)
             }
             completion(rooms,error)
         }
@@ -109,7 +109,7 @@ extension QiscusCore {
                 // clear local data
 //                QiscusCore.storage.clearRoom()
                 // save room
-                QiscusCore.storage.saveRoom(rooms)
+                QiscusCore.storage.saveRooms(rooms)
                 let roomLocal = QiscusCore.storage.getRooms()
                 // subscribe room from local
                 QiscusCore.realtime.subscribeRooms(rooms: rooms)
