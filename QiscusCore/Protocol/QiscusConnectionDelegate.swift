@@ -91,10 +91,3 @@ public protocol QiscusCoreRoomDelegate {
     ///   - time: millisecond UTC
     func onChangeUser(_ user: MemberModel, onlineStatus status: Bool, whenTime time: Date)
 }
-
-public enum CommentStatus {
-    case deliver
-    case receipt
-    case read
-    case deleted
-}

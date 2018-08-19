@@ -86,7 +86,7 @@ open class CommentModel : Codable {
     public var commentBeforeId : Int = 0
     public var disableLinkPreview : Bool = false
     public var email : String = ""
-    public var id : String = ""
+    public var id : String
     public var isDeleted: Bool = false
     public var isPublicChannel: Bool = false
     public var status: String = ""
@@ -97,7 +97,7 @@ open class CommentModel : Codable {
     public var timestamp : String = ""
     public var topicId : Int = 0
     public var type : CommentType = .text
-    public var uniqueTempId : String = "ios_"
+    public var uniqueTempId : String
     public var unixTimestamp : Int = 0
     public var userAvatarUrl : URL? = nil
     public var userId : Int = 0
@@ -126,7 +126,10 @@ open class CommentModel : Codable {
         case username = "username"
     }
     
-    public init() { }
+    public init() {
+        self.id             = ""
+        self.uniqueTempId   = "ios_\(NSDate().timeIntervalSince1970 * 1000.0)"
+    }
     
     public required init(from decoders: Decoder) throws {
         let values = try decoders.container(keyedBy: CodingKeys.self)
@@ -171,6 +174,14 @@ open class CommentModel : Codable {
         coder = decoders
     }
 
+}
+
+public enum CommentStatus : String {
+    case deliver    = "deliver"
+    case receipt    = "receipt"
+    case read       = "read"
+    case sent       = "sent"
+    case deleted    = "deleted"
 }
 
 public enum CommentType: String, Codable {

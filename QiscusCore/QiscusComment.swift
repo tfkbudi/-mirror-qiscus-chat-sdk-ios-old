@@ -31,8 +31,16 @@ extension QiscusCore {
     ///   - limit: by default set 20, min 0 and max 100
     ///   - completion: Response new Qiscus Array of Comment Object and error if exist.
     public func loadComments(roomID id: String, limit: Int? = nil, completion: @escaping ([CommentModel]?, QError?) -> Void) {
+        // load from local if exist
+        if let comments = QiscusCore.storage.getCommentbyRoomID(id: id) {
+            completion(comments,nil)
+        }
         // Load message by default 20
         QiscusCore.network.loadComments(roomId: id, limit: limit) { (comments, error) in
+            if let c = comments {
+                // save comment in local
+                QiscusCore.storage.saveComments(c)
+            }
             completion(comments,nil)
         }
     }
@@ -47,6 +55,10 @@ extension QiscusCore {
     public func loadMore(roomID id: String, lastCommentID commentID: Int, limit: Int? = nil, completion: @escaping ([CommentModel]?, QError?) -> Void) {
         // Load message from server
         QiscusCore.network.loadComments(roomId: id, lastCommentId: commentID, timestamp: nil, after: nil, limit: limit) { (comments, error) in
+            if let c = comments {
+                // save comment in local
+                QiscusCore.storage.saveComments(c)
+            }
             completion(comments,nil)
         }
     }

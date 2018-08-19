@@ -13,9 +13,9 @@ protocol QCCommentManager {
     func saveComment(_ data: CommentModel)
     func saveComments(_ data: [CommentModel])
     func readComment(_ data: CommentModel)
-    func findCommentbyRoomID(id: String) -> [CommentModel]?
-    func findCommentbyID(id: String) -> CommentModel?
-    func findCommentbyUniqueID(id: String) -> CommentModel?
+    func getCommentbyRoomID(id: String) -> [CommentModel]?
+    func getCommentbyID(id: String) -> CommentModel?
+    func getCommentbyUniqueID(id: String) -> CommentModel?
 }
 
 // Blueprint room function
@@ -82,6 +82,7 @@ public class QiscusStorage {
 
 //  MARK: Room Storage
 extension QiscusStorage : QCRoomManager {
+    // MARK: remove public next
     public func getRooms() -> [RoomModel] {
         return room.all()
     }
@@ -109,7 +110,7 @@ extension QiscusStorage : QCCommentManager {
         comment.add(data)
     }
     
-    func findCommentbyRoomID(id: String) -> [CommentModel]? {
+    func getCommentbyRoomID(id: String) -> [CommentModel]? {
         return comment.find(byRoomID: id)
     }
     
@@ -128,11 +129,11 @@ extension QiscusStorage : QCCommentManager {
         }
     }
     
-    func findCommentbyID(id: String) -> CommentModel? {
+    func getCommentbyID(id: String) -> CommentModel? {
         return comment.find(byID: id)
     }
     
-    func findCommentbyUniqueID(id: String) -> CommentModel? {
+    func getCommentbyUniqueID(id: String) -> CommentModel? {
         return comment.find(byUniqueID: id)
     }
 }

@@ -76,7 +76,7 @@ class CommentStorage {
     func sort(_ data: [CommentModel]) -> [CommentModel]{
         var result = data
         result.sort { (comment1, comment2) -> Bool in
-            return comment1.unixTimestamp < comment2.unixTimestamp
+            return comment1.unixTimestamp > comment2.unixTimestamp
         }
         return result
     }

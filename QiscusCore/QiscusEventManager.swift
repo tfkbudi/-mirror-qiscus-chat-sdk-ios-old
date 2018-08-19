@@ -77,7 +77,7 @@ class QiscusEventManager {
     /// - Parameter data: comment object
     /// - Returns: return true if comment is new or not exist in local
     private func checkNewComment(_ data: CommentModel) -> Bool {
-        return !(QiscusCore.storage.findCommentbyUniqueID(id: data.uniqueTempId) != nil)
+        return !(QiscusCore.storage.getCommentbyUniqueID(id: data.uniqueTempId) != nil)
     }
     
     // MARK: TODO comment status change
