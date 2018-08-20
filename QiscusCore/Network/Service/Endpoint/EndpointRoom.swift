@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: Room API
 internal enum APIRoom {
-    case roomList(showParticipants: Bool, limit: Int, page: Int?, roomType: RoomType? , showRemoved: Bool, showEmpty: Bool)
+    case roomList(showParticipants: Bool, limit: Int?, page: Int?, roomType: RoomType? , showRemoved: Bool, showEmpty: Bool)
     case roomInfo(roomId: [String]?, roomUniqueId: [String]?, showParticipants: Bool, showRemoved: Bool)
     case createNewRoom(name: String,participants: [String],avatarUrl: URL?)
     case updateRoom(roomId: String, roomName: String?, avatarUrl: URL?, options: String?)
@@ -67,7 +67,6 @@ extension APIRoom : EndPoint {
             var params = [
                 "token"                      : AUTHTOKEN,
                 "show_participants"          : showParticipants,
-                "limit"                      : limit,
                 "show_removed"               : showRemoved,
                 "show_empty"                 : showEmpty
                 
@@ -75,6 +74,10 @@ extension APIRoom : EndPoint {
             
             if let pages = page {
                 params["page"] = pages
+            }
+            
+            if let l = limit {
+                params["limit"] = l
             }
             
             if let roomTypeParams = roomType {

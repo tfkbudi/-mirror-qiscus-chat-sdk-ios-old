@@ -102,7 +102,7 @@ extension QiscusCore {
     /// getAllRoom
     ///
     /// - Parameter completion: First Completion will return data from local if exis, then return from server with meta data(totalpage,current). Response new Qiscus Room Object and error if exist.
-    public func getAllRoom(limit: Int = 20, page: Int = 1,completion: @escaping ([RoomModel]?, Meta?, QError?) -> Void) {
+    public func getAllRoom(limit: Int? = nil, page: Int? = nil,completion: @escaping ([RoomModel]?, Meta?, QError?) -> Void) {
         let localRooms = QiscusCore.storage.getRooms()
         if !localRooms.isEmpty {
             completion(localRooms, nil, nil)
