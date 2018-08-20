@@ -44,20 +44,23 @@ class Storage {
     ///   - directory: where you want to save file document dir or cache
     ///   - fileName: file name
     static func save<T: Codable>(_ object: T, to directory: Directory, as filename: String) {
-        let url = getURL(by: directory).appendingPathComponent(filename, isDirectory: false)
-        
-        let encoder = JSONEncoder()
-        do {
-            let data = try encoder.encode(object)
-            // check if file exist then remove
-            if fileExist(filename, in: directory) {
-                try FileManager.default.removeItem(at: url)
+//        let throttler = Throttler.init(seconds: 5)
+//        throttler.throttle {
+            let url = getURL(by: directory).appendingPathComponent(filename, isDirectory: false)
+            
+            let encoder = JSONEncoder()
+            do {
+                let data = try encoder.encode(object)
+                // check if file exist then remove
+                if fileExist(filename, in: directory) {
+                    try FileManager.default.removeItem(at: url)
+                }
+                // create new file
+                FileManager.default.createFile(atPath: url.path, contents: data, attributes: nil)
+            } catch {
+                fatalError(error.localizedDescription)
             }
-            // create new file
-            FileManager.default.createFile(atPath: url.path, contents: data, attributes: nil)
-        } catch {
-            fatalError(error.localizedDescription)
-        }
+        //}
     }
     
     /// find file in directory
