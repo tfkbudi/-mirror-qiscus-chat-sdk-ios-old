@@ -87,6 +87,7 @@ open class CommentModel : Codable {
     public var disableLinkPreview : Bool = false
     public var email : String = ""
     public var id : String
+    var idstr : String
     public var isDeleted: Bool = false
     public var isPublicChannel: Bool = false
     public var status: String = ""
@@ -109,6 +110,7 @@ open class CommentModel : Codable {
         case disableLinkPreview = "disable_link_preview"
         case email = "email"
         case id = "id"
+        case idstr = "id_str"
         case isDeleted = "is_deleted"
         case isPublicChannel = "is_public_channel"
         case status = "status"
@@ -128,20 +130,25 @@ open class CommentModel : Codable {
     
     public init() {
         self.id             = ""
+        self.idstr          = ""
         self.uniqueTempId   = "ios_\(NSDate().timeIntervalSince1970 * 1000.0)"
     }
     
     public required init(from decoders: Decoder) throws {
         let values = try decoders.container(keyedBy: CodingKeys.self)
+        idstr = try values.decodeIfPresent(String.self, forKey: .idstr) ?? ""
+        if !idstr.isEmpty {
+            id = idstr
+        }else {
+            id = "\(try values.decodeIfPresent(Int64.self, forKey: .id) ?? -1)"
+        }
         commentBeforeId = try values.decode(Int.self, forKey: .commentBeforeId)
         disableLinkPreview = try values.decode(Bool.self, forKey: .disableLinkPreview)
         email = try values.decode(String.self, forKey: .email)
-        id = "\(try values.decode(Int.self, forKey: .id))"
         isDeleted = try values.decodeIfPresent(Bool.self, forKey: .isDeleted) ?? false
         isPublicChannel = try values.decode(Bool.self, forKey: .isPublicChannel)
         status = try values.decodeIfPresent(String.self, forKey: .status) ?? ""
         message = try values.decode(String.self, forKey: .message)
-        
         extras = try values.decodeIfPresent(Extras.self, forKey: .extras)
         roomId = try values.decode(Int.self, forKey: .roomId)
         timestamp = try values.decode(String.self, forKey: .timestamp)

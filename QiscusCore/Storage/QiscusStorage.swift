@@ -83,7 +83,7 @@ public class QiscusStorage {
 //  MARK: Room Storage
 extension QiscusStorage : QCRoomManager {
     // MARK: remove public next
-    func getRooms() -> [RoomModel] {
+    public func getRooms() -> [RoomModel] {
         return room.all()
     }
     
@@ -99,7 +99,7 @@ extension QiscusStorage : QCRoomManager {
         room.removeAll()
     }
     
-    func findRoom(byID id: String) -> RoomModel? {
+    public func findRoom(byID id: String) -> RoomModel? {
         return room.find(byID: id)
     }
 }

@@ -79,7 +79,8 @@ public class Meta : Codable {
 }
 
 open class RoomModel : Codable, RoomEvent {
-    public let id : String
+    public var id : String
+    var idstr : String
     public let name : String
     public let uniqueId : String
     public let avatarUrl : String
@@ -90,8 +91,8 @@ open class RoomModel : Codable, RoomEvent {
     public var unreadCount : Int
     
     enum CodingKeys: String, CodingKey {
-        
         case id = "id"
+        case idstr = "id_str"
         case name = "room_name"
         case uniqueId = "unique_id"
         case avatarUrl = "avatar_url"
@@ -104,13 +105,18 @@ open class RoomModel : Codable, RoomEvent {
     
     public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        id = "\(try values.decode(Int.self, forKey: .id))"
+        idstr = try values.decodeIfPresent(String.self, forKey: .idstr) ?? ""
+        if !idstr.isEmpty {
+            id = idstr
+        }else {
+            id = "\(try values.decodeIfPresent(Int64.self, forKey: .id) ?? -1)"
+        }
         name = try values.decode(String.self, forKey: .name)
         uniqueId = try values.decode(String.self, forKey: .uniqueId)
         avatarUrl = try values.decode(String.self, forKey: .avatarUrl)
         chatType = try values.decode(String.self, forKey: .chatType)
         options = try values.decodeIfPresent(String.self, forKey: .options)
-        lastComment = try values.decodeIfPresent(CommentModel.self, forKey: .lastComment)
+        lastComment = try values.decodeIfPresent(CommentModel.self, forKey: .lastComment) ?? nil
         participants = try values.decodeIfPresent([MemberModel].self, forKey: .participants)
         unreadCount = try values.decode(Int.self, forKey: .unreadCount)
     }

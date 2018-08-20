@@ -25,7 +25,6 @@ class RoomStorage {
     }
     
     func all() -> [RoomModel] {
-//        return sort()
         return data
     }
     

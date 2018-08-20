@@ -116,7 +116,8 @@ public class App : Codable {
 open class MemberModel : Codable {
     public let avatarUrl : String
     public let email : String
-    public let id : String
+    public var id : String
+    let idstr : String
     public let lastCommentReadId : Int
     public let lastCommentReceivedId : Int
     public let username : String
@@ -126,6 +127,7 @@ open class MemberModel : Codable {
         case avatarUrl = "avatar_url"
         case email = "email"
         case id = "id"
+        case idstr = "id_str"
         case lastCommentReadId = "last_comment_read_id"
         case lastCommentReceivedId = "last_comment_received_id"
         case username = "username"
@@ -133,9 +135,14 @@ open class MemberModel : Codable {
     
     public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
+        idstr = try values.decodeIfPresent(String.self, forKey: .idstr) ?? ""
+        if !idstr.isEmpty {
+            id = idstr
+        }else {
+            id = "\(try values.decodeIfPresent(Int64.self, forKey: .id) ?? -1)"
+        }
         avatarUrl = try values.decode(String.self, forKey: .avatarUrl)
         email = try values.decode(String.self, forKey: .email)
-        id = "\(try values.decode(Int.self, forKey: .id))"
         lastCommentReadId = try values.decode(Int.self, forKey: .lastCommentReadId)
         lastCommentReceivedId = try values.decode(Int.self, forKey: .lastCommentReceivedId)
         username = try values.decode(String.self, forKey: .username)
