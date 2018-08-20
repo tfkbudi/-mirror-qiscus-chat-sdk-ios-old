@@ -101,11 +101,11 @@ extension QiscusCore {
     
     /// getAllRoom
     ///
-    /// - Parameter completion: Response new Qiscus Room Object and error if exist.
-    public func getAllRoom(limit: Int = 20, page: Int = 1,completion: @escaping ([RoomModel]?, QError?) -> Void) {
+    /// - Parameter completion: First Completion will return data from local if exis, then return from server with meta data(totalpage,current). Response new Qiscus Room Object and error if exist.
+    public func getAllRoom(limit: Int = 20, page: Int = 1,completion: @escaping ([RoomModel]?, Meta?, QError?) -> Void) {
         let localRooms = QiscusCore.storage.getRooms()
         if !localRooms.isEmpty {
-            completion(localRooms, nil)
+            completion(localRooms, nil, nil)
         }
         // api get room list
         QiscusCore.network.getRoomList(limit: limit, page: page) { (data, meta, error) in
@@ -115,7 +115,7 @@ extension QiscusCore {
                 // subscribe room from local
                 QiscusCore.realtime.subscribeRooms(rooms: rooms)
             }
-            completion(data,nil)
+            completion(data,meta,nil)
         }
     }
     
