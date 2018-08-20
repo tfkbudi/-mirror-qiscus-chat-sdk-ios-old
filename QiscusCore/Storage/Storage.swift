@@ -78,8 +78,8 @@ class Storage {
         if let data = FileManager.default.contents(atPath: url.path) {
             let decoder = JSONDecoder()
             do {
-                let user = try decoder.decode(UserModel.self, from: data)
-                print("name : \(user.email)")
+//                let user = try decoder.decode(UserModel.self, from: data)
+//                print("name : \(user.email)")
                 let model = try decoder.decode(type, from: data)
                 return model
                 

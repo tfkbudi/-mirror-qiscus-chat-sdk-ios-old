@@ -47,6 +47,7 @@ class RoomStorage {
             }
         }
         data = sort(data)
+        self.saveToLocal(data)
         // mark Todo update last comment
         QiscusLogger.debugPrint("number of room in local temp : \(data.count)")
     }
@@ -55,6 +56,7 @@ class RoomStorage {
     private func updateRoomDataEvent(old: RoomModel, new: RoomModel) -> Bool{
         if let index = data.index(where: { $0 === old }) {
             data[index] = new
+            saveToLocal(data)
             QiscusLogger.debugPrint("room \(new.name), unreadCount \(new.unreadCount)")
             return true
         }else {
@@ -93,6 +95,7 @@ class RoomStorage {
             new.lastComment = comment
             new.unreadCount = new.unreadCount + 1
             data = sort(data)
+            saveToLocal(data)
             return updateRoomDataEvent(old: r, new: new)
         }else {
             return false
@@ -131,7 +134,14 @@ class RoomStorage {
 extension RoomStorage {
     func loadFromLocal() -> [RoomModel] {
         // load from file
-        // parsing to model
-        return [RoomModel]()
+        if let rooms = Storage.find("rooms.json", in: .document, as: [RoomModel].self) {
+            return rooms
+        }else {
+            return [RoomModel]() // return emty rooms
+        }
+    }
+    
+    func saveToLocal(_ data: [RoomModel]) {
+        Storage.save(data, to: .document, as: "rooms.json")
     }
 }
