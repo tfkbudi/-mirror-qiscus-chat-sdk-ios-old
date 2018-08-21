@@ -136,4 +136,8 @@ extension QiscusStorage : QCCommentManager {
     func getCommentbyUniqueID(id: String) -> CommentModel? {
         return comment.find(byUniqueID: id)
     }
+    
+    func clearComment() {
+        comment.removeAll()
+    }
 }

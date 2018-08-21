@@ -44,4 +44,9 @@ class ConfigManager : NSObject {
         return user
     }
     
+    func clearConfig() {
+        // remove file user
+        Storage.removeFile(filename("userdata"), in: .document)
+        self.userCache = nil
+    }
 }

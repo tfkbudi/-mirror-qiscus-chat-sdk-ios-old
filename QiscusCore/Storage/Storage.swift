@@ -44,21 +44,19 @@ class Storage {
     ///   - directory: where you want to save file document dir or cache
     ///   - fileName: file name
     static func save<T: Codable>(_ object: T, to directory: Directory, as filename: String) {
-        DispatchQueue.global(qos: .background).async {
-            let url = getURL(by: directory).appendingPathComponent(filename, isDirectory: false)
-            
-            let encoder = JSONEncoder()
-            do {
-                let data = try encoder.encode(object)
-                // check if file exist then remove
-                if fileExist(filename, in: directory) {
-                    try FileManager.default.removeItem(at: url)
-                }
-                // create new file
-                FileManager.default.createFile(atPath: url.path, contents: data, attributes: nil)
-            } catch {
-                QiscusLogger.errorPrint(error.localizedDescription)
+        let url = getURL(by: directory).appendingPathComponent(filename, isDirectory: false)
+        
+        let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(object)
+            // check if file exist then remove
+            if fileExist(filename, in: directory) {
+                try FileManager.default.removeItem(at: url)
             }
+            // create new file
+            FileManager.default.createFile(atPath: url.path, contents: data, attributes: nil)
+        } catch {
+            QiscusLogger.errorPrint("error save file \(error.localizedDescription)")
         }
     }
     
@@ -80,8 +78,6 @@ class Storage {
         if let data = FileManager.default.contents(atPath: url.path) {
             let decoder = JSONDecoder()
             do {
-//                let user = try decoder.decode(UserModel.self, from: data)
-//                print("name : \(user.email)")
                 let model = try decoder.decode(type, from: data)
                 return model
                 

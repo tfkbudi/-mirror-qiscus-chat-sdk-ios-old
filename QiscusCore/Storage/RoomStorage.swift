@@ -8,13 +8,13 @@
 //  save room from restAPI in temp(variable)
 //  save room in local storage
 //  get rooms from local storage
-
 import Foundation
 
 class RoomStorage {
     private var data : [RoomModel] = [RoomModel]()
     var delegate = QiscusCore.eventManager.delegate
-    
+    var saveTask: DispatchWorkItem?
+    var filename : String = "QiscusRooms.json"
     init() {
         // MARK: TODO load data rooms from local storage to var data
         self.data = loadFromLocal()
@@ -22,6 +22,7 @@ class RoomStorage {
     
     func removeAll() {
         data.removeAll()
+        Storage.removeFile(filename, in: .document)
     }
     
     func all() -> [RoomModel] {
@@ -56,7 +57,6 @@ class RoomStorage {
         if let index = data.index(where: { $0 === old }) {
             data[index] = new
             saveToLocal(data)
-            QiscusLogger.debugPrint("room \(new.name), unreadCount \(new.unreadCount)")
             return true
         }else {
             return false
@@ -94,7 +94,7 @@ class RoomStorage {
             new.lastComment = comment
             new.unreadCount = new.unreadCount + 1
             data = sort(data)
-            saveToLocal(data)
+            // saveToLocal(data)
             return updateRoomDataEvent(old: r, new: new)
         }else {
             return false
@@ -133,7 +133,7 @@ class RoomStorage {
 extension RoomStorage {
     func loadFromLocal() -> [RoomModel] {
         // load from file
-        if let rooms = Storage.find("rooms.json", in: .document, as: [RoomModel].self) {
+        if let rooms = Storage.find(filename, in: .document, as: [RoomModel].self) {
             return rooms
         }else {
             return [RoomModel]() // return emty rooms
@@ -141,8 +141,17 @@ extension RoomStorage {
     }
     
     func saveToLocal(_ data: [RoomModel]) {
-        _ = throttle(delay: 0.4) {
-            Storage.save(data, to: .document, as: "rooms.json")
+        self.saveTask?.cancel()
+        let task = DispatchWorkItem {
+            self.saveToFile()
+        }
+        self.saveTask = task
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1, execute: task)
+    }
+    
+    private func saveToFile() {
+        DispatchQueue.global(qos: .background).async {
+            Storage.save(self.data, to: .document, as: self.filename)
         }
     }
 }
