@@ -12,12 +12,18 @@ import Foundation
 extension QiscusCore {
     
     public func sendMessage(roomID id: String, comment: CommentModel, completion: @escaping (CommentModel?, QError?) -> Void) {
+        // update comment
+        let _comment = comment
+        _comment.roomId = id
+        _comment.status = "sending"
         // save in local
-        QiscusCore.storage.saveComment(comment)
+        QiscusCore.storage.saveComment(_comment)
         // send message to server
         QiscusCore.network.postComment(roomId: id, type: comment.type, message: comment.message, payload: nil, extras: nil, uniqueTempId: comment.uniqueTempId) { (result, error) in
-            if result != nil {
-                completion(comment,nil)
+            if let commentResult = result {
+                // save in local
+                QiscusCore.storage.saveComment(commentResult)
+                completion(commentResult,nil)
             }else {
                 completion(nil,QError.init(message: error ?? "Failed to send message"))
             }

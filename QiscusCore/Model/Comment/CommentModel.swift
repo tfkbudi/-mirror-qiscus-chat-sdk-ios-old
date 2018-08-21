@@ -94,7 +94,8 @@ open class CommentModel : Codable {
     public var message: String = ""
     public var payload : Payload? = nil
     public var extras : Extras? = nil
-    public var roomId : Int = 0
+    public var roomId : String
+    public var roomIdStr : String
     public var timestamp : String = ""
     public var topicId : Int = 0
     public var type : CommentType = .text
@@ -118,6 +119,7 @@ open class CommentModel : Codable {
         case payload = "payload"
         case extras = "extras"
         case roomId = "room_id"
+        case roomIdStr = "room_id_str"
         case timestamp = "timestamp"
         case topicId = "topic_id"
         case type = "type"
@@ -131,16 +133,25 @@ open class CommentModel : Codable {
     public init() {
         self.id             = ""
         self.idstr          = ""
+        self.roomId         = ""
+        self.roomIdStr      = ""
         self.uniqueTempId   = "ios_\(NSDate().timeIntervalSince1970 * 1000.0)"
     }
     
     public required init(from decoders: Decoder) throws {
         let values = try decoders.container(keyedBy: CodingKeys.self)
+        // Convert id sdr
         idstr = try values.decodeIfPresent(String.self, forKey: .idstr) ?? ""
         if !idstr.isEmpty {
             id = idstr
         }else {
             id = "\(try values.decodeIfPresent(Int64.self, forKey: .id) ?? -1)"
+        }
+        roomIdStr = try values.decodeIfPresent(String.self, forKey: .roomIdStr) ?? ""
+        if !roomIdStr.isEmpty {
+            roomId = roomIdStr
+        }else {
+            roomId = "\(try values.decodeIfPresent(Int64.self, forKey: .id) ?? -1)"
         }
         commentBeforeId = try values.decode(Int.self, forKey: .commentBeforeId)
         disableLinkPreview = try values.decode(Bool.self, forKey: .disableLinkPreview)
@@ -150,7 +161,6 @@ open class CommentModel : Codable {
         status = try values.decodeIfPresent(String.self, forKey: .status) ?? ""
         message = try values.decode(String.self, forKey: .message)
         extras = try values.decodeIfPresent(Extras.self, forKey: .extras)
-        roomId = try values.decode(Int.self, forKey: .roomId)
         timestamp = try values.decode(String.self, forKey: .timestamp)
         topicId = try values.decode(Int.self, forKey: .topicId)
         uniqueTempId = try values.decode(String.self, forKey: .uniqueTempId)

@@ -28,6 +28,14 @@ class RealtimeManager {
         print("debug \(QiscusCore.enableDebugPrint) : \(QiscusRealtime.enableDebugPrint)")
     }
     
+    func disconnect() {
+        guard let c = client else {
+            return
+        }
+        c.disconnect()
+        self.pendingSubscribeTopic.removeAll()
+    }
+    
     func connect(username: String, password: String) {
         guard let c = client else {
             return

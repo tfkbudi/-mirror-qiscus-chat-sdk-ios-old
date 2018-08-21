@@ -56,7 +56,6 @@ class RoomStorage {
     private func updateRoomDataEvent(old: RoomModel, new: RoomModel) -> Bool{
         if let index = data.index(where: { $0 === old }) {
             data[index] = new
-            saveToLocal(data)
             return true
         }else {
             return false
@@ -92,10 +91,15 @@ class RoomStorage {
         if let r = find(byID: String(comment.roomId)) {
             let new = r
             new.lastComment = comment
-            new.unreadCount = new.unreadCount + 1
-            data = sort(data)
-            // saveToLocal(data)
-            return updateRoomDataEvent(old: r, new: new)
+            // check uniqtimestamp if nil, assume new comment from your
+            if comment.unixTimestamp > 0 {
+                new.unreadCount = new.unreadCount + 1
+            }
+            // check data exist and update
+            let isUpdate = updateRoomDataEvent(old: r, new: new)
+            data = sort(data) // check data source
+            saveToLocal(data) // update data local
+            return isUpdate
         }else {
             return false
         }
@@ -113,7 +117,10 @@ class RoomStorage {
             if let lastComment = r.lastComment {
                 if comment.id == lastComment.id {
                     new.unreadCount = new.unreadCount - 1
-                    return updateRoomDataEvent(old: r, new: new)
+                    let isUpdate = updateRoomDataEvent(old: r, new: new)
+                    // update data local
+                    saveToLocal(data)
+                    return isUpdate
                 }else { return false }
             }else { return false }
         }else {

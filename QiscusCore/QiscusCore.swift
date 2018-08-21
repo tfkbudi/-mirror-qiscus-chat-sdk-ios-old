@@ -124,7 +124,10 @@ public class QiscusCore: NSObject {
         QiscusCore.storage.clearComment()
         // clear config
         ConfigManager.shared.clearConfig()
+        // realtime disconnect
+        QiscusCore.realtime.disconnect()
         completion(nil)
+        
     }
     
     /// check already logined

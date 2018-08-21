@@ -57,7 +57,7 @@ class CommentStorage {
         if data.isEmpty {
             return nil
         }else {
-            let result = data.filter{ $0.roomId == Int(id) ?? 0 }
+            let result = data.filter{ $0.roomId == id }
             return sort(result) // short by unix
         }
     }
