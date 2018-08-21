@@ -141,7 +141,8 @@ extension RoomStorage {
     }
     
     func saveToLocal(_ data: [RoomModel]) {
-        // need throttle 
-        Storage.save(data, to: .document, as: "rooms.json")
+        _ = throttle(delay: 0.4) {
+            Storage.save(data, to: .document, as: "rooms.json")
+        }
     }
 }

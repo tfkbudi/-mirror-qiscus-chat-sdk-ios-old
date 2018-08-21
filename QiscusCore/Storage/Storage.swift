@@ -44,8 +44,7 @@ class Storage {
     ///   - directory: where you want to save file document dir or cache
     ///   - fileName: file name
     static func save<T: Codable>(_ object: T, to directory: Directory, as filename: String) {
-//        let throttler = Throttler.init(seconds: 5)
-//        throttler.throttle {
+        DispatchQueue.global(qos: .background).async {
             let url = getURL(by: directory).appendingPathComponent(filename, isDirectory: false)
             
             let encoder = JSONEncoder()
@@ -58,9 +57,9 @@ class Storage {
                 // create new file
                 FileManager.default.createFile(atPath: url.path, contents: data, attributes: nil)
             } catch {
-                fatalError(error.localizedDescription)
+                QiscusLogger.errorPrint(error.localizedDescription)
             }
-        //}
+        }
     }
     
     /// find file in directory
