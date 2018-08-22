@@ -17,12 +17,12 @@ extension QiscusCore {
         _comment.roomId = id
         _comment.status = "sending"
         // save in local
-        QiscusCore.storage.saveComment(_comment)
+        QiscusCore.dataStore.saveComment(_comment)
         // send message to server
         QiscusCore.network.postComment(roomId: id, type: comment.type, message: comment.message, payload: nil, extras: nil, uniqueTempId: comment.uniqueTempId) { (result, error) in
             if let commentResult = result {
                 // save in local
-                QiscusCore.storage.saveComment(commentResult)
+                QiscusCore.dataStore.saveComment(commentResult)
                 completion(commentResult,nil)
             }else {
                 completion(nil,QError.init(message: error ?? "Failed to send message"))
@@ -38,14 +38,14 @@ extension QiscusCore {
     ///   - completion: Response new Qiscus Array of Comment Object and error if exist.
     public func loadComments(roomID id: String, limit: Int? = nil, completion: @escaping ([CommentModel]?, QError?) -> Void) {
         // load from local if exist
-        if let comments = QiscusCore.storage.getCommentbyRoomID(id: id) {
+        if let comments = QiscusCore.dataStore.getCommentbyRoomID(id: id) {
             completion(comments,nil)
         }
         // Load message by default 20
         QiscusCore.network.loadComments(roomId: id, limit: limit) { (comments, error) in
             if let c = comments {
                 // save comment in local
-                QiscusCore.storage.saveComments(c)
+                QiscusCore.dataStore.saveComments(c)
             }
             completion(comments,nil)
         }
@@ -63,7 +63,7 @@ extension QiscusCore {
         QiscusCore.network.loadComments(roomId: id, lastCommentId: commentID, timestamp: nil, after: nil, limit: limit) { (comments, error) in
             if let c = comments {
                 // save comment in local
-                QiscusCore.storage.saveComments(c)
+                QiscusCore.dataStore.saveComments(c)
             }
             completion(comments,nil)
         }

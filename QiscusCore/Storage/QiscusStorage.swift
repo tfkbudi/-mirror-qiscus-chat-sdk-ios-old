@@ -56,7 +56,7 @@ public class QiscusStorage {
     }
     
     // take time, coz search in all rooms
-    func getMember(byEmail email: String) -> MemberModel? {
+    public func getMember(byEmail email: String) -> MemberModel? {
         let rooms = self.getRooms()
         for room in rooms {
             guard let participants = room.participants else { return nil }
@@ -69,7 +69,7 @@ public class QiscusStorage {
         return nil
     }
     
-    func getMember(byEmail email: String, inRoom room: RoomModel) -> MemberModel? {
+    public func getMember(byEmail email: String, inRoom room: RoomModel) -> MemberModel? {
         guard let participants = room.participants else { return nil }
         for p in participants {
             if p.email == email {
@@ -110,7 +110,7 @@ extension QiscusStorage : QCCommentManager {
         comment.add(data)
     }
     
-    func getCommentbyRoomID(id: String) -> [CommentModel]? {
+    public func getCommentbyRoomID(id: String) -> [CommentModel]? {
         return comment.find(byRoomID: id)
     }
     
@@ -129,11 +129,11 @@ extension QiscusStorage : QCCommentManager {
         }
     }
     
-    func getCommentbyID(id: String) -> CommentModel? {
+    public func getCommentbyID(id: String) -> CommentModel? {
         return comment.find(byID: id)
     }
     
-    func getCommentbyUniqueID(id: String) -> CommentModel? {
+    public func getCommentbyUniqueID(id: String) -> CommentModel? {
         return comment.find(byUniqueID: id)
     }
     

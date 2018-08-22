@@ -14,7 +14,7 @@ public class QiscusCore: NSObject {
     private static var config    : ConfigManager          = ConfigManager.shared
     static var realtime         : RealtimeManager       = RealtimeManager.shared
     static var eventManager     : QiscusEventManager    = QiscusEventManager.shared
-    public static var storage   : QiscusStorage         = QiscusStorage.shared
+    public static var dataStore : QiscusStorage         = QiscusStorage.shared
     static var network          : NetworkManager        = NetworkManager()
     public static var delegate  : QiscusCoreDelegate? {
         get {
@@ -119,9 +119,9 @@ public class QiscusCore: NSObject {
     /// - Parameter completionHandler: The code to be executed once the request has finished, also give a user object and error.
     public static func logout(completion: @escaping (QError?) -> Void) {
         // clear room
-        QiscusCore.storage.clearRoom()
+        QiscusCore.dataStore.clearRoom()
         // clear comment
-        QiscusCore.storage.clearComment()
+        QiscusCore.dataStore.clearComment()
         // clear config
         ConfigManager.shared.clearConfig()
         // realtime disconnect

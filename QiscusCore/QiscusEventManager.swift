@@ -19,18 +19,18 @@ class QiscusEventManager {
         // check comment already in local, if true should be update comment status(not new comment for this device)
         if !self.checkNewComment(comment) { return }
         // update last comment and increase unread
-        QiscusCore.storage.saveComment(comment)
+        QiscusCore.dataStore.saveComment(comment)
         // filter event for room or qiscuscore
         if let r = QiscusEventManager.shared.room {
             if r.id == String(comment.roomId) {
                 // publish event new comment inside room
                 roomDelegate?.gotNewComment(comment: comment)
                 // read comment, assume you read from this room
-                QiscusCore.storage.readComment(comment)
+                QiscusCore.dataStore.readComment(comment)
             }
         }
         // got new comment for other room
-        if let room = QiscusCore.storage.findRoom(byID: String(comment.roomId)) {
+        if let room = QiscusCore.dataStore.findRoom(byID: String(comment.roomId)) {
             delegate?.onRoom(room, gotNewComment: comment)
         }
     }
@@ -39,13 +39,13 @@ class QiscusEventManager {
         // filter event for room or qiscuscore
         if let r = QiscusEventManager.shared.room {
             if r.id == roomID {
-                guard let member = QiscusCore.storage.getMember(byEmail: user) else { return }
+                guard let member = QiscusCore.dataStore.getMember(byEmail: user) else { return }
                 roomDelegate?.onRoom(thisParticipant: member, isTyping: value)
             }
         }
         // got typing event for other room
-        if let room = QiscusCore.storage.findRoom(byID: roomID) {
-            guard let member = QiscusCore.storage.getMember(byEmail: user, inRoom: room) else { return }
+        if let room = QiscusCore.dataStore.findRoom(byID: roomID) {
+            guard let member = QiscusCore.dataStore.getMember(byEmail: user, inRoom: room) else { return }
             delegate?.onRoom(room, thisParticipant: member, isTyping: value)
         }
     }
@@ -53,11 +53,11 @@ class QiscusEventManager {
     func gotEvent(email: String, isOnline: Bool, timestamp time: String) {
         // filter event for room or qiscuscore
         if let r = QiscusEventManager.shared.room {
-            guard let member = QiscusCore.storage.getMember(byEmail: email, inRoom: r) else { return }
+            guard let member = QiscusCore.dataStore.getMember(byEmail: email, inRoom: r) else { return }
             let date = getDate(timestampUTC: time)
             self.roomDelegate?.onChangeUser(member, onlineStatus: isOnline, whenTime: date)
         }
-        guard let user = QiscusCore.storage.getMember(byEmail: email) else { return }
+        guard let user = QiscusCore.dataStore.getMember(byEmail: email) else { return }
         let date = getDate(timestampUTC: time)
         self.delegate?.onChange(user: user, isOnline: isOnline, at: date)
     }
@@ -77,7 +77,7 @@ class QiscusEventManager {
     /// - Parameter data: comment object
     /// - Returns: return true if comment is new or not exist in local
     private func checkNewComment(_ data: CommentModel) -> Bool {
-        return !(QiscusCore.storage.getCommentbyUniqueID(id: data.uniqueTempId) != nil)
+        return !(QiscusCore.dataStore.getCommentbyUniqueID(id: data.uniqueTempId) != nil)
     }
     
     // MARK: TODO comment status change

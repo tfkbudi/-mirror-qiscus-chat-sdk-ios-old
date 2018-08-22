@@ -56,7 +56,7 @@ extension QiscusCore {
         QiscusCore.network.getRoomById(roomId: id) { (room, comments, error) in
             if let r = room {
                 // save room
-                QiscusCore.storage.saveRoom(r)
+                QiscusCore.dataStore.saveRoom(r)
                 completion(r, nil)
             }else {
                 if let e = error {
@@ -78,7 +78,7 @@ extension QiscusCore {
         QiscusCore.network.getRoomInfo(roomIds: ids, roomUniqueIds: nil, showParticipant: false, showRemoved: false){ (rooms, error) in
             if let data = rooms {
                 // save room
-                QiscusCore.storage.saveRooms(data)
+                QiscusCore.dataStore.saveRooms(data)
             }
             completion(rooms,error)
         }
@@ -93,7 +93,7 @@ extension QiscusCore {
         QiscusCore.network.getRoomInfo(roomIds: nil, roomUniqueIds: ids, showParticipant: false, showRemoved: false){ (rooms, error) in
             if let data = rooms {
                 // save room
-                QiscusCore.storage.saveRooms(data)
+                QiscusCore.dataStore.saveRooms(data)
             }
             completion(rooms,error)
         }
@@ -107,7 +107,7 @@ extension QiscusCore {
         QiscusCore.network.getRoomList(limit: limit, page: page) { (data, meta, error) in
             if let rooms = data {
                 // save room
-                QiscusCore.storage.saveRooms(rooms)
+                QiscusCore.dataStore.saveRooms(rooms)
                 // subscribe room from local
                 QiscusCore.realtime.subscribeRooms(rooms: rooms)
             }
