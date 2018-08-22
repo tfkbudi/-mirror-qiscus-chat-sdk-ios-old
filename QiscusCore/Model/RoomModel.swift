@@ -79,16 +79,17 @@ public class Meta : Codable {
 }
 
 open class RoomModel : Codable, RoomEvent {
-    public var id : String
-    var idstr : String
-    public let name : String
-    public let uniqueId : String
-    public let avatarUrl : String
-    public let chatType : String
-    public let options : String?
-    public var lastComment : CommentModel? // can be update after got new comment
-    public let participants : [MemberModel]?
-    public var unreadCount : Int
+    public var id : String                  = ""
+    var idstr : String                      = ""
+    public var name : String                = ""
+    public var uniqueId : String            = ""
+    public var avatarUrl : String           = ""
+    public var chatType : String            = ""
+    public var options : String?            = ""
+    // can be update after got new comment
+    public var lastComment : CommentModel?      = nil
+    public var participants : [MemberModel]?    = nil
+    public var unreadCount : Int                = 0
     
     enum CodingKeys: String, CodingKey {
         case id = "id"
@@ -102,6 +103,8 @@ open class RoomModel : Codable, RoomEvent {
         case participants = "participants"
         case unreadCount = "unread_count"
     }
+    
+    public init() {}
     
     public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
