@@ -19,7 +19,7 @@ extension QiscusCore {
         // save in local
         QiscusCore.dataStore.saveComment(_comment)
         // send message to server
-        QiscusCore.network.postComment(roomId: comment.roomId, type: comment.type, message: comment.message, payload: nil, extras: nil, uniqueTempId: comment.uniqueTempId) { (result, error) in
+        QiscusCore.network.postComment(roomId: comment.roomId, type: comment.type, message: comment.message, payload: comment.payload, extras: nil, uniqueTempId: comment.uniqueTempId) { (result, error) in
             if let commentResult = result {
                 // save in local
                 commentResult.status = .sent

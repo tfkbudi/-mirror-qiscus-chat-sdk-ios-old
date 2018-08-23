@@ -22,7 +22,7 @@ open class CommentModel {
     public internal(set) var isPublicChannel      : Bool          = false
     public internal(set) var status               : CommentStatus = .sending
     public var message              : String        = ""
-    public var payload              : String?       = nil
+    public var payload              : [String:Any]? = nil
     public var extras               : String?       = nil
     public internal(set) var roomId               : String        = ""
     public internal(set) var timestamp            : String        = ""
@@ -52,7 +52,7 @@ open class CommentModel {
         self.isDeleted          = json["room_id_str"].boolValue
         self.isPublicChannel    = json["room_id_str"].boolValue
         self.message            = json["message"].stringValue
-        self.payload            = json["payload"].stringValue
+        self.payload            = json["payload"].dictionaryObject
         self.extras             = json["extras"].stringValue
         self.timestamp          = json["timestamp"].stringValue
         self.unixTimestamp      = json["unix_timestamp"].intValue

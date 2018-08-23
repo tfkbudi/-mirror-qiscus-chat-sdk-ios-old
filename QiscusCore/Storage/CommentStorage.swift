@@ -66,7 +66,6 @@ class CommentStorage {
     private func updateRoomDataEvent(old: CommentModel, new: CommentModel) -> Bool{
         if let index = data.index(where: { $0 === old }) {
             data[index] = new
-            QiscusLogger.debugPrint("comment \(new.id), unreadCount \(new.id)")
             return true
         }else {
             return false
