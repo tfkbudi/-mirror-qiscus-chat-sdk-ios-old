@@ -16,29 +16,31 @@ public class SyncMeta {
 
 open class CommentModel {
     public var onChange : (CommentModel) -> Void = { _ in} // data binding
-    public var commentBeforeId      : String        = ""
-    public var email                : String        = ""
-    public var id                   : String        = ""
-    public var isDeleted            : Bool          = false
-    public var isPublicChannel      : Bool          = false
-    public var status               : CommentStatus = .sending
+    public internal(set) var commentBeforeId      : String        = ""
+    public internal(set) var id                   : String        = ""
+    public internal(set) var isDeleted            : Bool          = false
+    public internal(set) var isPublicChannel      : Bool          = false
+    public internal(set) var status               : CommentStatus = .sending
     public var message              : String        = ""
     public var payload              : String?       = nil
     public var extras               : String?       = nil
-    public var roomId               : String        = ""
-    public var timestamp            : String        = ""
+    public internal(set) var roomId               : String        = ""
+    public internal(set) var timestamp            : String        = ""
     public var type                 : String        = "text"
-    public var uniqueTempId         : String
-    public var unixTimestamp        : Int           = 0
-    public var userAvatarUrl        : URL?          = nil
-    public var userId               : String        = ""
-    public var username             : String        = ""
+    public internal(set) var uniqueTempId         : String        = ""
+    public internal(set) var unixTimestamp        : Int           = 0
+    public internal(set) var userAvatarUrl        : URL?          = nil
+    public internal(set) var userId               : String        = ""
+    public internal(set) var username             : String        = ""
+    public internal(set) var userEmail            : String        = ""
     
-    public init(roomID id: String, message: String, payload: String) {
+    public init() {
+        guard let user = QiscusCore.getProfile() else { return }
+        self.userId         = String(user.id)
+        self.username       = user.username
+        self.userAvatarUrl  = URL(string: user.avatarUrl) ?? nil
+        self.userEmail      = user.email
         self.uniqueTempId   = "ios_\(NSDate().timeIntervalSince1970 * 1000.0)"
-        self.message    = message
-        self.payload    = payload
-        self.roomId     = id
     }
     
     init(json: JSON) {
@@ -46,7 +48,7 @@ open class CommentModel {
         self.roomId             = json["room_id_str"].stringValue
         self.uniqueTempId       = json["unique_temp_id"].stringValue
         self.commentBeforeId    = json["comment_before_id_str"].stringValue
-        self.email              = json["email"].stringValue
+        self.userEmail          = json["email"].stringValue
         self.isDeleted          = json["room_id_str"].boolValue
         self.isPublicChannel    = json["room_id_str"].boolValue
         self.message            = json["message"].stringValue
@@ -88,8 +90,9 @@ public enum CommentStatus : String {
     case sent       = "sent"
     case deleted    = "deleted"
     case sending    = "sending"
+    case failed     = "failed"
     
-    static let all = [sent, sending, deliver, receipt, read, deleted]
+    static let all = [sent, sending, deliver, receipt, read, deleted, failed]
 }
 
 public enum CommentType: String, Codable {

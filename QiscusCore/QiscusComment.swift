@@ -11,19 +11,25 @@ import Foundation
 // MARK: Comment Management
 extension QiscusCore {
     
-    public func sendMessage(comment: CommentModel, completion: @escaping (CommentModel?, QError?) -> Void) {
+    public func sendMessage(roomID id: String, comment: CommentModel, completion: @escaping (CommentModel?, QError?) -> Void) {
         // update comment
-        let _comment = comment
-        _comment.status = .sending
+        let _comment            = comment
+        _comment.roomId         = id
+        _comment.status         = .sending
         // save in local
         QiscusCore.dataStore.saveComment(_comment)
         // send message to server
         QiscusCore.network.postComment(roomId: comment.roomId, type: comment.type, message: comment.message, payload: nil, extras: nil, uniqueTempId: comment.uniqueTempId) { (result, error) in
             if let commentResult = result {
                 // save in local
+                commentResult.status = .sent
                 QiscusCore.dataStore.saveComment(commentResult)
+                comment.onChange(commentResult) // view data binding
                 completion(commentResult,nil)
             }else {
+                let _failed = comment
+                _failed.status  = .failed
+                comment.onChange(_failed) // view data binding
                 completion(nil,QError.init(message: error ?? "Failed to send message"))
             }
         }
