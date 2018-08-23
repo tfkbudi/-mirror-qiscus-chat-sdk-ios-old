@@ -11,15 +11,14 @@ import Foundation
 // MARK: Comment Management
 extension QiscusCore {
     
-    public func sendMessage(roomID id: String, comment: CommentModel, completion: @escaping (CommentModel?, QError?) -> Void) {
+    public func sendMessage(comment: CommentModel, completion: @escaping (CommentModel?, QError?) -> Void) {
         // update comment
         let _comment = comment
-        _comment.roomId = id
         _comment.status = .sending
         // save in local
         QiscusCore.dataStore.saveComment(_comment)
         // send message to server
-        QiscusCore.network.postComment(roomId: id, type: comment.type, message: comment.message, payload: nil, extras: nil, uniqueTempId: comment.uniqueTempId) { (result, error) in
+        QiscusCore.network.postComment(roomId: comment.roomId, type: comment.type, message: comment.message, payload: nil, extras: nil, uniqueTempId: comment.uniqueTempId) { (result, error) in
             if let commentResult = result {
                 // save in local
                 QiscusCore.dataStore.saveComment(commentResult)

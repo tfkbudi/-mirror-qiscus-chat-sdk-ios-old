@@ -34,16 +34,17 @@ open class CommentModel {
     public var userId               : String        = ""
     public var username             : String        = ""
     
-//    public static func new(message: String, payload: String) {
-//        self.uniqueTempId   = "ios_\(NSDate().timeIntervalSince1970 * 1000.0)"
-//        self.message    = message
-//        self.payload    = payload
-//    }
+    public init(roomID id: String, message: String, payload: String) {
+        self.uniqueTempId   = "ios_\(NSDate().timeIntervalSince1970 * 1000.0)"
+        self.message    = message
+        self.payload    = payload
+        self.roomId     = id
+    }
     
     init(json: JSON) {
         self.id                 = json["id_str"].stringValue
-        self.roomId             = json["id_str"].stringValue
-        self.uniqueTempId       = json["room_id_str"].stringValue
+        self.roomId             = json["room_id_str"].stringValue
+        self.uniqueTempId       = json["unique_temp_id"].stringValue
         self.commentBeforeId    = json["comment_before_id_str"].stringValue
         self.email              = json["email"].stringValue
         self.isDeleted          = json["room_id_str"].boolValue
