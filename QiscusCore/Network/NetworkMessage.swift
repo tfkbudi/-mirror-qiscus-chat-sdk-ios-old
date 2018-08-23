@@ -60,7 +60,7 @@ extension NetworkManager {
     ///   - extras: comment extras (string on json format)
     ///   - uniqueTempId: -
     ///   - completion: @escaping when success post comment, return Optional(CommentModel) and Optional(String error message)
-    func postComment(roomId: String, type: CommentType = .text, message: String, payload: String? = "", extras: String? = "", uniqueTempId: String = "", completion: @escaping(CommentModel?, String?) -> Void) {
+    func postComment(roomId: String, type: String = "text", message: String, payload: String? = "", extras: String? = "", uniqueTempId: String = "", completion: @escaping(CommentModel?, String?) -> Void) {
         commentRouter.request(.postComment(topicId: roomId, type: type, message: message, payload: payload, extras: extras, uniqueTempId: uniqueTempId)) { (data, response, error) in
             if error != nil {
                 completion(nil, "Please check your network connection.")

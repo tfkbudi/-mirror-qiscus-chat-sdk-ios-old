@@ -32,7 +32,7 @@ class CommentApiResponse {
     }
     
     static func comment(from json: JSON) -> CommentModel {
-        let comment = json["comments"]
+        let comment = json["comment"]
         return CommentModel(json: comment)
     }
 }

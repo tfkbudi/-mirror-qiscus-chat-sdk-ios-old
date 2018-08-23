@@ -15,32 +15,35 @@ public class SyncMeta {
 }
 
 open class CommentModel {
+    public var onChange : (CommentModel) -> Void = { _ in} // data binding
     public var commentBeforeId      : String        = ""
     public var email                : String        = ""
     public var id                   : String        = ""
     public var isDeleted            : Bool          = false
     public var isPublicChannel      : Bool          = false
-    public var status               : String        = ""
+    public var status               : CommentStatus = .sending
     public var message              : String        = ""
     public var payload              : String?       = nil
     public var extras               : String?       = nil
     public var roomId               : String        = ""
     public var timestamp            : String        = ""
-    public var type                 : CommentType   = .text
+    public var type                 : String        = "text"
     public var uniqueTempId         : String
     public var unixTimestamp        : Int           = 0
     public var userAvatarUrl        : URL?          = nil
     public var userId               : String        = ""
     public var username             : String        = ""
     
-    public init() {
-        self.uniqueTempId   = "ios_\(NSDate().timeIntervalSince1970 * 1000.0)"
-    }
+//    public static func new(message: String, payload: String) {
+//        self.uniqueTempId   = "ios_\(NSDate().timeIntervalSince1970 * 1000.0)"
+//        self.message    = message
+//        self.payload    = payload
+//    }
     
     init(json: JSON) {
-        self.id             = json["id_str"].stringValue
-        self.roomId         = json["id_str"].stringValue
-        self.uniqueTempId   = json["room_id_str"].stringValue
+        self.id                 = json["id_str"].stringValue
+        self.roomId             = json["id_str"].stringValue
+        self.uniqueTempId       = json["room_id_str"].stringValue
         self.commentBeforeId    = json["comment_before_id_str"].stringValue
         self.email              = json["email"].stringValue
         self.isDeleted          = json["room_id_str"].boolValue
@@ -53,10 +56,28 @@ open class CommentModel {
         self.userAvatarUrl      = json["room_avatar"].url ?? URL(string: "http://")
         self.username           = json["username"].stringValue
         self.userId             = json["user_id_str"].stringValue
-        self.type               = .text
-        self.status             = json["status"].stringValue
+        let _status             = json["status"].stringValue
+        for s in CommentStatus.all {
+            if s.rawValue == _status {
+                self.status = s
+            }
+        }
+        let _type               = json["type"].stringValue
+        if _type != "custom" {
+            self.type = _type
+        }else {
+            self.type = getType(fromPayload: json)
+        }
+        // parsing payload
+        if let _payload = self.payload {
+            print("payload \(_payload)")
+        }
     }
-
+    
+    private func getType(fromPayload data: JSON) -> String {
+        let type = data["type"].stringValue
+        return type
+    }
 }
 
 public enum CommentStatus : String {
@@ -65,6 +86,9 @@ public enum CommentStatus : String {
     case read       = "read"
     case sent       = "sent"
     case deleted    = "deleted"
+    case sending    = "sending"
+    
+    static let all = [sent, sending, deliver, receipt, read, deleted]
 }
 
 public enum CommentType: String, Codable {

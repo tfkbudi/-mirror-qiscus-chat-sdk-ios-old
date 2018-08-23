@@ -15,7 +15,7 @@ extension QiscusCore {
         // update comment
         let _comment = comment
         _comment.roomId = id
-        _comment.status = "sending"
+        _comment.status = .sending
         // save in local
         QiscusCore.dataStore.saveComment(_comment)
         // send message to server
