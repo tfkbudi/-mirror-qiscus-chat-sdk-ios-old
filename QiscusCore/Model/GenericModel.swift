@@ -23,5 +23,4 @@ public class UnreadModel : Codable {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         unread = try values.decode(Int.self, forKey: .unread)
     }
-    
 }

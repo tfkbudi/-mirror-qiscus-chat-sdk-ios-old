@@ -14,19 +14,19 @@ protocol RoomEvent {
 public class RoomCreateGetUpdateResult : Codable {
     let changed: Bool?
     let room : RoomModel
-    let comments : [CommentModel]
+//    let comments : [CommentModel]
     
     enum CodingKeys: String, CodingKey {
         case changed = "changed"
         case room = "room"
-        case comments = "comments"
+//        case comments = "comments"
     }
     
     public required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         changed = try values.decodeIfPresent(Bool.self, forKey: .changed)
         room = try values.decode(RoomModel.self, forKey: .room)
-        comments = try values.decode([CommentModel].self, forKey: .comments)
+        //comments = try values.decode([CommentModel].self, forKey: .comments)
     }
 }
 
@@ -99,7 +99,7 @@ open class RoomModel : Codable, RoomEvent {
         case avatarUrl = "avatar_url"
         case chatType = "chat_type"
         case options = "options"
-        case lastComment = "last_comment"
+//        case lastComment = "last_comment"
         case participants = "participants"
         case unreadCount = "unread_count"
     }
@@ -119,7 +119,7 @@ open class RoomModel : Codable, RoomEvent {
         avatarUrl = try values.decode(String.self, forKey: .avatarUrl)
         chatType = try values.decode(String.self, forKey: .chatType)
         options = try values.decodeIfPresent(String.self, forKey: .options)
-        lastComment = try values.decodeIfPresent(CommentModel.self, forKey: .lastComment) ?? nil
+        // lastComment = try values.decodeIfPresent(CommentModel.self, forKey: .lastComment) ?? nil
         participants = try values.decodeIfPresent([MemberModel].self, forKey: .participants)
         unreadCount = try values.decode(Int.self, forKey: .unreadCount)
     }

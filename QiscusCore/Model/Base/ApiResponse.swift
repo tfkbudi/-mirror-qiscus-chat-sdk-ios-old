@@ -7,20 +7,32 @@
 //
 
 import Foundation
+import SwiftyJSON
 
-class ApiResponse<T> : Codable where T: Codable{
-    let results : T
-    let status : Int
-    
-    enum CodingKeys: String, CodingKey {
-        
-        case results = "results"
-        case status = "status"
+class ApiResponse {
+    static func decode(from data: Data) -> JSON {
+        let json = JSON(data)
+        let result = json["results"]
+        return result
+    }
+}
+
+class CommentApiResponse {
+    static func comments(from json: JSON) -> [CommentModel]? {
+        if let comments = json["comments"].array {
+            var results = [CommentModel]()
+            for comment in comments {
+                let data = CommentModel(json: comment)
+                results.append(data)
+            }
+            return results
+        }else {
+            return nil
+        }
     }
     
-    public required init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        results = try values.decode(T.self, forKey: .results)
-        status = try values.decode(Int.self, forKey: .status)
+    static func comment(from json: JSON) -> CommentModel {
+        let comment = json["comments"]
+        return CommentModel(json: comment)
     }
 }

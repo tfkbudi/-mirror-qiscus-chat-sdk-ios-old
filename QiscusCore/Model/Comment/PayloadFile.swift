@@ -19,22 +19,22 @@ import Foundation
  }
  */
 
-public class PayloadFile : Payload {
-    public let caption : String
-    public let url : URL
-    public let fileName : String
-    
-    enum CodingKeys: String, CodingKey {
-        case caption = "caption"
-        case url    = "url"
-        case fileName = "file_name"
-    }
-    
-    required public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        caption = try values.decode(String.self, forKey: .caption)
-        url     = try values.decode(URL.self, forKey: .url)
-        fileName = try values.decode(String.self, forKey: .fileName)
-        super.init()
-    }
-}
+//public class PayloadFile : Payload {
+//    public let caption : String
+//    public let url : URL
+//    public let fileName : String
+//    
+//    enum CodingKeys: String, CodingKey {
+//        case caption = "caption"
+//        case url    = "url"
+//        case fileName = "file_name"
+//    }
+//    
+//    required public init(from decoder: Decoder) throws {
+//        let values = try decoder.container(keyedBy: CodingKeys.self)
+//        caption = try values.decode(String.self, forKey: .caption)
+//        url     = try values.decode(URL.self, forKey: .url)
+//        fileName = try values.decode(String.self, forKey: .fileName)
+//        super.init()
+//    }
+//}

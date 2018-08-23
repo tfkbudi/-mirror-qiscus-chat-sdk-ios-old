@@ -124,8 +124,8 @@ extension RealtimeManager: QiscusRealtimeDelegate {
     func didReceiveMessage(data: String) {
         if let json = data.data(using: .utf8) {
             do {
-                let comment = try JSONDecoder().decode(CommentModel.self, from: json)
-                QiscusEventManager.shared.gotNewMessage(comment: comment)
+                //let comment = try JSONDecoder().decode(CommentModel.self, from: json)
+                //QiscusEventManager.shared.gotNewMessage(comment: comment)
             }catch {
                 QiscusLogger.errorPrint("Failed to parse comment from realtime event")
             }

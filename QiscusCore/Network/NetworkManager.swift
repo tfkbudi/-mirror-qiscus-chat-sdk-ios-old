@@ -67,8 +67,8 @@ extension NetworkManager {
                         return
                     }
                     do {
-                        let apiResponse = try JSONDecoder().decode(ApiResponse<QNonce>.self, from: responseData)
-                        completion(apiResponse.results, nil)
+                        //let apiResponse = try JSONDecoder().decode(ApiResponse<QNonce>.self, from: responseData)
+                        //completion(apiResponse.results, nil)
                     } catch {
                         QiscusLogger.errorPrint(error as! String)
                         completion(nil, NetworkResponse.unableToDecode.rawValue)
@@ -109,8 +109,8 @@ extension NetworkManager {
                     }
                     
                     do {
-                        let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
-                        completion(apiResponse.results.user, nil)
+                        //let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
+                        //completion(apiResponse.results.user, nil)
                     } catch {
                         QiscusLogger.errorPrint(error as! String)
                         completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
@@ -152,9 +152,8 @@ extension NetworkManager {
                         return
                     }
                     do {
-                        let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
-                        debugPrint(apiResponse)
-                        completion(apiResponse.results.user, nil)
+                        //let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
+                        //completion(apiResponse.results.user, nil)
                     } catch {
                         QiscusLogger.errorPrint(error as! String)
                         completion(nil, NetworkResponse.unableToDecode.rawValue)
@@ -262,8 +261,8 @@ extension NetworkManager {
                         return
                     }
                     do {
-                        let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
-                        completion(apiResponse.results.user, nil)
+                        //let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
+                        //completion(apiResponse.results.user, nil)
                     } catch {
                         QiscusLogger.errorPrint(error as! String)
                         completion(nil, NetworkResponse.unableToDecode.rawValue)
@@ -306,8 +305,8 @@ extension NetworkManager {
                         return
                     }
                     do {
-                        let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
-                        completion(apiResponse.results.user, nil)
+                        //let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
+                        //completion(apiResponse.results.user, nil)
                     } catch {
                         QiscusLogger.errorPrint(error as! String)
                         completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
@@ -340,8 +339,8 @@ extension NetworkManager {
                         return
                     }
                     do {
-                        let apiResponse = try JSONDecoder().decode(ApiResponse<SyncResults>.self, from: responseData)
-                        completion(apiResponse.results.comments, apiResponse.results.meta, nil)
+                        //let apiResponse = try JSONDecoder().decode(ApiResponse<SyncResults>.self, from: responseData)
+                        //completion(apiResponse.results.comments, apiResponse.results.meta, nil)
                     } catch {
                         QiscusLogger.errorPrint(error as! String)
                         completion(nil, nil, NetworkResponse.unableToDecode.rawValue)
@@ -376,8 +375,8 @@ extension NetworkManager {
                     }
                     
                     do {
-                        let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
-                        completion(apiResponse.results.user, nil)
+                        //let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
+                        //completion(apiResponse.results.user, nil)
                     } catch {
                         QiscusLogger.errorPrint(error as! String)
                         completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
@@ -413,8 +412,8 @@ extension NetworkManager {
                     }
                     
                     do {
-                        let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
-                        completion(apiResponse.results.user, nil)
+                        //let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
+                        //completion(apiResponse.results.user, nil)
                     } catch {
                         QiscusLogger.errorPrint(error as! String)
                         completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
@@ -450,8 +449,8 @@ extension NetworkManager {
                     }
                     
                     do {
-                        let apiResponse = try JSONDecoder().decode(ApiResponse<BlokedUserResults>.self, from: responseData)
-                        completion(apiResponse.results.user, nil)
+                        //let apiResponse = try JSONDecoder().decode(ApiResponse<BlokedUserResults>.self, from: responseData)
+                        //completion(apiResponse.results.user, nil)
                     } catch {
                         QiscusLogger.errorPrint(error as! String)
                         completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
