@@ -6,7 +6,7 @@
 //  Copyright © 2018 Qiscus. All rights reserved.
 //
 
-import UIKit
+import SwiftyJSON
 
 public class UserResults : Codable {
     let user : UserModel
@@ -38,20 +38,17 @@ public class BlokedUserResults : Codable {
     
 }
 
-public class UserModel : Codable {
+public class UserModel {
     public let app : App
-    public var avatarUrl : String           = "http://"
-    public var email : String               = ""
-    public var id : Int64                   = -1
-    public var idStr : String               = ""
-    public var lastCommentId : Int64        = -1
-    public var lastCommentIdStr : String    = ""
-    public var lastSyncEventId : Int64      = -1
-    public var pnAndroidConfigured : Bool    = false
-    public var pnIosConfigured : Bool        = false
-    public var rtKey : String               = ""
-    public var token : String               = ""
-    public var username : String            = ""
+    public var avatarUrl : URL?
+    public var email : String
+    public var id : String
+    public var lastCommentId : String
+    public var lastSyncEventId : Int64
+    public var pnIosConfigured : Bool
+    public var rtKey : String
+    public var token : String
+    public var username : String
     
     enum CodingKeys: String, CodingKey {
         
@@ -70,21 +67,16 @@ public class UserModel : Codable {
         case username = "username"
     }
     
-    public required init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        app = try values.decode(App.self, forKey: .app)
-        avatarUrl = try values.decode(String.self, forKey: .avatarUrl)
-        email = try values.decode(String.self, forKey: .email)
-        id = (try values.decode(Int64.self, forKey: .id))
-        idStr = try values.decode(String.self, forKey: .idStr)
-        lastCommentId = try values.decode(Int64.self, forKey: .lastCommentId)
-        lastCommentIdStr = try values.decode(String.self, forKey: .lastCommentIdStr)
-        lastSyncEventId = try values.decode(Int64.self, forKey: .lastSyncEventId)
-        pnAndroidConfigured = try values.decode(Bool.self, forKey: .pnAndroidConfigured)
-        pnIosConfigured = try values.decode(Bool.self, forKey: .pnIosConfigured)
-        rtKey = try values.decode(String.self, forKey: .rtKey)
-        token = try values.decode(String.self, forKey: .token)
-        username = try values.decode(String.self, forKey: .username)
+    init(json: JSON) {
+        avatarUrl       = json["avatar_url"].url ?? nil
+        email           = json["email"].stringValue
+        id              = json["id_str"].stringValue
+        lastCommentId   = json["last_comment_id"].stringValue
+        lastSyncEventId = json["last_sync_event_id"].int64Value
+        pnIosConfigured  = json["pn_ios_configured"].boolValue
+        rtKey           = json["rtKey"].stringValue
+        token           = json["token"].stringValue
+        username        = json["username"].stringValue
     }
 }
 
@@ -113,39 +105,20 @@ public class App : Codable {
     
 }
 
-open class MemberModel : Codable {
-    public let avatarUrl : String
+open class MemberModel {
+    public let avatarUrl : URL?
     public let email : String
     public var id : String
-    let idstr : String
     public let lastCommentReadId : Int
     public let lastCommentReceivedId : Int
     public let username : String
     
-    enum CodingKeys: String, CodingKey {
-        
-        case avatarUrl = "avatar_url"
-        case email = "email"
-        case id = "id"
-        case idstr = "id_str"
-        case lastCommentReadId = "last_comment_read_id"
-        case lastCommentReceivedId = "last_comment_received_id"
-        case username = "username"
+    init(json: JSON) {
+        self.id         = json["id_str"].stringValue
+        self.username   = json["username"].stringValue
+        self.avatarUrl  = json["avatar_url"].url ?? nil
+        self.email      = json["email"].stringValue
+        self.lastCommentReadId      = json["last_comment_read_id"].intValue
+        self.lastCommentReceivedId  = json["last_comment_received_id"].intValue
     }
-    
-    public required init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        idstr = try values.decodeIfPresent(String.self, forKey: .idstr) ?? ""
-        if !idstr.isEmpty {
-            id = idstr
-        }else {
-            id = "\(try values.decodeIfPresent(Int64.self, forKey: .id) ?? -1)"
-        }
-        avatarUrl = try values.decode(String.self, forKey: .avatarUrl)
-        email = try values.decode(String.self, forKey: .email)
-        lastCommentReadId = try values.decode(Int.self, forKey: .lastCommentReadId)
-        lastCommentReceivedId = try values.decode(Int.self, forKey: .lastCommentReceivedId)
-        username = try values.decode(String.self, forKey: .username)
-    }
-    
 }

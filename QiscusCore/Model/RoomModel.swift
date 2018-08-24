@@ -93,6 +93,8 @@ open class RoomModel : RoomEvent {
         self.chatType       = json["chat_type"].stringValue
         self.options        = json["options"].string ?? nil
         self.unreadCount    = json["unread_count"].intValue
+        let _participant    = json["last_comment"]
+        self.lastComment    = CommentModel(json: _participant)
         //        case lastComment = "last_comment"
         // case participants = "participants"
     }
