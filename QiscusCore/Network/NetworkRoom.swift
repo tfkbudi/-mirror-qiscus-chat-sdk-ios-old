@@ -30,13 +30,10 @@ extension NetworkManager {
                         completion(nil, nil, NetworkResponse.noData.rawValue)
                         return
                     }
-                    do {
-                        //let apiResponse = try JSONDecoder().decode(ApiResponse<RoomsResults>.self, from: responseData)
-                        //completion(apiResponse.results.roomsInfo, apiResponse.results.meta, nil)
-                    } catch {
-                        QiscusLogger.errorPrint(error as! String)
-                        completion(nil, nil, NetworkResponse.unableToDecode.rawValue)
-                    }
+                    let response    = ApiResponse.decode(from: responseData)
+                    let rooms       = RoomApiResponse.rooms(from: response)
+                    let meta        = RoomApiResponse.meta(from: response)
+                    completion(rooms, meta, nil)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)

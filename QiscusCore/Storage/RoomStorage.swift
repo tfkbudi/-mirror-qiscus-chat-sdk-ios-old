@@ -140,11 +140,11 @@ class RoomStorage {
 extension RoomStorage {
     func loadFromLocal() -> [RoomModel] {
         // load from file
-        if let rooms = Storage.find(filename, in: .document, as: [RoomModel].self) {
-            return rooms
-        }else {
+//        if let rooms = Storage.find(filename, in: .document, as: [RoomModel].self) {
+//            return rooms
+//        }else {
             return [RoomModel]() // return emty rooms
-        }
+        //}
     }
     
     func saveToLocal(_ data: [RoomModel]) {
@@ -158,7 +158,7 @@ extension RoomStorage {
     
     private func saveToFile() {
         DispatchQueue.global(qos: .background).async {
-            Storage.save(self.data, to: .document, as: self.filename)
+           // Storage.save(self.data, to: .document, as: self.filename)
         }
     }
 }
