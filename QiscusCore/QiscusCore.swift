@@ -44,7 +44,9 @@ public class QiscusCore: NSObject {
         // check user login
         if let user = getProfile() {
             // setup configuration
-            QiscusCore.setup(WithAppID: user.app.code)
+            if let appid = ConfigManager.shared.appID {
+                QiscusCore.setup(WithAppID: appid)
+            }
             // set delegate
             eventManager.connectionDelegate = delegate
             // connect qiscus realtime server

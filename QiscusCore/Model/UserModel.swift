@@ -38,17 +38,19 @@ import SwiftyJSON
 //    
 //}
 
-public class UserModel {
-    let app : App
-    public var avatarUrl : URL
-    public var email : String
-    public var id : String
-    public var lastCommentId : String
-    public var lastSyncEventId : Int64
-    public var pnIosConfigured : Bool
-    public var rtKey : String
-    public var token : String
-    public var username : String
+public struct UserModel {
+    var app                     : App?      = nil
+    public var avatarUrl        : URL       = URL(string: "http://")!
+    public var email            : String    = ""
+    public var id               : String    = ""
+    public var lastCommentId    : String    = ""
+    public var lastSyncEventId  : Int64     = -1
+    public var pnIosConfigured   : Bool      = false
+    public var rtKey            : String    = ""
+    public var token            : String    = ""
+    public var username         : String    = ""
+    
+    init() { }
     
     init(json: JSON) {
         avatarUrl       = json["avatar_url"].url ?? URL(string: "http://")!

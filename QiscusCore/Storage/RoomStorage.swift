@@ -22,7 +22,6 @@ class RoomStorage {
     
     func removeAll() {
         data.removeAll()
-        Storage.removeFile(filename, in: .document)
     }
     
     func all() -> [RoomModel] {

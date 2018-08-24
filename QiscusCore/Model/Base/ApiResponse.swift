@@ -18,11 +18,11 @@ class ApiResponse {
 }
 
 class UserApiResponse {
-    static func blockedUsers(from json: JSON) -> [RoomModel]? {
+    static func blockedUsers(from json: JSON) -> [UserModel]? {
         if let rooms = json["blocked_user"].array {
-            var results = [RoomModel]()
+            var results = [UserModel]()
             for room in rooms {
-                let data = RoomModel(json: room)
+                let data = UserModel(json: room)
                 results.append(data)
             }
             return results
@@ -31,14 +31,9 @@ class UserApiResponse {
         }
     }
     
-    static func room(from json: JSON) -> RoomModel {
-        let comment = json["room"]
-        return RoomModel(json: comment)
-    }
-    
-    static func meta(from json: JSON) -> Meta {
-        let meta = json["meta"]
-        return Meta(json: meta)
+    static func user(from json: JSON) -> UserModel {
+        let comment = json["user"]
+        return UserModel(json: comment)
     }
 }
 

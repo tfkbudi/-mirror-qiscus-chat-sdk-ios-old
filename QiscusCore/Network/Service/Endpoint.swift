@@ -49,8 +49,8 @@ var HEADERS : [String: String] {
         }
         
         if let user = ConfigManager.shared.user {
-            if !user.app.code.isEmpty {
-                headers["QISCUS_SDK_APP_ID"] = user.app.code
+            if let appid = ConfigManager.shared.appID {
+                headers["QISCUS_SDK_APP_ID"] = appid
             }
             if !user.token.isEmpty {
                 headers["QISCUS_SDK_TOKEN"] = user.token
