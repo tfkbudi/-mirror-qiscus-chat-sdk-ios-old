@@ -38,7 +38,7 @@ open class CommentModel {
         guard let user = QiscusCore.getProfile() else { return }
         self.userId         = String(user.id)
         self.username       = user.username
-        self.userAvatarUrl  = URL(string: user.avatarUrl) ?? nil
+        self.userAvatarUrl  = user.avatarUrl
         self.userEmail      = user.email
         self.uniqueTempId   = "ios_\(NSDate().timeIntervalSince1970 * 1000.0)"
     }

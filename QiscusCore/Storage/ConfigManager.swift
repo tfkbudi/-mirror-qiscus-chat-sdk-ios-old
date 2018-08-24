@@ -34,14 +34,15 @@ class ConfigManager : NSObject {
     
     private func saveUser(_ data: UserModel) {
         // save in file
-        Storage.save(data, to: .document, as: filename("userdata"))
+        //Storage.save(data, to: .document, as: filename("userdata"))
     }
     
     private func loadUser() -> UserModel? {
         // save in cache
-        let user = Storage.find(filename("userdata"), in: .document, as: UserModel.self)
-        self.userCache = user
-        return user
+//        let user = Storage.find(filename("userdata"), in: .document, as: UserModel.self)
+//        self.userCache = user
+//        return user
+        return nil
     }
     
     func clearConfig() {

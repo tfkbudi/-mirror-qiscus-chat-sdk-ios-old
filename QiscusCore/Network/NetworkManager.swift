@@ -103,13 +103,9 @@ extension NetworkManager {
                         completion(nil, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
-                    do {
-                        //let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
-                        //completion(apiResponse.results.user, nil)
-                    } catch {
-                        QiscusLogger.errorPrint(error as! String)
-                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
-                    }
+                    let response = ApiResponse.decode(from: responseData)
+                    let user = UserModel(json: response)
+                    completion(user, nil)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
@@ -146,13 +142,9 @@ extension NetworkManager {
                         completion(nil, NetworkResponse.noData.rawValue)
                         return
                     }
-                    do {
-                        //let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
-                        //completion(apiResponse.results.user, nil)
-                    } catch {
-                        QiscusLogger.errorPrint(error as! String)
-                        completion(nil, NetworkResponse.unableToDecode.rawValue)
-                    }
+                    let response = ApiResponse.decode(from: responseData)
+                    let user = UserModel(json: response)
+                    completion(user, nil)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
@@ -255,13 +247,9 @@ extension NetworkManager {
                         completion(nil, NetworkResponse.noData.rawValue)
                         return
                     }
-                    do {
-                        //let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
-                        //completion(apiResponse.results.user, nil)
-                    } catch {
-                        QiscusLogger.errorPrint(error as! String)
-                        completion(nil, NetworkResponse.unableToDecode.rawValue)
-                    }
+                    let response = ApiResponse.decode(from: responseData)
+                    let user = UserModel(json: response)
+                    completion(user, nil)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
@@ -299,13 +287,9 @@ extension NetworkManager {
                         completion(nil, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
-                    do {
-                        //let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
-                        //completion(apiResponse.results.user, nil)
-                    } catch {
-                        QiscusLogger.errorPrint(error as! String)
-                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
-                    }
+                    let response = ApiResponse.decode(from: responseData)
+                    let user = UserModel(json: response)
+                    completion(user, nil)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
