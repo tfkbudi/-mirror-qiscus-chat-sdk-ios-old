@@ -15,6 +15,11 @@ class ApiResponse {
         let result = json["results"]
         return result
     }
+    
+    static func decode(string data: String) -> JSON {
+        let json = JSON.init(parseJSON: data)
+        return json
+    }
 }
 
 class UserApiResponse {
