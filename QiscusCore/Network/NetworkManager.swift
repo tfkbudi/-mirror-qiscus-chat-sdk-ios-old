@@ -304,26 +304,22 @@ extension NetworkManager {
         }
     }
     
-    func sync(lastCommentReceivedId: String, order: String = "", limit: Int = 20, completion: @escaping ([CommentModel]?, SyncMeta?, String?) -> Void) {
+    func sync(lastCommentReceivedId: String, order: String = "", limit: Int = 20, completion: @escaping ([CommentModel]?, String?) -> Void) {
         clientRouter.request(.sync(lastReceivedCommentId: lastCommentReceivedId, order: order, limit: limit)) { (data, response, error) in
             if error != nil {
-                completion(nil, nil, "Please check your network connection.")
+                completion(nil, "Please check your network connection.")
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(nil, nil, NetworkResponse.noData.rawValue)
+                        completion(nil, NetworkResponse.noData.rawValue)
                         return
                     }
-                    do {
-                        //let apiResponse = try JSONDecoder().decode(ApiResponse<SyncResults>.self, from: responseData)
-                        //completion(apiResponse.results.comments, apiResponse.results.meta, nil)
-                    } catch {
-                        QiscusLogger.errorPrint(error as! String)
-                        completion(nil, nil, NetworkResponse.unableToDecode.rawValue)
-                    }
+                    let response = ApiResponse.decode(from: responseData)
+                    let comments = CommentApiResponse.comments(from: response)
+                    completion(comments, nil)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
@@ -332,7 +328,7 @@ extension NetworkManager {
                         
                     }
                     
-                    completion(nil, nil, errorMessage)
+                    completion(nil, errorMessage)
                 }
             }
         }
@@ -352,14 +348,9 @@ extension NetworkManager {
                         completion(nil, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
-                    
-                    do {
-                        //let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
-                        //completion(apiResponse.results.user, nil)
-                    } catch {
-                        QiscusLogger.errorPrint(error as! String)
-                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
-                    }
+                    let response    = ApiResponse.decode(from: responseData)
+                    let member      = UserApiResponse.user(from: response)
+                    completion(member, nil)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
@@ -389,14 +380,9 @@ extension NetworkManager {
                         completion(nil, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
-                    
-                    do {
-                        //let apiResponse = try JSONDecoder().decode(ApiResponse<UserResults>.self, from: responseData)
-                        //completion(apiResponse.results.user, nil)
-                    } catch {
-                        QiscusLogger.errorPrint(error as! String)
-                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
-                    }
+                    let response    = ApiResponse.decode(from: responseData)
+                    let member      = UserApiResponse.user(from: response)
+                    completion(member, nil)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
@@ -426,14 +412,9 @@ extension NetworkManager {
                         completion(nil, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
-                    
-                    do {
-                        //let apiResponse = try JSONDecoder().decode(ApiResponse<BlokedUserResults>.self, from: responseData)
-                        //completion(apiResponse.results.user, nil)
-                    } catch {
-                        QiscusLogger.errorPrint(error as! String)
-                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
-                    }
+                    let response    = ApiResponse.decode(from: responseData)
+                    let members     = UserApiResponse.blockedUsers(from: response)
+                    completion(members, nil)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)

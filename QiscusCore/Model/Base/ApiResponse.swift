@@ -20,6 +20,12 @@ class ApiResponse {
         let json = JSON.init(parseJSON: data)
         return json
     }
+    
+    static func decode(unread data: Data) -> Int {
+        let json = JSON(data)
+        let unread = json["total_unread_count"].intValue
+        return unread
+    }
 }
 
 class UserApiResponse {
@@ -65,6 +71,20 @@ class RoomApiResponse {
         let meta = json["meta"]
         return Meta(json: meta)
     }
+    
+    static func addParticipants(from json: JSON) -> [MemberModel]? {
+        if let members = json["participants_added"].array {
+            var results = [MemberModel]()
+            for member in members {
+                let data = MemberModel(json: member)
+                results.append(data)
+            }
+            return results
+        }else {
+            return nil
+        }
+    }
+
 }
 
 class CommentApiResponse {

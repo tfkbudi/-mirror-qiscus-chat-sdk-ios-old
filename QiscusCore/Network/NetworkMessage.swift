@@ -183,13 +183,8 @@ extension NetworkManager {
                         completion(0, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
-                    do {
-                        //let apiResponse = try JSONDecoder().decode(ApiResponse<UnreadModel>.self, from: responseData)
-                        //completion(apiResponse.results.unread, nil)
-                    } catch {
-                        print(error)
-                        completion(0, QError(message: NetworkResponse.unableToDecode.rawValue))
-                    }
+                    let unread = ApiResponse.decode(unread: responseData)
+                    completion(unread,nil)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
@@ -223,13 +218,9 @@ extension NetworkManager {
                         completion(nil, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
-                    do {
-                        //let apiResponse = try JSONDecoder().decode(ApiResponse<CommentsResults>.self, from: responseData)
-                        //completion(apiResponse.results.comments, nil)
-                    } catch {
-                        print(error)
-                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
-                    }
+                    let response = ApiResponse.decode(from: responseData)
+                    let comments = CommentApiResponse.comments(from: response)
+                    completion(comments, nil)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
