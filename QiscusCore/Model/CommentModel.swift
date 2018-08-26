@@ -73,7 +73,7 @@ open class CommentModel {
         }
         // parsing payload
         if let _payload = self.payload {
-            print("payload \(_payload)")
+            
         }
     }
     
