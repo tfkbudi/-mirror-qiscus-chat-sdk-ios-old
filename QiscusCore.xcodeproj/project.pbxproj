@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0BA92C2F80E34B6BEF4B1740 /* Pods_QiscusCoreTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9FFD5261FB0CA8C203545C0 /* Pods_QiscusCoreTests.framework */; };
 		1A9AE35F987E498A4394B208 /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A30556DA65A102F1FEE21504 /* Pods_Example.framework */; };
 		3D55936E20FC89CE00AE35E5 /* QiscusCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D55936420FC89CD00AE35E5 /* QiscusCore.framework */; };
 		3D55937320FC89CE00AE35E5 /* QiscusCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D55937220FC89CE00AE35E5 /* QiscusCoreTests.swift */; };
@@ -123,9 +122,7 @@
 		AFC9813493DB53DCF29F7208 /* Pods-QiscusCore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QiscusCore.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QiscusCore/Pods-QiscusCore.debug.xcconfig"; sourceTree = "<group>"; };
 		C1CD2D5A88324C15CF0C55DC /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		C97C5A4122C08D08ADCDD0B1 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
-		DC0FF378292405E59D2272F1 /* Pods-QiscusCoreTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QiscusCoreTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-QiscusCoreTests/Pods-QiscusCoreTests.release.xcconfig"; sourceTree = "<group>"; };
 		E9FFD5261FB0CA8C203545C0 /* Pods_QiscusCoreTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QiscusCoreTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F8AFDFC9CA9E2F42930AAB42 /* Pods-QiscusCoreTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QiscusCoreTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QiscusCoreTests/Pods-QiscusCoreTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,7 +139,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D55936E20FC89CE00AE35E5 /* QiscusCore.framework in Frameworks */,
-				0BA92C2F80E34B6BEF4B1740 /* Pods_QiscusCoreTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,8 +352,6 @@
 				C97C5A4122C08D08ADCDD0B1 /* Pods-Example.release.xcconfig */,
 				AFC9813493DB53DCF29F7208 /* Pods-QiscusCore.debug.xcconfig */,
 				64802D245F1D9AD426A11FD8 /* Pods-QiscusCore.release.xcconfig */,
-				F8AFDFC9CA9E2F42930AAB42 /* Pods-QiscusCoreTests.debug.xcconfig */,
-				DC0FF378292405E59D2272F1 /* Pods-QiscusCoreTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -399,7 +393,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3D55937B20FC89CE00AE35E5 /* Build configuration list for PBXNativeTarget "QiscusCoreTests" */;
 			buildPhases = (
-				40A34891979EE22D967B3F4F /* [CP] Check Pods Manifest.lock */,
 				3D55936920FC89CE00AE35E5 /* Sources */,
 				3D55936A20FC89CE00AE35E5 /* Frameworks */,
 				3D55936B20FC89CE00AE35E5 /* Resources */,
@@ -534,33 +527,25 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Example/Pods-Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
+				"${BUILT_PRODUCTS_DIR}/CocoaMQTT/CocoaMQTT.framework",
 				"${BUILT_PRODUCTS_DIR}/QiscusCore/QiscusCore.framework",
+				"${BUILT_PRODUCTS_DIR}/QiscusRealtime/QiscusRealtime.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyTimer/SwiftyTimer.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaMQTT.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/QiscusCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/QiscusRealtime.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyTimer.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Example/Pods-Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		40A34891979EE22D967B3F4F /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-QiscusCoreTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F7556BF04363ABDDDEE9CCF1 /* [CP] Check Pods Manifest.lock */ = {
@@ -846,7 +831,6 @@
 		};
 		3D55937C20FC89CE00AE35E5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F8AFDFC9CA9E2F42930AAB42 /* Pods-QiscusCoreTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -862,7 +846,6 @@
 		};
 		3D55937D20FC89CE00AE35E5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DC0FF378292405E59D2272F1 /* Pods-QiscusCoreTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
