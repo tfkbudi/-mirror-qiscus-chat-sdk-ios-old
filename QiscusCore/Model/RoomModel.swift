@@ -93,10 +93,15 @@ open class RoomModel : RoomEvent {
         self.chatType       = json["chat_type"].stringValue
         self.options        = json["options"].string ?? nil
         self.unreadCount    = json["unread_count"].intValue
-        let _participant    = json["last_comment"]
-        self.lastComment    = CommentModel(json: _participant)
-        //        case lastComment = "last_comment"
-        // case participants = "participants"
+        let _lastComment    = json["last_comment"]
+        self.lastComment    = CommentModel(json: _lastComment)
+        if let _participants    = json["participants"].array {
+            var data = [MemberModel]()
+            for i in _participants {
+                data.append(MemberModel(json: i))
+            }
+            self.participants = data
+        }
     }
     
     enum CodingKeys: String, CodingKey {

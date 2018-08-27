@@ -1,4 +1,4 @@
-//
+ //
 //  RealtimeManager.swift
 //  QiscusCore
 //

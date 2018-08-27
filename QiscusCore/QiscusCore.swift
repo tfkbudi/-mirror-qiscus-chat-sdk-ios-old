@@ -223,7 +223,7 @@ public class QiscusCore: NSObject {
     /// - Parameters:
     ///   - email: qiscus email user
     ///   - completion: Response object user and error if exist
-    public func blockUser(email: String, completion: @escaping (UserModel?, QError?) -> Void) {
+    public func blockUser(email: String, completion: @escaping (MemberModel?, QError?) -> Void) {
         QiscusCore.network.blockUser(email: email, completion: completion)
     }
     
@@ -232,7 +232,7 @@ public class QiscusCore: NSObject {
     /// - Parameters:
     ///   - email: qiscus email user
     ///   - completion: Response object user and error if exist
-    public func unblockUser(email: String, completion: @escaping (UserModel?, QError?) -> Void) {
+    public func unblockUser(email: String, completion: @escaping (MemberModel?, QError?) -> Void) {
         QiscusCore.network.blockUser(email: email, completion: completion)
     }
     
@@ -242,7 +242,7 @@ public class QiscusCore: NSObject {
     ///   - page: page for pagination
     ///   - limit: limit per page
     ///   - completion: Response array of object user and error if exist
-    public func listBlocked(page: Int?, limit:Int?, completion: @escaping ([UserModel]?, QError?) -> Void) {
+    public func listBlocked(page: Int?, limit:Int?, completion: @escaping ([MemberModel]?, QError?) -> Void) {
         QiscusCore.network.getBlokedUser(page: page, limit: limit, completion: completion)
     }
 }
