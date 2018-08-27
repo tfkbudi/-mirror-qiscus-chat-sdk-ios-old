@@ -104,7 +104,7 @@ extension NetworkManager {
                         return
                     }
                     let response = ApiResponse.decode(from: responseData)
-                    let user = UserModel(json: response)
+                    let user     = UserApiResponse.user(from: response)
                     completion(user, nil)
                 case .failure(let errorMessage):
                     do {
