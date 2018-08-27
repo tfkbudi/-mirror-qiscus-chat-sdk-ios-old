@@ -1,4 +1,8 @@
 QiscusCore.framework
+Cocoapods/Pods/*
+Cocoapods/build/*
+Cocoapods/Podfile.lock
+Cocoapods/Podfile.lockbup
 fastlane/*
 build/*
 Pods/*
