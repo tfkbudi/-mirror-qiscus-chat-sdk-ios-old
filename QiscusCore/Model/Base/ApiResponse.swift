@@ -89,6 +89,19 @@ class RoomApiResponse {
             return nil
         }
     }
+    
+    static func participants(from json: JSON) -> [MemberModel]? {
+        if let members = json["participants"].array {
+            var results = [MemberModel]()
+            for member in members {
+                let data = MemberModel(json: member)
+                results.append(data)
+            }
+            return results
+        }else {
+            return nil
+        }
+    }
 
 }
 

@@ -170,4 +170,12 @@ extension QiscusCore {
         QiscusCore.network.removeParticipants(roomId: roomId, userSdkEmail: emails, completion: completion)
     }
     
+    /// get participant by room id
+    ///
+    /// - Parameters:
+    ///   - roomId: room id (group)
+    ///   - completion: Response new Qiscus Participant Object and error if exist.
+    public func getParticipant(roomId: String, completion: @escaping ([MemberModel]?, QError?) -> Void) {
+        QiscusCore.network.getParticipants(roomId: roomId, completion: completion)
+    }
 }

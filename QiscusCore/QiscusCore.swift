@@ -11,7 +11,7 @@ import Foundation
 public class QiscusCore: NSObject {
     
     public static let shared    : QiscusCore            = QiscusCore()
-    private static var config   : ConfigManager         = ConfigManager.shared
+    private static var config    : ConfigManager          = ConfigManager.shared
     static var realtime         : RealtimeManager       = RealtimeManager.shared
     static var eventManager     : QiscusEventManager    = QiscusEventManager.shared
     public static var dataStore : QiscusStorage         = QiscusStorage.shared

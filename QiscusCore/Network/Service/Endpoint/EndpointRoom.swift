@@ -17,6 +17,7 @@ internal enum APIRoom {
     case channelWithUniqueId(uniqueId: String,name: String?, avatarUrl: URL?, options: String?)
     case addParticipant(roomId: String, emails: [String])
     case removeParticipant(roomId: String, emails: [String])
+    case getParticipant(roomId: String)
     case getRoomById(roomId: String)
 }
 
@@ -45,12 +46,14 @@ extension APIRoom : EndPoint {
             return "/remove_room_participants"
         case .getRoomById( _):
             return "/get_room_by_id"
+        case .getParticipant(_):
+            return "/room_participants"
         }
     }
     
     var httpMethod: HTTPMethod {
         switch self {
-        case .roomList, .getRoomById:
+        case .roomList, .getRoomById, .getParticipant:
             return .get
         case .roomInfo, .createNewRoom, .updateRoom, .roomWithTarget, .channelWithUniqueId, .addParticipant, .removeParticipant:
             return .post
@@ -187,6 +190,11 @@ extension APIRoom : EndPoint {
                 "id"                    : Int64(roomId) ?? 0
                 ] as [String : Any]
             
+            return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: params)
+        case .getParticipant(let roomId):
+            let params = [
+                "room_unique_id"                    : roomId,
+                ] as [String : Any]
             return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: params)
         }
     }

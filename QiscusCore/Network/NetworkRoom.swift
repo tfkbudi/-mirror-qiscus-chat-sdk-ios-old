@@ -282,6 +282,41 @@ extension NetworkManager {
         }
     }
     
+    /// get participants to a chat room
+    ///
+    /// - Parameters:
+    ///   - roomId: chat room id
+    ///   - userSdkEmail: array of user's sdk email
+    ///   - completion: @escaping when success add participant to room, return added participants Optional([MemberModel]), Optional(String error message)
+    func getParticipants(roomId: String, completion: @escaping ([MemberModel]?, QError?) -> Void) {
+        roomRouter.request(.getParticipant(roomId: roomId)) { (data, response, error) in
+            if error != nil {
+                completion(nil, QError(message: "Please check your network connection."))
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
+                        return
+                    }
+                    let response    = ApiResponse.decode(from: responseData)
+                    let members     = RoomApiResponse.participants(from: response)
+                    completion(members, nil)
+                case .failure(let errorMessage):
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        QiscusLogger.errorPrint("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    
+                    completion(nil, QError(message: errorMessage))
+                }
+            }
+        }
+    }
     
     /// add participants to a chat room
     ///

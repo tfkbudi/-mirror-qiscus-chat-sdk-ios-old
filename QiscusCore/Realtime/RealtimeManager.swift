@@ -48,6 +48,11 @@ class RealtimeManager {
         }
     }
     
+    
+    /// Subscribe comment(deliverd and read), typing by member in the room, and online status
+    ///
+    /// - Parameter rooms: array of rooms
+    // MARK: TODO optimize, check already subscribe?
     func subscribeRooms(rooms: [RoomModel]) {
         guard let c = client else {
             return
