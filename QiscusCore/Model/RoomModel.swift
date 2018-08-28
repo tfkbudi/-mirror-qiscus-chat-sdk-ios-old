@@ -12,54 +12,13 @@ protocol RoomEvent {
     var delegate : QiscusCoreRoomDelegate? { set get }
 }
 
-//public class RoomCreateGetUpdateResult : Codable {
-//    let changed: Bool?
-//    let room : RoomModel
-////    let comments : [CommentModel]
-//    
-//    enum CodingKeys: String, CodingKey {
-//        case changed = "changed"
-//        case room = "room"
-////        case comments = "comments"
-//    }
-//    
-//    public required init(from decoder: Decoder) throws {
-//        let values = try decoder.container(keyedBy: CodingKeys.self)
-//        changed = try values.decodeIfPresent(Bool.self, forKey: .changed)
-//        room = try values.decode(RoomModel.self, forKey: .room)
-//        //comments = try values.decode([CommentModel].self, forKey: .comments)
-//    }
-//}
-//
-//public class RoomsResults : Codable {
-//    let meta : Meta?
-//    let roomsInfo : [RoomModel]
-//    
-//    enum CodingKeys: String, CodingKey {
-//        
-//        case meta = "meta"
-//        case roomsInfo = "rooms_info"
-//    }
-//    
-//    public required init(from decoder: Decoder) throws {
-//        let values = try decoder.container(keyedBy: CodingKeys.self)
-//        meta = try values.decodeIfPresent(Meta.self, forKey: .meta)
-//        roomsInfo = try values.decode([RoomModel].self, forKey: .roomsInfo)
-//    }
-//}
-//
-//public class AddParticipantsResult : Codable {
-//    let participantsAdded : [MemberModel]
-//    
-//    enum CodingKeys: String, CodingKey {
-//        case participantsAdded = "participants_added"
-//    }
-//    
-//    public required init(from decoder: Decoder) throws {
-//        let values = try decoder.container(keyedBy: CodingKeys.self)
-//        participantsAdded = try values.decode([MemberModel].self, forKey: .participantsAdded)
-//    }
-//}
+public enum RoomType: String {
+    case single = "single"
+    case group = "group"
+    case channel = "public_channel"
+    
+    static let all = [single,group,channel]
+}
 
 public class Meta {
     public let currentPage : Int?
@@ -78,7 +37,7 @@ open class RoomModel : RoomEvent {
     public internal(set) var name : String
     public internal(set) var uniqueId : String
     public internal(set) var avatarUrl : URL?
-    public internal(set) var chatType : String
+    public internal(set) var type : RoomType                  = .group
     public internal(set) var options : String?
     // can be update after got new comment
     public internal(set) var lastComment : CommentModel?      = nil
@@ -90,7 +49,6 @@ open class RoomModel : RoomEvent {
         self.name           = json["room_name"].stringValue
         self.uniqueId       = json["unique_id"].stringValue
         self.avatarUrl      = json["avatar_url"].url ?? nil
-        self.chatType       = json["chat_type"].stringValue
         self.options        = json["options"].string ?? nil
         self.unreadCount    = json["unread_count"].intValue
         let _lastComment    = json["last_comment"]
@@ -101,6 +59,13 @@ open class RoomModel : RoomEvent {
                 data.append(MemberModel(json: i))
             }
             self.participants = data
+        }
+        if let _type = json["chat_type"].string {
+            for i in RoomType.all {
+                if _type == i.rawValue {
+                    self.type = i
+                }
+            }
         }
     }
     

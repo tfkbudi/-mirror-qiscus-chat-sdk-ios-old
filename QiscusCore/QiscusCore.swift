@@ -246,9 +246,3 @@ public class QiscusCore: NSObject {
         QiscusCore.network.getBlokedUser(page: page, limit: limit, completion: completion)
     }
 }
-
-public enum RoomType: String {
-    case Single = "single"
-    case Group = "group"
-    case PublicChannel = "public_channel"
-}
