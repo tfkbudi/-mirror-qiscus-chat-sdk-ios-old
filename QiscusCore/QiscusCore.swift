@@ -63,7 +63,7 @@ public class QiscusCore: NSObject {
     ///   - customServer: your custom server host
     ///   - realtimeServer: your qiscus realtime host, without port
     ///   - realtimePort: your qiscus realtime port
-    public class func set(customServer: URL, realtimeServer: String, realtimePort port: Int) {
+    public class func set(customServer: URL, realtimeServer: String?, realtimePort port: Int?) {
         config.server = ServerConfig(url: customServer, realtimeURL: realtimeServer, realtimePort: port)
     }
     
