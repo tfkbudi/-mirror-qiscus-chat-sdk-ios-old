@@ -137,7 +137,6 @@ public class QiscusCore: NSObject {
     /// - Returns: return true if already login
     public static var isLogined : Bool {
         get {
-            
             return QiscusCore.connect()
         }
     }

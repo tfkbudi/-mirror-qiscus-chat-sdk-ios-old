@@ -84,15 +84,16 @@ open class CommentModel {
 }
 
 public enum CommentStatus : String {
-    case deliver    = "deliver"
+    case delivered    = "delivered"
     case receipt    = "receipt"
     case read       = "read"
     case sent       = "sent"
     case deleted    = "deleted"
     case sending    = "sending"
     case failed     = "failed"
+    case pending    = "pending"
     
-    static let all = [sent, sending, deliver, receipt, read, deleted, failed]
+    static let all = [sent, sending, delivered, receipt, read, deleted, failed]
 }
 
 public enum CommentType: String, Codable {
