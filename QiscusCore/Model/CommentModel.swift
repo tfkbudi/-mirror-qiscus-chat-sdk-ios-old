@@ -71,6 +71,7 @@ open class CommentModel {
         }else {
             self.type = getType(fromPayload: json)
         }
+        
         // parsing payload
         if let _payload = self.payload {
             
@@ -85,7 +86,6 @@ open class CommentModel {
 
 public enum CommentStatus : String {
     case delivered    = "delivered"
-    case receipt    = "receipt"
     case read       = "read"
     case sent       = "sent"
     case deleted    = "deleted"
@@ -93,7 +93,7 @@ public enum CommentStatus : String {
     case failed     = "failed"
     case pending    = "pending"
     
-    static let all = [sent, sending, delivered, receipt, read, deleted, failed]
+    static let all = [sent, sending, delivered, read, deleted, failed]
 }
 
 public enum CommentType: String, Codable {

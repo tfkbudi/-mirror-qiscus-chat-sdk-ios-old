@@ -113,6 +113,10 @@ extension QiscusStorage : QCCommentManager {
         comment.add(data)
     }
     
+    public func getComments() -> [CommentModel] {
+        return comment.all()
+    }
+    
     public func getCommentbyRoomID(id: String) -> [CommentModel]? {
         return comment.find(byRoomID: id)
     }
