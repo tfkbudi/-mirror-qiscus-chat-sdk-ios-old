@@ -33,6 +33,7 @@ open class CommentModel {
     public internal(set) var userId               : String        = ""
     public internal(set) var username             : String        = ""
     public internal(set) var userEmail            : String        = ""
+    public internal(set) var date                 : Date?         = nil
     
     public init() {
         guard let user = QiscusCore.getProfile() else { return }
@@ -76,11 +77,22 @@ open class CommentModel {
         if let _payload = self.payload {
             
         }
+        self.date = self.getDate(string: self.timestamp)
     }
     
     private func getType(fromPayload data: JSON) -> String {
         let type = data["type"].stringValue
         return type
+    }
+}
+
+extension CommentModel {
+    func getDate(string: String) -> Date? {
+        let formatter = DateFormatter()
+        formatter.dateFormat    = "yyyy-MM-dd'T'HH:mm:ssZ"
+        formatter.timeZone      = TimeZone(abbreviation: "UTC")
+        let date = formatter.date(from: string)
+        return date
     }
 }
 

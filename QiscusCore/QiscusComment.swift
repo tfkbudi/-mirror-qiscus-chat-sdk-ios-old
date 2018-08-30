@@ -29,6 +29,7 @@ extension QiscusCore {
             }else {
                 let _failed = comment
                 _failed.status  = .failed
+                QiscusCore.dataStore.saveComment(_failed)
                 comment.onChange(_failed) // view data binding
                 completion(nil,QError.init(message: error ?? "Failed to send message"))
             }
