@@ -334,7 +334,7 @@ extension NetworkManager {
         }
     }
     
-    func blockUser(email: String, completion: @escaping (UserModel?, QError?) -> Void) {
+    func blockUser(email: String, completion: @escaping (MemberModel?, QError?) -> Void) {
         userRouter.request(.block(email: email)) { (data, response, error) in
             if error != nil {
                 completion(nil, QError(message: "Please check your network connection."))
@@ -349,7 +349,7 @@ extension NetworkManager {
                         return
                     }
                     let response    = ApiResponse.decode(from: responseData)
-                    let member      = UserApiResponse.user(from: response)
+                    let member      = UserApiResponse.blockUser(from: response)
                     completion(member, nil)
                 case .failure(let errorMessage):
                     do {
@@ -366,7 +366,7 @@ extension NetworkManager {
         }
     }
     
-    func unblockUser(email: String, completion: @escaping (UserModel?, QError?) -> Void) {
+    func unblockUser(email: String, completion: @escaping (MemberModel?, QError?) -> Void) {
         userRouter.request(.unblock(email: email)) { (data, response, error) in
             if error != nil {
                 completion(nil, QError(message: "Please check your network connection."))
@@ -381,7 +381,7 @@ extension NetworkManager {
                         return
                     }
                     let response    = ApiResponse.decode(from: responseData)
-                    let member      = UserApiResponse.user(from: response)
+                    let member      = UserApiResponse.blockUser(from: response)
                     completion(member, nil)
                 case .failure(let errorMessage):
                     do {
@@ -398,7 +398,7 @@ extension NetworkManager {
         }
     }
     
-    func getBlokedUser(page: Int?, limit: Int?, completion: @escaping ([UserModel]?, QError?) -> Void) {
+    func getBlokedUser(page: Int?, limit: Int?, completion: @escaping ([MemberModel]?, QError?) -> Void) {
         userRouter.request(.listBloked(page: page, limit: limit)) { (data, response, error) in
             if error != nil {
                 completion(nil, QError(message: "Please check your network connection."))

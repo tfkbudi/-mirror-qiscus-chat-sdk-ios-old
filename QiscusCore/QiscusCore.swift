@@ -11,7 +11,7 @@ import Foundation
 public class QiscusCore: NSObject {
     
     public static let shared    : QiscusCore            = QiscusCore()
-    private static var config   : ConfigManager         = ConfigManager.shared
+    private static var config    : ConfigManager          = ConfigManager.shared
     static var realtime         : RealtimeManager       = RealtimeManager.shared
     static var eventManager     : QiscusEventManager    = QiscusEventManager.shared
     public static var dataStore : QiscusStorage         = QiscusStorage.shared
@@ -63,7 +63,7 @@ public class QiscusCore: NSObject {
     ///   - customServer: your custom server host
     ///   - realtimeServer: your qiscus realtime host, without port
     ///   - realtimePort: your qiscus realtime port
-    public class func set(customServer: URL, realtimeServer: String, realtimePort port: Int) {
+    public class func set(customServer: URL, realtimeServer: String?, realtimePort port: Int?) {
         config.server = ServerConfig(url: customServer, realtimeURL: realtimeServer, realtimePort: port)
     }
     
@@ -137,7 +137,6 @@ public class QiscusCore: NSObject {
     /// - Returns: return true if already login
     public static var isLogined : Bool {
         get {
-            
             return QiscusCore.connect()
         }
     }
@@ -223,7 +222,7 @@ public class QiscusCore: NSObject {
     /// - Parameters:
     ///   - email: qiscus email user
     ///   - completion: Response object user and error if exist
-    public func blockUser(email: String, completion: @escaping (UserModel?, QError?) -> Void) {
+    public func blockUser(email: String, completion: @escaping (MemberModel?, QError?) -> Void) {
         QiscusCore.network.blockUser(email: email, completion: completion)
     }
     
@@ -232,7 +231,7 @@ public class QiscusCore: NSObject {
     /// - Parameters:
     ///   - email: qiscus email user
     ///   - completion: Response object user and error if exist
-    public func unblockUser(email: String, completion: @escaping (UserModel?, QError?) -> Void) {
+    public func unblockUser(email: String, completion: @escaping (MemberModel?, QError?) -> Void) {
         QiscusCore.network.blockUser(email: email, completion: completion)
     }
     
@@ -242,13 +241,7 @@ public class QiscusCore: NSObject {
     ///   - page: page for pagination
     ///   - limit: limit per page
     ///   - completion: Response array of object user and error if exist
-    public func listBlocked(page: Int?, limit:Int?, completion: @escaping ([UserModel]?, QError?) -> Void) {
+    public func listBlocked(page: Int?, limit:Int?, completion: @escaping ([MemberModel]?, QError?) -> Void) {
         QiscusCore.network.getBlokedUser(page: page, limit: limit, completion: completion)
     }
-}
-
-public enum RoomType: String {
-    case Single = "single"
-    case Group = "group"
-    case PublicChannel = "public_channel"
 }

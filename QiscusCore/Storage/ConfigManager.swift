@@ -77,7 +77,14 @@ class ConfigManager : NSObject {
     
     func clearConfig() {
         // remove file user
-        //Storage.removeFile(filename("userdata"), in: .document)
+        let storage = UserDefaults.standard
+        storage.removeObject(forKey: filename("id"))
+        storage.removeObject(forKey: filename("token"))
+        storage.removeObject(forKey: filename("username"))
+        storage.removeObject(forKey: filename("email"))
+        storage.removeObject(forKey: filename("rtKey"))
+        storage.removeObject(forKey: filename("avatarUrl"))
+        storage.removeObject(forKey: filename("lastCommentId"))
         self.userCache = nil
     }
 }

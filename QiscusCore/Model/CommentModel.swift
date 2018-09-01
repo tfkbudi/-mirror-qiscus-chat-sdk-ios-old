@@ -33,6 +33,7 @@ open class CommentModel {
     public internal(set) var userId               : String        = ""
     public internal(set) var username             : String        = ""
     public internal(set) var userEmail            : String        = ""
+    public internal(set) var date                 : Date?         = nil
     
     public init() {
         guard let user = QiscusCore.getProfile() else { return }
@@ -71,10 +72,12 @@ open class CommentModel {
         }else {
             self.type = getType(fromPayload: json)
         }
+        
         // parsing payload
         if let _payload = self.payload {
             
         }
+        self.date = self.getDate(string: self.timestamp)
     }
     
     private func getType(fromPayload data: JSON) -> String {
@@ -83,16 +86,26 @@ open class CommentModel {
     }
 }
 
+extension CommentModel {
+    func getDate(string: String) -> Date? {
+        let formatter = DateFormatter()
+        formatter.dateFormat    = "yyyy-MM-dd'T'HH:mm:ssZ"
+        formatter.timeZone      = TimeZone(abbreviation: "UTC")
+        let date = formatter.date(from: string)
+        return date
+    }
+}
+
 public enum CommentStatus : String {
-    case deliver    = "deliver"
-    case receipt    = "receipt"
+    case delivered    = "delivered"
     case read       = "read"
     case sent       = "sent"
     case deleted    = "deleted"
     case sending    = "sending"
     case failed     = "failed"
+    case pending    = "pending"
     
-    static let all = [sent, sending, deliver, receipt, read, deleted, failed]
+    static let all = [sent, sending, delivered, read, deleted, failed]
 }
 
 public enum CommentType: String, Codable {

@@ -84,7 +84,10 @@ public class QiscusStorage {
 extension QiscusStorage : QCRoomManager {
     // MARK: remove public next
     public func getRooms() -> [RoomModel] {
-        return room.all()
+        let rooms = room.all()
+        // subscribe
+        QiscusCore.realtime.subscribeRooms(rooms: rooms)
+        return rooms
     }
     
     func saveRoom(_ data: RoomModel) {
@@ -108,6 +111,10 @@ extension QiscusStorage : QCRoomManager {
 extension QiscusStorage : QCCommentManager {
     func saveComments(_ data: [CommentModel]) {
         comment.add(data)
+    }
+    
+    public func getComments() -> [CommentModel] {
+        return comment.all()
     }
     
     public func getCommentbyRoomID(id: String) -> [CommentModel]? {
