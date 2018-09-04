@@ -16,6 +16,20 @@ extension QiscusCore {
         let _comment            = comment
         _comment.roomId         = id
         _comment.status         = .sending
+        // check comment type, if not Qiscus Comment set as custom type
+        if !_comment.isQiscustype() {
+            let _payload    = _comment.payload
+            let _type       = _comment.type
+            _comment.type = "custom"
+            _comment.payload?.removeAll() // clear last payload then recreate
+            _comment.payload = ["type" : _type]
+            if let payload = _payload {
+                _comment.payload!["content"] = payload
+            }else {
+                _comment.payload!["content"] = ["":""]
+            }
+            
+        }
         // save in local
         QiscusCore.dataStore.saveComment(_comment)
         // send message to server
@@ -35,6 +49,8 @@ extension QiscusCore {
             }
         }
     }
+    
+    
     
     /// Load Comment by room
     ///

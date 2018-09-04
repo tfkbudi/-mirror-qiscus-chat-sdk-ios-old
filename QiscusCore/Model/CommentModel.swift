@@ -94,6 +94,16 @@ extension CommentModel {
         let date = formatter.date(from: string)
         return date
     }
+    
+    func isQiscustype() -> Bool {
+        var result = false
+        for t in CommentType.all {
+            if self.type == t.rawValue {
+                result = true
+            }
+        }
+        return result
+    }
 }
 
 public enum CommentStatus : String {
@@ -108,7 +118,7 @@ public enum CommentStatus : String {
     static let all = [sent, sending, delivered, read, deleted, failed]
 }
 
-public enum CommentType: String, Codable {
+enum CommentType: String {
     case text                       = "text"
     case fileAttachment              = "file_attachment"
     case accountLink                = "account_linking"
