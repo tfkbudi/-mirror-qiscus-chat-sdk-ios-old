@@ -66,23 +66,31 @@ open class CommentModel {
                 self.status = s
             }
         }
-        let _type               = json["type"].stringValue
-        if _type != "custom" {
+        let _type   = json["type"].stringValue
+        if _type.lowercased() != "custom" {
             self.type = _type
         }else {
-            self.type = getType(fromPayload: json)
+            self.type = getType(fromPayload: self.payload)
+            // parsing payload
+            if let _payload = self.payload {
+                self.payload?.removeAll()
+                self.payload = getPayload(fromPayload: _payload)
+            }
         }
         
-        // parsing payload
-        if let _payload = self.payload {
-            
-        }
+        
         self.date = self.getDate(string: self.timestamp)
     }
     
-    private func getType(fromPayload data: JSON) -> String {
-        let type = data["type"].stringValue
+    private func getType(fromPayload data: [String:Any]?) -> String {
+        guard let payload = data else { return "custom"}
+        let type = payload["type"] as! String
         return type
+    }
+    
+    private func getPayload(fromPayload data: [String:Any]) -> [String:Any] {
+        let payload = data["content"] as! [String:Any]
+        return payload
     }
 }
 
