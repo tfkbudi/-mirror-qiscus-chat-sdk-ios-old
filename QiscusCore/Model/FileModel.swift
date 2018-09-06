@@ -44,6 +44,7 @@ class Download {
     var task: URLSessionDownloadTask?
     var isDownloading = false
     var resumeData: Data?
+    var totalBytes: Int64 = 0
     
     // Download delegate sets this value:
     var progress: Float = 0

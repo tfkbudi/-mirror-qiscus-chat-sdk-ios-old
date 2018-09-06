@@ -49,6 +49,7 @@ public class QiscusStorage {
     static var shared   : QiscusStorage = QiscusStorage()
     private var room    : RoomStorage!
     private var comment : CommentStorage!
+    let fileManager     : QiscusFileManager = QiscusFileManager()
     
     init() {
         room    = RoomStorage()

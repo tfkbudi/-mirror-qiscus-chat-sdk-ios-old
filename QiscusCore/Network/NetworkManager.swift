@@ -41,15 +41,9 @@ class NetworkManager: NSObject {
     // Create downloadsSession here, to set self as delegate
     private lazy var downloadsSession: URLSession = {
         //    let configuration = URLSessionConfiguration.default
-        let configuration = URLSessionConfiguration.background(withIdentifier: "bgSessionConfiguration")
+        let configuration = URLSessionConfiguration.background(withIdentifier: "downloadSessionConfiguration")
         return URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
     }()
-    // Get local file path: download task stores tune here; AV player plays it.
-    private let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-    
-    func localFilePath(for url: URL) -> URL {
-        return documentsPath.appendingPathComponent(url.lastPathComponent)
-    }
     
     override init() {
         super.init()
@@ -499,13 +493,23 @@ extension NetworkManager {
     
     func download(url: URL, onSuccess: @escaping (URL) -> Void, onProgress: @escaping (Float) -> Void) {
         let file = FileModel.init(url: url)
-        downloadService.startDownload(file)
+        DispatchQueue.global(qos: .background).async {
+            // check already in local
+            if let localPath = QiscusStorage.shared.fileManager.getlocalPath(from: url) {
+                DispatchQueue.main.async {
+                    onSuccess(localPath)
+                }
+            }else {
+                self.downloadService.startDownload(file)
+            }
+        }
+        // find progress in active download queue
         for d in downloadService.activeDownloads {
             if d.key == file.url {
                 d.value.onProgress = { progress in
                     onProgress(progress)
                     if progress == 1 {
-                        let localPath: URL = self.localFilePath(for: d.value.file.url)
+                        let localPath: URL = QiscusStorage.shared.fileManager.localFilePath(for: d.value.file.url)
                         onSuccess(localPath)
                     }
                 }
@@ -518,21 +522,11 @@ extension NetworkManager {
 // MARK: Download session
 extension NetworkManager : URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        // 1
         guard let sourceURL = downloadTask.originalRequest?.url else { return }
         let download = downloadService.activeDownloads[sourceURL]
         downloadService.activeDownloads[sourceURL] = nil
-        // 2
-        let destinationURL = localFilePath(for: sourceURL)
-        QiscusLogger.debugPrint(destinationURL.absoluteString)
-        // 3
-        let fileManager = FileManager.default
-        try? fileManager.removeItem(at: destinationURL)
-        do {
-            try fileManager.copyItem(at: location, to: destinationURL)
+        if QiscusStorage.shared.fileManager.move(fromURL: sourceURL, to: location) {
             download?.file.downloaded = true
-        } catch let error {
-            QiscusLogger.errorPrint("Could not copy file to disk: \(error.localizedDescription)")
         }
     }
     
@@ -545,13 +539,10 @@ extension NetworkManager : URLSessionDownloadDelegate {
             let download = downloadService.activeDownloads[url]  else { return }
         // 2
         download.progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
+        download.totalBytes = totalBytesExpectedToWrite
         download.onProgress(download.progress)
         // 3
-        let totalSize = ByteCountFormatter.string(fromByteCount: totalBytesExpectedToWrite,
-                                                  countStyle: .file)
-        // 4
-        DispatchQueue.main.async {
-            
-        }
+        // let totalSize = ByteCountFormatter.string(fromByteCount: totalBytesExpectedToWrite, countStyle: .file)
+
     }
 }
