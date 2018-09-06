@@ -79,7 +79,7 @@ internal enum APIClient {
     case unread
     case myProfile //
     case updateMyProfile(name: String?, avatarUrl: String?) //
-    case upload
+    case upload()
 }
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 extension APIClient : EndPoint {
@@ -222,8 +222,11 @@ extension APIClient : EndPoint {
             }
             
             return .requestParameters(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil)
-        default:
-            return .request
+        case .upload() :
+            let param = [
+                "token" : AUTHTOKEN
+                ]
+            return .requestParameters(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil)
         }
     }
 }

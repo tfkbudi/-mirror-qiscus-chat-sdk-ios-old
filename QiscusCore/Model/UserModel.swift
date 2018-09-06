@@ -8,36 +8,6 @@
 
 import SwiftyJSON
 
-//public class UserResults : Codable {
-//    let user : UserModel
-//    
-//    enum CodingKeys: String, CodingKey {
-//        
-//        case user = "user"
-//    }
-//    
-//    public required init(from decoder: Decoder) throws {
-//        let values = try decoder.container(keyedBy: CodingKeys.self)
-//        user = try values.decode(UserModel.self, forKey: .user)
-//    }
-//    
-//}
-//
-//public class BlokedUserResults : Codable {
-//    let user : [UserModel]
-//    
-//    enum CodingKeys: String, CodingKey {
-//        
-//        case user = "blocked_user"
-//    }
-//    
-//    public required init(from decoder: Decoder) throws {
-//        let values = try decoder.container(keyedBy: CodingKeys.self)
-//        user = try values.decode([UserModel].self, forKey: .user)
-//    }
-//    
-//}
-
 public struct UserModel {
     var app                     : App?      = nil
     public var avatarUrl        : URL       = URL(string: "http://")!

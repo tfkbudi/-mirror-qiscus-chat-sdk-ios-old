@@ -20,7 +20,7 @@ internal enum HTTPMethod : String {
 
 internal enum HTTPTask {
     case request
-    
+
     case requestParameters(bodyParameters: Parameters?,
         bodyEncoding: ParameterEncoding,
         urlParameters: Parameters?)
