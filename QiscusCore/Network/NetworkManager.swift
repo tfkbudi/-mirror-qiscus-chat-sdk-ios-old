@@ -36,6 +36,26 @@ class NetworkManager: NSObject {
     let commentRouter   = Router<APIComment>()
     let userRouter      = Router<APIUser>()
     
+    // Download Upload
+    private let downloadService = DownloadService()
+    // Create downloadsSession here, to set self as delegate
+    private lazy var downloadsSession: URLSession = {
+        //    let configuration = URLSessionConfiguration.default
+        let configuration = URLSessionConfiguration.background(withIdentifier: "bgSessionConfiguration")
+        return URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
+    }()
+    // Get local file path: download task stores tune here; AV player plays it.
+    private let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+    
+    func localFilePath(for url: URL) -> URL {
+        return documentsPath.appendingPathComponent(url.lastPathComponent)
+    }
+    
+    override init() {
+        super.init()
+        self.downloadService.downloadsSession = self.downloadsSession
+    }
+    
     func handleNetworkResponse(_ response: HTTPURLResponse) -> Result<String>{
         print("response code \(response.statusCode)")
         switch response.statusCode {
@@ -429,7 +449,7 @@ extension NetworkManager {
             }
         }
     }
-    
+
     //    MARK: TODO use router to network upload
     func upload(data : Data, filename: String, onSuccess: @escaping (FileModel) -> Void, onError: @escaping (QError) -> Void, progress: @escaping (Double) -> Void) {
         let endpoint = APIClient.upload()
@@ -477,4 +497,60 @@ extension NetworkManager {
         task.resume()
     }
     
+    func download(file: FileModel, onSuccess: @escaping (URL) -> Void, onProgress: @escaping (Float) -> Void) {
+        downloadService.startDownload(file)
+        for d in downloadService.activeDownloads {
+            if d.key == file.url {
+                d.value.onProgress = { progress in
+                    onProgress(progress)
+                    if progress == 1 {
+                        let localPath: URL = self.localFilePath(for: d.value.file.url)
+                        onSuccess(localPath)
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+// MARK: Download session
+extension NetworkManager : URLSessionDownloadDelegate {
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        // 1
+        guard let sourceURL = downloadTask.originalRequest?.url else { return }
+        let download = downloadService.activeDownloads[sourceURL]
+        downloadService.activeDownloads[sourceURL] = nil
+        // 2
+        let destinationURL = localFilePath(for: sourceURL)
+        print(destinationURL)
+        // 3
+        let fileManager = FileManager.default
+        try? fileManager.removeItem(at: destinationURL)
+        do {
+            try fileManager.copyItem(at: location, to: destinationURL)
+            download?.file.downloaded = true
+        } catch let error {
+            print("Could not copy file to disk: \(error.localizedDescription)")
+        }
+    }
+    
+    // Updates progress info
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask,
+                    didWriteData bytesWritten: Int64, totalBytesWritten: Int64,
+                    totalBytesExpectedToWrite: Int64) {
+        // 1
+        guard let url = downloadTask.originalRequest?.url,
+            let download = downloadService.activeDownloads[url]  else { return }
+        // 2
+        download.progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
+        download.onProgress(download.progress)
+        // 3
+        let totalSize = ByteCountFormatter.string(fromByteCount: totalBytesExpectedToWrite,
+                                                  countStyle: .file)
+        // 4
+        DispatchQueue.main.async {
+            
+        }
+    }
 }

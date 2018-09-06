@@ -17,13 +17,38 @@
 import SwiftyJSON
 
 public struct FileModel {
-    public var name : String
-    public var size : Int
+    public var name : String    = ""
+    public var size : Int       = 1
     public var url  : URL
-
+    var downloaded  : Bool      = false
+    
+    public init(url: URL) {
+        self.url = url
+    }
+    
     init(json: JSON) {
         url     = json["url"].url ?? URL(string: "http://")!
         name    = json["name"].stringValue
         size    = json["size"].intValue
     }
+}
+
+class Download {
+    
+    var file: FileModel
+    init(file: FileModel) {
+        self.file = file
+    }
+    
+    // Download service sets these values:
+    var task: URLSessionDownloadTask?
+    var isDownloading = false
+    var resumeData: Data?
+    
+    // Download delegate sets this value:
+    var progress: Float = 0
+    
+    // Download progress bind
+    var onProgress : (Float) -> Void = { _ in}
+    
 }
