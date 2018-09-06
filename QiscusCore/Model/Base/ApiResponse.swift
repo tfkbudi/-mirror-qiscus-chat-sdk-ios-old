@@ -28,6 +28,13 @@ class ApiResponse {
     }
 }
 
+class FileApiResponse {
+    static func upload(from json: JSON) -> FileModel {
+        let i = json["file"]
+        return FileModel(json: i)
+    }
+}
+
 class UserApiResponse {
     static func blockedUsers(from json: JSON) -> [MemberModel]? {
         if let rooms = json["blocked_user"].array {

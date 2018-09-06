@@ -431,39 +431,49 @@ extension NetworkManager {
     }
     
     //    MARK: TODO use router to network upload
-    func upload(data : Data, filename: String, completion: @escaping (String) -> Void, progress: @escaping (Double) -> Void) {
+    func upload(data : Data, filename: String, onSuccess: @escaping (FileModel) -> Void, onError: @escaping (QError) -> Void, progress: @escaping (Double) -> Void) {
         let endpoint = APIClient.upload()
         let request: URLRequest
         
         do {
             request = try NetworkUpload().createRequest(route: endpoint, data: data, filename: filename)
         } catch {
-            print(error)
+             QiscusLogger.errorPrint(error as! String)
             return
         }
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard error == nil else {
-                // handle error here
-                print(error!)
-                return
-            }
-            
             // if response was JSON, then parse it
-            
-            do {
-                let responseDictionary = try JSONSerialization.jsonObject(with: data!)
-                print("success == \(responseDictionary)")
-                DispatchQueue.main.async {
-                    
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        DispatchQueue.main.async {
+                            onError(QError(message: NetworkResponse.noData.rawValue))
+                        }
+                        return
+                    }
+                    let response = ApiResponse.decode(from: responseData)
+                    let file     = FileApiResponse.upload(from: response)
+                    QiscusLogger.debugPrint("upload \(response)")
+                    DispatchQueue.main.async {
+                        onSuccess(file)
+                    }
+                case .failure(let errorMessage):
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        QiscusLogger.errorPrint("json: \(jsondata)")
+                    } catch {
+                        QiscusLogger.errorPrint(error as! String)
+                    }
+                    DispatchQueue.main.async {
+                        onError(QError(message: errorMessage))
+                    }
                 }
-            } catch {
-                print("error \(error)")
-                
-                let responseString = String(data: data!, encoding: .utf8)
-                print("responseString = \(responseString)")
             }
         }
+        
         task.resume()
     }
     

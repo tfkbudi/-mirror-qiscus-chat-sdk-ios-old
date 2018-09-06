@@ -14,5 +14,16 @@
  }
  */
 
-import Foundation
+import SwiftyJSON
 
+public struct FileModel {
+    public var name : String
+    public var size : Int
+    public var url  : URL
+
+    init(json: JSON) {
+        url     = json["url"].url ?? URL(string: "http://")!
+        name    = json["name"].stringValue
+        size    = json["size"].intValue
+    }
+}

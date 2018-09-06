@@ -245,7 +245,7 @@ public class QiscusCore: NSObject {
         QiscusCore.network.getBlokedUser(page: page, limit: limit, completion: completion)
     }
     
-    public func upload(data : Data, filename: String, completion: @escaping (String) -> Void) {
-        QiscusCore.network.upload(data: data, filename: filename, completion: completion)
+    public func upload(data : Data, filename: String, onSuccess: @escaping (FileModel) -> Void, onError: @escaping (QError) -> Void, progress: @escaping (Double) -> Void ) {
+        QiscusCore.network.upload(data: data, filename: filename, onSuccess: onSuccess, onError: onError, progress: progress)
     }
 }
