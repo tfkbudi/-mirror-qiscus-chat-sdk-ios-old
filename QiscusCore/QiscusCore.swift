@@ -245,10 +245,24 @@ public class QiscusCore: NSObject {
         QiscusCore.network.getBlokedUser(page: page, limit: limit, completion: completion)
     }
     
+    /// Upload to qiscus server
+    ///
+    /// - Parameters:
+    ///   - data: data file to upload
+    ///   - filename: file Name
+    ///   - onSuccess: return object file model when success
+    ///   - onError: return QError
+    ///   - progress: progress upload
     public func upload(data : Data, filename: String, onSuccess: @escaping (FileModel) -> Void, onError: @escaping (QError) -> Void, progress: @escaping (Double) -> Void ) {
         QiscusCore.network.upload(data: data, filename: filename, onSuccess: onSuccess, onError: onError, progress: progress)
     }
     
+    /// Download
+    ///
+    /// - Parameters:
+    ///   - url: url you want to download
+    ///   - onSuccess: resturn local url after success download
+    ///   - onProgress: progress download
     public func download(url: URL, onSuccess: @escaping (URL) -> Void, onProgress: @escaping (Float) -> Void) {
         QiscusCore.network.download(url: url, onSuccess: onSuccess, onProgress: onProgress)
     }
