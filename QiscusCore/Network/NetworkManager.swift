@@ -57,7 +57,7 @@ class NetworkManager: NSObject {
     }
     
     func handleNetworkResponse(_ response: HTTPURLResponse) -> Result<String>{
-        print("response code \(response.statusCode)")
+        QiscusLogger.debugPrint("response code \(response.statusCode)")
         switch response.statusCode {
         case 200...299: return .success
         case 400...499: return .failure(NetworkResponse.clientError.rawValue)
@@ -497,7 +497,8 @@ extension NetworkManager {
         task.resume()
     }
     
-    func download(file: FileModel, onSuccess: @escaping (URL) -> Void, onProgress: @escaping (Float) -> Void) {
+    func download(url: URL, onSuccess: @escaping (URL) -> Void, onProgress: @escaping (Float) -> Void) {
+        let file = FileModel.init(url: url)
         downloadService.startDownload(file)
         for d in downloadService.activeDownloads {
             if d.key == file.url {
@@ -523,7 +524,7 @@ extension NetworkManager : URLSessionDownloadDelegate {
         downloadService.activeDownloads[sourceURL] = nil
         // 2
         let destinationURL = localFilePath(for: sourceURL)
-        print(destinationURL)
+        QiscusLogger.debugPrint(destinationURL.absoluteString)
         // 3
         let fileManager = FileManager.default
         try? fileManager.removeItem(at: destinationURL)
@@ -531,7 +532,7 @@ extension NetworkManager : URLSessionDownloadDelegate {
             try fileManager.copyItem(at: location, to: destinationURL)
             download?.file.downloaded = true
         } catch let error {
-            print("Could not copy file to disk: \(error.localizedDescription)")
+            QiscusLogger.errorPrint("Could not copy file to disk: \(error.localizedDescription)")
         }
     }
     

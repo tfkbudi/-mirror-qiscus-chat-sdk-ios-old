@@ -249,7 +249,7 @@ public class QiscusCore: NSObject {
         QiscusCore.network.upload(data: data, filename: filename, onSuccess: onSuccess, onError: onError, progress: progress)
     }
     
-    public func download(file: FileModel, onSuccess: @escaping (URL) -> Void, onProgress: @escaping (Float) -> Void) {
-        QiscusCore.network.download(file: file, onSuccess: onSuccess, onProgress: onProgress)
+    public func download(url: URL, onSuccess: @escaping (URL) -> Void, onProgress: @escaping (Float) -> Void) {
+        QiscusCore.network.download(url: url, onSuccess: onSuccess, onProgress: onProgress)
     }
 }
