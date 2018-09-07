@@ -14,6 +14,8 @@ IOS_ARCHIVE_DSYM_PATH=$BUILD/$IOS_ARCHIVE_DIR/dSYMs
 IOS_SIM_DIR=Release-iphonesimulator
 IOS_UNIVERSAL_DIR=Release-universal-iOS
 
+echo "### Bismillahirrahmanirrahim."
+echo ""
 echo "### Cleaning up after old builds"
 rm -Rf $BUILD
 
@@ -24,7 +26,6 @@ if ! [ -x "$(command -v xcpretty)" ]; then
 fi
 
 # iOS
-echo "### Bismillahirrahmanirrahim."
 echo "### BUILDING FOR iOS"
 echo "### Building for device (Archive)"
 xcodebuild archive -workspace QiscusCore.xcworkspace -scheme QiscusCore -sdk iphoneos -archivePath $BUILD/Release-iphoneos.xcarchive OTHER_CFLAGS="-fembed-bitcode" BITCODE_GENERATION_MODE=bitcode | xcpretty
