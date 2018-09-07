@@ -1,14 +1,24 @@
 #!/bin/sh
-# Note: this file is originally based upon
-# https://gkbrown.org/2017/10/11/creating-a-universal-framework-in-xcode-9/
-# Since it includes simulator slices as well, these will need to be
-# stripped out prior to the apps being submitted to the app store
+
+echo -n "Sudahkah anda sholat 🕌 (y/n)? "
+old_stty_cfg=$(stty -g)
+stty raw -echo
+answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
+stty $old_stty_cfg
+if echo "$answer" | grep -iq "^y" ;then
+    echo "\033[32m Bismillahirrahmanirrahim, no error ... \033[0m\n"
+else
+    echo "\033[31m 😡 Astagfirullahaladzim sholat dulu sana \033[0m\n"
+    exit
+fi
 
 WORKSPACE=QiscusCore
 FRAMEWORK=QiscusCore
+PUBLISH=Cocoapods
 BUILD=build
 FRAMEWORK_NAME_WITH_EXT=$FRAMEWORK.framework
 DSYM_NAME_WITH_EXT=$FRAMEWORK_NAME_WITH_EXT.dSYM
+ZIP_DIR=zip
 
 IOS_ARCHIVE_DIR=Release-iphoneos-archive
 IOS_ARCHIVE_FRAMEWORK_PATH=$BUILD/$IOS_ARCHIVE_DIR/Products/Library/Frameworks/$FRAMEWORK_NAME_WITH_EXT
@@ -16,7 +26,6 @@ IOS_ARCHIVE_DSYM_PATH=$BUILD/$IOS_ARCHIVE_DIR/dSYMs
 IOS_SIM_DIR=Release-iphonesimulator
 IOS_UNIVERSAL_DIR=Release-universal-iOS
 
-echo "\033[37m Bismillahirrahmanirrahim. \033[0m\n"
 echo "\033[31m Cleaning up after old builds \033[0m\n"
 rm -Rf $BUILD
 
@@ -32,38 +41,67 @@ pod install
 
 echo "\033[32m BUILDING FOR iOS \033[0m\n"
 
-echo "\033[26m ▹ Building for simulator (Release) \033[0m\n"
-xcodebuild build -workspace $WORKSPACE.xcworkspace -scheme $FRAMEWORK -sdk iphonesimulator SYMROOT=$BUILD OTHER_CFLAGS="-fembed-bitcode" BITCODE_GENERATION_MODE=bitcode | xcpretty
+echo "\033[35m ▹ Building for simulator (Release) \033[0m\n"
+xcodebuild build -workspace $WORKSPACE.xcworkspace -scheme $FRAMEWORK -sdk iphonesimulator SYMROOT=$(PWD)/$BUILD OTHER_CFLAGS="-fembed-bitcode" BITCODE_GENERATION_MODE=bitcode | xcpretty
 
-echo "\033[32m ▹ Building for device (Archive) \033[0m\n"
+echo "\033[32m \n ▹ Building for device (Archive) \033[0m\n"
 xcodebuild archive -workspace $WORKSPACE.xcworkspace -scheme $FRAMEWORK -sdk iphoneos -archivePath $BUILD/Release-iphoneos.xcarchive OTHER_CFLAGS="-fembed-bitcode" BITCODE_GENERATION_MODE=bitcode | xcpretty
 
 
-echo "\033[32m Copying... \n framework files \033[0m\n"
+echo "\033[32m Copying framework files \033[0m\n"
 mv $BUILD/Release-iphoneos.xcarchive $BUILD/$IOS_ARCHIVE_DIR
-echo "\033[32m Create Universal directory \033[0m\n"
+echo "\033[32m  ▹ Create Universal directory \033[0m\n"
 mkdir -p $BUILD/$IOS_UNIVERSAL_DIR
-echo "\033[32m Create Universal frameworks \033[0m\n"
+echo "\033[32m  ▹ Create Universal frameworks \033[0m\n"
 cp -RL $IOS_ARCHIVE_FRAMEWORK_PATH $BUILD/$IOS_UNIVERSAL_DIR/$FRAMEWORK_NAME_WITH_EXT
-echo "\033[32m Create Universal dSYMs \033[0m\n"
+echo "\033[32m  ▹ Create Universal dSYMs \033[0m\n"
 cp -RL $IOS_ARCHIVE_DSYM_PATH/$DSYM_NAME_WITH_EXT $BUILD/$IOS_UNIVERSAL_DIR/$DSYM_NAME_WITH_EXT
-
 cp -RL $BUILD/$IOS_SIM_DIR/$FRAMEWORK_NAME_WITH_EXT/Modules/$FRAMEWORK.swiftmodule/* $BUILD/$IOS_UNIVERSAL_DIR/$FRAMEWORK_NAME_WITH_EXT/Modules/$FRAMEWORK.swiftmodule
-echo "### lipo'ing the iOS frameworks together into universal framework"
+echo "\033[35m 🤝 lipo'ing the iOS frameworks together into universal framework \033[0m\n"
 lipo -create $IOS_ARCHIVE_FRAMEWORK_PATH/$FRAMEWORK $BUILD/$IOS_SIM_DIR/$FRAMEWORK_NAME_WITH_EXT/$FRAMEWORK -output $BUILD/$IOS_UNIVERSAL_DIR/$FRAMEWORK_NAME_WITH_EXT/$FRAMEWORK
-echo "### lipo'ing the iOS dSYMs together into a universal dSYM"
+echo "\033[35m 🤝 lipo'ing the iOS dSYMs together into a universal dSYM \033[0m\n"
 DSYM_PATH=$DSYM_NAME_WITH_EXT/Contents/Resources/DWARF/$FRAMEWORK
 lipo -create $IOS_ARCHIVE_DSYM_PATH/$DSYM_PATH $BUILD/$IOS_SIM_DIR/$DSYM_PATH  -output $BUILD/$IOS_UNIVERSAL_DIR/$DSYM_PATH
 
-
 # Rename and zip
-echo "### Copying iOS files into zip directory"
-ZIP_DIR=$BUILD/zip
+echo "\033[32m Copying iOS files into zip directory \033[0m\n"
 mkdir $ZIP_DIR
 cp -RL LICENSE $ZIP_DIR
-mkdir $ZIP_DIR/iOS
-cp -RL $BUILD/$IOS_UNIVERSAL_DIR/$FRAMEWORK_NAME_WITH_EXT $ZIP_DIR/iOS/$FRAMEWORK_NAME_WITH_EXT
-cp -RL $BUILD/$IOS_UNIVERSAL_DIR/$DSYM_NAME_WITH_EXT $ZIP_DIR/iOS/$DSYM_NAME_WITH_EXT
+cp -RL $BUILD/$IOS_UNIVERSAL_DIR/$FRAMEWORK_NAME_WITH_EXT $ZIP_DIR/$FRAMEWORK_NAME_WITH_EXT
+cp -RL $BUILD/$IOS_UNIVERSAL_DIR/$DSYM_NAME_WITH_EXT $ZIP_DIR/$DSYM_NAME_WITH_EXT
 cd $ZIP_DIR
-zip -r QiscusCore.zip LICENSE iOS/$FRAMEWORK_NAME_WITH_EXT iOS/$DSYM_NAME_WITH_EXT
-echo "### Zipped resulting frameworks and dSYMs to $ZIP_DIR/QiscusCore.zip"
+
+zip -r QiscusCore.zip LICENSE $FRAMEWORK_NAME_WITH_EXT $DSYM_NAME_WITH_EXT
+echo "\033[32m Zipped resulting frameworks and dSYMs to $ZIP_DIR/QiscusCore.zip \033[0m\n"
+echo "\033[35m Finish creating universal frameworks \n Alhamdulillah 🎊 🎊 🎁 \033[0m\n"
+
+# checking arhitechture
+echo "\033[32m \n Checking framework arhitechture, should be 4 arhitechture include arm, i386 and x86_64 \033[0m\n"
+cd $FRAMEWORK_NAME_WITH_EXT
+file $FRAMEWORK
+
+echo -n "Mau sekalian di publish ke github (y/n)? "
+old_stty_cfg=$(stty -g)
+stty raw -echo
+answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
+stty $old_stty_cfg
+if echo "$answer" | grep -iq "^y" ;then
+    echo "\033[32m Siap bos ku ... \033[0m\n"
+else
+    echo "\033[31m Ya sudah \033[0m\n"
+    exit
+fi
+
+# copy framework, readme, etc to publish directory
+echo "\033[35m \n Copying framework and dSYMs to cocoapods directory \033[0m\n"
+cd ../../ 
+cp -RL $BUILD/$IOS_UNIVERSAL_DIR/$FRAMEWORK_NAME_WITH_EXT $PUBLISH/$FRAMEWORK_NAME_WITH_EXT
+cp -RL $BUILD/$IOS_UNIVERSAL_DIR/$DSYM_NAME_WITH_EXT $PUBLISH/$DSYM_NAME_WITH_EXT
+cp -RL LICENSE $PUBLISH
+cp -RL README.md $PUBLISH
+cd $PUBLISH
+echo "\033[35m Finish copy new framework to publish directory \033[0m\n"
+git add .
+git commit -m "update new build"
+git push origin master
+echo "\033[35m Finish update cocoapod repo \n Alhamdulillah 🎉 🎉 🎉 \033[0m\n"
