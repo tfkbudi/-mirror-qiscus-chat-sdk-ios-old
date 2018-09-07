@@ -138,6 +138,9 @@ extension RealtimeManager: QiscusRealtimeDelegate {
     
     func connectionState(change state: QiscusRealtimeConnectionState) {
         QiscusLogger.debugPrint("Qiscus realtime connection state \(state.rawValue)")
+        if let state : QiscusConnectionState = QiscusConnectionState(rawValue: state.rawValue) {
+            QiscusEventManager.shared.connectionDelegate?.connectionState(change: state)
+        }
         if state == .connected {
             resumePendingSubscribeTopic()
             QiscusLogger.debugPrint("Qiscus realtime connected")

@@ -84,7 +84,7 @@ public class QiscusCore: NSObject {
     /// - userKey                       : user password
     /// - parameter completion          : The code to be executed once the request has finished, also give a user object and error.
     ///
-    public class func connect(userID: String, userKey: String, completion: @escaping (UserModel?, String?) -> Void) {
+    public class func login(userID: String, userKey: String, completion: @escaping (UserModel?, String?) -> Void) {
         if config.appID == nil {
             fatalError("You need to set App ID")
         }
@@ -103,7 +103,7 @@ public class QiscusCore: NSObject {
     /// - Parameters:
     ///   - token: identity token from your server, when you implement Nonce or JWT
     ///   - completion: The code to be executed once the request has finished, also give a user object and error.
-    public class func connect(withIdentityToken token: String, completion: @escaping (UserModel?, QError?) -> Void) {
+    public class func login(withIdentityToken token: String, completion: @escaping (UserModel?, QError?) -> Void) {
         if config.appID == nil {
             fatalError("You need to set App ID")
         }
@@ -173,7 +173,6 @@ public class QiscusCore: NSObject {
             }else {
                 completion(comments, nil) // success
             }
-            
         }
     }
     

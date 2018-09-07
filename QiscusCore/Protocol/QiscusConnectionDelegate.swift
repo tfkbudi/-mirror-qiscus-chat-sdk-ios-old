@@ -12,7 +12,13 @@ import QiscusRealtime
 public protocol QiscusConnectionDelegate {
     func disconnect(withError err: QError?)
     func connected()
-    func connectionState(change state: QiscusRealtimeConnectionState)
+    func connectionState(change state: QiscusConnectionState)
+}
+
+public enum QiscusConnectionState : String{
+    case connecting     = "connecting"
+    case connected      = "connected"
+    case disconnected   = "disconnected"
 }
 
 public protocol QiscusCoreDelegate {
