@@ -51,5 +51,5 @@ class Download {
     
     // Download progress bind
     var onProgress : (Float) -> Void = { _ in}
-    
+    var onCompleted : (Bool) -> Void = { _ in}
 }

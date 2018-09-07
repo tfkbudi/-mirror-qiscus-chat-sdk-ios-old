@@ -508,10 +508,11 @@ extension NetworkManager {
             if d.key == file.url {
                 d.value.onProgress = { progress in
                     onProgress(progress)
-                    if progress == 1 {
-                        let localPath: URL = QiscusStorage.shared.fileManager.localFilePath(for: d.value.file.url)
-                        onSuccess(localPath)
-                    }
+                }
+                d.value.onCompleted = { success in
+                    if !success { return }
+                    let localPath: URL = QiscusStorage.shared.fileManager.localFilePath(for: d.value.file.url)
+                    onSuccess(localPath)
                 }
             }
         }
@@ -527,6 +528,7 @@ extension NetworkManager : URLSessionDownloadDelegate {
         downloadService.activeDownloads[sourceURL] = nil
         if QiscusStorage.shared.fileManager.move(fromURL: sourceURL, to: location) {
             download?.file.downloaded = true
+            download?.onCompleted(true)
         }
     }
     
