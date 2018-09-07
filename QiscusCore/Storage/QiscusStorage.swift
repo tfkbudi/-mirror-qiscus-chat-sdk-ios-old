@@ -16,6 +16,7 @@ protocol QCCommentManager {
     func getCommentbyRoomID(id: String) -> [CommentModel]?
     func getCommentbyID(id: String) -> CommentModel?
     func getCommentbyUniqueID(id: String) -> CommentModel?
+    func getComments() -> [CommentModel]
 }
 
 // Blueprint room function

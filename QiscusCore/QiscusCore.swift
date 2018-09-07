@@ -159,6 +159,24 @@ public class QiscusCore: NSObject {
         QiscusCore.network.removeDeviceToken(deviceToken: deviceToken, completion: completion)
     }
     
+    /// Sync comment
+    ///
+    /// - Parameters:
+    ///   - lastCommentReceivedId: last comment id, to get id you can call QiscusCore.dataStore.getComments().
+    ///   - order: "asc" or "desc" only, lowercase. If other than that, it will assumed to "desc"
+    ///   - limit: limit number of comment by default 20
+    ///   - completion: return object array of comment and return error if exist
+    public func sync(lastCommentReceivedId id: String, order: String = "", limit: Int = 20, completion: @escaping ([CommentModel]?, QError?) -> Void) {
+        QiscusCore.network.sync(lastCommentReceivedId: id, order: order, limit: limit) { (comments, error) in
+            if let message = error {
+                completion(comments,QError.init(message: message))
+            }else {
+                completion(comments, nil) // success
+            }
+            
+        }
+    }
+    
     // MARK: User Profile
     
     /// get qiscus user from local storage
