@@ -13,7 +13,7 @@
 |-----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Lite Version Chat SDK**                   | Qiscus Chat SDK without UI.                                       |
 | **Realtime Event**                          | QiscusCore handle realtime event like publish typing or online status and Automatic subscribe all Qiscus Messaging Event(incoming message, change message status, etc). |
-| **Local Database**                       | InProgress, already cache api response. |
+| **Local Database**                       | In Progress. |
 | **Local Storage**                       | Not Yet. |
 
 ## Features
