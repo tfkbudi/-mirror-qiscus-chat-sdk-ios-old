@@ -128,7 +128,7 @@ public enum CommentStatus : String {
 
 enum CommentType: String {
     case text                       = "text"
-    case fileAttachment              = "file_attachment"
+    case fileAttachment             = "file_attachment"
     case accountLink                = "account_linking"
     case buttons                    = "buttons"
     case buttonPostbackResponse     = "button_postback_response"

@@ -63,7 +63,146 @@ Then, run the following command:
 ```bash
 $ pod install
 ```
+## Setup
 
+### Init AppId
+Initiate qiscus with app id
+
+```
+QiscusCore.setup(WithAppID: "yourAppId")
+```
+
+
+## Authentication
+
+### Authentication with UserID & UserKey
+
+```
+QiscusCore.login(userID: userID, userKey: key) { (result, error) in
+    if result != nil {
+        print("success")
+    }else {
+        print("error \(String(describing: error?.message))")
+    }
+}
+```
+
+### Authentication with JWT
+
+```
+QiscusCore.login(withIdentityToken: identityToken, completion: { (result, error) in
+     if result != nil {
+        print("success")
+     }else{
+        print("error \(String(describing: error?.message))")
+    }
+})
+```
+
+## Message
+
+### send message
+
+* Text comment:
+
+```
+let message = CommentModel()
+message.message = "textComment"
+message.type    = "text"
+QiscusCore.shared.sendMessage(roomID: roomId comment: message) { (message, error) in
+    if let message != nil {
+        print("success")
+    }else{
+        print("error \(String(describing: error?.message))")
+    }
+}
+```
+
+* Custom type
+
+How to send comment with your mimetype or comment type. You can defind *type* as string and *payload* as Dictionary [String:Any]. type can be anything except: ***text, file_attachment, account_linking, buttons, button_postback_response, replay, system_event, card, custom, location, contactPerson, carousel***. the comment types already used by Qiscus SDK with specific payload.
+
+
+```
+let message = CommentModel()
+message.type = "Coupon/BukaToko"
+message.payload = [
+    "name"  : "BukaToko",
+    "voucher" : "xyz"
+]
+message.message = "Send Coupon"
+QiscusCore.shared.sendMessage(roomID: "roomId", comment: message) { (result, error) in
+    if let result != nil {
+        print("success")
+    }else{
+        print("error \(String(describing: error?.message))")
+    }
+}
+```
+
+### load messages
+
+* Get message from server
+
+```
+QiscusCore.shared.loadComments(roomID: id, limit: limit) { (result, error) in
+    if result != nil{
+        print("success")
+    }else{
+        print("error \(String(describing: error?.message))")
+    }
+}
+```
+
+* Get from local
+
+Get all comments from local
+
+```
+ let comments : [CommentModel]? = QiscusCore.dataStore.getComments
+```
+
+Get comments by room id
+
+```
+ let comments : [CommentModel]? = QiscusCore.dataStore.getCommentbyRoomID(id: "123")
+```
+
+## File Management
+
+### Upload
+
+Qiscus uploader, upload your file as Data to Qiscus. Example:
+
+```
+let data = UIImageJPEGRepresentation(YourImage, 0.5)!
+let timestamp = "\(NSDate().timeIntervalSince1970 * 1000).jpg"
+QiscusCore.shared.upload(data: data, filename: timestamp, onSuccess: { (file) in 
+	print(file.url.absoluteString)
+}, onError: { (error) in
+    print(error)
+}) { (progress) in
+    print("upload progress: \(progress)")
+}
+```
+
+
+### Download
+
+Download file from url and save to Qiscus Local Storage. Cache file already active by default.
+
+```
+QiscusCore.shared.download(url: URL(string: url)!, onSuccess: { (localPath) in
+    print("download result : \(localPath)")
+    }
+}) { (progress) in
+    print("Download Progress \(progress)")
+}
+```
+
+### Example
+
+You can download example how to use QiscusCore with advance usage from [QiscusUI Example](https://github.com/qiscus/QiscusUI-iOS).
 
 ### Security Disclosure
 
