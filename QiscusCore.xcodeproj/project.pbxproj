@@ -49,7 +49,6 @@
 		3DDF12A5213307B900E15B36 /* QiscusEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF1284213307B900E15B36 /* QiscusEventManager.swift */; };
 		3DDF12A6213307B900E15B36 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3DDF1285213307B900E15B36 /* Info.plist */; };
 		3DDF12A7213307B900E15B36 /* QiscusRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF1286213307B900E15B36 /* QiscusRoom.swift */; };
-		3DE57529210AD44900655DDE /* QiscusCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D55936420FC89CD00AE35E5 /* QiscusCore.framework */; };
 		3DF16E9921426E7C00E6B059 /* FileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF16E9821426E7C00E6B059 /* FileModel.swift */; };
 		3DF16E9B21426E9000E6B059 /* QiscusFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF16E9A21426E9000E6B059 /* QiscusFileManager.swift */; };
 		3DF16E9D21426EAB00E6B059 /* DownloadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF16E9C21426EAB00E6B059 /* DownloadService.swift */; };
@@ -59,13 +58,6 @@
 
 /* Begin PBXContainerItemProxy section */
 		3D55936F20FC89CE00AE35E5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3D55935B20FC89CD00AE35E5 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3D55936320FC89CD00AE35E5;
-			remoteInfo = QiscusCore;
-		};
-		3DE57527210AD43D00655DDE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3D55935B20FC89CD00AE35E5 /* Project object */;
 			proxyType = 1;
@@ -154,7 +146,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3DE57529210AD44900655DDE /* QiscusCore.framework in Frameworks */,
 				1A9AE35F987E498A4394B208 /* Pods_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -434,7 +425,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				3DE57528210AD43D00655DDE /* PBXTargetDependency */,
 			);
 			name = Example;
 			productName = Example;
@@ -543,7 +533,7 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-Example/Pods-Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaMQTT/CocoaMQTT.framework",
-				"${BUILT_PRODUCTS_DIR}/QiscusCore/QiscusCore.framework",
+				"${PODS_ROOT}/../Cocoapods/QiscusCore.framework",
 				"${BUILT_PRODUCTS_DIR}/QiscusRealtime/QiscusRealtime.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyTimer/SwiftyTimer.framework",
@@ -679,11 +669,6 @@
 			isa = PBXTargetDependency;
 			target = 3D55936320FC89CD00AE35E5 /* QiscusCore */;
 			targetProxy = 3D55936F20FC89CE00AE35E5 /* PBXContainerItemProxy */;
-		};
-		3DE57528210AD43D00655DDE /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 3D55936320FC89CD00AE35E5 /* QiscusCore */;
-			targetProxy = 3DE57527210AD43D00655DDE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -841,6 +826,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = QiscusCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.qiscus.sdk;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -867,6 +853,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = QiscusCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.qiscus.sdk;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -915,6 +902,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = QG8KA4P8TE;
 				INFOPLIST_FILE = Example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.qiscusdev.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -933,6 +921,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = QG8KA4P8TE;
 				INFOPLIST_FILE = Example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.qiscusdev.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";

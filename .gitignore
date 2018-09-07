@@ -1,3 +1,4 @@
+.firebase/*
 docs/
 QiscusCore.framework
 Cocoapods/Pods/*

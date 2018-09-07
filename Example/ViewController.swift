@@ -23,7 +23,7 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     @IBAction func clickLogin(_ sender: Any) {
-        QiscusCore.connect(userID: "amsibsan", userKey: "12345678") { (user, error) in
+        QiscusCore.login(userID: "amsibsan", userKey: "12345678") { (user, error) in
             print("result:: \(user!)")
 //            QiscusCore.network.removeParticipants(roomId: "939225", userSdkEmail: ["mantab"], completion: { (success, error) in
 //                print("is success delete \(success)")
