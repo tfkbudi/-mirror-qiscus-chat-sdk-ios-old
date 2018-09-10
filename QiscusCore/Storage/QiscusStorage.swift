@@ -146,6 +146,10 @@ extension QiscusStorage : QCCommentManager {
         return comment.find(byUniqueID: id)
     }
     
+    func deleteComment(uniqueID: String) {
+        // MARK: TODO waiting local storage
+    }
+    
     func clearComment() {
         comment.removeAll()
     }

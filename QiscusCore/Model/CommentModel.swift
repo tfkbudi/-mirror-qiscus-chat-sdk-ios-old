@@ -27,7 +27,7 @@ open class CommentModel {
     public internal(set) var roomId               : String        = ""
     public internal(set) var timestamp            : String        = ""
     public var type                 : String        = "text"
-    public internal(set) var uniqueTempId         : String        = ""
+    public internal(set) var uniqId               : String        = ""
     public internal(set) var unixTimestamp        : Int           = 0
     public internal(set) var userAvatarUrl        : URL?          = nil
     public internal(set) var userId               : String        = ""
@@ -41,13 +41,13 @@ open class CommentModel {
         self.username       = user.username
         self.userAvatarUrl  = user.avatarUrl
         self.userEmail      = user.email
-        self.uniqueTempId   = "ios_\(NSDate().timeIntervalSince1970 * 1000.0)"
+        self.uniqId         = "ios_\(NSDate().timeIntervalSince1970 * 1000.0)"
     }
     
     init(json: JSON) {
         self.id                 = json["id_str"].stringValue
         self.roomId             = json["room_id_str"].stringValue
-        self.uniqueTempId       = json["unique_temp_id"].stringValue
+        self.uniqId             = json["unique_temp_id"].stringValue
         self.commentBeforeId    = json["comment_before_id_str"].stringValue
         self.userEmail          = json["email"].stringValue
         self.isDeleted          = json["room_id_str"].boolValue

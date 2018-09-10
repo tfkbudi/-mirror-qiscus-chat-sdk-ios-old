@@ -18,6 +18,8 @@ class QiscusEventManager {
     func gotMessageStatus(roomID: String, commentUniqueID id: String, status: CommentStatus){
         guard let room = QiscusCore.dataStore.findRoom(byID: String(roomID)) else { return }
         guard let comment = QiscusCore.dataStore.getCommentbyUniqueID(id: id) else { return }
+        // delete from local
+        QiscusCore.dataStore.deleteComment(uniqueID: comment.uniqId)
         // only 3 kind status from realtime read, deliverd, and deleted
         var commentStatus : CommentStatus = CommentStatus.read
         switch status {
@@ -104,7 +106,7 @@ class QiscusEventManager {
     /// - Parameter data: comment object
     /// - Returns: return true if comment is new or not exist in local
     private func checkNewComment(_ data: CommentModel) -> Bool {
-        return !(QiscusCore.dataStore.getCommentbyUniqueID(id: data.uniqueTempId) != nil)
+        return !(QiscusCore.dataStore.getCommentbyUniqueID(id: data.uniqId) != nil)
     }
     
     // MARK: TODO comment status change

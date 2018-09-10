@@ -25,7 +25,7 @@ class CommentStorage {
     func add(_ value: [CommentModel]) {
         // filter if room exist update, if not add
         for comment in value {
-            if let r = find(byUniqueID: comment.uniqueTempId)  {
+            if let r = find(byUniqueID: comment.uniqId)  {
                 if !updateRoomDataEvent(old: r, new: comment) {
                     // add new
                     data.append(comment)
@@ -49,7 +49,7 @@ class CommentStorage {
         if data.isEmpty {
             return nil
         }else {
-            return data.filter{ $0.uniqueTempId == id }.first
+            return data.filter{ $0.uniqId == id }.first
         }
     }
     
