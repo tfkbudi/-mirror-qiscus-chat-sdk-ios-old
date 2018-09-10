@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo -n "Sudahkah anda sholat 🕌 (y/n)? "
+echo -n "\033[31m Sudahkah anda sholat 🕌 (y/n)? \033[0m\n"
 old_stty_cfg=$(stty -g)
 stty raw -echo
 answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
@@ -80,18 +80,6 @@ echo "\033[32m \n Checking framework arhitechture, should be 4 arhitechture incl
 cd $FRAMEWORK_NAME_WITH_EXT
 file $FRAMEWORK
 
-echo -n "Mau sekalian di publish ke github (y/n)? "
-old_stty_cfg=$(stty -g)
-stty raw -echo
-answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
-stty $old_stty_cfg
-if echo "$answer" | grep -iq "^y" ;then
-    echo "\033[32m Siap bos ku ... \033[0m\n"
-else
-    echo "\033[31m Ya sudah \033[0m\n"
-    exit
-fi
-
 # copy framework, readme, etc to publish directory
 echo "\033[35m \n Copying framework and dSYMs to cocoapods directory \033[0m\n"
 cd ../../ 
@@ -99,6 +87,21 @@ cp -RL $BUILD/$IOS_UNIVERSAL_DIR/$FRAMEWORK_NAME_WITH_EXT $PUBLISH/$FRAMEWORK_NA
 cp -RL $BUILD/$IOS_UNIVERSAL_DIR/$DSYM_NAME_WITH_EXT $PUBLISH/$DSYM_NAME_WITH_EXT
 cp -RL LICENSE $PUBLISH
 cp -RL README.md $PUBLISH
+git add .
+git commit -m "finish build for cocoapod"
+rm -rf $BUILD
+
+echo -n "\033[31m Mau sekalian di publish ke github (y/n)? \033[0m\n"
+old_stty_cfg=$(stty -g)
+stty raw -echo
+answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
+stty $old_stty_cfg
+if echo "$answer" | grep -iq "^y" ;then
+    echo "\033[32m \n Siap bos ku ... \033[0m\n"
+else
+    echo "\033[31m Ya sudah \033[0m\n"
+    exit
+fi
 cd $PUBLISH
 echo "\033[35m Finish copy new framework to publish directory \033[0m\n"
 git add .
