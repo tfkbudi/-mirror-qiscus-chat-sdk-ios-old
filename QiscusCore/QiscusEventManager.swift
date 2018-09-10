@@ -15,6 +15,33 @@ class QiscusEventManager {
     var roomDelegate : QiscusCoreRoomDelegate? = nil
     var room : RoomModel? = nil
     
+    func gotMessageStatus(roomID: String, commentUniqueID id: String, status: CommentStatus){
+        guard let room = QiscusCore.dataStore.findRoom(byID: String(roomID)) else { return }
+        guard let comment = QiscusCore.dataStore.getCommentbyUniqueID(id: id) else { return }
+        // only 3 kind status from realtime read, deliverd, and deleted
+        var commentStatus : CommentStatus = CommentStatus.read
+        switch status {
+        case .deleted:
+            commentStatus = CommentStatus.deleted
+            break
+        case .read:
+            commentStatus = CommentStatus.read
+            break
+        case .delivered:
+            commentStatus = CommentStatus.delivered
+            break
+        default:
+            break
+        }
+        if let r = QiscusEventManager.shared.room {
+            if r.id == roomID {
+                roomDelegate?.didComment(comment: comment, changeStatus: commentStatus)
+            }
+        }
+        // got new comment for other room
+        delegate?.onRoom(room, didChangeComment: comment, changeStatus: commentStatus)
+    }
+    
     func gotNewMessage(comment: CommentModel) {
         // check comment already in local, if true should be update comment status(not new comment for this device)
         if !self.checkNewComment(comment) { return }

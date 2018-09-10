@@ -46,6 +46,10 @@ class RealtimeManager {
             // subscribeNewComment(token: token)
             self.pendingSubscribeTopic.append(.comment(token: password))
         }
+        // subcribe user notification
+        if !c.subscribe(endpoint: .notification(token: password)) {
+            self.pendingSubscribeTopic.append(.notification(token: password))
+        }
     }
     
     
@@ -75,9 +79,7 @@ class RealtimeManager {
                     QiscusLogger.errorPrint("failed to subscribe online status user \(u.email)")
                 }
             }
-            
         }
-        
     }
     
     func isTyping(_ value: Bool, roomID: String){
@@ -123,7 +125,17 @@ extension RealtimeManager: QiscusRealtimeDelegate {
 
     
     func didReceiveMessageStatus(roomId: String, commentId: String, commentUniqueId: String, Status: MessageStatus) {
-        //
+        switch Status {
+        case .deleted:
+            QiscusEventManager.shared.gotMessageStatus(roomID: roomId, commentUniqueID: commentUniqueId, status: .deleted)
+            break
+        case .delivered:
+            QiscusEventManager.shared.gotMessageStatus(roomID: roomId, commentUniqueID: commentUniqueId, status: .delivered)
+            break
+        case .read:
+            QiscusEventManager.shared.gotMessageStatus(roomID: roomId, commentUniqueID: commentUniqueId, status: .read)
+            break
+        }
     }
     
     func didReceiveMessage(data: String) {
