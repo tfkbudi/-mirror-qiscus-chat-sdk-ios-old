@@ -8,44 +8,6 @@
 
 import Foundation
 
-// Blueprint Comment Function
-protocol QCCommentManager {
-    func saveComment(_ data: CommentModel)
-    func saveComments(_ data: [CommentModel])
-    func readComment(_ data: CommentModel)
-    func getCommentbyRoomID(id: String) -> [CommentModel]?
-    func getCommentbyID(id: String) -> CommentModel?
-    func getCommentbyUniqueID(id: String) -> CommentModel?
-    func getComments() -> [CommentModel]
-}
-
-// Blueprint room function
-protocol QCRoomManager {
-    /// Get rooms from local storage
-    ///
-    /// - Returns: Array of Rooms
-    func getRooms() -> [RoomModel]
-    /// Save Room
-    ///
-    /// - Parameter data: room data
-    /// - Returns: Void
-    func saveRoom(_ data: RoomModel)
-    /// save rooms, more than one room data
-    ///
-    /// - Parameter data: object room
-    /// - Returns: Void
-    func saveRooms(_ data: [RoomModel])
-    /// Remove all room from storage
-    ///
-    /// - Returns: Void
-    func clearRoom()
-    /// Find Room
-    ///
-    /// - Parameter id: room id
-    /// - Returns: return Object Room if exist
-    func findRoom(byID id: String) -> RoomModel?
-}
-
 public class QiscusStorage {
     static var shared   : QiscusStorage = QiscusStorage()
     private var room    : RoomStorage!
@@ -83,7 +45,7 @@ public class QiscusStorage {
 }
 
 //  MARK: Room Storage
-extension QiscusStorage : QCRoomManager {
+extension QiscusStorage {
     // MARK: remove public next
     public func getRooms() -> [RoomModel] {
         let rooms = room.all()
@@ -110,16 +72,16 @@ extension QiscusStorage : QCRoomManager {
 }
 
 // MARK: Comment Storage
-extension QiscusStorage : QCCommentManager {
+extension QiscusStorage {
     func saveComments(_ data: [CommentModel]) {
         comment.add(data)
     }
     
-    public func getComments() -> [CommentModel] {
+    func getComments() -> [CommentModel] {
         return comment.all()
     }
     
-    public func getCommentbyRoomID(id: String) -> [CommentModel]? {
+    func getCommentbyRoomID(id: String) -> [CommentModel]? {
         return comment.find(byRoomID: id)
     }
     
@@ -138,11 +100,11 @@ extension QiscusStorage : QCCommentManager {
         }
     }
     
-    public func getCommentbyID(id: String) -> CommentModel? {
+    func getCommentbyID(id: String) -> CommentModel? {
         return comment.find(byID: id)
     }
     
-    public func getCommentbyUniqueID(id: String) -> CommentModel? {
+    func getCommentbyUniqueID(id: String) -> CommentModel? {
         return comment.find(byUniqueID: id)
     }
     
