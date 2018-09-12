@@ -8,13 +8,12 @@
 //  save room from restAPI in temp(variable)
 //  save room in local storage
 //  get rooms from local storage
-import Foundation
+import QiscusDatabase
 
 class RoomStorage {
     private var data : [RoomModel] = [RoomModel]()
     var delegate = QiscusCore.eventManager.delegate
-    var saveTask: DispatchWorkItem?
-    var filename : String = "QiscusRooms.json"
+
     init() {
         // MARK: TODO load data rooms from local storage to var data
         self.data = loadFromLocal()
@@ -22,6 +21,7 @@ class RoomStorage {
     
     func removeAll() {
         data.removeAll()
+        self.clearDB()
     }
     
     func all() -> [RoomModel] {
@@ -41,12 +41,12 @@ class RoomStorage {
             }else {
                 // add new room
                 data.append(room)
+                save(room)
                 // publish event add new room
                 delegate?.gotNew(room: room)
             }
         }
         data = sort(data)
-        self.saveToLocal(data)
         // mark Todo update last comment
         QiscusLogger.debugPrint("number of room in local temp : \(data.count)")
     }
@@ -55,6 +55,7 @@ class RoomStorage {
     private func updateRoomDataEvent(old: RoomModel, new: RoomModel) -> Bool{
         if let index = data.index(where: { $0 === old }) {
             data[index] = new
+            save(new)
             return true
         }else {
             return false
@@ -94,10 +95,10 @@ class RoomStorage {
             if comment.unixTimestamp > 0 {
                 new.unreadCount = new.unreadCount + 1
             }
+            save(new)
             // check data exist and update
             let isUpdate = updateRoomDataEvent(old: r, new: new)
             data = sort(data) // check data source
-            saveToLocal(data) // update data local
             return isUpdate
         }else {
             return false
@@ -118,7 +119,7 @@ class RoomStorage {
                     new.unreadCount = new.unreadCount - 1
                     let isUpdate = updateRoomDataEvent(old: r, new: new)
                     // update data local
-                    saveToLocal(data)
+//                    saveToLocal(data)
                     return isUpdate
                 }else { return false }
             }else { return false }
@@ -135,29 +136,95 @@ class RoomStorage {
     
 }
 
-// MARK: Local Storage
+// MARK: Local Database
 extension RoomStorage {
+    func find(predicate: NSPredicate) -> [RoomModel]? {
+        guard let rooms = Room.find(predicate: predicate) else { return nil}
+        var results = [RoomModel]()
+        for r in rooms {
+            results.append(map(r))
+        }
+        return results
+    }
+    
+    func clearDB() {
+        Room.clear()
+    }
+    
+    func save(_ data: RoomModel) {
+        if let db = Room.find(predicate: NSPredicate(format: "id = %@", data.id))?.first {
+            let _comment = map(data, data: db) // update value
+            _comment.update() // save to db
+        }else {
+            // save new room
+            let _comment = self.map(data)
+            _comment.save()
+            // get last comment and save to comment db
+            if let comment = data.lastComment {
+                CommentStorage().save(comment)
+            }
+        }
+    }
+    
     func loadFromLocal() -> [RoomModel] {
-        // load from file
-//        if let rooms = Storage.find(filename, in: .document, as: [RoomModel].self) {
-//            return rooms
-//        }else {
-            return [RoomModel]() // return emty rooms
-        //}
+        var results = [RoomModel]()
+        let roomsdb = Room.all()
+        
+        for room in roomsdb {
+            let _room = map(room)
+            results.append(_room)
+        }
+        return results
     }
     
-    func saveToLocal(_ data: [RoomModel]) {
-        self.saveTask?.cancel()
-        let task = DispatchWorkItem {
-            self.saveToFile()
+    /// create or update db object
+    ///
+    /// - Parameters:
+    ///   - core: core model
+    ///   - data: db model, if exist just update falue
+    /// - Returns: db object
+    private func map(_ core: RoomModel, data: Room? = nil) -> Room {
+        var result : Room
+        if let _result = data {
+            result = _result // Update data
+        }else {
+            result = Room.generate() // prepare create new
         }
-        self.saveTask = task
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1, execute: task)
+        result.id            = core.id
+        result.unreadCount   = Int16(core.unreadCount)
+        result.name          = core.name
+        result.avatarUrl     = core.avatarUrl?.absoluteString
+        result.options       = core.options
+        result.lastCommentId    = core.lastComment?.id
+        result.type          = core.type.rawValue
+        return result
     }
     
-    private func saveToFile() {
-        DispatchQueue.global(qos: .background).async {
-           // Storage.save(self.data, to: .document, as: self.filename)
+    private func map(_ room: Room) -> RoomModel {
+        let result = RoomModel()
+        // check record data
+        guard let id = room.id else { return result }
+        guard let name = room.name else { return result }
+        guard let avatarUrl = room.avatarUrl else { return result }
+        guard let type = room.type else { return result }
+        guard let lastCommentid = room.lastCommentId else { return result }
+        
+        // room type
+        for t in RoomType.all {
+            if type == t.rawValue {
+                result.type = t
+            }
         }
+        
+        // MARK: TODO get participants
+        //            _room.participants
+        result.id            = id
+        result.unreadCount   = Int(room.unreadCount)
+        result.name          = name
+        result.avatarUrl     = URL(string: avatarUrl)
+        result.options       = room.options
+        // check comment
+        result.lastComment   = CommentStorage().find(predicate: NSPredicate(format: "id = %@", lastCommentid))?.first
+        return result
     }
 }

@@ -1,5 +1,6 @@
 .firebase/*
-docs/
+zip/*
+docs/*
 QiscusCore.framework
 Cocoapods/Pods/*
 Cocoapods/build/*
