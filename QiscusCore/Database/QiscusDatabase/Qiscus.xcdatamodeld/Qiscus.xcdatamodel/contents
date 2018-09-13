@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14133" systemVersion="17E199" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="1.0">
-    <entity name="Comment" representedClassName="QiscusDatabase.Comment" syncable="YES">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17F77" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="1.0">
+    <entity name="Comment" representedClassName="QiscusCore.Comment" syncable="YES">
         <attribute name="commentBeforeId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="extras" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
@@ -17,7 +17,7 @@
         <attribute name="userId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="Member" representedClassName="QiscusDatabase.Member" syncable="YES">
+    <entity name="Member" representedClassName="QiscusCore.Member" syncable="YES">
         <attribute name="avatarUrl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
@@ -25,7 +25,7 @@
         <attribute name="lastCommentReceivedId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="Room" representedClassName="QiscusDatabase.Room" syncable="YES">
+    <entity name="Room" representedClassName="QiscusCore.Room" syncable="YES">
         <attribute name="avatarUrl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastCommentId" optional="YES" attributeType="String" syncable="YES"/>
@@ -37,7 +37,7 @@
     </entity>
     <elements>
         <element name="Comment" positionX="-63" positionY="-18" width="128" height="270"/>
-        <element name="Room" positionX="-54" positionY="-9" width="128" height="165"/>
         <element name="Member" positionX="-36" positionY="9" width="128" height="135"/>
+        <element name="Room" positionX="-54" positionY="-9" width="128" height="165"/>
     </elements>
 </model>

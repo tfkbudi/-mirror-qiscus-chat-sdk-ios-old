@@ -22,9 +22,9 @@ extension Room {
         var results = [Room]()
         
         do {
-            results = try  QiscusDatabase.context.fetch(fetchRequest)
+            results = try PresistentStore.context.fetch(fetchRequest)
         } catch  {
-            
+            print(error)
         }
         return results
     }
