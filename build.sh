@@ -1,6 +1,6 @@
 #!/bin/sh
 say Have you prayed?
-echo -n "\033[31m Sudahkah anda sholat 🕌 (y/n)? \033[0m\n"
+echo "\033[31m Sudahkah anda sholat 🕌 (y/n)? \033[0m\n"
 old_stty_cfg=$(stty -g)
 stty raw -echo
 answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
@@ -44,7 +44,7 @@ echo " Installing cocoapods \033[0m\n"
 pod install
 
 echo "\033[32m BUILDING FOR iOS \033[0m\n"
-say BUILDING FOR iOS, Please wait
+say Building for simulator, Please wait
 echo "\033[35m ▹ Building for simulator (Release) \033[0m\n"
 xcodebuild build -workspace $WORKSPACE.xcworkspace -scheme $FRAMEWORK -sdk iphonesimulator SYMROOT=$(PWD)/$BUILD OTHER_CFLAGS="-fembed-bitcode" BITCODE_GENERATION_MODE=bitcode | xcpretty
 say Building for device, Please wait
