@@ -44,10 +44,10 @@ echo " Installing cocoapods \033[0m\n"
 pod install
 
 echo "\033[32m BUILDING FOR iOS \033[0m\n"
-say Building for simulator, 'First, solve the problem. Then, write the code.' – John Johnson
+say Building for simulator, it will take a long time, - John Johnson said 'First, solve the problem. Then, write the code.'
 echo "\033[35m ▹ Building for simulator (Release) \033[0m\n"
 xcodebuild build -workspace $WORKSPACE.xcworkspace -scheme $FRAMEWORK -sdk iphonesimulator SYMROOT=$(PWD)/$BUILD OTHER_CFLAGS="-fembed-bitcode" BITCODE_GENERATION_MODE=bitcode | xcpretty
-say Building for device, 'Make it work, make it right, make it fast.' – Kent Beck
+say Building for device, – Kent Beck said 'Make it work, make it right, make it fast.' 
 echo "\033[35m \n ▹ Building for device (Archive) \033[0m\n"
 xcodebuild archive -workspace $WORKSPACE.xcworkspace -scheme $FRAMEWORK -sdk iphoneos -archivePath $BUILD/Release-iphoneos.xcarchive OTHER_CFLAGS="-fembed-bitcode" BITCODE_GENERATION_MODE=bitcode | xcpretty
 
@@ -61,6 +61,7 @@ cp -RL $IOS_ARCHIVE_FRAMEWORK_PATH $BUILD/$IOS_UNIVERSAL_DIR/$FRAMEWORK_NAME_WIT
 echo "\033[32m  ▹ Create Universal dSYMs \033[0m\n"
 cp -RL $IOS_ARCHIVE_DSYM_PATH/$DSYM_NAME_WITH_EXT $BUILD/$IOS_UNIVERSAL_DIR/$DSYM_NAME_WITH_EXT
 cp -RL $BUILD/$IOS_SIM_DIR/$FRAMEWORK_NAME_WITH_EXT/Modules/$FRAMEWORK.swiftmodule/* $BUILD/$IOS_UNIVERSAL_DIR/$FRAMEWORK_NAME_WITH_EXT/Modules/$FRAMEWORK.swiftmodule
+say lipo-ing the iOS frameworks together into universal framework
 echo "\033[35m 🤝 lipo'ing the iOS frameworks together into universal framework \033[0m\n"
 lipo -create $IOS_ARCHIVE_FRAMEWORK_PATH/$FRAMEWORK $BUILD/$IOS_SIM_DIR/$FRAMEWORK_NAME_WITH_EXT/$FRAMEWORK -output $BUILD/$IOS_UNIVERSAL_DIR/$FRAMEWORK_NAME_WITH_EXT/$FRAMEWORK
 echo "\033[35m 🤝 lipo'ing the iOS dSYMs together into a universal dSYM \033[0m\n"
@@ -75,7 +76,7 @@ cp -RL LICENSE $ZIP_DIR
 cp -RL $BUILD/$IOS_UNIVERSAL_DIR/$FRAMEWORK_NAME_WITH_EXT $ZIP_DIR/$FRAMEWORK_NAME_WITH_EXT
 cp -RL $BUILD/$IOS_UNIVERSAL_DIR/$DSYM_NAME_WITH_EXT $ZIP_DIR/$DSYM_NAME_WITH_EXT
 cd $ZIP_DIR
-
+say creating universal frameworks
 zip -r QiscusCore.zip LICENSE $FRAMEWORK_NAME_WITH_EXT $DSYM_NAME_WITH_EXT
 echo "\033[32m Zipped resulting frameworks and dSYMs to $ZIP_DIR/QiscusCore.zip \033[0m\n"
 echo "\033[35m Finish creating universal frameworks \n Alhamdulillah 🎊 🎊 🎁 \033[0m\n"
