@@ -33,16 +33,18 @@ public class Meta {
 
 open class RoomModel : RoomEvent {
     public var onChange : (CommentModel) -> Void = { _ in} // data binding
-    public internal(set) var id : String
-    public internal(set) var name : String
-    public internal(set) var uniqueId : String
-    public internal(set) var avatarUrl : URL?
+    public internal(set) var id : String = ""
+    public internal(set) var name : String = ""
+    public internal(set) var uniqueId : String = ""
+    public internal(set) var avatarUrl : URL? = nil
     public internal(set) var type : RoomType                  = .group
-    public internal(set) var options : String?
+    public internal(set) var options : String? = nil
     // can be update after got new comment
     public internal(set) var lastComment : CommentModel?      = nil
     public internal(set) var participants : [MemberModel]?    = nil
-    public internal(set) var unreadCount : Int
+    public internal(set) var unreadCount : Int = -1
+    
+    init() {}
     
     init(json: JSON) {
         self.id             = json["id_str"].stringValue
