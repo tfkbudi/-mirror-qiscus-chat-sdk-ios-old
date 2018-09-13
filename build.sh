@@ -44,14 +44,14 @@ echo " Installing cocoapods \033[0m\n"
 pod install
 
 echo "\033[32m BUILDING FOR iOS \033[0m\n"
-say BUILDING FOR iOS
+say BUILDING FOR iOS, Please wait
 echo "\033[35m ▹ Building for simulator (Release) \033[0m\n"
 xcodebuild build -workspace $WORKSPACE.xcworkspace -scheme $FRAMEWORK -sdk iphonesimulator SYMROOT=$(PWD)/$BUILD OTHER_CFLAGS="-fembed-bitcode" BITCODE_GENERATION_MODE=bitcode | xcpretty
-say Building for device
-echo "\033[32m \n ▹ Building for device (Archive) \033[0m\n"
+say Building for device, Please wait
+echo "\033[35m \n ▹ Building for device (Archive) \033[0m\n"
 xcodebuild archive -workspace $WORKSPACE.xcworkspace -scheme $FRAMEWORK -sdk iphoneos -archivePath $BUILD/Release-iphoneos.xcarchive OTHER_CFLAGS="-fembed-bitcode" BITCODE_GENERATION_MODE=bitcode | xcpretty
 
-
+say Copying framework
 echo "\033[32m Copying framework files \033[0m\n"
 mv $BUILD/Release-iphoneos.xcarchive $BUILD/$IOS_ARCHIVE_DIR
 echo "\033[32m  ▹ Create Universal directory \033[0m\n"
@@ -68,6 +68,7 @@ DSYM_PATH=$DSYM_NAME_WITH_EXT/Contents/Resources/DWARF/$FRAMEWORK
 lipo -create $IOS_ARCHIVE_DSYM_PATH/$DSYM_PATH $BUILD/$IOS_SIM_DIR/$DSYM_PATH  -output $BUILD/$IOS_UNIVERSAL_DIR/$DSYM_PATH
 
 # Rename and zip
+say Copying iOS files into zip directory
 echo "\033[32m Copying iOS files into zip directory \033[0m\n"
 mkdir $ZIP_DIR
 cp -RL LICENSE $ZIP_DIR
@@ -96,14 +97,17 @@ git add .
 git commit -m "finish build for cocoapod"
 rm -rf $BUILD
 
+say Do you want to publish to github?
 echo -n "\033[31m Mau sekalian di publish ke github (y/n)? \033[0m\n"
 old_stty_cfg=$(stty -g)
 stty raw -echo
 answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
 stty $old_stty_cfg
 if echo "$answer" | grep -iq "^y" ;then
+	say Aye aye captain
     echo "\033[32m \n Siap bos ku ... \033[0m\n"
 else
+	say Up to you
     echo "\033[31m Ya sudah \033[0m\n"
     exit
 fi
@@ -113,3 +117,4 @@ git add .
 git commit -m "update new build"
 git push origin master
 echo "\033[35m Finish update cocoapod repo \n Alhamdulillah 🎉 🎉 🎉 \033[0m\n"
+say Horree 🎉
