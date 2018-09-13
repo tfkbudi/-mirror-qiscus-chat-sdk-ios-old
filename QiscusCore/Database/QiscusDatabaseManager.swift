@@ -33,7 +33,15 @@ public class RoomDB {
     public func find(predicate: NSPredicate) -> [RoomModel]? {
         return room.find(predicate: predicate)
     }
-
+    
+    public func find(id: String) -> RoomModel? {
+        if let room = room.find(byID: id) {
+            return room
+        }else {
+            return find(predicate: NSPredicate(format: "id = %@", id))?.last
+        }
+    }
+    
     public func all() -> [RoomModel] {
         let rooms = room.all()
         return rooms
@@ -53,14 +61,26 @@ public class CommentDB {
     }
     
     public func find(roomId id: String) -> [CommentModel]? {
-        return comment.find(byRoomID: id)
+        if let comments = comment.find(byRoomID: id) {
+            return comments
+        }else {
+            return comment.find(predicate: NSPredicate(format: "roomId = %@", id))
+        }
     }
 
     public func find(id: String) -> CommentModel? {
-        return comment.find(byID: id)
+        if let comment = comment.find(byID: id) {
+            return comment
+        }else {
+            return comment.find(predicate: NSPredicate(format: "id = %@", id))?.first
+        }
     }
 
     public func find(uniqueId id: String) -> CommentModel? {
-        return comment.find(byUniqueID: id)
+        if let comment = comment.find(byUniqueID: id) {
+            return comment
+        }else {
+            return comment.find(predicate: NSPredicate(format: "uniqId = %@", id))?.first
+        }
     }
 }
