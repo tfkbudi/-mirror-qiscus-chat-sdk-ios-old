@@ -5,7 +5,7 @@
 //  Created by Qiscus on 13/09/18.
 //
 
-import QiscusDatabase
+import Foundation
 
 class MemberDatabase {
     private var data : [MemberModel] = [MemberModel]()

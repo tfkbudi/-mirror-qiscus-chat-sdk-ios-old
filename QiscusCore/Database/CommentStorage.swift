@@ -5,7 +5,7 @@
 //  Created by Qiscus on 19/08/18.
 //
 
-import QiscusDatabase
+import Foundation
 
 class CommentStorage {
     private var data : [CommentModel] = [CommentModel]()

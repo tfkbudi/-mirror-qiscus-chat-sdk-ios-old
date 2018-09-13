@@ -4,7 +4,7 @@
 //
 //  Created by Qiscus on 12/09/18.
 //
-import QiscusDatabase
+import Foundation
 
 public class QiscusDatabaseManager {
     static var shared   : QiscusDatabaseManager = QiscusDatabaseManager()

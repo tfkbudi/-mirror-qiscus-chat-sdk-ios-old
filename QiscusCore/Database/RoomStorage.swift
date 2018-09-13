@@ -8,7 +8,8 @@
 //  save room from restAPI in temp(variable)
 //  save room in local storage
 //  get rooms from local storage
-import QiscusDatabase
+
+import Foundation
 
 class RoomStorage {
     private var data : [RoomModel] = [RoomModel]()
