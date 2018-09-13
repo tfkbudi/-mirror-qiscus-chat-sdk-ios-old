@@ -50,12 +50,14 @@ class App  {
 }
 
 open class MemberModel {
-    public let avatarUrl : URL?
-    public let email : String
-    public var id : String
-    public let lastCommentReadId : Int
-    public let lastCommentReceivedId : Int
-    public let username : String
+    public var avatarUrl : URL? = nil
+    public var email : String   = ""
+    public var id : String      = ""
+    public var lastCommentReadId : Int  = -1
+    public var lastCommentReceivedId : Int  = -1
+    public var username : String    = ""
+    
+    init() { }
     
     init(json: JSON) {
         self.id         = json["id_str"].stringValue
