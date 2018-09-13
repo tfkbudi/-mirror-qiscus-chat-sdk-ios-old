@@ -13,6 +13,7 @@ class CommentStorage {
     init() {
         // MARK: TODO load data rooms from local storage to var data
         self.data = self.loadFromLocal()
+        
     }
     
     func removeAll() {
@@ -153,6 +154,9 @@ extension CommentStorage {
         result.roomId           = core.roomId
         result.commentBeforeId  = core.commentBeforeId
         result.status           = core.status.rawValue
+        result.unixTimestamp    = Int64(core.unixTimestamp)
+        result.timestamp        = core.timestamp
+        result.isPublicChannel  = core.isPublicChannel
         return result
     }
     
@@ -171,6 +175,7 @@ extension CommentStorage {
         guard let extras = data.extras else { return result }
         guard let roomId = data.roomId else { return result }
         guard let uniqueId = data.uniqId else { return result }
+        guard let timestamp = data.timestamp else { return result }
         guard let commentBeforeId = data.commentBeforeId else { return result }
 
         result.id               = id
@@ -185,6 +190,9 @@ extension CommentStorage {
         result.roomId           = roomId
         result.commentBeforeId  = commentBeforeId
         result.isDeleted        = data.isDeleted
+        result.unixTimestamp    = Int(data.unixTimestamp)
+        result.timestamp        = timestamp
+        result.isPublicChannel  = data.isPublicChannel
         
         for s in CommentStatus.all {
             if s.rawValue == status {
@@ -197,8 +205,5 @@ extension CommentStorage {
 }
 
 // MARK: TODO map
-//public internal(set) var isPublicChannel      : Bool          = false
 //public var payload              : [String:Any]? = nil
-//public internal(set) var timestamp            : String        = ""
-//public internal(set) var unixTimestamp        : Int           = 0
 

@@ -9,6 +9,7 @@
         <attribute name="payload" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="roomId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uniqId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="unixTimestamp" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -36,7 +37,7 @@
         <attribute name="unreadCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Comment" positionX="-63" positionY="-18" width="128" height="270"/>
+        <element name="Comment" positionX="-63" positionY="-18" width="128" height="285"/>
         <element name="Member" positionX="-36" positionY="9" width="128" height="135"/>
         <element name="Room" positionX="-54" positionY="-9" width="128" height="165"/>
     </elements>

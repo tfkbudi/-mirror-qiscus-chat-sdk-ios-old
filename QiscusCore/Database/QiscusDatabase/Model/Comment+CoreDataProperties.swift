@@ -30,5 +30,10 @@ extension Comment {
     @NSManaged  var extras: String?
     @NSManaged  var payload: String?
     @NSManaged  var uniqId: String?
+    @NSManaged  var unixTimestamp: Int64
+    @NSManaged  var timestamp: String?
+    @NSManaged  var isPublicChannel: Bool
 
 }
+
+//public var payload              : [String:Any]? = nil

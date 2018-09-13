@@ -83,7 +83,8 @@ extension QiscusStorage {
     
     func saveComments(_ data: [CommentModel]) {
         comment.add(data)
-        for comment in data {
+        // make sure data sort by date
+        for comment in data.reversed() {
             // update last comment in room, mean comment where you send
             if !room.updateLastComment(comment) {
                 QiscusLogger.errorPrint("filed to update last comment, mybe room not exist")

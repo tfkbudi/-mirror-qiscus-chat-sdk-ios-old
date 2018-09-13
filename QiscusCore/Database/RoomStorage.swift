@@ -17,7 +17,8 @@ class RoomStorage {
 
     init() {
         // MARK: TODO load data rooms from local storage to var data
-        self.data = loadFromLocal()
+        let local = loadFromLocal()
+        data = sort(local)
     }
     
     func removeAll() {
