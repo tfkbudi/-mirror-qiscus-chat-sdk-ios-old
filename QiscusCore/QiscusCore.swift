@@ -176,12 +176,43 @@ public class QiscusCore: NSObject {
     ///   - order: "asc" or "desc" only, lowercase. If other than that, it will assumed to "desc"
     ///   - limit: limit number of comment by default 20
     ///   - completion: return object array of comment and return error if exist
-    public func sync(lastCommentReceivedId id: String, order: String = "", limit: Int = 20, completion: @escaping ([CommentModel]?, QError?) -> Void) {
-        QiscusCore.network.sync(lastCommentReceivedId: id, order: order, limit: limit) { (comments, error) in
-            if let message = error {
-                completion(comments,QError.init(message: message))
+    public func sync(lastCommentReceivedId id: String = "", order: String = "", limit: Int = 20, completion: @escaping ([CommentModel]?, QError?) -> Void) {
+        if id.isEmpty {
+            // get last comment id
+            if let comment1 = QiscusCore.database.comment.all().last {
+                print("comment1")
+                print(comment1.date)
+                print(comment1.unixTimestamp)
+            }
+            if let comment = QiscusCore.database.comment.all().last {
+                print("comment")
+                print(comment.date)
+                print(comment.unixTimestamp)
+                QiscusCore.network.sync(lastCommentReceivedId: comment.id, order: order, limit: limit) { (comments, error) in
+                    if let message = error {
+                        completion(comments,QError.init(message: message))
+                    }else {
+                        if let results = comments {
+                            // Save comment in local
+                            QiscusCore.dataStore.saveComments(results)
+                        }
+                        completion(comments, nil) // success
+                    }
+                }
             }else {
-                completion(comments, nil) // success
+                completion(nil,QError(message: "please set last comment id"))
+            }
+        }else {
+            QiscusCore.network.sync(lastCommentReceivedId: id, order: order, limit: limit) { (comments, error) in
+                if let message = error {
+                    completion(comments,QError.init(message: message))
+                }else {
+                    if let results = comments {
+                        // Save comment in local
+                        QiscusCore.dataStore.saveComments(results)
+                    }
+                    completion(comments, nil) // success
+                }
             }
         }
     }
