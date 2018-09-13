@@ -11,13 +11,7 @@ import Foundation
 class QiscusDatabase {
     class var bundle:Bundle{
         get{
-            let podBundle = Bundle(for: QiscusDatabase.self)
-            
-            if let bundleURL = podBundle.url(forResource: "QiscusCore", withExtension: "bundle") {
-                return Bundle(url: bundleURL)!
-            }else{
-                return podBundle
-            }
+            return QiscusCore.bundle
         }
     }
     

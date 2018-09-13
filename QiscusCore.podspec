@@ -9,7 +9,7 @@ s.homepage     = "https://qisc.us"
 s.license      = "MIT"
 s.author       = "Qiscus"
 s.source       = { :git => "https://github.com/qiscus/qiscus-sdk-ios.git", :tag => "#{s.version}" }
-s.source_files  = "QiscusCore/**/*.{swift}"
+s.source_files  = "QiscusCore/**/*.{swift,xcdatamodeld,xcdatamodel}"
 s.platform      = :ios, "10.0"
 s.dependency 'QiscusRealtime'
 s.dependency 'SwiftyJSON'

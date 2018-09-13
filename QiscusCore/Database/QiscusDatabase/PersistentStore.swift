@@ -19,7 +19,7 @@ class PresistentStore {
     }
     
     static var persistentContainer: NSPersistentContainer = {
-        let modelURL = QiscusDatabase.bundle.url(forResource: "Qiscus", withExtension: "momd")!
+        let modelURL = QiscusCore.bundle.url(forResource: "Qiscus", withExtension: "momd")!
         let container = NSPersistentContainer.init(name: "Qiscus", managedObjectModel: NSManagedObjectModel(contentsOf: modelURL)!)
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {

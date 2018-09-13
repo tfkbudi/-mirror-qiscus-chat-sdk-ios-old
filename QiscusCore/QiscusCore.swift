@@ -9,7 +9,16 @@
 import Foundation
 
 public class QiscusCore: NSObject {
-    
+    class var bundle:Bundle{
+        get{
+            let podBundle = Bundle(for: QiscusCore.self)
+            if let bundleURL = podBundle.url(forResource: "QiscusCore", withExtension: "bundle") {
+                return Bundle(url: bundleURL)!
+            }else{
+                return podBundle
+            }
+        }
+    }
     public static let shared    : QiscusCore            = QiscusCore()
     private static var config    : ConfigManager          = ConfigManager.shared
     static var realtime         : RealtimeManager       = RealtimeManager.shared
