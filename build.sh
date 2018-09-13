@@ -44,11 +44,11 @@ echo " Installing cocoapods \033[0m\n"
 pod install
 
 echo "\033[32m BUILDING FOR iOS \033[0m\n"
-say Building for simulator, it will take a long time, - John Johnson said 'First, solve the problem. Then, write the code.'
 echo "\033[35m ▹ Building for simulator (Release) \033[0m\n"
+say Building for simulator, it will take a long time, - John Johnson said 'First, solve the problem. Then, write the code.'
 xcodebuild build -workspace $WORKSPACE.xcworkspace -scheme $FRAMEWORK -sdk iphonesimulator SYMROOT=$(PWD)/$BUILD OTHER_CFLAGS="-fembed-bitcode" BITCODE_GENERATION_MODE=bitcode | xcpretty
-say Building for device, – Kent Beck said 'Make it work, make it right, make it fast.' 
 echo "\033[35m \n ▹ Building for device (Archive) \033[0m\n"
+say Building for device, – Kent Beck said 'Make it work, make it right, make it fast.' 
 xcodebuild archive -workspace $WORKSPACE.xcworkspace -scheme $FRAMEWORK -sdk iphoneos -archivePath $BUILD/Release-iphoneos.xcarchive OTHER_CFLAGS="-fembed-bitcode" BITCODE_GENERATION_MODE=bitcode | xcpretty
 
 say Copying framework
