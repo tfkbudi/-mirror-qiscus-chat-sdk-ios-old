@@ -1,13 +1,15 @@
 #!/bin/sh
-
+say Have you prayed?
 echo -n "\033[31m Sudahkah anda sholat 🕌 (y/n)? \033[0m\n"
 old_stty_cfg=$(stty -g)
 stty raw -echo
 answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
 stty $old_stty_cfg
 if echo "$answer" | grep -iq "^y" ;then
+	say Alhamdulillah
     echo "\033[32m Bismillahirrahmanirrahim, no error ... \033[0m\n"
 else
+	say Astagfirullahaladzim
     echo "\033[31m 😡 Astagfirullahaladzim sholat dulu sana \033[0m\n"
     exit
 fi
@@ -26,9 +28,10 @@ IOS_ARCHIVE_DSYM_PATH=$BUILD/$IOS_ARCHIVE_DIR/dSYMs
 IOS_SIM_DIR=Release-iphonesimulator
 IOS_UNIVERSAL_DIR=Release-universal-iOS
 
+say Cleaning up
 echo "\033[31m Cleaning up after old builds \033[0m\n"
 rm -Rf $BUILD
-
+say Installing dependencies
 echo "\033[37m Installing dependencies"
 if ! [ -x "$(command -v xcpretty)" ]; then
   echo " Installing xcpretty....."
@@ -36,14 +39,15 @@ if ! [ -x "$(command -v xcpretty)" ]; then
 fi
 
 # iOS
+say Installing... cocoapods
 echo " Installing cocoapods \033[0m\n"
 pod install
 
 echo "\033[32m BUILDING FOR iOS \033[0m\n"
-
+say BUILDING FOR iOS
 echo "\033[35m ▹ Building for simulator (Release) \033[0m\n"
 xcodebuild build -workspace $WORKSPACE.xcworkspace -scheme $FRAMEWORK -sdk iphonesimulator SYMROOT=$(PWD)/$BUILD OTHER_CFLAGS="-fembed-bitcode" BITCODE_GENERATION_MODE=bitcode | xcpretty
-
+say Building for device
 echo "\033[32m \n ▹ Building for device (Archive) \033[0m\n"
 xcodebuild archive -workspace $WORKSPACE.xcworkspace -scheme $FRAMEWORK -sdk iphoneos -archivePath $BUILD/Release-iphoneos.xcarchive OTHER_CFLAGS="-fembed-bitcode" BITCODE_GENERATION_MODE=bitcode | xcpretty
 
@@ -76,6 +80,7 @@ echo "\033[32m Zipped resulting frameworks and dSYMs to $ZIP_DIR/QiscusCore.zip 
 echo "\033[35m Finish creating universal frameworks \n Alhamdulillah 🎊 🎊 🎁 \033[0m\n"
 
 # checking arhitechture
+say Checking framework arhitechture
 echo "\033[32m \n Checking framework arhitechture, should be 4 arhitechture include arm, i386 and x86_64 \033[0m\n"
 cd $FRAMEWORK_NAME_WITH_EXT
 file $FRAMEWORK
