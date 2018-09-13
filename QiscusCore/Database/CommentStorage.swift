@@ -157,6 +157,9 @@ extension CommentStorage {
         result.unixTimestamp    = Int64(core.unixTimestamp)
         result.timestamp        = core.timestamp
         result.isPublicChannel  = core.isPublicChannel
+        if let payload = core.payload {
+            result.payload = payload.dict2json()
+        }
         return result
     }
     
@@ -177,6 +180,7 @@ extension CommentStorage {
         guard let uniqueId = data.uniqId else { return result }
         guard let timestamp = data.timestamp else { return result }
         guard let commentBeforeId = data.commentBeforeId else { return result }
+        guard let payload = data.payload else { return result }
 
         result.id               = id
         result.type             = type
@@ -193,6 +197,7 @@ extension CommentStorage {
         result.unixTimestamp    = Int(data.unixTimestamp)
         result.timestamp        = timestamp
         result.isPublicChannel  = data.isPublicChannel
+        result.payload          = convertToDictionary(from: payload)
         
         for s in CommentStatus.all {
             if s.rawValue == status {
@@ -201,6 +206,28 @@ extension CommentStorage {
         }
         
         return result
+    }
+    
+    private func convertToDictionary(from text: String) -> [String: Any]? {
+        guard let data = text.data(using: .utf8) else { return nil }
+        let anyResult = try? JSONSerialization.jsonObject(with: data, options: [])
+        return anyResult as? [String: Any]
+    }
+}
+
+extension Dictionary {
+    var json: String {
+        let invalidJson = "Not a valid JSON"
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
+            return String(bytes: jsonData, encoding: String.Encoding.utf8) ?? invalidJson
+        } catch {
+            return invalidJson
+        }
+    }
+    
+    func dict2json() -> String {
+        return json
     }
 }
 

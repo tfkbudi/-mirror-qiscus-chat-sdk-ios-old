@@ -179,15 +179,7 @@ public class QiscusCore: NSObject {
     public func sync(lastCommentReceivedId id: String = "", order: String = "", limit: Int = 20, completion: @escaping ([CommentModel]?, QError?) -> Void) {
         if id.isEmpty {
             // get last comment id
-            if let comment1 = QiscusCore.database.comment.all().last {
-                print("comment1")
-                print(comment1.date)
-                print(comment1.unixTimestamp)
-            }
             if let comment = QiscusCore.database.comment.all().last {
-                print("comment")
-                print(comment.date)
-                print(comment.unixTimestamp)
                 QiscusCore.network.sync(lastCommentReceivedId: comment.id, order: order, limit: limit) { (comments, error) in
                     if let message = error {
                         completion(comments,QError.init(message: message))
