@@ -10,15 +10,21 @@ public class QiscusDatabaseManager {
     static var shared   : QiscusDatabaseManager = QiscusDatabaseManager()
     public var room    : RoomDB!
     public var comment : CommentDB!
+    public var member   : MemberDB!
     
     init() {
-        self.room = RoomDB()
-        self.comment = CommentDB()
+        self.room       = RoomDB()
+        self.comment    = CommentDB()
+        self.member     = MemberDB()
     }
     
     func clear() {
         QiscusDatabase.clear()
     }
+}
+
+public class MemberDB {
+    private var member : MemberDatabase = MemberDatabase()
 }
 
 public class RoomDB {
