@@ -113,6 +113,7 @@ extension CommentStorage {
             let _comment = self.map(data)
             _comment.save()
         }
+        self.data = loadFromLocal()
     }
     
     private func loadFromLocal() -> [CommentModel] {

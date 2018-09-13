@@ -48,6 +48,10 @@ public class CommentDB {
         return comment.all()
     }
 
+    public func find(predicate: NSPredicate) -> [CommentModel]? {
+        return comment.find(predicate: predicate)
+    }
+    
     public func find(roomId id: String) -> [CommentModel]? {
         return comment.find(byRoomID: id)
     }
