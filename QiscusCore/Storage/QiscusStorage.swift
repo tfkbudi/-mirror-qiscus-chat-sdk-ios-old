@@ -73,16 +73,22 @@ extension QiscusStorage {
 
 // MARK: Comment Storage
 extension QiscusStorage {
-    func saveComments(_ data: [CommentModel]) {
-        comment.add(data)
-    }
-    
     func getComments() -> [CommentModel] {
         return comment.all()
     }
     
     func getCommentbyRoomID(id: String) -> [CommentModel]? {
         return comment.find(byRoomID: id)
+    }
+    
+    func saveComments(_ data: [CommentModel]) {
+        comment.add(data)
+        for comment in data {
+            // update last comment in room, mean comment where you send
+            if !room.updateLastComment(comment) {
+                QiscusLogger.errorPrint("filed to update last comment, mybe room not exist")
+            }
+        }
     }
     
     func saveComment(_ data: CommentModel) {

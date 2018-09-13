@@ -75,7 +75,6 @@ class CommentStorage {
     private func updateRoomDataEvent(old: CommentModel, new: CommentModel) -> Bool{
         if let index = data.index(where: { $0 === old }) {
             data[index] = new
-            save(new)
             return true
         }else {
             return false
