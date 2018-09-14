@@ -88,9 +88,14 @@ open class CommentModel {
         return type
     }
     
-    private func getPayload(fromPayload data: [String:Any]) -> [String:Any] {
-        let payload = data["content"] as! [String:Any]
-        return payload
+    private func getPayload(fromPayload data: [String:Any]) -> [String:Any]? {
+        if let payload = data["content"] as? [String:Any]{
+            if !payload.isEmpty {
+                return payload
+            }else { return nil }
+        }else {
+            return nil
+        }
     }
 }
 
