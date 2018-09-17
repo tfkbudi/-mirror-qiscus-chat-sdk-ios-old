@@ -28,7 +28,7 @@ open class CommentModel {
     public internal(set) var timestamp            : String        = ""
     public var type                 : String        = "text"
     public internal(set) var uniqId               : String        = ""
-    public internal(set) var unixTimestamp        : Int           = 0
+    public internal(set) var unixTimestamp        : Int64         = 0
     public internal(set) var userAvatarUrl        : URL?          = nil
     public internal(set) var userId               : String        = ""
     public internal(set) var username             : String        = ""
@@ -41,7 +41,9 @@ open class CommentModel {
         self.username       = user.username
         self.userAvatarUrl  = user.avatarUrl
         self.userEmail      = user.email
-        self.uniqId         = "ios_\(NSDate().timeIntervalSince1970 * 1000.0)"
+        let now             = Int64(NSDate().timeIntervalSince1970 * 1000.0)
+        self.uniqId         = "ios_\(now)"
+        self.unixTimestamp  = now
     }
     
     init(json: JSON) {
@@ -56,7 +58,7 @@ open class CommentModel {
         self.payload            = json["payload"].dictionaryObject
         self.extras             = json["extras"].stringValue
         self.timestamp          = json["timestamp"].stringValue
-        self.unixTimestamp      = json["unix_timestamp"].intValue
+        self.unixTimestamp      = json["unix_timestamp"].int64Value
         self.userAvatarUrl      = json["room_avatar"].url ?? URL(string: "http://")
         self.username           = json["username"].stringValue
         self.userId             = json["user_id_str"].stringValue

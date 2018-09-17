@@ -194,7 +194,7 @@ extension CommentStorage {
         result.roomId           = roomId
         result.commentBeforeId  = commentBeforeId
         result.isDeleted        = data.isDeleted
-        result.unixTimestamp    = Int(data.unixTimestamp)
+        result.unixTimestamp    = Int64(data.unixTimestamp)
         result.timestamp        = timestamp
         result.isPublicChannel  = data.isPublicChannel
         result.payload          = convertToDictionary(from: payload)
