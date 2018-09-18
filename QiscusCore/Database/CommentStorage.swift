@@ -31,10 +31,10 @@ class CommentStorage {
     }
     
     func add(_ value: [CommentModel]) {
-        // filter if room exist update, if not add
+        // filter if comment exist update, if not add
         for comment in value {
             if let r = find(byUniqueID: comment.uniqId)  {
-                if !updateRoomDataEvent(old: r, new: comment) {
+                if !updateCommentDataEvent(old: r, new: comment) {
                     // add new
                     data.append(comment)
                     save(comment)
@@ -73,7 +73,7 @@ class CommentStorage {
     }
     
     // update/replace === identical object
-    private func updateRoomDataEvent(old: CommentModel, new: CommentModel) -> Bool{
+    private func updateCommentDataEvent(old: CommentModel, new: CommentModel) -> Bool{
         if let index = data.index(where: { $0 === old }) {
             data[index] = new
             return true

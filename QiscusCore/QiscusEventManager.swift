@@ -19,7 +19,7 @@ class QiscusEventManager {
         guard let room = QiscusCore.dataStore.findRoom(byID: String(roomID)) else { return }
         guard let comment = QiscusCore.dataStore.getCommentbyUniqueID(id: id) else { return }
         // delete from local
-        QiscusCore.dataStore.deleteComment(uniqueID: comment.uniqId)
+//        QiscusCore.dataStore.deleteComment(uniqueID: comment.uniqId)
         // only 3 kind status from realtime read, deliverd, and deleted
         var commentStatus : CommentStatus = CommentStatus.read
         switch status {
@@ -35,6 +35,9 @@ class QiscusEventManager {
         default:
             break
         }
+        // update comment
+        comment.status = commentStatus
+        QiscusCore.dataStore.saveComment(comment)
         if let r = QiscusEventManager.shared.room {
             if r.id == roomID {
                 roomDelegate?.didComment(comment: comment, changeStatus: commentStatus)
@@ -109,13 +112,13 @@ class QiscusEventManager {
         return !(QiscusCore.dataStore.getCommentbyUniqueID(id: data.uniqId) != nil)
     }
     
-    // MARK: TODO comment status change
-    func onComment(_ comment: CommentModel, statusChange status: CommentStatus) {
-        // filter event for room or qiscuscore
-        if let r = QiscusEventManager.shared.room {
-            if r.id == String(comment.roomId) {
-                self.roomDelegate?.didComment(comment: comment, changeStatus: status)
-            }
-        }
-    }
+//    // MARK: TODO comment status change
+//    func onComment(_ comment: CommentModel, statusChange status: CommentStatus) {
+//        // filter event for room or qiscuscore
+//        if let r = QiscusEventManager.shared.room {
+//            if r.id == String(comment.roomId) {
+//                self.roomDelegate?.didComment(comment: comment, changeStatus: status)
+//            }
+//        }
+//    }
 }

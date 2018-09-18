@@ -46,8 +46,7 @@ public class QiscusStorage {
 
 //  MARK: Room Storage
 extension QiscusStorage {
-    // MARK: remove public next
-    public func getRooms() -> [RoomModel] {
+    func getRooms() -> [RoomModel] {
         let rooms = room.all()
         // subscribe
         QiscusCore.realtime.subscribeRooms(rooms: rooms)
@@ -66,7 +65,7 @@ extension QiscusStorage {
         room.removeAll()
     }
     
-    public func findRoom(byID id: String) -> RoomModel? {
+    func findRoom(byID id: String) -> RoomModel? {
         return room.find(byID: id)
     }
 }
@@ -92,6 +91,10 @@ extension QiscusStorage {
         }
     }
     
+    
+    /// save new comment or update
+    ///
+    /// - Parameter data: comment model
     func saveComment(_ data: CommentModel) {
         comment.add([data])
         // update last comment in room, mean comment where you send
