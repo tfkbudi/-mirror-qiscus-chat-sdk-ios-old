@@ -18,13 +18,14 @@ class QiscusEventManager {
     func gotMessageStatus(roomID: String, commentUniqueID id: String, status: CommentStatus){
         guard let room = QiscusCore.dataStore.findRoom(byID: String(roomID)) else { return }
         guard let comment = QiscusCore.dataStore.getCommentbyUniqueID(id: id) else { return }
-        // delete from local
-//        QiscusCore.dataStore.deleteComment(uniqueID: comment.uniqId)
+
         // only 3 kind status from realtime read, deliverd, and deleted
         var commentStatus : CommentStatus = CommentStatus.read
         switch status {
         case .deleted:
             commentStatus = CommentStatus.deleted
+            // delete from local
+            QiscusCore.dataStore.deleteComment(uniqueID: comment.uniqId)
             break
         case .read:
             commentStatus = CommentStatus.read
@@ -45,6 +46,27 @@ class QiscusEventManager {
         }
         // got new comment for other room
         delegate?.onRoom(room, didChangeComment: comment, changeStatus: commentStatus)
+        // check comment before, in local then update comment status in this room
+        // very tricky, need to review v3
+        if let comments = QiscusCore.database.comment.find(roomId: room.id) {
+            var _comments = [CommentModel]()
+            if commentStatus == .delivered {
+                _comments = comments.filter({ ($0.status == CommentStatus.sent)})
+            }else if commentStatus == .read {
+                _comments = comments.filter({ ($0.status == CommentStatus.delivered) || ($0.status == CommentStatus.sent)})
+            }
+            for c in _comments {
+                c.status = commentStatus
+                QiscusCore.dataStore.saveComment(c)
+                if let r = QiscusEventManager.shared.room {
+                    if r.id == roomID {
+                        roomDelegate?.didComment(comment: comment, changeStatus: commentStatus)
+                    }
+                }
+                // got new comment for other room
+                delegate?.onRoom(room, didChangeComment: comment, changeStatus: commentStatus)
+            }
+        }
     }
     
     func gotNewMessage(comment: CommentModel) {
