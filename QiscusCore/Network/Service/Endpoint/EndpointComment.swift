@@ -141,11 +141,11 @@ extension APIComment : EndPoint {
             }
             return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
         case .statusComment(let id):
-            var params = [
+            let params = [
                 "token"                     : AUTHTOKEN,
                 "comment_id"                : id,
                 ] as [String : Any]
-            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
+            return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: params)
         }
     }
 }

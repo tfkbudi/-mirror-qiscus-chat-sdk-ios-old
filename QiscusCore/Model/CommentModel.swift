@@ -122,15 +122,15 @@ extension CommentModel {
 }
 
 public enum CommentStatus : String {
+    case sending    = "sending"
+    case pending    = "pending"
+    case failed     = "failed"
+    case sent       = "sent"
     case delivered    = "delivered"
     case read       = "read"
-    case sent       = "sent"
     case deleted    = "deleted"
-    case sending    = "sending"
-    case failed     = "failed"
-    case pending    = "pending"
     
-    static let all = [sent, sending, delivered, read, deleted, failed]
+    static let all = [sending, pending, failed, sent, delivered, read, deleted]
 }
 
 enum CommentType: String {
