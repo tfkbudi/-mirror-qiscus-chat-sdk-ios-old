@@ -133,4 +133,20 @@ extension QiscusCore {
     public func updateCommentReceive(roomId: String, lastCommentReceivedId commentID: String) {
         QiscusCore.network.updateCommentStatus(roomId: roomId, lastCommentReadId: nil, lastCommentReceivedId: commentID)
     }
+    
+    /// Get comment status is read or received
+    ///
+    /// - Parameters:
+    ///   - id: comment id
+    ///   - completion: return object comment if exist
+    public func readReceiptStatus(commentId id: String, completion: @escaping (CommentModel?, QError?) -> Void) {
+        QiscusCore.network.readReceiptStatus(commentId: id) { (comment, message) in
+            if let c = comment {
+                // save comment in local
+                QiscusCore.dataStore.saveComment(c)
+            }
+            completion(comment,nil)
+        }
+    }
+    
 }

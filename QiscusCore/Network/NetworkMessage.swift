@@ -261,4 +261,62 @@ extension NetworkManager {
             }
         }
     }
+    
+    func readReceiptStatus(commentId id: String, completion: @escaping (CommentModel?, String?) -> Void) {
+        commentRouter.request(.statusComment(id: id)) { (data, response, error) in
+            if error != nil {
+                completion(nil, "Please check your network connection.")
+            }
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, NetworkResponse.noData.rawValue)
+                        return
+                    }
+                    let response = ApiResponse.decode(from: responseData)
+                    let comment = CommentApiResponse.comment(from: response)
+                    completion(comment, nil)
+                case .failure(let errorMessage):
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        QiscusLogger.errorPrint("json: \(jsondata)")
+                    } catch {
+                        
+                    }
+                    
+                    completion(nil, errorMessage)
+                }
+            }
+        }
+        
+//        request(.loadComment(topicId: roomId, lastCommentId: lastCommentId, timestamp: timestamp, after: after, limit: limit)) { (data, response, error) in
+//            if error != nil {
+//                completion(nil, "Please check your network connection.")
+//            }
+//            if let response = response as? HTTPURLResponse {
+//                let result = self.handleNetworkResponse(response)
+//                switch result {
+//                case .success:
+//                    guard let responseData = data else {
+//                        completion(nil, NetworkResponse.noData.rawValue)
+//                        return
+//                    }
+//                    let response = ApiResponse.decode(from: responseData)
+//                    let comments = CommentApiResponse.comments(from: response)
+//                    completion(comments, nil)
+//                case .failure(let errorMessage):
+//                    do {
+//                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+//                        QiscusLogger.errorPrint("json: \(jsondata)")
+//                    } catch {
+//
+//                    }
+//
+//                    completion(nil, errorMessage)
+//                }
+//            }
+//        }
+    }
 }

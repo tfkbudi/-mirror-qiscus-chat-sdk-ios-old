@@ -23,50 +23,49 @@ class QiscusEventManager {
         var commentStatus : CommentStatus = status
         switch status {
         case .deleted:
+            // update status
             commentStatus = CommentStatus.deleted
             // delete from local
             QiscusCore.dataStore.deleteComment(uniqueID: comment.uniqId)
+            if let r = QiscusEventManager.shared.room {
+                if r.id == roomID {
+                    roomDelegate?.didComment(comment: comment, changeStatus: commentStatus)
+                }
+            }
+            // got new comment for other room
+            delegate?.onRoom(room, didChangeComment: comment, changeStatus: commentStatus)
             break
         default:
             break
         }
-        // update comment
-        comment.status = commentStatus
-        QiscusCore.dataStore.saveComment(comment)
-        if let r = QiscusEventManager.shared.room {
-            if r.id == roomID {
-                roomDelegate?.didComment(comment: comment, changeStatus: commentStatus)
-            }
-        }
-        // got new comment for other room
-        delegate?.onRoom(room, didChangeComment: comment, changeStatus: commentStatus)
+
         // check comment before, in local then update comment status in this room
         // very tricky, need to review v3
-        if var comments = QiscusCore.database.comment.find(roomId: room.id) {
+        if let comments = QiscusCore.database.comment.find(roomId: room.id) {
             guard let user = QiscusCore.getProfile() else { return }
-            comments = comments.filter({ $0.userEmail == user.email }) // filter my comment
-            comments = comments.filter({ $0.status.hashValue < commentStatus.hashValue }) // filter status < new status
-            comments = comments.sorted(by: { $0.date < $1.date}) // asc
+            var mycomments = comments.filter({ $0.userEmail == user.email }) // filter my comment
+            mycomments = mycomments.filter({ $0.status.hashValue < commentStatus.hashValue }) // filter status < new status
+            mycomments = mycomments.sorted(by: { $0.date < $1.date}) // asc
             // call api
-            guard let lastMyComment = comments.last else { return }
-            //
-            
-            
-            if commentStatus == .delivered {
-                _comments = comments.filter({ ($0.status == CommentStatus.sent)})
-            }else if commentStatus == .read {
-                _comments = comments.filter({ ($0.status == CommentStatus.delivered) || ($0.status == CommentStatus.sent)})
-            }
-            for c in _comments {
-                c.status = commentStatus
-                QiscusCore.dataStore.saveComment(c)
-                if let r = QiscusEventManager.shared.room {
-                    if r.id == roomID {
-                        roomDelegate?.didComment(comment: comment, changeStatus: commentStatus)
+            guard let lastMyComment = mycomments.last else { return }
+            QiscusCore.shared.readReceiptStatus(commentId: lastMyComment.id) { (result, error) in
+                if let _comment = result {
+                    // compare current status
+                    if lastMyComment.status.hashValue > _comment.status.hashValue {
+                        for c in mycomments {
+                            // update comment
+                            c.status = _comment.status
+                            QiscusCore.dataStore.saveComment(c)
+                            if let r = QiscusEventManager.shared.room {
+                                if r.id == roomID {
+                                    self.roomDelegate?.didComment(comment: c, changeStatus: _comment.status)
+                                }
+                            }
+                            // got new comment for other room
+                            self.delegate?.onRoom(room, didChangeComment: c, changeStatus: _comment.status)
+                        }
                     }
                 }
-                // got new comment for other room
-                delegate?.onRoom(room, didChangeComment: comment, changeStatus: commentStatus)
             }
         }
     }
@@ -76,6 +75,9 @@ class QiscusEventManager {
         if !self.checkNewComment(comment) { return }
         // update last comment and increase unread
         QiscusCore.dataStore.saveComment(comment)
+        // MARK: TODO receive new comment, need trotle
+        guard let user = QiscusCore.getProfile() else { return }
+        
         // filter event for room or qiscuscore
         if let r = QiscusEventManager.shared.room {
             if r.id == String(comment.roomId) {
@@ -83,11 +85,21 @@ class QiscusEventManager {
                 roomDelegate?.gotNewComment(comment: comment)
                 // read comment, assume you read from this room
                 QiscusCore.dataStore.readComment(comment)
+                // no update if your comment
+                if user.email != comment.userEmail {
+                    // call api receive, need optimize
+                    QiscusCore.shared.updateCommentReceive(roomId: r.id, lastCommentReceivedId: comment.id)
+                }
             }
         }
         // got new comment for other room
         if let room = QiscusCore.dataStore.findRoom(byID: String(comment.roomId)) {
             delegate?.onRoom(room, gotNewComment: comment)
+            // no update if your comment
+            if user.email != comment.userEmail {
+                // call api receive, need optimize
+                QiscusCore.shared.updateCommentReceive(roomId: room.id, lastCommentReceivedId: comment.id)
+            }
         }
     }
     
@@ -120,6 +132,7 @@ class QiscusEventManager {
     
     private func getDate(timestampUTC: String) -> Date {
         let date = Date(timeIntervalSince1970: Double(timestampUTC) ?? 0.0)
+        //        MARK : TODO fix it
 //        date.tim
 //        let df = DateFormatter()
 //        df.timeStyle    = DateFormatter.Style.medium
@@ -135,14 +148,4 @@ class QiscusEventManager {
     private func checkNewComment(_ data: CommentModel) -> Bool {
         return !(QiscusCore.dataStore.getCommentbyUniqueID(id: data.uniqId) != nil)
     }
-    
-//    // MARK: TODO comment status change
-//    func onComment(_ comment: CommentModel, statusChange status: CommentStatus) {
-//        // filter event for room or qiscuscore
-//        if let r = QiscusEventManager.shared.room {
-//            if r.id == String(comment.roomId) {
-//                self.roomDelegate?.didComment(comment: comment, changeStatus: status)
-//            }
-//        }
-//    }
 }
