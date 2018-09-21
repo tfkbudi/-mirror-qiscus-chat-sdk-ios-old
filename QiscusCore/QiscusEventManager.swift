@@ -20,18 +20,12 @@ class QiscusEventManager {
         guard let comment = QiscusCore.dataStore.getCommentbyUniqueID(id: id) else { return }
 
         // only 3 kind status from realtime read, deliverd, and deleted
-        var commentStatus : CommentStatus = CommentStatus.read
+        var commentStatus : CommentStatus = status
         switch status {
         case .deleted:
             commentStatus = CommentStatus.deleted
             // delete from local
             QiscusCore.dataStore.deleteComment(uniqueID: comment.uniqId)
-            break
-        case .read:
-            commentStatus = CommentStatus.read
-            break
-        case .delivered:
-            commentStatus = CommentStatus.delivered
             break
         default:
             break
@@ -48,8 +42,16 @@ class QiscusEventManager {
         delegate?.onRoom(room, didChangeComment: comment, changeStatus: commentStatus)
         // check comment before, in local then update comment status in this room
         // very tricky, need to review v3
-        if let comments = QiscusCore.database.comment.find(roomId: room.id) {
-            var _comments = [CommentModel]()
+        if var comments = QiscusCore.database.comment.find(roomId: room.id) {
+            guard let user = QiscusCore.getProfile() else { return }
+            comments = comments.filter({ $0.userEmail == user.email }) // filter my comment
+            comments = comments.filter({ $0.status.hashValue < commentStatus.hashValue }) // filter status < new status
+            comments = comments.sorted(by: { $0.date < $1.date}) // asc
+            // call api
+            guard let lastMyComment = comments.last else { return }
+            //
+            
+            
             if commentStatus == .delivered {
                 _comments = comments.filter({ ($0.status == CommentStatus.sent)})
             }else if commentStatus == .read {

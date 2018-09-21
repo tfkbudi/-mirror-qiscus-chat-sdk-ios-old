@@ -16,6 +16,7 @@ internal enum APIComment {
     case clear(roomChannelIds: [String])
     /// Search comment on server
     case search(keyword: String, roomID: String?, lastCommentID: Int?)
+    case statusComment(id: String)
 }
 
 extension APIComment : EndPoint {
@@ -37,12 +38,14 @@ extension APIComment : EndPoint {
             return "/clear_room_messages"
         case .search:
             return "/search_messages"
+        case .statusComment(_):
+            return "/comment_receipt"
         }
     }
     
     var httpMethod: HTTPMethod {
         switch self {
-        case .loadComment:
+        case .loadComment, .statusComment(_):
             return .get
         case .postComment, .updateStatus, .search( _, _, _):
             return .post
@@ -137,6 +140,12 @@ extension APIComment : EndPoint {
                 params["last_comment_id"] = commentID
             }
             return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
+        case .statusComment(let id):
+            var params = [
+                "token"                     : AUTHTOKEN,
+                "comment_id"                : id,
+                ] as [String : Any]
+            return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
         }
     }
 }
