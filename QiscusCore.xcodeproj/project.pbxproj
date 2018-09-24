@@ -57,6 +57,8 @@
 		3DDF12A5213307B900E15B36 /* QiscusEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF1284213307B900E15B36 /* QiscusEventManager.swift */; };
 		3DDF12A6213307B900E15B36 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3DDF1285213307B900E15B36 /* Info.plist */; };
 		3DDF12A7213307B900E15B36 /* QiscusRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF1286213307B900E15B36 /* QiscusRoom.swift */; };
+		3DE20493215888B700E3DF96 /* QiscusCore.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 3DE20492215888B600E3DF96 /* QiscusCore.podspec */; };
+		3DE20495215889A500E3DF96 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 3DE20494215889A500E3DF96 /* README.md */; };
 		3DEC8EFF214A20A700B1BC53 /* CommentStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEC8EFB214A20A600B1BC53 /* CommentStorage.swift */; };
 		3DEC8F00214A20A700B1BC53 /* QiscusDatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEC8EFC214A20A600B1BC53 /* QiscusDatabaseManager.swift */; };
 		3DEC8F01214A20A700B1BC53 /* MemberDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEC8EFD214A20A600B1BC53 /* MemberDatabase.swift */; };
@@ -133,6 +135,8 @@
 		3DDF1284213307B900E15B36 /* QiscusEventManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusEventManager.swift; sourceTree = "<group>"; };
 		3DDF1285213307B900E15B36 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3DDF1286213307B900E15B36 /* QiscusRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusRoom.swift; sourceTree = "<group>"; };
+		3DE20492215888B600E3DF96 /* QiscusCore.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = QiscusCore.podspec; path = Cocoapods/QiscusCore.podspec; sourceTree = "<group>"; };
+		3DE20494215889A500E3DF96 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = Cocoapods/README.md; sourceTree = "<group>"; };
 		3DEC8EFB214A20A600B1BC53 /* CommentStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentStorage.swift; sourceTree = "<group>"; };
 		3DEC8EFC214A20A600B1BC53 /* QiscusDatabaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusDatabaseManager.swift; sourceTree = "<group>"; };
 		3DEC8EFD214A20A600B1BC53 /* MemberDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemberDatabase.swift; sourceTree = "<group>"; };
@@ -193,6 +197,8 @@
 			isa = PBXGroup;
 			children = (
 				3D55939420FC8F3500AE35E5 /* QiscusCore.podspec */,
+				3DE20492215888B600E3DF96 /* QiscusCore.podspec */,
+				3DE20494215889A500E3DF96 /* README.md */,
 				3DDF1259213307B900E15B36 /* QiscusCore */,
 				3D55937120FC89CE00AE35E5 /* QiscusCoreTests */,
 				3D55938320FC8A0300AE35E5 /* Example */,
@@ -542,6 +548,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3DDF12A6213307B900E15B36 /* Info.plist in Resources */,
+				3DE20493215888B700E3DF96 /* QiscusCore.podspec in Resources */,
+				3DE20495215889A500E3DF96 /* README.md in Resources */,
 				3D55939520FC8F3500AE35E5 /* QiscusCore.podspec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
