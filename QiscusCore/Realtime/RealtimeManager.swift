@@ -43,12 +43,13 @@ class RealtimeManager {
         c.connect(username: username, password: password, delegate: self)
         // subcribe user token to get new comment
         if !c.subscribe(endpoint: .comment(token: password)) {
-            // subscribeNewComment(token: token)
             self.pendingSubscribeTopic.append(.comment(token: password))
+            QiscusLogger.errorPrint("failed to subscribe event comment or new comment, then queue in pending")
         }
         // subcribe user notification
         if !c.subscribe(endpoint: .notification(token: password)) {
             self.pendingSubscribeTopic.append(.notification(token: password))
+            QiscusLogger.errorPrint("failed to subscribe event comment or new comment, then queue in pending")
         }
     }
     
@@ -64,19 +65,23 @@ class RealtimeManager {
         for room in rooms {
             // subscribe comment deliverd receipt
             if !c.subscribe(endpoint: .delivery(roomID: room.id)){
-                QiscusLogger.errorPrint("failed to subscribe event deliver event from room \(room.name)")
+                self.pendingSubscribeTopic.append(.delivery(roomID: room.id))
+                QiscusLogger.errorPrint("failed to subscribe event deliver event from room \(room.name), then queue in pending")
             }
             // subscribe comment read
             if !c.subscribe(endpoint: .read(roomID: room.id)) {
-                QiscusLogger.errorPrint("failed to subscribe event read from room \(room.name)")
+                self.pendingSubscribeTopic.append(.read(roomID: room.id))
+                QiscusLogger.errorPrint("failed to subscribe event read from room \(room.name), then queue in pending")
             }
             if !c.subscribe(endpoint: .typing(roomID: room.id)) {
-                QiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name)")
+                self.pendingSubscribeTopic.append(.typing(roomID: room.id))
+                QiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
             }
             guard let participants = room.participants else { return }
             for u in participants {
                 if !c.subscribe(endpoint: .onlineStatus(user: u.email)) {
-                    QiscusLogger.errorPrint("failed to subscribe online status user \(u.email)")
+                    self.pendingSubscribeTopic.append(.onlineStatus(user: u.email))
+                    QiscusLogger.errorPrint("failed to subscribe online status user \(u.email), then queue in pending")
                 }
             }
         }
@@ -104,6 +109,7 @@ class RealtimeManager {
         guard let client = client else {
             return
         }
+        QiscusLogger.debugPrint("Resume pending subscribe")
         // resume pending subscribe
         if !pendingSubscribeTopic.isEmpty {
             for (i,t) in pendingSubscribeTopic.enumerated().reversed() {

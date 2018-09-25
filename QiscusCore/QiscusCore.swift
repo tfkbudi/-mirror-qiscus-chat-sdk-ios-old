@@ -190,7 +190,7 @@ public class QiscusCore: NSObject {
                     }
                 }
             }else {
-                completion(nil,QError(message: "please set last comment id"))
+                completion(nil,QError(message: "call sync without parameter is not work, please try to set last comment id"))
             }
         }else {
             QiscusCore.network.sync(lastCommentReceivedId: id, order: order, limit: limit) { (comments, error) in
