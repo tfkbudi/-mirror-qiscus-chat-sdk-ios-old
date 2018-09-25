@@ -25,7 +25,6 @@ class RealtimeManager {
         let config = QiscusRealtimeConfig(appName: appName, clientID: clientID)
         client = QiscusRealtime.init(withConfig: config)
         QiscusRealtime.enableDebugPrint = QiscusCore.enableDebugPrint
-        print("debug \(QiscusCore.enableDebugPrint) : \(QiscusRealtime.enableDebugPrint)")
     }
     
     func disconnect() {

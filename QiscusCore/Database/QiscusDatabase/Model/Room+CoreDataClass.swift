@@ -24,7 +24,7 @@ extension Room {
         do {
             results = try PresistentStore.context.fetch(fetchRequest)
         } catch  {
-            print(error)
+            //
         }
         return results
     }
