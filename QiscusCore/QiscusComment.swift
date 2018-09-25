@@ -122,6 +122,11 @@ extension QiscusCore {
     ///   - roomId: room id, where comment cooming
     ///   - lastCommentReadId: comment id
     public func updateCommentRead(roomId: String, lastCommentReadId commentID: String) {
+        // update unread comment
+        if let comment = QiscusCore.database.comment.find(id: commentID) {
+            _ = QiscusCore.database.room.updateReadComment(comment)
+        }
+        
         QiscusCore.network.updateCommentStatus(roomId: roomId, lastCommentReadId: commentID, lastCommentReceivedId: nil)
     }
     

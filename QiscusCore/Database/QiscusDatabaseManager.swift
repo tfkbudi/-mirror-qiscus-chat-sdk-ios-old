@@ -26,6 +26,22 @@ public class QiscusDatabaseManager {
 
 public class MemberDB {
     private var member : MemberDatabase = MemberDatabase()
+    
+    // MARK : Internal
+    internal func save(_ data: [MemberModel]) {
+        member.add(data)
+    }
+    
+    // MARK : Public
+    // take time, coz search in all rooms
+    public func find(byEmail email: String) -> MemberModel? {
+//        if let member = comment.find(byUniqueID: id) {
+//            return comment
+//        }else {
+            return member.find(predicate: NSPredicate(format: "email = %@", email))?.first
+//        }
+    }
+    
 }
 
 public class RoomDB {
@@ -34,10 +50,20 @@ public class RoomDB {
     // MARK : Private
     internal func save(_ rooms: [RoomModel]) {
         room.add(rooms)
+        
+        for r in rooms {
+            // save member
+            guard let participants = r.participants else { return }
+            QiscusCore.database.member.save(participants)
+        }
     }
     
     internal func updateLastComment(_ comment: CommentModel) -> Bool {
         return room.updateLastComment(comment)
+    }
+    
+    internal func updateReadComment(_ comment: CommentModel) -> Bool {
+        return room.updateUnreadComment(comment)
     }
     
     // MARK : Private
@@ -71,13 +97,6 @@ public class CommentDB {
             if !QiscusCore.database.room.updateLastComment(comment) {
                 QiscusLogger.errorPrint("filed to update last comment")
             }
-        }
-    }
-    
-    internal func read(_ data: CommentModel) {
-        // update unread count in room
-        if !QiscusCore.database.room.updateLastComment(data) {
-            QiscusLogger.errorPrint("filed to update unread count, mybe room not exist")
         }
     }
     

@@ -14,27 +14,5 @@ public class QiscusStorage {
     
     init() { }
     
-    // take time, coz search in all rooms
-    public func getMember(byEmail email: String) -> MemberModel? {
-        let rooms = QiscusCore.database.room.all()
-        for room in rooms {
-            guard let participants = room.participants else { return nil }
-            for p in participants {
-                if p.email == email {
-                    return p
-                }
-            }
-        }
-        return nil
-    }
-    
-    public func getMember(byEmail email: String, inRoom room: RoomModel) -> MemberModel? {
-        guard let participants = room.participants else { return nil }
-        for p in participants {
-            if p.email == email {
-                return p
-            }
-        }
-        return nil
-    }
+    // Move this to File Manager
 }

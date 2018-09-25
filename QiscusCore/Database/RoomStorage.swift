@@ -104,7 +104,8 @@ class RoomStorage {
             if comment.unixTimestamp > lastComment.unixTimestamp {
                 let new = r
                 new.lastComment = comment
-                new.unreadCount = new.unreadCount + 1
+                // check if myComment
+//                new.unreadCount = new.unreadCount + 1
                 // check data exist and update
                 let isUpdate = updateRoomDataEvent(old: r, new: new)
                 data = sort(data) // check data source
@@ -123,29 +124,14 @@ class RoomStorage {
     /// - Parameter comment: new comment object already read
     /// - Returns: true if room already exist and false if room unavailable
     func updateUnreadComment(_ comment: CommentModel) -> Bool {
-        if let r = find(byID: String(comment.roomId)) {
-            let new = r
-            // compare comment
-            if let lastComment = r.lastComment {
-                if comment.id == lastComment.id {
-                    new.unreadCount = new.unreadCount - 1
-                    let isUpdate = updateRoomDataEvent(old: r, new: new)
-                    // update data local
-//                    saveToLocal(data)
-                    return isUpdate
-                }else { return false }
-            }else { return false }
+        if let currentRoom = find(byID: String(comment.roomId)) {
+            let newRoom = currentRoom
+            newRoom.unreadCount = 0
+            return updateRoomDataEvent(old: currentRoom, new: newRoom)
         }else {
             return false
         }
     }
-    
-    // improve unread count, handle multiple login
-    func readComments(_ comment : [CommentModel]) {
-        // calculate
-        
-    }
-    
 }
 
 // MARK: Local Database

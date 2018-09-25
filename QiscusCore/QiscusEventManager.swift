@@ -83,8 +83,10 @@ class QiscusEventManager {
             if r.id == String(comment.roomId) {
                 // publish event new comment inside room
                 roomDelegate?.gotNewComment(comment: comment)
-                // read comment, assume you read from this room
-                QiscusCore.database.comment.read(comment)
+                // update unread count in room
+                if !QiscusCore.database.room.updateLastComment(comment) {
+                    QiscusLogger.errorPrint("filed to update unread count, mybe room not exist")
+                }
                 // no update if your comment
                 if user.email != comment.userEmail {
                     // call api receive, need optimize
@@ -107,27 +109,25 @@ class QiscusEventManager {
         // filter event for room or qiscuscore
         if let r = QiscusEventManager.shared.room {
             if r.id == roomID {
-                guard let member = QiscusCore.dataStore.getMember(byEmail: user) else { return }
+                guard let member = QiscusCore.database.member.find(byEmail: user) else { return }
                 roomDelegate?.onRoom(thisParticipant: member, isTyping: value)
             }
         }
         // got typing event for other room
         if let room = QiscusCore.database.room.find(id: roomID) {
-            guard let member = QiscusCore.dataStore.getMember(byEmail: user, inRoom: room) else { return }
+            guard let member = QiscusCore.database.member.find(byEmail: user) else { return }
             delegate?.onRoom(room, thisParticipant: member, isTyping: value)
         }
     }
     
     func gotEvent(email: String, isOnline: Bool, timestamp time: String) {
+        guard let member = QiscusCore.database.member.find(byEmail: email) else { return }
+        let date = getDate(timestampUTC: time)
         // filter event for room or qiscuscore
-        if let r = QiscusEventManager.shared.room {
-            guard let member = QiscusCore.dataStore.getMember(byEmail: email, inRoom: r) else { return }
-            let date = getDate(timestampUTC: time)
+        if QiscusEventManager.shared.room != nil {
             self.roomDelegate?.onChangeUser(member, onlineStatus: isOnline, whenTime: date)
         }
-        guard let user = QiscusCore.dataStore.getMember(byEmail: email) else { return }
-        let date = getDate(timestampUTC: time)
-        self.delegate?.onChange(user: user, isOnline: isOnline, at: date)
+        self.delegate?.onChange(user: member, isOnline: isOnline, at: date)
     }
     
     private func getDate(timestampUTC: String) -> Date {

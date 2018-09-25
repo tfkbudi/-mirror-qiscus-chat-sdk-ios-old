@@ -29,7 +29,7 @@ class MemberDatabase {
         // filter if room exist update, if not add
         for room in value {
             if let r = find(byID: room.id)  {
-                if !updateRoomDataEvent(old: r, new: room) {
+                if !updateMemberDataEvent(old: r, new: room) {
                     // add new room
                     data.append(room)
                 }
@@ -39,13 +39,12 @@ class MemberDatabase {
                 save(room)
             }
         }
-//        data = sort(data)
         // mark Todo update last comment
         QiscusLogger.debugPrint("number of room in local temp : \(data.count)")
     }
     
     // update/replace === identical object
-    private func updateRoomDataEvent(old: MemberModel, new: MemberModel) -> Bool{
+    private func updateMemberDataEvent(old: MemberModel, new: MemberModel) -> Bool{
         if let index = data.index(where: { $0 === old }) {
             data[index] = new
             save(new)
@@ -62,19 +61,6 @@ class MemberDatabase {
             return data.filter{ $0.id == id }.first
         }
     }
-    
-    // MARK: TODO Sorting not work
-//    func sort(_ data: [MemberModel]) -> [MemberModel]{
-//        var result = data
-//        result.sort { (room1, room2) -> Bool in
-//            if let comment1 = room1.lastComment, let comment2 = room2.lastComment {
-//                return comment1.unixTimestamp > comment2.unixTimestamp
-//            }else {
-//                return false
-//            }
-//        }
-//        return result
-//    }
 }
 
 // MARK: Local Database
