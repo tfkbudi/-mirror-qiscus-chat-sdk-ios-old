@@ -17,7 +17,7 @@ class QiscusEventManager {
     
     func gotMessageStatus(roomID: String, commentUniqueID id: String, status: CommentStatus){
         guard let room = QiscusCore.database.room.find(id: roomID) else { return }
-        guard let comment = QiscusCore.dataStore.getCommentbyUniqueID(id: id) else { return }
+        guard let comment = QiscusCore.database.comment.find(uniqueId: id) else { return }
 
         // only 3 kind status from realtime read, deliverd, and deleted
         var commentStatus : CommentStatus = status
@@ -26,7 +26,7 @@ class QiscusEventManager {
             // update status
             commentStatus = CommentStatus.deleted
             // delete from local
-            QiscusCore.dataStore.deleteComment(uniqueID: comment.uniqId)
+            QiscusCore.database.comment.delete(uniqId: comment.uniqId)
             if let r = QiscusEventManager.shared.room {
                 if r.id == roomID {
                     roomDelegate?.didComment(comment: comment, changeStatus: commentStatus)
@@ -55,7 +55,7 @@ class QiscusEventManager {
                         for c in mycomments {
                             // update comment
                             c.status = _comment.status
-                            QiscusCore.dataStore.saveComment(c)
+                            QiscusCore.database.comment.save([c])
                             if let r = QiscusEventManager.shared.room {
                                 if r.id == roomID {
                                     self.roomDelegate?.didComment(comment: c, changeStatus: _comment.status)
@@ -74,7 +74,7 @@ class QiscusEventManager {
         // check comment already in local, if true should be update comment status(not new comment for this device)
         if !self.checkNewComment(comment) { return }
         // update last comment and increase unread
-        QiscusCore.dataStore.saveComment(comment)
+        QiscusCore.database.comment.save([comment])
         // MARK: TODO receive new comment, need trotle
         guard let user = QiscusCore.getProfile() else { return }
         
@@ -84,7 +84,7 @@ class QiscusEventManager {
                 // publish event new comment inside room
                 roomDelegate?.gotNewComment(comment: comment)
                 // read comment, assume you read from this room
-                QiscusCore.dataStore.readComment(comment)
+                QiscusCore.database.comment.read(comment)
                 // no update if your comment
                 if user.email != comment.userEmail {
                     // call api receive, need optimize
@@ -146,6 +146,6 @@ class QiscusEventManager {
     /// - Parameter data: comment object
     /// - Returns: return true if comment is new or not exist in local
     private func checkNewComment(_ data: CommentModel) -> Bool {
-        return !(QiscusCore.dataStore.getCommentbyUniqueID(id: data.uniqId) != nil)
+        return !(QiscusCore.database.comment.find(uniqueId: data.uniqId) != nil)
     }
 }

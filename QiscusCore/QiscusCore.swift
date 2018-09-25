@@ -184,7 +184,7 @@ public class QiscusCore: NSObject {
                     }else {
                         if let results = comments {
                             // Save comment in local
-                            QiscusCore.dataStore.saveComments(results)
+                            QiscusCore.database.comment.save(results)
                         }
                         completion(comments, nil) // success
                     }
@@ -199,7 +199,7 @@ public class QiscusCore: NSObject {
                 }else {
                     if let results = comments {
                         // Save comment in local
-                        QiscusCore.dataStore.saveComments(results)
+                        QiscusCore.database.comment.save(results)
                     }
                     completion(comments, nil) // success
                 }

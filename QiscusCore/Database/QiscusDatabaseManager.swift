@@ -39,17 +39,6 @@ public class RoomDB {
     internal func updateLastComment(_ comment: CommentModel) -> Bool {
         return room.updateLastComment(comment)
     }
-    //    func saveRoom(_ data: RoomModel) {
-    //        room.add([data])
-    //    }
-    //
-    //    func saveRooms(_ data: [RoomModel]) {
-    //        room.add(data)
-    //    }
-    
-    //    func clearRoom() {
-    //        room.removeAll()
-    //    }
     
     // MARK : Private
     public func find(predicate: NSPredicate) -> [RoomModel]? {
@@ -73,6 +62,30 @@ public class RoomDB {
 public class CommentDB {
     private var comment = CommentStorage()
     
+    // MARK: Internal
+    internal func save(_ data: [CommentModel]) {
+        comment.add(data)
+        // make sure data sort by date
+        for comment in data.reversed() {
+            // update last comment in room, mean comment where you send
+            if !QiscusCore.database.room.updateLastComment(comment) {
+                QiscusLogger.errorPrint("filed to update last comment")
+            }
+        }
+    }
+    
+    internal func read(_ data: CommentModel) {
+        // update unread count in room
+        if !QiscusCore.database.room.updateLastComment(data) {
+            QiscusLogger.errorPrint("filed to update unread count, mybe room not exist")
+        }
+    }
+    
+    internal func delete(uniqId id: String) {
+        // MARK : TODO
+    }
+    
+    // MARK: Public comment
     public func all() -> [CommentModel] {
         return comment.all()
     }

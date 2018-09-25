@@ -30,20 +30,20 @@ extension QiscusCore {
             }
             
         }
-        // save in local
-        QiscusCore.dataStore.saveComment(_comment)
+        // save in local comment pending
+        QiscusCore.database.comment.save([_comment])
         // send message to server
         QiscusCore.network.postComment(roomId: comment.roomId, type: comment.type, message: comment.message, payload: comment.payload, extras: nil, uniqueTempId: comment.uniqId) { (result, error) in
             if let commentResult = result {
                 // save in local
                 commentResult.status = .sent
-                QiscusCore.dataStore.saveComment(commentResult)
+                QiscusCore.database.comment.save([commentResult])
                 comment.onChange(commentResult) // view data binding
                 completion(commentResult,nil)
             }else {
                 let _failed = comment
                 _failed.status  = .failed
-                QiscusCore.dataStore.saveComment(_failed)
+                QiscusCore.database.comment.save([_failed])
                 comment.onChange(_failed) // view data binding
                 completion(nil,QError.init(message: error ?? "Failed to send message"))
             }
@@ -63,7 +63,7 @@ extension QiscusCore {
         QiscusCore.network.loadComments(roomId: id, limit: limit) { (comments, error) in
             if let c = comments {
                 // save comment in local
-                QiscusCore.dataStore.saveComments(c)
+                QiscusCore.database.comment.save(c)
             }
             completion(comments,nil)
         }
@@ -81,7 +81,7 @@ extension QiscusCore {
         QiscusCore.network.loadComments(roomId: id, lastCommentId: commentID, timestamp: nil, after: nil, limit: limit) { (comments, error) in
             if let c = comments {
                 // save comment in local
-                QiscusCore.dataStore.saveComments(c)
+                QiscusCore.database.comment.save(c)
             }
             completion(comments,nil)
         }
@@ -143,7 +143,7 @@ extension QiscusCore {
         QiscusCore.network.readReceiptStatus(commentId: id) { (comment, message) in
             if let c = comment {
                 // save comment in local
-                QiscusCore.dataStore.saveComment(c)
+                QiscusCore.database.comment.save([c])
             }
             completion(comment,nil)
         }
