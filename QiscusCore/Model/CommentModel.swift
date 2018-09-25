@@ -139,12 +139,12 @@ enum CommentType: String {
     case accountLink                = "account_linking"
     case buttons                    = "buttons"
     case buttonPostbackResponse     = "button_postback_response"
-    case reply                      = "replay"
+    case reply                      = "reply"
     case systemEvent                = "system_event"
     case card                       = "card"
     case custom                     = "custom"
     case location                   = "location"
-    case contactPerson              = "contactPerson"
+    case contactPerson              = "contact_person"
     case carousel                   = "carousel"
     
     static let all = [text,fileAttachment,accountLink,buttons,buttonPostbackResponse,reply,systemEvent,card,custom,location,contactPerson,carousel]
