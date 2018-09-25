@@ -28,3 +28,20 @@ extension Room {
     @NSManaged  var localData: String?
 
 }
+
+// MARK: Generated accessors for members
+//extension Room {
+//    
+//    @objc(addMembersObject:)
+//    @NSManaged public func addToMembers(_ value: Member)
+//    
+//    @objc(removeMembersObject:)
+//    @NSManaged public func removeFromMembers(_ value: Member)
+//    
+//    @objc(addMembers:)
+//    @NSManaged public func addToMembers(_ values: NSSet)
+//    
+//    @objc(removeMembers:)
+//    @NSManaged public func removeFromMembers(_ values: NSSet)
+//    
+//}

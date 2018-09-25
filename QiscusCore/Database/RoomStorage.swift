@@ -195,6 +195,7 @@ extension RoomStorage {
         result.options       = core.options
         result.lastCommentId    = core.lastComment?.id
         result.type          = core.type.rawValue
+
         return result
     }
     
