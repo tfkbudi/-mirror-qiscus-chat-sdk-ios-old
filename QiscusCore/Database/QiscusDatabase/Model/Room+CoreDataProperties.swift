@@ -25,5 +25,6 @@ extension Room {
     @NSManaged  var avatarUrl: String?
     @NSManaged  var options: String?
     @NSManaged  var unreadCount: Int16
+    @NSManaged  var localData: String?
 
 }

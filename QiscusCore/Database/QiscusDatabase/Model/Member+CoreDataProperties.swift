@@ -23,5 +23,5 @@ extension Member {
     @NSManaged  var username: String?
     @NSManaged  var lastCommentReadId: Int64
     @NSManaged  var lastCommentReceivedId: Int64
-
+    @NSManaged  var localData: String?
 }

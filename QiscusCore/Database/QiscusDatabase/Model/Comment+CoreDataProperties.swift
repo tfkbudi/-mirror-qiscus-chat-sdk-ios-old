@@ -33,7 +33,6 @@ extension Comment {
     @NSManaged  var unixTimestamp: Int64
     @NSManaged  var timestamp: String?
     @NSManaged  var isPublicChannel: Bool
+    @NSManaged  var localData: String?
 
 }
-
-//public var payload              : [String:Any]? = nil
