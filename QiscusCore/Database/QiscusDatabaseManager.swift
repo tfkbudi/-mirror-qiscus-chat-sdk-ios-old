@@ -21,6 +21,7 @@ public class QiscusDatabaseManager {
     func clear() {
         QiscusDatabase.clear()
     }
+    
 }
 
 public class MemberDB {
@@ -30,6 +31,27 @@ public class MemberDB {
 public class RoomDB {
     private var room : RoomStorage = RoomStorage()
     
+    // MARK : Private
+    internal func save(_ rooms: [RoomModel]) {
+        room.add(rooms)
+    }
+    
+    internal func updateLastComment(_ comment: CommentModel) -> Bool {
+        return room.updateLastComment(comment)
+    }
+    //    func saveRoom(_ data: RoomModel) {
+    //        room.add([data])
+    //    }
+    //
+    //    func saveRooms(_ data: [RoomModel]) {
+    //        room.add(data)
+    //    }
+    
+    //    func clearRoom() {
+    //        room.removeAll()
+    //    }
+    
+    // MARK : Private
     public func find(predicate: NSPredicate) -> [RoomModel]? {
         return room.find(predicate: predicate)
     }
@@ -43,8 +65,7 @@ public class RoomDB {
     }
     
     public func all() -> [RoomModel] {
-        let rooms = room.all()
-        return rooms
+        return room.all()
     }
     
 }

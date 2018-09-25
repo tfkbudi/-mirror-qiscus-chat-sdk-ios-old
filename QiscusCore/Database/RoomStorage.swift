@@ -54,6 +54,12 @@ class RoomStorage {
     }
     
     // update/replace === identical object
+    /// Update or replace room object from array then save to db
+    ///
+    /// - Parameters:
+    ///   - old: old room object
+    ///   - new: new room object
+    /// - Returns: return true if room exist
     private func updateRoomDataEvent(old: RoomModel, new: RoomModel) -> Bool{
         if let index = data.index(where: { $0 === old }) {
             data[index] = new
@@ -91,17 +97,21 @@ class RoomStorage {
     /// - Returns: true if room already exist and false if room unavailable
     func updateLastComment(_ comment: CommentModel) -> Bool {
         if let r = find(byID: String(comment.roomId)) {
-            let new = r
-            new.lastComment = comment
-            // check uniqtimestamp if nil, assume new comment from your
-            if comment.unixTimestamp > 0 {
-                new.unreadCount = new.unreadCount + 1
+            guard let lastComment = r.lastComment else {
+                return false
             }
-            save(new)
-            // check data exist and update
-            let isUpdate = updateRoomDataEvent(old: r, new: new)
-            data = sort(data) // check data source
-            return isUpdate
+            // check uniqtimestamp if nil, assume new comment from your
+            if comment.unixTimestamp > lastComment.unixTimestamp {
+                let new = r
+                new.lastComment = comment
+                new.unreadCount = new.unreadCount + 1
+                // check data exist and update
+                let isUpdate = updateRoomDataEvent(old: r, new: new)
+                data = sort(data) // check data source
+                return isUpdate
+            }else {
+                return false
+            }
         }else {
             return false
         }
@@ -153,7 +163,7 @@ extension RoomStorage {
         Room.clear()
     }
     
-    func save(_ data: RoomModel) {
+    private func save(_ data: RoomModel) {
         if let db = Room.find(predicate: NSPredicate(format: "id = %@", data.id))?.first {
             let _comment = map(data, data: db) // update value
             _comment.update() // save to db
@@ -168,7 +178,7 @@ extension RoomStorage {
         }
     }
     
-    func loadFromLocal() -> [RoomModel] {
+    private func loadFromLocal() -> [RoomModel] {
         var results = [RoomModel]()
         let roomsdb = Room.all()
         

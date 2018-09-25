@@ -1,4 +1,4 @@
-//
+ //
 //  QiscusStorage.swift
 //  QiscusCore
 //
@@ -10,18 +10,16 @@ import Foundation
 
 public class QiscusStorage {
     static var shared   : QiscusStorage = QiscusStorage()
-    private var room    : RoomStorage!
     private var comment : CommentStorage!
     let fileManager     : QiscusFileManager = QiscusFileManager()
     
     init() {
-        room    = RoomStorage()
         comment = CommentStorage()
     }
     
     // take time, coz search in all rooms
     public func getMember(byEmail email: String) -> MemberModel? {
-        let rooms = self.getRooms()
+        let rooms = QiscusCore.database.room.all()
         for room in rooms {
             guard let participants = room.participants else { return nil }
             for p in participants {
@@ -45,30 +43,28 @@ public class QiscusStorage {
 }
 
 //  MARK: Room Storage
-extension QiscusStorage {
-    func getRooms() -> [RoomModel] {
-        let rooms = room.all()
-        // subscribe
-        QiscusCore.realtime.subscribeRooms(rooms: rooms)
-        return rooms
-    }
-    
-    func saveRoom(_ data: RoomModel) {
-        room.add([data])
-    }
-    
-    func saveRooms(_ data: [RoomModel]) {
-        room.add(data)
-    }
-    
-    func clearRoom() {
-        room.removeAll()
-    }
-    
-    func findRoom(byID id: String) -> RoomModel? {
-        return room.find(byID: id)
-    }
-}
+//extension QiscusStorage {
+//    func getRooms() -> [RoomModel] {
+//        let rooms = room.all()
+//        return rooms
+//    }
+//
+//    func saveRoom(_ data: RoomModel) {
+//        room.add([data])
+//    }
+//
+//    func saveRooms(_ data: [RoomModel]) {
+//        room.add(data)
+//    }
+//
+//    func clearRoom() {
+//        room.removeAll()
+//    }
+//
+//    func findRoom(byID id: String) -> RoomModel? {
+//        return room.find(byID: id)
+//    }
+//}
 
 // MARK: Comment Storage
 extension QiscusStorage {
@@ -85,7 +81,7 @@ extension QiscusStorage {
         // make sure data sort by date
         for comment in data.reversed() {
             // update last comment in room, mean comment where you send
-            if !room.updateLastComment(comment) {
+            if !QiscusCore.database.room.updateLastComment(comment) {
                 QiscusLogger.errorPrint("filed to update last comment, mybe room not exist")
             }
         }
@@ -98,14 +94,14 @@ extension QiscusStorage {
     func saveComment(_ data: CommentModel) {
         comment.add([data])
         // update last comment in room, mean comment where you send
-        if !room.updateLastComment(data) {
+        if !QiscusCore.database.room.updateLastComment(data) {
             QiscusLogger.errorPrint("filed to update last comment, mybe room not exist")
         }
     }
     
     func readComment(_ data: CommentModel) {
         // update unread count in room
-        if !room.updateUnreadComment(data) {
+        if !QiscusCore.database.room.updateLastComment(data) {
             QiscusLogger.errorPrint("filed to update unread count, mybe room not exist")
         }
     }

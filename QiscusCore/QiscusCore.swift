@@ -130,10 +130,8 @@ public class QiscusCore: NSObject {
     ///
     /// - Parameter completionHandler: The code to be executed once the request has finished, also give a user object and error.
     public static func logout(completion: @escaping (QError?) -> Void) {
-        // clear room
-        QiscusCore.dataStore.clearRoom()
-        // clear comment
-        QiscusCore.dataStore.clearComment()
+        // clear room and comment
+        QiscusCore.database.clear()
         // clear config
         ConfigManager.shared.clearConfig()
         // realtime disconnect

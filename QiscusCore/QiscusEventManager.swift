@@ -16,7 +16,7 @@ class QiscusEventManager {
     var room : RoomModel? = nil
     
     func gotMessageStatus(roomID: String, commentUniqueID id: String, status: CommentStatus){
-        guard let room = QiscusCore.dataStore.findRoom(byID: String(roomID)) else { return }
+        guard let room = QiscusCore.database.room.find(id: roomID) else { return }
         guard let comment = QiscusCore.dataStore.getCommentbyUniqueID(id: id) else { return }
 
         // only 3 kind status from realtime read, deliverd, and deleted
@@ -93,7 +93,7 @@ class QiscusEventManager {
             }
         }
         // got new comment for other room
-        if let room = QiscusCore.dataStore.findRoom(byID: String(comment.roomId)) {
+        if let room = QiscusCore.database.room.find(id: comment.roomId) {
             delegate?.onRoom(room, gotNewComment: comment)
             // no update if your comment
             if user.email != comment.userEmail {
@@ -112,7 +112,7 @@ class QiscusEventManager {
             }
         }
         // got typing event for other room
-        if let room = QiscusCore.dataStore.findRoom(byID: roomID) {
+        if let room = QiscusCore.database.room.find(id: roomID) {
             guard let member = QiscusCore.dataStore.getMember(byEmail: user, inRoom: room) else { return }
             delegate?.onRoom(room, thisParticipant: member, isTyping: value)
         }
