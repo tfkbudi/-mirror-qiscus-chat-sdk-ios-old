@@ -23,6 +23,6 @@ class QiscusDatabase {
     
     /// Remove all data from db
     static func clear() {
-        // clear all data
+        // MARK: TODO clear all data
     }
 }

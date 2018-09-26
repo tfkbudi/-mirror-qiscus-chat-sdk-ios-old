@@ -13,9 +13,9 @@ public class QiscusDatabaseManager {
     public var member   : MemberDB!
     
     init() {
+        self.member     = MemberDB()
         self.room       = RoomDB()
         self.comment    = CommentDB()
-        self.member     = MemberDB()
     }
     
     func clear() {
@@ -30,6 +30,15 @@ public class MemberDB {
     // MARK : Internal
     internal func save(_ data: [MemberModel]) {
         member.add(data)
+    }
+    
+    // manage relations rooms and member
+    internal func map(_ core: MemberModel, data: Member? = nil) -> Member {
+        return member.map(core, data: data)
+    }
+    
+    internal func map(member data: Member) -> MemberModel {
+        return member.map(data)
     }
     
     // MARK : Public

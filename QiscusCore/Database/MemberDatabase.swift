@@ -106,7 +106,7 @@ extension MemberDatabase {
     ///   - core: core model
     ///   - data: db model, if exist just update falue
     /// - Returns: db object
-    private func map(_ core: MemberModel, data: Member? = nil) -> Member {
+    internal func map(_ core: MemberModel, data: Member? = nil) -> Member {
         var result : Member
         if let _result = data {
             result = _result // Update data
@@ -122,7 +122,7 @@ extension MemberDatabase {
         return result
     }
     
-    private func map(_ member: Member) -> MemberModel {
+    internal func map(_ member: Member) -> MemberModel {
         let result = MemberModel()
         // check record data
         guard let id = member.id else { return result }

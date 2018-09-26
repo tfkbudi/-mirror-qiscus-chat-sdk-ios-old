@@ -151,12 +151,12 @@ extension RoomStorage {
     
     private func save(_ data: RoomModel) {
         if let db = Room.find(predicate: NSPredicate(format: "id = %@", data.id))?.first {
-            let _comment = map(data, data: db) // update value
-            _comment.update() // save to db
+            let _room = map(data, data: db) // update value
+            _room.update() // save to db
         }else {
             // save new room
-            let _comment = self.map(data)
-            _comment.save()
+            let _room = self.map(data)
+            _room.save()
             // get last comment and save to comment db
             if let comment = data.lastComment {
                 CommentStorage().save(comment)
@@ -195,7 +195,13 @@ extension RoomStorage {
         result.options       = core.options
         result.lastCommentId    = core.lastComment?.id
         result.type          = core.type.rawValue
-
+        // participants
+        if let participants = core.participants {
+            for p in participants {
+                let member = QiscusCore.database.member.map(p)
+                result.addToMembers(member)
+            }
+        }
         return result
     }
     
@@ -217,6 +223,13 @@ extension RoomStorage {
         
         // MARK: TODO get participants
         //            _room.participants
+        result.participants = [MemberModel]()
+        for p in room.members! {
+            let _member = p as! Member
+            if let memberModel = QiscusCore.database.member.find(byEmail: _member.email ?? "") {
+                result.participants?.append(memberModel)
+            }
+        }
         result.id            = id
         result.unreadCount   = Int(room.unreadCount)
         result.name          = name
