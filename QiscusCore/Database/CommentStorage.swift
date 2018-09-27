@@ -12,8 +12,10 @@ class CommentStorage {
 
     init() {
         // MARK: TODO load data rooms from local storage to var data
+    }
+    
+    func loadData() {
         self.data = self.loadFromLocal()
-        
     }
     
     func removeAll() {

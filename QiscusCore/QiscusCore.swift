@@ -43,6 +43,8 @@ public class QiscusCore: NSObject {
         config.appID    = id
         config.server   = ServerConfig(url: URL.init(string: "https://api.qiscus.com/api/v2/mobile")!, realtimeURL: nil, realtimePort: nil)
         realtime.setup(appName: id)
+        // Populate data from db
+        QiscusCore.database.loadData()
     }
     
     

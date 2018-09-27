@@ -22,6 +22,7 @@ class PresistentStore {
         let modelURL = QiscusCore.bundle.url(forResource: "Qiscus", withExtension: "momd")!
         let container = NSPersistentContainer.init(name: "Qiscus", managedObjectModel: NSManagedObjectModel(contentsOf: modelURL)!)
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
             if let error = error as NSError? {
 //                fatalError("Unresolved error \(error), \(error.userInfo)")
             }

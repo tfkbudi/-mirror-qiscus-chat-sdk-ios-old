@@ -18,6 +18,12 @@ public class QiscusDatabaseManager {
         self.comment    = CommentDB()
     }
     
+    func loadData() {
+        member.loadData()
+        room.loadData()
+        comment.loadData()
+    }
+    
     func clear() {
         QiscusDatabase.clear()
     }
@@ -28,6 +34,10 @@ public class MemberDB {
     private var member : MemberDatabase = MemberDatabase()
     
     // MARK : Internal
+    internal func loadData() {
+        member.loadData()
+    }
+    
     internal func save(_ data: [MemberModel]) {
         member.add(data)
     }
@@ -57,6 +67,10 @@ public class RoomDB {
     private var room : RoomStorage = RoomStorage()
     
     // MARK : Private
+    internal func loadData() {
+        room.loadData()
+    }
+    
     internal func save(_ rooms: [RoomModel]) {
         room.add(rooms)
         
@@ -98,6 +112,10 @@ public class CommentDB {
     private var comment = CommentStorage()
     
     // MARK: Internal
+    internal func loadData() {
+        comment.loadData()
+    }
+    
     internal func save(_ data: [CommentModel]) {
         comment.add(data)
         // make sure data sort by date

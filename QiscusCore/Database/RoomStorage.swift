@@ -17,6 +17,9 @@ class RoomStorage {
 
     init() {
         // MARK: TODO load data rooms from local storage to var data
+    }
+    
+    func loadData() {
         let local = loadFromLocal()
         data = sort(local)
     }
@@ -222,7 +225,6 @@ extension RoomStorage {
         }
         
         // MARK: TODO get participants
-        //            _room.participants
         result.participants = [MemberModel]()
         for p in room.members! {
             let _member = p as! Member
