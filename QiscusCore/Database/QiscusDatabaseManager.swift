@@ -121,9 +121,7 @@ public class CommentDB {
         // make sure data sort by date
         for comment in data.reversed() {
             // update last comment in room, mean comment where you send
-            if !QiscusCore.database.room.updateLastComment(comment) {
-                QiscusLogger.errorPrint("filed to update last comment")
-            }
+            _ = QiscusCore.database.room.updateLastComment(comment)
         }
     }
     

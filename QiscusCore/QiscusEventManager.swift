@@ -39,8 +39,10 @@ class QiscusEventManager {
             break
         }
 
-        // check comment before, in local then update comment status in this room
-        // very tricky, need to review v3
+        // MARK: TODO check if room single and read by opponent, reduce call API
+        
+        
+        // very tricky, need to review v3, calculating comment status in backend for group rooms
         if let comments = QiscusCore.database.comment.find(roomId: room.id) {
             guard let user = QiscusCore.getProfile() else { return }
             var mycomments = comments.filter({ $0.userEmail == user.email }) // filter my comment
@@ -51,18 +53,22 @@ class QiscusEventManager {
             QiscusCore.shared.readReceiptStatus(commentId: lastMyComment.id) { (result, error) in
                 if let _comment = result {
                     // compare current status
-                    if lastMyComment.status.hashValue > _comment.status.hashValue {
+                    if lastMyComment.status.hashValue < _comment.status.hashValue {
+                        // update all my comment status
                         for c in mycomments {
-                            // update comment
-                            c.status = _comment.status
-                            QiscusCore.database.comment.save([c])
-                            if let r = QiscusEventManager.shared.room {
-                                if r.id == roomID {
-                                    self.roomDelegate?.didComment(comment: c, changeStatus: _comment.status)
+                            // check lastStatus and compare
+                            if c.status.hashValue != _comment.status.hashValue {
+                                // update comment
+                                c.status = _comment.status
+                                QiscusCore.database.comment.save([c])
+                                if let r = QiscusEventManager.shared.room {
+                                    if r.id == roomID {
+                                        self.roomDelegate?.didComment(comment: c, changeStatus: _comment.status)
+                                    }
                                 }
+                                // got new comment for other room
+                                self.delegate?.onRoom(room, didChangeComment: c, changeStatus: _comment.status)
                             }
-                            // got new comment for other room
-                            self.delegate?.onRoom(room, didChangeComment: c, changeStatus: _comment.status)
                         }
                     }
                 }
@@ -73,35 +79,26 @@ class QiscusEventManager {
     func gotNewMessage(comment: CommentModel) {
         // check comment already in local, if true should be update comment status(not new comment for this device)
         if !self.checkNewComment(comment) { return }
-        // update last comment and increase unread
         QiscusCore.database.comment.save([comment])
         // MARK: TODO receive new comment, need trotle
         guard let user = QiscusCore.getProfile() else { return }
-        
-        // filter event for room or qiscuscore
+        // no update if your comment
+        if user.email != comment.userEmail {
+            // call api receive, need optimize
+            QiscusCore.shared.updateCommentReceive(roomId: comment.roomId, lastCommentReceivedId: comment.id)
+        }
+        // filter event for active room
         if let r = QiscusEventManager.shared.room {
             if r.id == String(comment.roomId) {
+                // we assume UI or developer is active listen this room
+                _ = QiscusCore.database.room.updateReadComment(comment)
                 // publish event new comment inside room
                 roomDelegate?.gotNewComment(comment: comment)
-                // update unread count in room
-                if !QiscusCore.database.room.updateLastComment(comment) {
-                    QiscusLogger.errorPrint("filed to update unread count, mybe room not exist")
-                }
-                // no update if your comment
-                if user.email != comment.userEmail {
-                    // call api receive, need optimize
-                    QiscusCore.shared.updateCommentReceive(roomId: r.id, lastCommentReceivedId: comment.id)
-                }
             }
         }
         // got new comment for other room
         if let room = QiscusCore.database.room.find(id: comment.roomId) {
             delegate?.onRoom(room, gotNewComment: comment)
-            // no update if your comment
-            if user.email != comment.userEmail {
-                // call api receive, need optimize
-                QiscusCore.shared.updateCommentReceive(roomId: room.id, lastCommentReceivedId: comment.id)
-            }
         }
     }
     
@@ -132,12 +129,6 @@ class QiscusEventManager {
     
     private func getDate(timestampUTC: String) -> Date {
         let date = Date(timeIntervalSince1970: Double(timestampUTC) ?? 0.0)
-        //        MARK : TODO fix it
-//        date.tim
-//        let df = DateFormatter()
-//        df.timeStyle    = DateFormatter.Style.medium
-//        df.dateStyle    = DateFormatter.Style.medium
-//        df.timeZone     = TimeZone.current
         return date
     }
     

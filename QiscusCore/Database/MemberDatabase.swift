@@ -31,20 +31,18 @@ class MemberDatabase {
     
     func add(_ value: [MemberModel]) {
         // filter if room exist update, if not add
-        for room in value {
-            if let r = find(byID: room.id)  {
-                if !updateMemberDataEvent(old: r, new: room) {
+        for m in value {
+            if let r = find(byID: m.id)  {
+                if !updateMemberDataEvent(old: r, new: m) {
                     // add new room
-                    data.append(room)
+                    data.append(m)
                 }
             }else {
                 // add new room
-                data.append(room)
-                save(room)
+                data.append(m)
+                save(m)
             }
         }
-        // mark Todo update last comment
-        QiscusLogger.debugPrint("number of room in local temp : \(data.count)")
     }
     
     // update/replace === identical object

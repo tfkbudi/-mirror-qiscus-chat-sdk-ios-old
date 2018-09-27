@@ -108,7 +108,7 @@ class RoomStorage {
                 let new = r
                 new.lastComment = comment
                 // check if myComment
-//                new.unreadCount = new.unreadCount + 1
+                new.unreadCount = new.unreadCount + 1
                 // check data exist and update
                 let isUpdate = updateRoomDataEvent(old: r, new: new)
                 data = sort(data) // check data source
