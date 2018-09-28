@@ -84,7 +84,7 @@ public class QiscusCore: NSObject {
     /// Get Nonce from SDK server. use when login with JWT
     ///
     /// - Parameter completion: @escaping with Optional(QNonce) and String Optional(error)
-    public class func getNonce(completion: @escaping (QNonce?, String?) -> Void) {
+    public class func getNonce(onSuccess: @escaping (QNonce) -> Void, onError: @escaping (QError) -> Void) {
         if config.appID == nil {
             fatalError("You need to set App ID")
         }
@@ -96,7 +96,7 @@ public class QiscusCore: NSObject {
     /// - userKey                       : user password
     /// - parameter completion          : The code to be executed once the request has finished, also give a user object and error.
     ///
-    public class func login(userID: String, userKey: String, completion: @escaping (UserModel?, String?) -> Void) {
+    public class func login(userID: String, userKey: String, onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
         if config.appID == nil {
             fatalError("You need to set App ID")
         }
@@ -115,7 +115,7 @@ public class QiscusCore: NSObject {
     /// - Parameters:
     ///   - token: identity token from your server, when you implement Nonce or JWT
     ///   - completion: The code to be executed once the request has finished, also give a user object and error.
-    public class func login(withIdentityToken token: String, completion: @escaping (UserModel?, QError?) -> Void) {
+    public class func login(withIdentityToken token: String, onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
         if config.appID == nil {
             fatalError("You need to set App ID")
         }
@@ -156,7 +156,7 @@ public class QiscusCore: NSObject {
     /// - Parameters:
     ///   - deviceToken: device token
     ///   - completion: The code to be executed once the request has finished
-    public func register(deviceToken : String, completion: @escaping (Bool, QError?) -> Void) {
+    public func register(deviceToken : String, onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
         QiscusCore.network.registerDeviceToken(deviceToken: deviceToken, completion: completion)
     }
     
@@ -165,7 +165,7 @@ public class QiscusCore: NSObject {
     /// - Parameters:
     ///   - deviceToken: device token
     ///   - completion: The code to be executed once the request has finished
-    public func remove(deviceToken : String, completion: @escaping (Bool, QError?) -> Void) {
+    public func remove(deviceToken : String, onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
         QiscusCore.network.removeDeviceToken(deviceToken: deviceToken, completion: completion)
     }
     
@@ -176,7 +176,7 @@ public class QiscusCore: NSObject {
     ///   - order: "asc" or "desc" only, lowercase. If other than that, it will assumed to "desc"
     ///   - limit: limit number of comment by default 20
     ///   - completion: return object array of comment and return error if exist
-    public func sync(lastCommentReceivedId id: String = "", order: String = "", limit: Int = 20, completion: @escaping ([CommentModel]?, QError?) -> Void) {
+    public func sync(lastCommentReceivedId id: String = "", order: String = "", limit: Int = 20, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
         if id.isEmpty {
             // get last comment id
             if let comment = QiscusCore.database.comment.all().last {
@@ -221,7 +221,7 @@ public class QiscusCore: NSObject {
     /// Get Profile from server
     ///
     /// - Parameter completion: The code to be executed once the request has finished
-    public func getProfile(completion: @escaping (UserModel?, QError?) -> Void) {
+    public func getProfile(onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
         QiscusCore.network.getProfile { (user, error) in
             if let profile = user{
                 completion(profile,nil)
@@ -256,7 +256,7 @@ public class QiscusCore: NSObject {
     ///   - displayName: nick name
     ///   - url: user avatar url
     ///   - completion: The code to be executed once the request has finished
-    public func updateProfile(displayName: String = "", avatarUrl url: URL? = nil, completion: @escaping (UserModel?, QError?) -> Void) {
+    public func updateProfile(displayName: String = "", avatarUrl url: URL? = nil, onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
         QiscusCore.network.updateProfile(displayName: displayName, avatarUrl: url, completion: completion)
     }
     
@@ -272,7 +272,7 @@ public class QiscusCore: NSObject {
     /// - Parameters:
     ///   - email: qiscus email user
     ///   - completion: Response object user and error if exist
-    public func blockUser(email: String, completion: @escaping (MemberModel?, QError?) -> Void) {
+    public func blockUser(email: String, onSuccess: @escaping (MemberModel) -> Void, onError: @escaping (QError) -> Void) {
         QiscusCore.network.blockUser(email: email, completion: completion)
     }
     
@@ -281,7 +281,7 @@ public class QiscusCore: NSObject {
     /// - Parameters:
     ///   - email: qiscus email user
     ///   - completion: Response object user and error if exist
-    public func unblockUser(email: String, completion: @escaping (MemberModel?, QError?) -> Void) {
+    public func unblockUser(email: String, onSuccess: @escaping (MemberModel) -> Void, onError: @escaping (QError) -> Void) {
         QiscusCore.network.blockUser(email: email, completion: completion)
     }
     
@@ -291,7 +291,7 @@ public class QiscusCore: NSObject {
     ///   - page: page for pagination
     ///   - limit: limit per page
     ///   - completion: Response array of object user and error if exist
-    public func listBlocked(page: Int?, limit:Int?, completion: @escaping ([MemberModel]?, QError?) -> Void) {
+    public func listBlocked(page: Int?, limit:Int?, onSuccess: @escaping ([MemberModel]) -> Void, onError: @escaping (QError) -> Void) {
         QiscusCore.network.getBlokedUser(page: page, limit: limit, completion: completion)
     }
     

@@ -67,22 +67,22 @@ extension NetworkManager {
     /// get nonce for JWT authentication
     ///
     /// - Parameter completion: @ecaping on getNonce request done return Optional(QNonce) and Optional(Error message)
-    func getNonce(completion: @escaping (QNonce?, String?)->Void) {
+    func getNonce(onSuccess: @escaping (QNonce) -> Void, onError: @escaping (QError) -> Void) {
         clientRouter.request(.nonce) { (data, response, error) in
             if error != nil {
-                completion(nil, "Please check your network connection.")
+                onError(QError(message: "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(nil, NetworkResponse.noData.rawValue)
+                        onError(QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     let response = ApiResponse.decode(from: responseData)
                     let nonce = QNonce(json: response)
-                    completion(nonce, nil)
+                    onSuccess(nonce)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
@@ -90,8 +90,7 @@ extension NetworkManager {
                     } catch {
                         
                     }
-
-                    completion(nil,errorMessage)
+                    onError(QError(message: errorMessage))
                 }
             }
         }
