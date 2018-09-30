@@ -173,24 +173,23 @@ extension NetworkManager {
     ///   - distincId: distinc id
     ///   - options: room options (string json)
     ///   - completion: @escaping when success update room, return created Optional(RoomModel), Optional([CommentModel]), Optional(String error message)
-    func getOrCreateRoomWithTarget(targetSdkEmail: String, avatarUrl: URL? = nil, distincId: String? = nil, options: String? = nil, completion: @escaping (RoomModel?, [CommentModel]?, String?) -> Void) {
+    func getOrCreateRoomWithTarget(targetSdkEmail: String, avatarUrl: URL? = nil, distincId: String? = nil, options: String? = nil, onSuccess: @escaping (RoomModel,[CommentModel]?) -> Void, onError: @escaping (QError) -> Void) {
         roomRouter.request(.roomWithTarget(email: [targetSdkEmail], avatarUrl: avatarUrl, distincId: distincId, options: options)) { (data, response, error) in
             if error != nil {
-                completion(nil, nil, "Please check your network connection.")
+                onError(QError(message: "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(nil, nil, NetworkResponse.noData.rawValue)
+                        onError(QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     let response    = ApiResponse.decode(from: responseData)
                     let room        = RoomApiResponse.room(from: response)
                     let comments    = CommentApiResponse.comments(from: response)
-                    completion(room, comments, nil)
-                    
+                    onSuccess(room,comments)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
@@ -198,8 +197,7 @@ extension NetworkManager {
                     } catch {
                         
                     }
-                    
-                    completion(nil, nil, errorMessage)
+                    onError(QError(message: errorMessage))
                 }
             }
         }

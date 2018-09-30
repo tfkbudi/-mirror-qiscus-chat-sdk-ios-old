@@ -15,21 +15,19 @@ extension QiscusCore {
     /// - Parameters:
     ///   - withUsers: Qiscus user emaial.
     ///   - completion: Qiscus Room Object and error if exist.
-    public func getRoom(withUser user: String, completion: @escaping (RoomModel?, QError?) -> Void) {
+    public func getRoom(withUser user: String, onSuccess: @escaping (RoomModel) -> Void, onError: @escaping (QError) -> Void) {
         // call api get_or_create_room_with_target
-        QiscusCore.network.getOrCreateRoomWithTarget(targetSdkEmail: user) { (room, comments, error) in
-            if let r = room {
-                QiscusCore.database.room.save([r])
-                // subscribe room from local
-                QiscusCore.realtime.subscribeRooms(rooms: [r])
-                completion(r, nil)
-            }else {
-                if let e = error {
-                    completion(nil, QError.init(message: e))
-                }else {
-                    completion(nil, QError.init(message: "Unexpectend results"))
-                }
+        QiscusCore.network.getOrCreateRoomWithTarget(targetSdkEmail: user, onSuccess: { (room, comments) in
+            QiscusCore.database.room.save([room])
+            // subscribe room from local
+            QiscusCore.realtime.subscribeRooms(rooms: [room])
+            if let _comments = comments {
+                // save comments
+                QiscusCore.database.comment.save(_comments)
             }
+            onSuccess(room)
+        }) { (error) in
+            onError(error)
         }
     }
     
@@ -38,7 +36,7 @@ extension QiscusCore {
     /// - Parameters:
     ///   - channel: channel name or channel id
     ///   - completion: Response Qiscus Room Object and error if exist.
-    public func getRoom(withChannel channel: String, completion: @escaping (RoomModel?, QError?) -> Void) {
+    public func getRoom(withChannel channel: String, onSuccess: @escaping (RoomModel) -> Void, onError: @escaping (QError) -> Void) {
         // call api get_room_by_id
         QiscusCore.network.getRoomInfo(roomIds: nil, roomUniqueIds: [channel], showParticipant: true, showRemoved: false) { (rooms, error) in
             if let room = rooms {
@@ -58,7 +56,7 @@ extension QiscusCore {
     /// - Parameters:
     ///   - withID: existing roomID from server or local db.
     ///   - completion: Response Qiscus Room Object and error if exist.
-    public func getRoom(withID id: String, completion: @escaping (RoomModel?, QError?) -> Void) {
+    public func getRoom(withID id: String, onSuccess: @escaping (RoomModel) -> Void, onError: @escaping (QError) -> Void) {
         // call api get_room_by_id
         QiscusCore.network.getRoomById(roomId: id) { (room, comments, error) in
             if let r = room {
@@ -83,7 +81,7 @@ extension QiscusCore {
     /// - Parameters:
     ///   - withId: array of room id
     ///   - completion: Response new Qiscus Room Object and error if exist.
-    public func getRooms(withId ids: [String], completion: @escaping ([RoomModel]?, QError?) -> Void) {
+    public func getRooms(withId ids: [String], onSuccess: @escaping ([RoomModel]) -> Void, onError: @escaping (QError) -> Void) {
         QiscusCore.network.getRoomInfo(roomIds: ids, roomUniqueIds: nil, showParticipant: false, showRemoved: false){ (rooms, error) in
             if let data = rooms {
                 // save room
@@ -100,7 +98,7 @@ extension QiscusCore {
     /// - Parameters:
     ///   - ids: Unique room id
     ///   - completion: Response new Qiscus Room Object and error if exist.
-    public func getRooms(withUniqueId ids: [String], completion: @escaping ([RoomModel]?, QError?) -> Void) {
+    public func getRooms(withUniqueId ids: [String], onSuccess: @escaping ([RoomModel]) -> Void, onError: @escaping (QError) -> Void) {
         QiscusCore.network.getRoomInfo(roomIds: nil, roomUniqueIds: ids, showParticipant: false, showRemoved: false){ (rooms, error) in
             if let data = rooms {
                 // save room
@@ -115,7 +113,7 @@ extension QiscusCore {
     /// getAllRoom
     ///
     /// - Parameter completion: First Completion will return data from local if exis, then return from server with meta data(totalpage,current). Response new Qiscus Room Object and error if exist.
-    public func getAllRoom(limit: Int? = nil, page: Int? = nil,completion: @escaping ([RoomModel]?, Meta?, QError?) -> Void) {
+    public func getAllRoom(limit: Int? = nil, page: Int? = nil,onSuccess: @escaping ([RoomModel],Meta) -> Void, onError: @escaping (QError) -> Void) {
         // api get room list
         QiscusCore.network.getRoomList(limit: limit, page: page) { (data, meta, error) in
             if let rooms = data {
@@ -136,7 +134,7 @@ extension QiscusCore {
     ///   - withName: Name of group
     ///   - participants: arrau of user id/qiscus email
     ///   - completion: Response Qiscus Room Object and error if exist.
-    public func createGroup(withName name: String, participants: [String], avatarUrl url: URL?, completion: @escaping (RoomModel?, QError?) -> Void) {
+    public func createGroup(withName name: String, participants: [String], avatarUrl url: URL?, onSuccess: @escaping (RoomModel) -> Void, onError: @escaping (QError) -> Void) {
         // call api create_room
         QiscusCore.network.createRoom(name: name, participants: participants, avatarUrl: url) { (room, error) in
             // save room
@@ -164,7 +162,7 @@ extension QiscusCore {
     ///   - avatarURL: new room Avatar
     ///   - options: String, and JSON string is approved
     ///   - completion: Response new Qiscus Room Object and error if exist.
-    public func updateRoom(withID id: String, name: String?, avatarURL url: URL?, options: String?, completion: @escaping (RoomModel?, QError?) -> Void) {
+    public func updateRoom(withID id: String, name: String?, avatarURL url: URL?, options: String?, onSuccess: @escaping (RoomModel) -> Void, onError: @escaping (QError) -> Void) {
         // call api update_room
         QiscusCore.network.updateRoom(roomId: id, roomName: name, avatarUrl: url, options: options, completion: completion)
     }
@@ -176,7 +174,7 @@ extension QiscusCore {
     ///   - avatarUrl: room avatar
     ///   - options: options, string or json string
     ///   - completion: Response new Qiscus Room Object and error if exist.
-    public func updateRoom(roomId id: String, name: String?, avatarUrl url: URL?, options: String? = nil, completion: @escaping (RoomModel?, QError?) -> Void) {
+    public func updateRoom(roomId id: String, name: String?, avatarUrl url: URL?, options: String? = nil, onSuccess: @escaping (RoomModel) -> Void, onError: @escaping (QError) -> Void) {
         QiscusCore.network.updateRoom(roomId: id, roomName: name, avatarUrl: url, options: options, completion: completion)
     }
     
@@ -186,7 +184,7 @@ extension QiscusCore {
     ///   - userEmails: qiscus user email
     ///   - roomId: room id
     ///   - completion:  Response new Qiscus Participant Object and error if exist.
-    public func addParticipant(userEmails emails: [String], roomId: String, completion: @escaping ([MemberModel]?, QError?) -> Void) {
+    public func addParticipant(userEmails emails: [String], roomId: String, onSuccess: @escaping ([MemberModel]) -> Void, onError: @escaping (QError) -> Void) {
         QiscusCore.network.addParticipants(roomId: roomId, userSdkEmail: emails, completion: completion)
     }
     
@@ -196,7 +194,7 @@ extension QiscusCore {
     ///   - emails: array qiscus email
     ///   - roomId: room id (group)
     ///   - completion: Response true if success and error if exist
-    public func removeParticipant(userEmails emails: [String], roomId: String, completion: @escaping (Bool, QError?) -> Void) {
+    public func removeParticipant(userEmails emails: [String], roomId: String, onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
         QiscusCore.network.removeParticipants(roomId: roomId, userSdkEmail: emails, completion: completion)
     }
     
@@ -205,7 +203,7 @@ extension QiscusCore {
     /// - Parameters:
     ///   - roomId: room id (group)
     ///   - completion: Response new Qiscus Participant Object and error if exist.
-    public func getParticipant(roomId: String, completion: @escaping ([MemberModel]?, QError?) -> Void) {
+    public func getParticipant(roomId: String, onSuccess: @escaping ([MemberModel]) -> Void, onError: @escaping (QError) -> Void ) {
         QiscusCore.network.getParticipants(roomId: roomId, completion: completion)
     }
 }
