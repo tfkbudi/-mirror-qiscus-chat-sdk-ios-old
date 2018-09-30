@@ -102,10 +102,10 @@ extension NetworkManager {
     /// - Parameters:
     ///   - identityToken: identity token from your server after verify the nonce
     ///   - completion: @escaping when success login retrun Optional(UserModel) and Optional(String error message)
-    func login(identityToken: String, completion: @escaping (UserModel?, QError?) -> Void) {
+    func login(identityToken: String, onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
         clientRouter.request(.loginRegisterJWT(identityToken: identityToken)) { (data, response, error) in
             if error != nil {
-                completion(nil, QError(message: "Please check your network connection."))
+                onError(QError(message: "Please check your network connection."))
             }
             
             if let response = response as? HTTPURLResponse {
@@ -113,22 +113,22 @@ extension NetworkManager {
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
+                        onError(QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     let response = ApiResponse.decode(from: responseData)
                     let user     = UserApiResponse.user(from: response)
-                    completion(user, nil)
+                    onSuccess(user)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         QiscusLogger.errorPrint(error as! String)
-                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
+                        onError( QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                     
-                    completion(nil,QError(message: errorMessage))
+                    onError(QError(message: errorMessage))
                 }
             }
         }
@@ -142,22 +142,22 @@ extension NetworkManager {
     ///   - username: user display name
     ///   - avatarUrl: user avatar url
     ///   - completion: @escaping on 
-    func login(email: String, password: String ,username : String? ,avatarUrl : String?, completion: @escaping (UserModel?, String?) -> Void) {
+    func login(email: String, password: String ,username : String? ,avatarUrl : String?, onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
         clientRouter.request(.loginRegister(user: email, password: password,username: username,avatarUrl: avatarUrl)) { (data, response, error) in
             if error != nil {
-                completion(nil, "Please check your network connection.")
+                onError(QError(message: "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(nil, NetworkResponse.noData.rawValue)
+                        onError(QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     let response = ApiResponse.decode(from: responseData)
                     let user     = UserApiResponse.user(from: response)
-                    completion(user, nil)
+                    onSuccess(user)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
@@ -165,8 +165,7 @@ extension NetworkManager {
                     } catch {
                         
                     }
-                    
-                    completion(nil,errorMessage)
+                    onError(QError(message:errorMessage))
                 }
             }
         }
@@ -178,22 +177,20 @@ extension NetworkManager {
     /// - Parameters:
     ///   - deviceToken: string device token for push notification
     ///   - completion: @escaping when success register device token to sdk server returning value bool(success or not) and Optional String(error message)
-    func registerDeviceToken(deviceToken: String, completion: @escaping (Bool, QError?) -> Void) {
+    func registerDeviceToken(deviceToken: String, onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
         clientRouter.request(.registerDeviceToken(token: deviceToken)) { (data, response, error) in
             if error != nil {
-                completion(false, QError(message: "Please check your network connection."))
+                onError(QError(message: "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let _ = data else {
-                        completion(false, QError(message: NetworkResponse.noData.rawValue))
+                        onError(QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
-                    
-                    completion(true, QError(message: "Success register device token"))
-                
+                    onSuccess(true)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
@@ -201,8 +198,7 @@ extension NetworkManager {
                     } catch {
                         
                     }
-                    
-                    completion(false,QError(message: errorMessage))
+                    onError(QError(message: errorMessage))
                 }
             }
         }
@@ -213,22 +209,20 @@ extension NetworkManager {
     /// - Parameters:
     ///   - deviceToken: string device token to be remove from server
     ///   - completion: @escaping when success remove device token to sdk server returning value bool(success or not) and Optional String(error message)
-    func removeDeviceToken(deviceToken: String, completion: @escaping (Bool, QError?) -> Void) {
+    func removeDeviceToken(deviceToken: String, onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
         clientRouter.request(.removeDeviceToken(token: deviceToken)) { (data, response, error) in
             if error != nil {
-                completion(false, QError(message: "Please check your network connection."))
+                onError(QError(message: "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let _ = data else {
-                        completion(false, QError(message: NetworkResponse.noData.rawValue))
+                        onError(QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
-                    
-                    completion(true, QError(message: "Success register device token"))
-                    
+                    onSuccess(true)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
@@ -236,8 +230,7 @@ extension NetworkManager {
                     } catch {
                         
                     }
-                    
-                    completion(false,QError(message: errorMessage))
+                    onError(QError(message: errorMessage))
                 }
             }
         }
@@ -283,26 +276,29 @@ extension NetworkManager {
     ///   - displayName: user new displayname
     ///   - avatarUrl: user new avatar url
     ///   - completion: @escaping when finish updating user profile return update Optional(UserModel) and Optional(String error message)
-    func updateProfile(displayName: String = "", avatarUrl: URL? = nil, completion: @escaping (UserModel?, QError?) -> Void) {
+    func updateProfile(displayName: String = "", avatarUrl: URL? = nil,  onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
         if displayName.isEmpty && avatarUrl == nil {
+            onError(QError(message: "Please set display name"))
             return
         }
-        
         clientRouter.request(.updateMyProfile(name: displayName, avatarUrl: avatarUrl?.absoluteString)) { (data, response, error) in
             if error != nil {
-                completion(nil, QError(message: "Please check your network connection."))
+                onError(QError(message: "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
+                        onError(QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     let response = ApiResponse.decode(from: responseData)
-                    let user     = UserApiResponse.user(from: response)
-                    completion(user, nil)
+                    let user = UserApiResponse.user(from: response)
+                        onSuccess(user)
+//                    }else {
+//                        onError(QError(message: "Failed to parsing results"))
+//                    }
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
@@ -311,7 +307,7 @@ extension NetworkManager {
                         
                     }
                     
-                    completion(nil, QError(message: errorMessage))
+                    onError(QError(message: errorMessage))
                 }
             }
         }
@@ -347,10 +343,10 @@ extension NetworkManager {
         }
     }
     
-    func blockUser(email: String, completion: @escaping (MemberModel?, QError?) -> Void) {
+    func blockUser(email: String, onSuccess: @escaping (MemberModel) -> Void, onError: @escaping (QError) -> Void) {
         userRouter.request(.block(email: email)) { (data, response, error) in
             if error != nil {
-                completion(nil, QError(message: "Please check your network connection."))
+                onError(QError(message: "Please check your network connection."))
             }
             
             if let response = response as? HTTPURLResponse {
@@ -358,22 +354,21 @@ extension NetworkManager {
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
+                        onError(QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     let response    = ApiResponse.decode(from: responseData)
                     let member      = UserApiResponse.blockUser(from: response)
-                    completion(member, nil)
+                    onSuccess(member)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         QiscusLogger.errorPrint(error as! String)
-                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
+                        onError(QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
-                    
-                    completion(nil,QError(message: errorMessage))
+                    onError(QError(message: errorMessage))
                 }
             }
         }
@@ -411,33 +406,34 @@ extension NetworkManager {
         }
     }
     
-    func getBlokedUser(page: Int?, limit: Int?, completion: @escaping ([MemberModel]?, QError?) -> Void) {
+    func getBlokedUser(page: Int?, limit: Int?, onSuccess: @escaping ([MemberModel]) -> Void, onError: @escaping (QError) -> Void) {
         userRouter.request(.listBloked(page: page, limit: limit)) { (data, response, error) in
             if error != nil {
-                completion(nil, QError(message: "Please check your network connection."))
+                onError(QError(message: "Please check your network connection."))
             }
-            
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
+                        onError(QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     let response    = ApiResponse.decode(from: responseData)
-                    let members     = UserApiResponse.blockedUsers(from: response)
-                    completion(members, nil)
+                    if let members     = UserApiResponse.blockedUsers(from: response) {
+                        onSuccess(members)
+                    }else {
+                        onError(QError(message: "Result failed to parse"))
+                    }
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
                         QiscusLogger.errorPrint(error as! String)
-                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
+                        onError(QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
-                    
-                    completion(nil,QError(message: errorMessage))
+                    onError(QError(message: errorMessage))
                 }
             }
         }

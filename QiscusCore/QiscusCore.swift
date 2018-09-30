@@ -88,7 +88,7 @@ public class QiscusCore: NSObject {
         if config.appID == nil {
             fatalError("You need to set App ID")
         }
-        network.getNonce(completion: completion)
+        network.getNonce(onSuccess: onSuccess, onError: onError)
     }
     
     /// SDK Connect with userId and passkey. The handler to be called once the request has finished.
@@ -100,13 +100,13 @@ public class QiscusCore: NSObject {
         if config.appID == nil {
             fatalError("You need to set App ID")
         }
-        network.login(email: userID, password: userKey, username: nil, avatarUrl: nil) { (results, error) in
-            if let user = results {
-                // save user in local
-                ConfigManager.shared.user = user
-                realtime.connect(username: user.email, password: user.token)
-            }
-            completion(results, error)
+        network.login(email: userID, password: userKey, username: nil, avatarUrl: nil, onSuccess: { (user) in
+            // save user in local
+            ConfigManager.shared.user = user
+            realtime.connect(username: user.email, password: user.token)
+            onSuccess(user)
+        }) { (error) in
+            onError(error)
         }
     }
     
@@ -119,12 +119,12 @@ public class QiscusCore: NSObject {
         if config.appID == nil {
             fatalError("You need to set App ID")
         }
-        network.login(identityToken: token) { (results, error) in
-            if let user = results {
-                // save user in local
-                ConfigManager.shared.user = user
-            }
-            completion(results, error)
+        network.login(identityToken: token, onSuccess: { (user) in
+            // save user in local
+            ConfigManager.shared.user = user
+            onSuccess(user)
+        }) { (error) in
+            onError(error)
         }
     }
     
@@ -157,7 +157,7 @@ public class QiscusCore: NSObject {
     ///   - deviceToken: device token
     ///   - completion: The code to be executed once the request has finished
     public func register(deviceToken : String, onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.registerDeviceToken(deviceToken: deviceToken, completion: completion)
+        QiscusCore.network.registerDeviceToken(deviceToken: deviceToken, onSuccess: onSuccess, onError: onError)
     }
     
     /// Remove device token
@@ -166,7 +166,7 @@ public class QiscusCore: NSObject {
     ///   - deviceToken: device token
     ///   - completion: The code to be executed once the request has finished
     public func remove(deviceToken : String, onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.removeDeviceToken(deviceToken: deviceToken, completion: completion)
+        QiscusCore.network.removeDeviceToken(deviceToken: deviceToken, onSuccess: onSuccess, onError: onError)
     }
     
     /// Sync comment
@@ -182,28 +182,28 @@ public class QiscusCore: NSObject {
             if let comment = QiscusCore.database.comment.all().last {
                 QiscusCore.network.sync(lastCommentReceivedId: comment.id, order: order, limit: limit) { (comments, error) in
                     if let message = error {
-                        completion(comments,QError.init(message: message))
+                        onError(QError(message: message))
                     }else {
                         if let results = comments {
                             // Save comment in local
                             QiscusCore.database.comment.save(results)
+                            onSuccess(results)
                         }
-                        completion(comments, nil) // success
                     }
                 }
             }else {
-                completion(nil,QError(message: "call sync without parameter is not work, please try to set last comment id"))
+                onError(QError(message: "call sync without parameter is not work, please try to set last comment id"))
             }
         }else {
             QiscusCore.network.sync(lastCommentReceivedId: id, order: order, limit: limit) { (comments, error) in
                 if let message = error {
-                    completion(comments,QError.init(message: message))
+                    onError(QError.init(message: message))
                 }else {
                     if let results = comments {
                         // Save comment in local
                         QiscusCore.database.comment.save(results)
+                        onSuccess(results)
                     }
-                    completion(comments, nil) // success
                 }
             }
         }
@@ -224,10 +224,10 @@ public class QiscusCore: NSObject {
     public func getProfile(onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
         QiscusCore.network.getProfile { (user, error) in
             if let profile = user{
-                completion(profile,nil)
+                onSuccess(profile)
             }
             if let message = error {
-                completion(nil,QError.init(message: message))
+                onError(QError.init(message: message))
             }
         }
     }
@@ -257,7 +257,8 @@ public class QiscusCore: NSObject {
     ///   - url: user avatar url
     ///   - completion: The code to be executed once the request has finished
     public func updateProfile(displayName: String = "", avatarUrl url: URL? = nil, onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.updateProfile(displayName: displayName, avatarUrl: url, completion: completion)
+        // MARK : TODO save profile
+        QiscusCore.network.updateProfile(displayName: displayName, avatarUrl: url, onSuccess: onSuccess, onError: onError)
     }
     
     /// Get total unreac count by user
@@ -273,7 +274,7 @@ public class QiscusCore: NSObject {
     ///   - email: qiscus email user
     ///   - completion: Response object user and error if exist
     public func blockUser(email: String, onSuccess: @escaping (MemberModel) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.blockUser(email: email, completion: completion)
+        QiscusCore.network.blockUser(email: email, onSuccess: onSuccess, onError: onError)
     }
     
     /// Unblock Qiscus User
@@ -282,7 +283,7 @@ public class QiscusCore: NSObject {
     ///   - email: qiscus email user
     ///   - completion: Response object user and error if exist
     public func unblockUser(email: String, onSuccess: @escaping (MemberModel) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.blockUser(email: email, completion: completion)
+        QiscusCore.network.blockUser(email: email, onSuccess: onSuccess, onError: onError)
     }
     
     /// Get blocked user
@@ -292,7 +293,7 @@ public class QiscusCore: NSObject {
     ///   - limit: limit per page
     ///   - completion: Response array of object user and error if exist
     public func listBlocked(page: Int?, limit:Int?, onSuccess: @escaping ([MemberModel]) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.getBlokedUser(page: page, limit: limit, completion: completion)
+        QiscusCore.network.getBlokedUser(page: page, limit: limit, onSuccess: onSuccess, onError: onError)
     }
     
     /// Upload to qiscus server
