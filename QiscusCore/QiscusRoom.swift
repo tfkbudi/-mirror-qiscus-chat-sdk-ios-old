@@ -44,9 +44,13 @@ extension QiscusCore {
                 QiscusCore.database.room.save(room)
                 // subscribe room from local
                 QiscusCore.realtime.subscribeRooms(rooms: room)
-                completion(room.first,nil)
+                if let first = room.first {
+                    onSuccess(first)
+                }else {
+                    onError(QError(message: "Unexpected error"))
+                }
             }else {
-                completion(nil,error)
+                onError(error ?? QError(message: "Unexpected error"))
             }
         }
     }
@@ -64,12 +68,12 @@ extension QiscusCore {
                 QiscusCore.database.room.save([r])
                 // subscribe room from local
                 QiscusCore.realtime.subscribeRooms(rooms: [r])
-                completion(r, nil)
+                onSuccess(r)
             }else {
                 if let e = error {
-                    completion(nil, QError.init(message: e))
+                    onError(QError.init(message: e))
                 }else {
-                    completion(nil, QError.init(message: "Unexpectend results"))
+                    onError(QError.init(message: "Unexpectend results"))
                 }
             }
         }
@@ -88,8 +92,10 @@ extension QiscusCore {
                 QiscusCore.database.room.save(data)
                 // subscribe room from local
                 QiscusCore.realtime.subscribeRooms(rooms: data)
+                onSuccess(data)
+            }else {
+                onError(error ?? QError(message: "Unexpected error"))
             }
-            completion(rooms,error)
         }
     }
     
@@ -105,15 +111,17 @@ extension QiscusCore {
                 QiscusCore.database.room.save(data)
                 // subscribe room from local
                 QiscusCore.realtime.subscribeRooms(rooms: data)
+                onSuccess(data)
+            }else {
+                onError(error ?? QError(message: "Unexpected error"))
             }
-            completion(rooms,error)
         }
     }
     
     /// getAllRoom
     ///
     /// - Parameter completion: First Completion will return data from local if exis, then return from server with meta data(totalpage,current). Response new Qiscus Room Object and error if exist.
-    public func getAllRoom(limit: Int? = nil, page: Int? = nil,onSuccess: @escaping ([RoomModel],Meta) -> Void, onError: @escaping (QError) -> Void) {
+    public func getAllRoom(limit: Int? = nil, page: Int? = nil,onSuccess: @escaping ([RoomModel],Meta?) -> Void, onError: @escaping (QError) -> Void) {
         // api get room list
         QiscusCore.network.getRoomList(limit: limit, page: page) { (data, meta, error) in
             if let rooms = data {
@@ -121,9 +129,9 @@ extension QiscusCore {
                 QiscusCore.database.room.save(rooms)
                 // subscribe room from local
                 QiscusCore.realtime.subscribeRooms(rooms: rooms)
-                completion(data,meta,nil)
+                onSuccess(rooms,meta)
             }else {
-                completion(data,meta,QError.init(message: error ?? "Something Wrong"))
+                onError(QError.init(message: error ?? "Something Wrong"))
             }
         }
     }
@@ -142,13 +150,13 @@ extension QiscusCore {
                 QiscusCore.database.room.save([data])
                 // subscribe room from local
                 QiscusCore.realtime.subscribeRooms(rooms: [data])
-                completion(room,nil)
+                onSuccess(data)
             }else {
                 guard let message = error else {
-                    completion(nil,QError.init(message: "Something Wrong"))
+                    onError(QError.init(message: "Something Wrong"))
                     return
                 }
-                completion(nil,QError.init(message: message))
+                onError(QError.init(message: message))
             }
             
         }
@@ -164,7 +172,20 @@ extension QiscusCore {
     ///   - completion: Response new Qiscus Room Object and error if exist.
     public func updateRoom(withID id: String, name: String?, avatarURL url: URL?, options: String?, onSuccess: @escaping (RoomModel) -> Void, onError: @escaping (QError) -> Void) {
         // call api update_room
-        QiscusCore.network.updateRoom(roomId: id, roomName: name, avatarUrl: url, options: options, completion: completion)
+        QiscusCore.network.updateRoom(roomId: id, roomName: name, avatarUrl: url, options: options) { (room, error) in
+            if let data = room {
+                QiscusCore.database.room.save([data])
+                // subscribe room from local
+                QiscusCore.realtime.subscribeRooms(rooms: [data])
+                onSuccess(data)
+            }else {
+                guard let message = error else {
+                    onError(QError.init(message: "Something Wrong"))
+                    return
+                }
+                onError(message)
+            }
+        }
     }
 
     /// Update Room
@@ -174,9 +195,9 @@ extension QiscusCore {
     ///   - avatarUrl: room avatar
     ///   - options: options, string or json string
     ///   - completion: Response new Qiscus Room Object and error if exist.
-    public func updateRoom(roomId id: String, name: String?, avatarUrl url: URL?, options: String? = nil, onSuccess: @escaping (RoomModel) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.updateRoom(roomId: id, roomName: name, avatarUrl: url, options: options, completion: completion)
-    }
+//    public func updateRoom(roomId id: String, name: String?, avatarUrl url: URL?, options: String? = nil, onSuccess: @escaping (RoomModel) -> Void, onError: @escaping (QError) -> Void) {
+//        QiscusCore.network.updateRoom(roomId: id, roomName: name, avatarUrl: url, options: options, completion: completion)
+//    }
     
     /// Add new participant in room(Group)
     ///
@@ -185,7 +206,17 @@ extension QiscusCore {
     ///   - roomId: room id
     ///   - completion:  Response new Qiscus Participant Object and error if exist.
     public func addParticipant(userEmails emails: [String], roomId: String, onSuccess: @escaping ([MemberModel]) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.addParticipants(roomId: roomId, userSdkEmail: emails, completion: completion)
+        QiscusCore.network.addParticipants(roomId: roomId, userSdkEmail: emails) { (members, error) in
+            if let _members = members {
+                onSuccess(_members)
+            }else{
+                if let _error = error {
+                    onError(_error)
+                }else {
+                    onError(QError(message: "Unexpected Error"))
+                }
+            }
+        }
     }
     
     /// remove users from room(Group)
@@ -195,7 +226,17 @@ extension QiscusCore {
     ///   - roomId: room id (group)
     ///   - completion: Response true if success and error if exist
     public func removeParticipant(userEmails emails: [String], roomId: String, onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.removeParticipants(roomId: roomId, userSdkEmail: emails, completion: completion)
+        QiscusCore.network.removeParticipants(roomId: roomId, userSdkEmail: emails) { (result, error) in
+            if result {
+                onSuccess(result)
+            }else {
+                if let _error = error {
+                    onError(_error)
+                }else {
+                    onError(QError(message: "Unexpected Error"))
+                }
+            }
+        }
     }
     
     /// get participant by room id
@@ -204,6 +245,16 @@ extension QiscusCore {
     ///   - roomId: room id (group)
     ///   - completion: Response new Qiscus Participant Object and error if exist.
     public func getParticipant(roomId: String, onSuccess: @escaping ([MemberModel]) -> Void, onError: @escaping (QError) -> Void ) {
-        QiscusCore.network.getParticipants(roomId: roomId, completion: completion)
+        QiscusCore.network.getParticipants(roomId: roomId) { (members, error) in
+            if let _members = members {
+                onSuccess(_members)
+            }else{
+                if let _error = error {
+                    onError(_error)
+                }else {
+                    onError(QError(message: "Unexpected Error"))
+                }
+            }
+        }
     }
 }
