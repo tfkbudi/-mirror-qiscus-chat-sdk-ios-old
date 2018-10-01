@@ -23,10 +23,22 @@ class CommentStorage {
         self.clearDB() // clear db
     }
     
-    
-//    func delete(byID: String) {
-//        
-//    }
+    func delete(byUniqueID id: String) -> Bool {
+        // remove from memory
+        if let index = self.data.lastIndex(where: {$0.uniqId == id}) {
+            data.remove(at: index)
+        }else {
+            return false
+        }
+        
+        // remove from db
+        if let db = Comment.find(predicate: NSPredicate(format: "uniqId = %@", id))?.first {
+            db.remove()
+        }else {
+            return false
+        }
+        return true
+    }
     
     func all() -> [CommentModel] {
         return data
@@ -236,7 +248,4 @@ extension Dictionary {
         return json
     }
 }
-
-// MARK: TODO map
-//public var payload              : [String:Any]? = nil
 

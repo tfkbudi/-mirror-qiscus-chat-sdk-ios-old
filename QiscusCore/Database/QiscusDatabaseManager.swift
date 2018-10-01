@@ -38,8 +38,15 @@ public class MemberDB {
         member.loadData()
     }
     
-    internal func save(_ data: [MemberModel]) {
-        member.add(data)
+    internal func save(_ data: [MemberModel], roomID id: String) {
+        for m in data {
+            guard let room = QiscusCore.database.room.find(id: id) else {
+                QiscusLogger.errorPrint("Failed to save member \(data) in db, mybe room not found")
+                return
+            }
+            let roomDB = QiscusCore.database.room.map(room)
+            member.add([m], inRoom: roomDB)
+        }
     }
     
     // manage relations rooms and member
@@ -71,13 +78,17 @@ public class RoomDB {
         room.loadData()
     }
     
+    internal func map(_ core: RoomModel, data: Room? = nil) -> Room {
+        return room.map(core, data: data)
+    }
+    
     internal func save(_ rooms: [RoomModel]) {
         room.add(rooms)
         
         for r in rooms {
             // save member
             guard let participants = r.participants else { return }
-            QiscusCore.database.member.save(participants)
+            QiscusCore.database.member.save(participants, roomID: r.id)
         }
     }
     
@@ -125,8 +136,9 @@ public class CommentDB {
         }
     }
     
-    internal func delete(uniqId id: String) {
+    internal func delete(uniqId id: String) -> Bool {
         // MARK : TODO
+        return comment.delete(byUniqueID: id)
     }
     
     // MARK: Public comment

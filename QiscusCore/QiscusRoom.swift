@@ -208,6 +208,8 @@ extension QiscusCore {
     public func addParticipant(userEmails emails: [String], roomId: String, onSuccess: @escaping ([MemberModel]) -> Void, onError: @escaping (QError) -> Void) {
         QiscusCore.network.addParticipants(roomId: roomId, userSdkEmail: emails) { (members, error) in
             if let _members = members {
+                // Save participant in local
+                QiscusCore.database.member.save(_members, roomID: roomId)
                 onSuccess(_members)
             }else{
                 if let _error = error {

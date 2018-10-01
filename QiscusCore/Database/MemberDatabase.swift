@@ -29,27 +29,27 @@ class MemberDatabase {
         return data
     }
     
-    func add(_ value: [MemberModel]) {
+    func add(_ value: [MemberModel], inRoom room: Room) {
         // filter if room exist update, if not add
         for m in value {
             if let r = find(byID: m.id)  {
-                if !updateMemberDataEvent(old: r, new: m) {
+                if !updateMemberDataEvent(old: r, new: m, inRoom: room) {
                     // add new room
                     data.append(m)
                 }
             }else {
                 // add new room
                 data.append(m)
-                save(m)
+                save(m, inRoom: room)
             }
         }
     }
     
     // update/replace === identical object
-    private func updateMemberDataEvent(old: MemberModel, new: MemberModel) -> Bool{
+    private func updateMemberDataEvent(old: MemberModel, new: MemberModel, inRoom room: Room) -> Bool{
         if let index = data.index(where: { $0 === old }) {
             data[index] = new
-            save(new)
+            save(new, inRoom: room)
             return true
         }else {
             return false
@@ -80,14 +80,14 @@ extension MemberDatabase {
         Room.clear()
     }
     
-    func save(_ data: MemberModel) {
+    func save(_ data: MemberModel, inRoom room: Room) {
+        // create new in db with relations
+        let _member = self.map(data)
+        _member.addToRooms(room)
+        
         if let db = Member.find(predicate: NSPredicate(format: "id = %@", data.id))?.first {
             let _comment = map(data, data: db) // update value
             _comment.update() // save to db
-        }else {
-            // save new member
-            let _comment = self.map(data)
-            _comment.save()
         }
     }
     

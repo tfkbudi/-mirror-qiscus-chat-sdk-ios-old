@@ -184,7 +184,7 @@ extension RoomStorage {
     ///   - core: core model
     ///   - data: db model, if exist just update falue
     /// - Returns: db object
-    private func map(_ core: RoomModel, data: Room? = nil) -> Room {
+    internal func map(_ core: RoomModel, data: Room? = nil) -> Room {
         var result : Room
         if let _result = data {
             result = _result // Update data
