@@ -11,7 +11,7 @@ import Foundation
 // MARK: Comment Management
 extension QiscusCore {
     
-    public func sendMessage(roomID id: String, comment: CommentModel, completion: @escaping (CommentModel?, QError?) -> Void) {
+    public func sendMessage(roomID id: String, comment: CommentModel, onSuccess: @escaping (CommentModel) -> Void, onError: @escaping (QError) -> Void) {
         // update comment
         let _comment            = comment
         _comment.roomId         = id
@@ -28,7 +28,6 @@ extension QiscusCore {
             }else {
                 _comment.payload!["content"] = ["":""]
             }
-            
         }
         // save in local comment pending
         QiscusCore.database.comment.save([_comment])
@@ -39,18 +38,16 @@ extension QiscusCore {
                 commentResult.status = .sent
                 QiscusCore.database.comment.save([commentResult])
                 comment.onChange(commentResult) // view data binding
-                completion(commentResult,nil)
+                onSuccess(commentResult)
             }else {
                 let _failed = comment
                 _failed.status  = .failed
                 QiscusCore.database.comment.save([_failed])
                 comment.onChange(_failed) // view data binding
-                completion(nil,QError.init(message: error ?? "Failed to send message"))
+                onError(QError.init(message: error ?? "Failed to send message"))
             }
         }
     }
-    
-    
     
     /// Load Comment by room
     ///
@@ -58,14 +55,16 @@ extension QiscusCore {
     ///   - id: Room ID
     ///   - limit: by default set 20, min 0 and max 100
     ///   - completion: Response new Qiscus Array of Comment Object and error if exist.
-    public func loadComments(roomID id: String, limit: Int? = nil, completion: @escaping ([CommentModel]?, QError?) -> Void) {
+    public func loadComments(roomID id: String, limit: Int? = nil, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
         // Load message by default 20
         QiscusCore.network.loadComments(roomId: id, limit: limit) { (comments, error) in
             if let c = comments {
                 // save comment in local
                 QiscusCore.database.comment.save(c)
+                onSuccess(c)
+            }else {
+                onError(error ?? QError(message: "Unexpected error"))
             }
-            completion(comments,nil)
         }
     }
     
@@ -76,14 +75,16 @@ extension QiscusCore {
     ///   - lastCommentID: last comment id want to load
     ///   - limit: by default set 20, min 0 and max 100
     ///   - completion: Response new Qiscus Array of Comment Object and error if exist.
-    public func loadMore(roomID id: String, lastCommentID commentID: Int, limit: Int? = nil, completion: @escaping ([CommentModel]?, QError?) -> Void) {
+    public func loadMore(roomID id: String, lastCommentID commentID: Int, limit: Int? = nil, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
         // Load message from server
         QiscusCore.network.loadComments(roomId: id, lastCommentId: commentID, timestamp: nil, after: nil, limit: limit) { (comments, error) in
             if let c = comments {
                 // save comment in local
                 QiscusCore.database.comment.save(c)
+                onSuccess(c)
+            }else {
+                onError(error ?? QError(message: "Unexpected error"))
             }
-            completion(comments,nil)
         }
     }
     
@@ -93,8 +94,18 @@ extension QiscusCore {
     ///   - uniqueID: comment unique id
     ///   - type: forMe or ForEveryone
     ///   - completion: Response Comments your deleted
-    public func deleteMessage(uniqueIDs id: [String], type: DeleteType, completion: @escaping ([CommentModel]?, QError?) -> Void) {
-        QiscusCore.network.deleteComment(commentUniqueId: id, type: type, completion: completion)
+    public func deleteMessage(uniqueIDs id: [String], type: DeleteType, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
+        QiscusCore.network.deleteComment(commentUniqueId: id, type: type) { (results, error) in
+            if let c = results {
+                // MARK : delete comment in local
+                for comment in c {
+                    QiscusCore.database.comment.delete(uniqId: comment.uniqId)
+                }
+                onSuccess(c)
+            }else {
+                onError(error ?? QError(message: "Unexpected error"))
+            }
+        }
     }
     
     /// Delete all message in room
@@ -112,8 +123,14 @@ extension QiscusCore {
     ///   - keyword: required, keyword to search
     ///   - roomID: optional, search on specific room by room id
     ///   - lastCommentId: optional, will get comments aafter this id
-    public func searchMessage(keyword: String, roomID: String?, lastCommentId: Int?, completion: @escaping ([CommentModel]?, QError?) -> Void) {
-        QiscusCore.network.searchMessage(keyword: keyword, roomID: roomID, lastCommentId: lastCommentId, completion: completion)
+    public func searchMessage(keyword: String, roomID: String?, lastCommentId: Int?, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
+        QiscusCore.network.searchMessage(keyword: keyword, roomID: roomID, lastCommentId: lastCommentId) { (results, error) in
+            if let c = results {
+                onSuccess(c)
+            }else {
+                onError(error ?? QError(message: "Unexpected error"))
+            }
+        }
     }
     
     /// Mark Comment as read, include comment before
@@ -144,13 +161,15 @@ extension QiscusCore {
     /// - Parameters:
     ///   - id: comment id
     ///   - completion: return object comment if exist
-    public func readReceiptStatus(commentId id: String, completion: @escaping (CommentModel?, QError?) -> Void) {
-        QiscusCore.network.readReceiptStatus(commentId: id) { (comment, message) in
+    public func readReceiptStatus(commentId id: String, onSuccess: @escaping (CommentModel) -> Void, onError: @escaping (QError) -> Void) {
+        QiscusCore.network.readReceiptStatus(commentId: id) { (comment, error) in
             if let c = comment {
                 // save comment in local
                 QiscusCore.database.comment.save([c])
+                onSuccess(c)
+            }else {
+                onError(error ?? QError(message: "Unexpected error"))
             }
-            completion(comment,nil)
         }
     }
     

@@ -50,28 +50,28 @@ class QiscusEventManager {
             mycomments = mycomments.sorted(by: { $0.date < $1.date}) // asc
             // call api
             guard let lastMyComment = mycomments.last else { return }
-            QiscusCore.shared.readReceiptStatus(commentId: lastMyComment.id) { (result, error) in
-                if let _comment = result {
-                    // compare current status
-                    if lastMyComment.status.hashValue < _comment.status.hashValue {
-                        // update all my comment status
-                        for c in mycomments {
-                            // check lastStatus and compare
-                            if c.status.hashValue != _comment.status.hashValue {
-                                // update comment
-                                c.status = _comment.status
-                                QiscusCore.database.comment.save([c])
-                                if let r = QiscusEventManager.shared.room {
-                                    if r.id == roomID {
-                                        self.roomDelegate?.didComment(comment: c, changeStatus: _comment.status)
-                                    }
+            QiscusCore.shared.readReceiptStatus(commentId: lastMyComment.id, onSuccess: { (result) in
+                // compare current status
+                if lastMyComment.status.hashValue < result.status.hashValue {
+                    // update all my comment status
+                    for c in mycomments {
+                        // check lastStatus and compare
+                        if c.status.hashValue != result.status.hashValue {
+                            // update comment
+                            c.status = result.status
+                            QiscusCore.database.comment.save([c])
+                            if let r = QiscusEventManager.shared.room {
+                                if r.id == roomID {
+                                    self.roomDelegate?.didComment(comment: c, changeStatus: result.status)
                                 }
-                                // got new comment for other room
-                                self.delegate?.onRoom(room, didChangeComment: c, changeStatus: _comment.status)
                             }
+                            // got new comment for other room
+                            self.delegate?.onRoom(room, didChangeComment: c, changeStatus: result.status)
                         }
                     }
                 }
+            }) { (error) in
+                //
             }
         }
     }

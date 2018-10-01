@@ -19,17 +19,17 @@ extension NetworkManager {
     ///   - after: if true returns comments with id >= last_comment_id. if false and last_comment_id is specified, returns last 20 comments with id < last_comment_id. if false and last_comment_id is not specified, returns last 20 comments
     ///   - limit: limit for the result default value is 20, max value is 100
     ///   - completion: @escaping when success load comments, return Optional([CommentModel]) and Optional(String error message)
-    func loadComments(roomId: String, lastCommentId: Int? = nil, timestamp: String? = nil, after: Bool? = nil, limit: Int? = nil, completion: @escaping ([CommentModel]?, String?) -> Void) {
+    func loadComments(roomId: String, lastCommentId: Int? = nil, timestamp: String? = nil, after: Bool? = nil, limit: Int? = nil, completion: @escaping ([CommentModel]?, QError?) -> Void) {
         commentRouter.request(.loadComment(topicId: roomId, lastCommentId: lastCommentId, timestamp: timestamp, after: after, limit: limit)) { (data, response, error) in
             if error != nil {
-                completion(nil, "Please check your network connection.")
+                completion(nil, QError(message: "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(nil, NetworkResponse.noData.rawValue)
+                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     let response = ApiResponse.decode(from: responseData)
@@ -42,8 +42,7 @@ extension NetworkManager {
                     } catch {
                         
                     }
-                    
-                    completion(nil, errorMessage)
+                    completion(nil, QError(message: errorMessage))
                 }
             }
         }
@@ -262,17 +261,17 @@ extension NetworkManager {
         }
     }
     
-    func readReceiptStatus(commentId id: String, completion: @escaping (CommentModel?, String?) -> Void) {
+    func readReceiptStatus(commentId id: String, completion: @escaping (CommentModel?, QError?) -> Void) {
         commentRouter.request(.statusComment(id: id)) { (data, response, error) in
             if error != nil {
-                completion(nil, "Please check your network connection.")
+                completion(nil, QError(message: "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(nil, NetworkResponse.noData.rawValue)
+                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     let response = ApiResponse.decode(from: responseData)
@@ -286,7 +285,7 @@ extension NetworkManager {
                         
                     }
                     
-                    completion(nil, errorMessage)
+                    completion(nil, QError(message: errorMessage))
                 }
             }
         }
