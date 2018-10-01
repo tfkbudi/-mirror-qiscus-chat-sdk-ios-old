@@ -345,7 +345,6 @@ extension NetworkManager {
                     } catch {
                         
                     }
-                    
                     completion(nil, QError(message: errorMessage))
                 }
             }

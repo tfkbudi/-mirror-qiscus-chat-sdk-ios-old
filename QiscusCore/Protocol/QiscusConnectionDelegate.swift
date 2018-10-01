@@ -50,6 +50,11 @@ public protocol QiscusCoreDelegate {
     ///   - typing: true if user start typing and false when finish typing. typing time avarange is 5-10s, we assume user typing is finish after that
     func onRoom(_ room: RoomModel, thisParticipant user: MemberModel, isTyping typing: Bool)
     
+    /// Room update
+    ///
+    /// - Parameter room: new room object
+    func onRoom(update room: RoomModel)
+    
     /// User Online status
     ///
     /// - Parameters:
@@ -96,4 +101,9 @@ public protocol QiscusCoreRoomDelegate {
     ///   - status: true if user login
     ///   - time: millisecond UTC
     func onChangeUser(_ user: MemberModel, onlineStatus status: Bool, whenTime time: Date)
+    
+    /// Room update
+    ///
+    /// - Parameter room: new room object
+    func onRoom(update room: RoomModel)
 }
