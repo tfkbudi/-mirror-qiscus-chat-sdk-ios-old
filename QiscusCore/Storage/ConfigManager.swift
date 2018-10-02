@@ -36,7 +36,7 @@ class ConfigManager : NSObject {
             }
         }
     }
-    var server  : ServerConfig? = nil
+    var server      : ServerConfig?     = nil
     
     fileprivate func filename(_ name: String) -> String {
         return prefix + name + "userdata"

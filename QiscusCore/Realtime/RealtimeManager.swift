@@ -158,9 +158,17 @@ extension RealtimeManager: QiscusRealtimeDelegate {
         if let state : QiscusConnectionState = QiscusConnectionState(rawValue: state.rawValue) {
             QiscusEventManager.shared.connectionDelegate?.connectionState(change: state)
         }
-        if state == .connected {
+        
+        switch state {
+        case .connected:
             resumePendingSubscribeTopic()
             QiscusLogger.debugPrint("Qiscus realtime connected")
+            break
+        case .disconnected:
+            QiscusCore.heartBeat?.resume()
+            break
+        default:
+            break
         }
     }
 }

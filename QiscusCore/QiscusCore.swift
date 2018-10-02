@@ -26,6 +26,7 @@ public class QiscusCore: NSObject {
     public static var dataStore : QiscusStorage         = QiscusStorage.shared
     public static var database  : QiscusDatabaseManager = QiscusDatabaseManager.shared
     static var network          : NetworkManager        = NetworkManager()
+    static var heartBeat        : QiscusHeartBeat?      = nil
     public static var delegate  : QiscusCoreDelegate? {
         get {
             return eventManager.delegate
@@ -45,6 +46,12 @@ public class QiscusCore: NSObject {
         realtime.setup(appName: id)
         // Populate data from db
         QiscusCore.database.loadData()
+        
+        // Background sync when realtime off
+        QiscusCore.heartBeat = QiscusHeartBeat.init(timeInterval: 5)
+        QiscusCore.heartBeat?.eventHandler = {
+            QiscusLogger.debugPrint("Start background sync")
+        }
     }
     
     
