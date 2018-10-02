@@ -133,6 +133,8 @@ extension RealtimeManager: QiscusRealtimeDelegate {
     func didReceiveMessageStatus(roomId: String, commentId: String, commentUniqueId: String, Status: MessageStatus) {
         switch Status {
         case .deleted:
+            // delete from local
+            _ = QiscusCore.database.comment.delete(uniqId: commentUniqueId)
             QiscusEventManager.shared.gotMessageStatus(roomID: roomId, commentUniqueID: commentUniqueId, status: .deleted)
             break
         case .delivered:

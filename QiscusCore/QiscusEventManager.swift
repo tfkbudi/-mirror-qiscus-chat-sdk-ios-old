@@ -19,34 +19,23 @@ class QiscusEventManager {
         guard let room = QiscusCore.database.room.find(id: roomID) else { return }
         guard let comment = QiscusCore.database.comment.find(uniqueId: id) else { return }
 
-        // only 3 kind status from realtime read, deliverd, and deleted
-        var commentStatus : CommentStatus = status
-        switch status {
-        case .deleted:
-            // update status
-            commentStatus = CommentStatus.deleted
-            // delete from local
-            _ = QiscusCore.database.comment.delete(uniqId: comment.uniqId)
+        if status == .deleted {
             if let r = QiscusEventManager.shared.room {
                 if r.id == roomID {
-                    roomDelegate?.didComment(comment: comment, changeStatus: commentStatus)
+                    roomDelegate?.didComment(comment: comment, changeStatus: .deleted)
                 }
             }
             // got new comment for other room
-            delegate?.onRoom(room, didChangeComment: comment, changeStatus: commentStatus)
-            break
-        default:
-            break
+            delegate?.onRoom(room, didChangeComment: comment, changeStatus: .deleted)
         }
 
         // MARK: TODO check if room single and read by opponent, reduce call API
-        
-        
+
         // very tricky, need to review v3, calculating comment status in backend for group rooms
         if let comments = QiscusCore.database.comment.find(roomId: room.id) {
             guard let user = QiscusCore.getProfile() else { return }
             var mycomments = comments.filter({ $0.userEmail == user.email }) // filter my comment
-            mycomments = mycomments.filter({ $0.status.hashValue < commentStatus.hashValue }) // filter status < new status
+            mycomments = mycomments.filter({ $0.status.hashValue < status.hashValue }) // filter status < new status
             mycomments = mycomments.sorted(by: { $0.date < $1.date}) // asc
             // call api
             guard let lastMyComment = mycomments.last else { return }

@@ -129,7 +129,6 @@ public class CommentDB {
     
     internal func save(_ data: [CommentModel]) {
         data.forEach { (c) in
-            //
             // listen callback to provide event
             comment.add(c, onCreate: { (result) in
                 QiscusEventManager.shared.gotNewMessage(comment: c)

@@ -108,7 +108,11 @@ class RoomStorage {
                 let new = r
                 new.lastComment = comment
                 // check if myComment
-                new.unreadCount = new.unreadCount + 1
+                if let user = QiscusCore.getProfile() {
+                    if comment.userEmail != user.email {
+                        new.unreadCount = new.unreadCount + 1
+                    }
+                }
                 // check data exist and update
                 let isUpdate = updateRoomDataEvent(old: r, new: new)
                 data = sort(data) // check data source

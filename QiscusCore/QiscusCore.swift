@@ -48,7 +48,7 @@ public class QiscusCore: NSObject {
         QiscusCore.database.loadData()
         
         // Background sync when realtime off
-        QiscusCore.heartBeat = QiscusHeartBeat.init(timeInterval: 5)
+        QiscusCore.heartBeat = QiscusHeartBeat.init(timeInterval: 10)
         QiscusCore.heartBeat?.eventHandler = {
             QiscusLogger.debugPrint("Start background sync")
             QiscusCore.shared.sync(onSuccess: { (comments) in
@@ -60,6 +60,7 @@ public class QiscusCore: NSObject {
                 }
             }, onError: { (error) in
                 QiscusLogger.errorPrint("sync error, \(error.message)")
+                QiscusCore.heartBeat?.resume()
             })
             QiscusCore.heartBeat?.suspend()
         }
