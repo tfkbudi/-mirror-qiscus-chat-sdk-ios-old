@@ -26,7 +26,7 @@ class QiscusEventManager {
             // update status
             commentStatus = CommentStatus.deleted
             // delete from local
-            QiscusCore.database.comment.delete(uniqId: comment.uniqId)
+            _ = QiscusCore.database.comment.delete(uniqId: comment.uniqId)
             if let r = QiscusEventManager.shared.room {
                 if r.id == roomID {
                     roomDelegate?.didComment(comment: comment, changeStatus: commentStatus)
@@ -77,16 +77,6 @@ class QiscusEventManager {
     }
     
     func gotNewMessage(comment: CommentModel) {
-        // check comment already in local, if true should be update comment status(not new comment for this device)
-        if !self.checkNewComment(comment) { return }
-        QiscusCore.database.comment.save([comment])
-        // MARK: TODO receive new comment, need trotle
-        guard let user = QiscusCore.getProfile() else { return }
-        // no update if your comment
-        if user.email != comment.userEmail {
-            // call api receive, need optimize
-            QiscusCore.shared.updateCommentReceive(roomId: comment.roomId, lastCommentReceivedId: comment.id)
-        }
         // filter event for active room
         if let r = QiscusEventManager.shared.room {
             if r.id == String(comment.roomId) {
@@ -99,6 +89,14 @@ class QiscusEventManager {
         // got new comment for other room
         if let room = QiscusCore.database.room.find(id: comment.roomId) {
             delegate?.onRoom(room, gotNewComment: comment)
+        }
+        
+        // MARK: TODO receive new comment, need trotle
+        guard let user = QiscusCore.getProfile() else { return }
+        // no update if your comment
+        if user.email != comment.userEmail {
+            // call api receive, need optimize
+            QiscusCore.shared.updateCommentReceive(roomId: comment.roomId, lastCommentReceivedId: comment.id)
         }
     }
     
@@ -136,7 +134,7 @@ class QiscusEventManager {
     ///
     /// - Parameter data: comment object
     /// - Returns: return true if comment is new or not exist in local
-    private func checkNewComment(_ data: CommentModel) -> Bool {
-        return !(QiscusCore.database.comment.find(uniqueId: data.uniqId) != nil)
-    }
+//    private func checkNewComment(_ data: CommentModel) -> Bool {
+//        return !(QiscusCore.database.comment.find(uniqueId: data.uniqId) != nil)
+//    }
 }

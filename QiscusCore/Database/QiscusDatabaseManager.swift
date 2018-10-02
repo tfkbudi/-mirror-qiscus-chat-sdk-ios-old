@@ -128,11 +128,20 @@ public class CommentDB {
     }
     
     internal func save(_ data: [CommentModel]) {
-        comment.add(data)
+        data.forEach { (c) in
+            //
+            // listen callback to provide event
+            comment.add(c, onCreate: { (result) in
+                QiscusEventManager.shared.gotNewMessage(comment: c)
+            }) { (updatedResult) in
+                // MARK : TODO refactor comment update flow and event
+            }
+        }
+        
         // make sure data sort by date
-        for comment in data.reversed() {
+        data.reversed().forEach { (c) in
             // update last comment in room, mean comment where you send
-            _ = QiscusCore.database.room.updateLastComment(comment)
+            _ = QiscusCore.database.room.updateLastComment(c)
         }
     }
     

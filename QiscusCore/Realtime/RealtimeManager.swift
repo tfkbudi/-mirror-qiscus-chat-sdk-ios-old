@@ -12,6 +12,7 @@ class RealtimeManager {
     static var shared : RealtimeManager = RealtimeManager()
     private var client : QiscusRealtime? = nil
     private var pendingSubscribeTopic : [RealtimeSubscribeEndpoint] = [RealtimeSubscribeEndpoint]()
+    var state : QiscusRealtimeConnectionState = QiscusRealtimeConnectionState.disconnected
     
     func setup(appName: String) {
         // make sure realtime client still single object
@@ -146,7 +147,7 @@ extension RealtimeManager: QiscusRealtimeDelegate {
     func didReceiveMessage(data: String) {
         let json = ApiResponse.decode(string: data)
         let comment = CommentModel(json: json)
-        QiscusEventManager.shared.gotNewMessage(comment: comment)
+        QiscusCore.database.comment.save([comment])
     }
     
     func didReceiveUser(typing: Bool, roomId: String, userEmail: String) {
@@ -155,6 +156,7 @@ extension RealtimeManager: QiscusRealtimeDelegate {
     
     func connectionState(change state: QiscusRealtimeConnectionState) {
         QiscusLogger.debugPrint("Qiscus realtime connection state \(state.rawValue)")
+        self.state = state
         if let state : QiscusConnectionState = QiscusConnectionState(rawValue: state.rawValue) {
             QiscusEventManager.shared.connectionDelegate?.connectionState(change: state)
         }

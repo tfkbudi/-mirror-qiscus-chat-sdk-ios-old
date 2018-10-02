@@ -44,24 +44,27 @@ class CommentStorage {
         return data
     }
     
-    func add(_ value: [CommentModel]) {
+    func add(_ comment: CommentModel, onCreate: @escaping (CommentModel) -> Void, onUpdate: @escaping (CommentModel) -> Void) {
         // filter if comment exist update, if not add
-        for comment in value {
-            if let r = find(byUniqueID: comment.uniqId)  {
-                // check new comment status, end status is read. sending - sent - deliverd - read
-                if comment.status.hashValue <= r.status.hashValue {
-                    return // just ignore, this part is trick from backend. after receiver update comment status then sender call api load comment somehow status still sent but sender already receive event status read/deliverd via mqtt
-                }
-                if !updateCommentDataEvent(old: r, new: comment) {
-                    // add new
-                    data.append(comment)
-                }
-                save(comment) // else just update
-            }else {
+        if let r = find(byUniqueID: comment.uniqId)  {
+            // check new comment status, end status is read. sending - sent - deliverd - read
+            if comment.status.hashValue <= r.status.hashValue {
+                return // just ignore, this part is trick from backend. after receiver update comment status then sender call api load comment somehow status still sent but sender already receive event status read/deliverd via mqtt
+            }
+            if !updateCommentDataEvent(old: r, new: comment) {
                 // add new
                 data.append(comment)
-                save(comment)
+                onCreate(comment)
+            }else {
+                // update
+                onUpdate(comment)
             }
+            save(comment) // else just update
+        }else {
+            // add new
+            data.append(comment)
+            onCreate(comment)
+            save(comment)
         }
     }
     
