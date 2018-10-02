@@ -131,18 +131,68 @@ extension RealtimeManager: QiscusRealtimeDelegate {
 
     
     func didReceiveMessageStatus(roomId: String, commentId: String, commentUniqueId: String, Status: MessageStatus) {
+        var status : CommentStatus = .sent
         switch Status {
         case .deleted:
+            status  = .deleted
             // delete from local
             _ = QiscusCore.database.comment.delete(uniqId: commentUniqueId)
             QiscusEventManager.shared.gotMessageStatus(roomID: roomId, commentUniqueID: commentUniqueId, status: .deleted)
             break
         case .delivered:
+            status  = .delivered
             QiscusEventManager.shared.gotMessageStatus(roomID: roomId, commentUniqueID: commentUniqueId, status: .delivered)
             break
         case .read:
+            status  = .read
             QiscusEventManager.shared.gotMessageStatus(roomID: roomId, commentUniqueID: commentUniqueId, status: .read)
             break
+        }
+        
+        if let room = QiscusCore.database.room.find(id: roomId) {
+            // very tricky, need to review v3, calculating comment status in backend for group rooms
+            if let comments = QiscusCore.database.comment.find(roomId: roomId) {
+                guard let user = QiscusCore.getProfile() else { return }
+                var mycomments = comments.filter({ $0.userEmail == user.email }) // filter my comment
+                mycomments = mycomments.filter({ $0.status.hashValue < Status.hashValue }) // filter status < new status
+                mycomments = mycomments.sorted(by: { $0.date < $1.date}) // asc
+                // call api
+                guard let lastMyComment = mycomments.last else { return }
+                
+                if room.type == .single {
+                    // compare current status
+                    if lastMyComment.status.hashValue < status.hashValue {
+                        // update all my comment status
+                        for c in mycomments {
+                            // check lastStatus and compare
+                            if c.status.hashValue != status.hashValue {
+                                // update comment
+                                c.status = status
+                                QiscusCore.database.comment.save([c])
+                            }
+                        }
+                    }
+                }else if room.type == .group {
+                    QiscusCore.shared.readReceiptStatus(commentId: lastMyComment.id, onSuccess: { (result) in
+                        // compare current status
+                        if lastMyComment.status.hashValue < result.status.hashValue {
+                            // update all my comment status
+                            for c in mycomments {
+                                // check lastStatus and compare
+                                if c.status.hashValue != result.status.hashValue {
+                                    // update comment
+                                    c.status = result.status
+                                    QiscusCore.database.comment.save([c])
+                                }
+                            }
+                        }
+                    }) { (error) in
+                        //
+                    }
+                }else {
+                    // ignore for channel
+                }
+            }
         }
     }
     

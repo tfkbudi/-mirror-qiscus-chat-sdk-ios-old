@@ -134,6 +134,7 @@ public class CommentDB {
                 QiscusEventManager.shared.gotNewMessage(comment: c)
             }) { (updatedResult) in
                 // MARK : TODO refactor comment update flow and event
+                QiscusCore.eventManager.gotMessageStatus(roomID: c.roomId, commentUniqueID: c.uniqId, status: c.status)
             }
         }
         
