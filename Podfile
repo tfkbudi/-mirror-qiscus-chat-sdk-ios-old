@@ -6,12 +6,15 @@ target 'Example' do
   use_frameworks!
   pod 'QiscusCore', :path => '.'
   pod 'QiscusRealtime', :path => '../QiscusRealtime'
+  pod 'Quick'
+  pod 'Nimble'
 end
 
 target 'QiscusCore' do
     # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
     use_frameworks!
+    pod 'Quick'
+    pod 'Nimble'
     pod 'SwiftyJSON'
     pod 'QiscusRealtime', :path => '../QiscusRealtime'
-    
 end
