@@ -25,7 +25,7 @@ class CommentStorage {
     
     func delete(byUniqueID id: String) -> Bool {
         // remove from memory
-        if let index = self.data.lastIndex(where: {$0.uniqId == id}) {
+        if let index = self.data.index(where: {$0.uniqId == id}) {
             data.remove(at: index)
         }else {
             return false
