@@ -48,7 +48,7 @@ public class QiscusCore: NSObject {
         QiscusCore.database.loadData()
         
         // Background sync when realtime off
-        QiscusCore.heartBeat = QiscusHeartBeat.init(timeInterval: 10)
+        QiscusCore.heartBeat = QiscusHeartBeat.init(timeInterval: config.syncInterval)
         QiscusCore.heartBeat?.eventHandler = {
             QiscusLogger.debugPrint("Start background sync")
             if QiscusCore.realtime.state == .disconnected {
@@ -93,6 +93,13 @@ public class QiscusCore: NSObject {
     ///   - realtimePort: your qiscus realtime port
     public class func set(customServer: URL, realtimeServer: String?, realtimePort port: Int?) {
         config.server = ServerConfig(url: customServer, realtimeURL: realtimeServer, realtimePort: port)
+    }
+    
+    /// Sync Time interval, by default is 30s. every 30 sec will be sync when realtime server is disconnect
+    ///
+    /// - Parameter interval: time interval, by default is 30s
+    public class func setSync(interval: TimeInterval) {
+        config.syncInterval = interval
     }
     
     // MARK: Auth

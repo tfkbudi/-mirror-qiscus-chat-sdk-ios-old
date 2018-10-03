@@ -132,6 +132,8 @@ public class CommentDB {
             // listen callback to provide event
             comment.add(c, onCreate: { (result) in
                 QiscusEventManager.shared.gotNewMessage(comment: c)
+                // check is mycomment
+                self.markCommentAsRead(comment: result)
             }) { (updatedResult) in
                 // MARK : TODO refactor comment update flow and event
                 QiscusCore.eventManager.gotMessageStatus(roomID: c.roomId, commentUniqueID: c.uniqId, status: c.status)
@@ -148,6 +150,20 @@ public class CommentDB {
     internal func delete(uniqId id: String) -> Bool {
         // MARK : TODO
         return comment.delete(byUniqueID: id)
+    }
+    
+    /// Requirement said, we asume when receive comment from opponent then old my comment status is read
+    private func markCommentAsRead(comment: CommentModel) {
+        guard let user = QiscusCore.getProfile() else { return }
+        // check comment from opponent
+        if comment.userEmail == user.email { return }
+        guard let comments = QiscusCore.database.comment.find(roomId: comment.roomId) else { return }
+        let mycomments = comments.filter({ $0.userEmail == user.email }) // filter my comment
+        for c in mycomments {
+            // update comment
+            c.status = .read
+            QiscusCore.database.comment.save([c])
+        }
     }
     
     // MARK: Public comment
