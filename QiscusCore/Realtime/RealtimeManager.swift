@@ -129,22 +129,21 @@ extension RealtimeManager: QiscusRealtimeDelegate {
         QiscusEventManager.shared.gotEvent(email: userEmail, isOnline: isOnline, timestamp: timestamp)
     }
 
-    
     func didReceiveMessageStatus(roomId: String, commentId: String, commentUniqueId: String, Status: MessageStatus) {
-        var status : CommentStatus = .sent
+        var _status : CommentStatus = .sent
         switch Status {
         case .deleted:
-            status  = .deleted
+            _status  = .deleted
             // delete from local
             _ = QiscusCore.database.comment.delete(uniqId: commentUniqueId)
             QiscusEventManager.shared.gotMessageStatus(roomID: roomId, commentUniqueID: commentUniqueId, status: .deleted)
             break
         case .delivered:
-            status  = .delivered
+            _status  = .delivered
             QiscusEventManager.shared.gotMessageStatus(roomID: roomId, commentUniqueID: commentUniqueId, status: .delivered)
             break
         case .read:
-            status  = .read
+            _status  = .read
             QiscusEventManager.shared.gotMessageStatus(roomID: roomId, commentUniqueID: commentUniqueId, status: .read)
             break
         }
@@ -154,20 +153,20 @@ extension RealtimeManager: QiscusRealtimeDelegate {
             if let comments = QiscusCore.database.comment.find(roomId: roomId) {
                 guard let user = QiscusCore.getProfile() else { return }
                 var mycomments = comments.filter({ $0.userEmail == user.email }) // filter my comment
-                mycomments = mycomments.filter({ $0.status.hashValue < Status.hashValue }) // filter status < new status
+                mycomments = mycomments.filter({ $0.status.hashValue < _status.hashValue }) // filter status < new status
                 mycomments = mycomments.sorted(by: { $0.date < $1.date}) // asc
                 // call api
                 guard let lastMyComment = mycomments.last else { return }
                 
                 if room.type == .single {
                     // compare current status
-                    if lastMyComment.status.hashValue < status.hashValue {
+                    if lastMyComment.status.hashValue < _status.hashValue {
                         // update all my comment status
                         for c in mycomments {
                             // check lastStatus and compare
-                            if c.status.hashValue != status.hashValue {
+                            if c.status != _status {
                                 // update comment
-                                c.status = status
+                                c.status = _status
                                 QiscusCore.database.comment.save([c])
                             }
                         }
