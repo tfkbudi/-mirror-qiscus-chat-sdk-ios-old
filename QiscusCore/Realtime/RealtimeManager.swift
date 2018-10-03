@@ -130,7 +130,7 @@ extension RealtimeManager: QiscusRealtimeDelegate {
     }
 
     func didReceiveMessageStatus(roomId: String, commentId: String, commentUniqueId: String, Status: MessageStatus) {
-        var _status : CommentStatus = .sent
+        var _status : CommentStatus? = nil
         switch Status {
         case .deleted:
             _status  = .deleted
@@ -147,26 +147,28 @@ extension RealtimeManager: QiscusRealtimeDelegate {
             QiscusEventManager.shared.gotMessageStatus(roomID: roomId, commentUniqueID: commentUniqueId, status: .read)
             break
         }
-        
+        // check convert status
+        guard let status = _status else { return }
         if let room = QiscusCore.database.room.find(id: roomId) {
             // very tricky, need to review v3, calculating comment status in backend for group rooms
             if let comments = QiscusCore.database.comment.find(roomId: roomId) {
                 guard let user = QiscusCore.getProfile() else { return }
                 var mycomments = comments.filter({ $0.userEmail == user.email }) // filter my comment
-                mycomments = mycomments.filter({ $0.status.hashValue < _status.hashValue }) // filter status < new status
+                mycomments = mycomments.filter({ $0.status.hashValue < status.hashValue }) // filter status < new status
                 mycomments = mycomments.sorted(by: { $0.date < $1.date}) // asc
                 // call api
                 guard let lastMyComment = mycomments.last else { return }
                 
                 if room.type == .single {
                     // compare current status
-                    if lastMyComment.status.hashValue < _status.hashValue {
+                    if lastMyComment.status.hashValue < status.hashValue {
                         // update all my comment status
                         for c in mycomments {
                             // check lastStatus and compare
-                            if c.status != _status {
+                            print("compare \(c.status.hashValue)/\(c.status.rawValue) < \(status.hashValue)/\(status.rawValue)")
+                            if c.status.hashValue < status.hashValue {
                                 // update comment
-                                c.status = _status
+                                c.status = status
                                 QiscusCore.database.comment.save([c])
                             }
                         }

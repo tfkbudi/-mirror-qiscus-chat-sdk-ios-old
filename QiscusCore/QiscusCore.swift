@@ -51,19 +51,16 @@ public class QiscusCore: NSObject {
         QiscusCore.heartBeat = QiscusHeartBeat.init(timeInterval: 10)
         QiscusCore.heartBeat?.eventHandler = {
             QiscusLogger.debugPrint("Start background sync")
-            QiscusCore.shared.sync(onSuccess: { (comments) in
-                // save comment in local
-                QiscusCore.database.comment.save(comments)
-                // check realtime state
-                if QiscusCore.realtime.state == .disconnected {
-                    QiscusCore.heartBeat?.resume()
-                }
-            }, onError: { (error) in
-                QiscusLogger.errorPrint("sync error, \(error.message)")
-                QiscusCore.heartBeat?.resume()
-            })
-            QiscusCore.heartBeat?.suspend()
+            if QiscusCore.realtime.state == .disconnected {
+                QiscusCore.shared.sync(onSuccess: { (comments) in
+                    // save comment in local
+                    QiscusCore.database.comment.save(comments)
+                }, onError: { (error) in
+                    QiscusLogger.errorPrint("sync error, \(error.message)")
+                })
+            }
         }
+        QiscusCore.heartBeat?.resume()
     }
     
     

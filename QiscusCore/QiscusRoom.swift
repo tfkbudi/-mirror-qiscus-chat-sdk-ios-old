@@ -130,7 +130,6 @@ extension QiscusCore {
                 // subscribe room from local
                 QiscusCore.realtime.subscribeRooms(rooms: rooms)
                 onSuccess(rooms,meta)
-                QiscusCore.heartBeat?.resume()
             }else {
                 onError(QError.init(message: error ?? "Something Wrong"))
             }
