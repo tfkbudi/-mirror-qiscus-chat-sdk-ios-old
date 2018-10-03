@@ -13,8 +13,10 @@ import Nimble
 class ConfigTest: QuickSpec {
     override func spec() {
         describe("Qiscus config"){
-            
-            
+            it("test") {
+             
+                expect("") == ""
+            }
         }
     }
 }
