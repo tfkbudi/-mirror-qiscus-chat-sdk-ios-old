@@ -15,17 +15,19 @@ extension QiscusCore {
     /// - Parameters:
     ///   - withUsers: Qiscus user emaial.
     ///   - completion: Qiscus Room Object and error if exist.
-    public func getRoom(withUser user: String, onSuccess: @escaping (RoomModel) -> Void, onError: @escaping (QError) -> Void) {
+    public func getRoom(withUser user: String, onSuccess: @escaping (RoomModel, [CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
         // call api get_or_create_room_with_target
         QiscusCore.network.getOrCreateRoomWithTarget(targetSdkEmail: user, onSuccess: { (room, comments) in
             QiscusCore.database.room.save([room])
             // subscribe room from local
             QiscusCore.realtime.subscribeRooms(rooms: [room])
+            var c = [CommentModel]()
             if let _comments = comments {
                 // save comments
                 QiscusCore.database.comment.save(_comments)
+                c = _comments
             }
-            onSuccess(room)
+            onSuccess(room,c)
         }) { (error) in
             onError(error)
         }
@@ -60,7 +62,7 @@ extension QiscusCore {
     /// - Parameters:
     ///   - withID: existing roomID from server or local db.
     ///   - completion: Response Qiscus Room Object and error if exist.
-    public func getRoom(withID id: String, onSuccess: @escaping (RoomModel) -> Void, onError: @escaping (QError) -> Void) {
+    public func getRoom(withID id: String, onSuccess: @escaping (RoomModel, [CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
         // call api get_room_by_id
         QiscusCore.network.getRoomById(roomId: id) { (room, comments, error) in
             if let r = room {
@@ -68,7 +70,13 @@ extension QiscusCore {
                 QiscusCore.database.room.save([r])
                 // subscribe room from local
                 QiscusCore.realtime.subscribeRooms(rooms: [r])
-                onSuccess(r)
+                var c = [CommentModel]()
+                if let _comments = comments {
+                    // save comments
+                    QiscusCore.database.comment.save(_comments)
+                    c = _comments
+                }
+                onSuccess(r,c)
             }else {
                 if let e = error {
                     onError(QError.init(message: e))
