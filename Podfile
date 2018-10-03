@@ -13,4 +13,5 @@ target 'QiscusCore' do
     use_frameworks!
     pod 'SwiftyJSON'
     pod 'QiscusRealtime', :path => '../QiscusRealtime'
+    
 end
