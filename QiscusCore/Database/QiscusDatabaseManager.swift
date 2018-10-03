@@ -156,10 +156,10 @@ public class CommentDB {
     private func markCommentAsRead(comment: CommentModel) {
         guard let user = QiscusCore.getProfile() else { return }
         // check comment from opponent
-        if comment.userEmail == user.email { return }
         guard let comments = QiscusCore.database.comment.find(roomId: comment.roomId) else { return }
-        let mycomments = comments.filter({ $0.userEmail == user.email }) // filter my comment
-        for c in mycomments {
+        let myComments = comments.filter({ $0.userEmail == user.email }) // filter my comment
+        let myCommentBefore = myComments.filter({ $0.unixTimestamp < comment.unixTimestamp })
+        for c in myCommentBefore {
             // update comment
             c.status = .read
             QiscusCore.database.comment.save([c])
