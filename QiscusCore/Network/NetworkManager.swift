@@ -490,7 +490,7 @@ extension NetworkManager {
         let file = FileModel.init(url: url)
         DispatchQueue.global(qos: .background).async {
             // check already in local
-            if let localPath = QiscusStorage.shared.fileManager.getlocalPath(from: url) {
+            if let localPath = QiscusCore.fileManager.getlocalPath(from: url) {
                 DispatchQueue.main.async {
                     onSuccess(localPath)
                 }
@@ -506,7 +506,7 @@ extension NetworkManager {
                 }
                 d.value.onCompleted = { success in
                     if !success { return }
-                    let localPath: URL = QiscusStorage.shared.fileManager.localFilePath(for: d.value.file.url)
+                    let localPath: URL = QiscusCore.fileManager.localFilePath(for: d.value.file.url)
                     onSuccess(localPath)
                 }
             }
@@ -521,7 +521,7 @@ extension NetworkManager : URLSessionDownloadDelegate {
         guard let sourceURL = downloadTask.originalRequest?.url else { return }
         let download = downloadService.activeDownloads[sourceURL]
         downloadService.activeDownloads[sourceURL] = nil
-        if QiscusStorage.shared.fileManager.move(fromURL: sourceURL, to: location) {
+        if QiscusCore.fileManager.move(fromURL: sourceURL, to: location) {
             download?.file.downloaded = true
             download?.onCompleted(true)
         }
