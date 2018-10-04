@@ -16,15 +16,15 @@ class QiscusStorage {
     
     // Move this to File Manager
     
-    func background(_ work: @escaping () -> ()) {
-        DispatchQueue.global(qos: .userInitiated).async {
-            work()
-        }
-    }
-    
-    func main(_ work: @escaping () -> ()) {
-        DispatchQueue.main.async {
-            work()
-        }
-    }
+//    func background(_ work: @escaping () -> ()) {
+//        DispatchQueue.global(qos: .userInitiated).async {
+//            work()
+//        }
+//    }
+//    
+//    func main(_ work: @escaping () -> ()) {
+//        DispatchQueue.main.async {
+//            work()
+//        }
+//    }
 }

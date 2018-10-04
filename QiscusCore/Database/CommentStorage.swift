@@ -46,34 +46,26 @@ class CommentStorage : QiscusStorage {
     }
     
     func add(_ comment: CommentModel, onCreate: @escaping (CommentModel) -> Void, onUpdate: @escaping (CommentModel) -> Void) {
-        self.background {
-            // filter if comment exist update, if not add
-            if let r = self.find(byUniqueID: comment.uniqId)  {
-                // check new comment status, end status is read. sending - sent - deliverd - read
-                if comment.status.hashValue <= r.status.hashValue {
-                    return // just ignore, this part is trick from backend. after receiver update comment status then sender call api load comment somehow status still sent but sender already receive event status read/deliverd via mqtt
-                }
-                if !self.updateCommentDataEvent(old: r, new: comment) {
-                    // add new
-                    self.data.append(comment)
-                    self.main {
-                        onCreate(comment)
-                    }
-                }else {
-                    // update
-                    self.main {
-                        onUpdate(comment)
-                    }
-                }
-                self.save(comment) // else just update
-            }else {
-                // add new
-                self.data.append(comment)
-                self.save(comment)
-                self.main {
-                    onCreate(comment)
-                }
+        // filter if comment exist update, if not add
+        if let r = find(byUniqueID: comment.uniqId)  {
+            // check new comment status, end status is read. sending - sent - deliverd - read
+            if comment.status.hashValue <= r.status.hashValue {
+                return // just ignore, this part is trick from backend. after receiver update comment status then sender call api load comment somehow status still sent but sender already receive event status read/deliverd via mqtt
             }
+            if !updateCommentDataEvent(old: r, new: comment) {
+                // add new
+                data.append(comment)
+                onCreate(comment)
+            }else {
+                // update
+                onUpdate(comment)
+            }
+            save(comment) // else just update
+        }else {
+            // add new
+            data.append(comment)
+            onCreate(comment)
+            save(comment)
         }
     }
     
@@ -146,9 +138,7 @@ extension CommentStorage {
             let _comment = self.map(data)
             _comment.save()
         }
-        self.main {
-            self.data = self.loadFromLocal()
-        }
+        self.data = self.loadFromLocal()
     }
     
     private func loadFromLocal() -> [CommentModel] {
