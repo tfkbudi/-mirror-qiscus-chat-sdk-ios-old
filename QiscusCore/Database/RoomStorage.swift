@@ -40,6 +40,7 @@ class RoomStorage {
                 if !updateRoomDataEvent(old: r, new: room) {
                     // add new room
                     data.append(room)
+                    data = sort(data)
                     // publish event add new room
                     delegate?.gotNew(room: room)
                 }
@@ -47,13 +48,11 @@ class RoomStorage {
                 // add new room
                 data.append(room)
                 save(room)
+                data = sort(data)
                 // publish event add new room
                 delegate?.gotNew(room: room)
             }
         }
-        data = sort(data)
-        // mark Todo update last comment
-        QiscusLogger.debugPrint("number of room in local temp : \(data.count)")
     }
     
     // update/replace === identical object

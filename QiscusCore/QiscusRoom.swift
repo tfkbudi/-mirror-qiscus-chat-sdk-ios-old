@@ -65,17 +65,21 @@ extension QiscusCore {
     public func getRoom(withID id: String, onSuccess: @escaping (RoomModel, [CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
         // call api get_room_by_id
         QiscusCore.network.getRoomById(roomId: id) { (room, comments, error) in
-            if let r = room {
-                // save room
-                QiscusCore.database.room.save([r])
-                // subscribe room from local
-                QiscusCore.realtime.subscribeRooms(rooms: [r])
+            if var r = room {
+                // save comments
                 var c = [CommentModel]()
                 if let _comments = comments {
                     // save comments
                     QiscusCore.database.comment.save(_comments)
                     c = _comments
                 }
+                // save room
+                // trick, coz this api object room not provide comment. So we need to path response api.
+                r.lastComment = c.first
+                QiscusCore.database.room.save([r])
+                // subscribe room from local
+                QiscusCore.realtime.subscribeRooms(rooms: [r])
+                
                 onSuccess(r,c)
             }else {
                 if let e = error {

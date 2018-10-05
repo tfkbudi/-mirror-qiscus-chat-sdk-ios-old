@@ -85,11 +85,11 @@ public class RoomDB {
     internal func save(_ rooms: [RoomModel]) {
         room.add(rooms)
         
-//        for r in rooms {
-//            // save member
-//            guard let participants = r.participants else { return }
-//            QiscusCore.database.member.save(participants, roomID: r.id)
-//        }
+        for r in rooms {
+            // save member
+            guard let participants = r.participants else { return }
+            QiscusCore.database.member.save(participants, roomID: r.id)
+        }
     }
     
     internal func updateLastComment(_ comment: CommentModel) -> Bool {
