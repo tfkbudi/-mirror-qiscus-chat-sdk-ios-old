@@ -114,7 +114,12 @@ public class RoomDB {
     }
     
     public func all() -> [RoomModel] {
-        return room.all()
+        let results = room.all()
+        for r in results {
+            // subscribe room from local
+            QiscusCore.realtime.subscribeRooms(rooms: [r])
+        }
+        return results
     }
     
 }
