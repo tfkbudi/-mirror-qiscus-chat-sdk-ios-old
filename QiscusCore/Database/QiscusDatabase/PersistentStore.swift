@@ -33,13 +33,13 @@ class PresistentStore {
     // MARK: - Core Data Saving support
     
     static func saveContext () {
-        let context = persistentContainer.viewContext
         if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                _ = error as NSError
-//                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            context.perform {
+                do {
+                    try context.save()
+                } catch {
+                    fatalError("Unresolved error \(error), \(String(describing: error._userInfo))")
+                }
             }
         }
     }
