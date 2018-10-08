@@ -115,10 +115,6 @@ public class RoomDB {
     
     public func all() -> [RoomModel] {
         let results = room.all()
-        for r in results {
-            // subscribe room from local
-            QiscusCore.realtime.subscribeRooms(rooms: [r])
-        }
         return results
     }
     
