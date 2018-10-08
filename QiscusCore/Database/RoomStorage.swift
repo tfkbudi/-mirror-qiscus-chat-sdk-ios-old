@@ -220,28 +220,31 @@ extension RoomStorage {
         guard let type = room.type else { return result }
         guard let lastCommentid = room.lastCommentId else { return result }
         
-        // room type
-        for t in RoomType.all {
-            if type == t.rawValue {
-                result.type = t
+        QiscusThread.background {
+            // room type
+            for t in RoomType.all {
+                if type == t.rawValue {
+                    result.type = t
+                }
             }
+            
+            // MARK: TODO get participants
+            result.participants = [MemberModel]()
+            for p in room.members! {
+                let _member = p as! Member
+                if let memberModel = QiscusCore.database.member.find(byEmail: _member.email ?? "") {
+                    result.participants?.append(memberModel)
+                }
+            }
+            result.id            = id
+            result.unreadCount   = Int(room.unreadCount)
+            result.name          = name
+            result.avatarUrl     = URL(string: avatarUrl)
+            result.options       = room.options
+            // check comment
+            result.lastComment   = CommentStorage().find(predicate: NSPredicate(format: "id = %@", lastCommentid))?.first
         }
         
-        // MARK: TODO get participants
-        result.participants = [MemberModel]()
-        for p in room.members! {
-            let _member = p as! Member
-            if let memberModel = QiscusCore.database.member.find(byEmail: _member.email ?? "") {
-                result.participants?.append(memberModel)
-            }
-        }
-        result.id            = id
-        result.unreadCount   = Int(room.unreadCount)
-        result.name          = name
-        result.avatarUrl     = URL(string: avatarUrl)
-        result.options       = room.options
-        // check comment
-        result.lastComment   = CommentStorage().find(predicate: NSPredicate(format: "id = %@", lastCommentid))?.first
         return result
     }
 }

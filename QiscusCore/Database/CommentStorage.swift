@@ -165,23 +165,25 @@ extension CommentStorage {
         }else {
             result = Comment.generate() // prepare create new
         }
-        result.id               = core.id
-        result.type             = core.type
-        result.userAvatarUrl    = core.userAvatarUrl?.absoluteString
-        result.username         = core.username
-        result.userEmail        = core.userEmail
-        result.userId           = core.userId
-        result.message          = core.message
-        result.extras           = core.extras
-        result.uniqId           = core.uniqId
-        result.roomId           = core.roomId
-        result.commentBeforeId  = core.commentBeforeId
-        result.status           = core.status.rawValue
-        result.unixTimestamp    = Int64(core.unixTimestamp)
-        result.timestamp        = core.timestamp
-        result.isPublicChannel  = core.isPublicChannel
-        if let payload = core.payload {
-            result.payload = payload.dict2json()
+        QiscusThread.background {
+            result.id               = core.id
+            result.type             = core.type
+            result.userAvatarUrl    = core.userAvatarUrl?.absoluteString
+            result.username         = core.username
+            result.userEmail        = core.userEmail
+            result.userId           = core.userId
+            result.message          = core.message
+            result.extras           = core.extras
+            result.uniqId           = core.uniqId
+            result.roomId           = core.roomId
+            result.commentBeforeId  = core.commentBeforeId
+            result.status           = core.status.rawValue
+            result.unixTimestamp    = Int64(core.unixTimestamp)
+            result.timestamp        = core.timestamp
+            result.isPublicChannel  = core.isPublicChannel
+            if let payload = core.payload {
+                result.payload = payload.dict2json()
+            }
         }
         return result
     }
@@ -204,30 +206,30 @@ extension CommentStorage {
         guard let timestamp = data.timestamp else { return result }
         guard let commentBeforeId = data.commentBeforeId else { return result }
         guard let payload = data.payload else { return result }
-
-        result.id               = id
-        result.type             = type
-        result.userAvatarUrl    = URL(string: userAvatarUrl)
-        result.username         = username
-        result.userEmail        = userEmail
-        result.userId           = userId
-        result.message          = message
-        result.extras           = extras
-        result.uniqId           = uniqueId
-        result.roomId           = roomId
-        result.commentBeforeId  = commentBeforeId
-        result.isDeleted        = data.isDeleted
-        result.unixTimestamp    = Int64(data.unixTimestamp)
-        result.timestamp        = timestamp
-        result.isPublicChannel  = data.isPublicChannel
-        result.payload          = convertToDictionary(from: payload)
-        
-        for s in CommentStatus.all {
-            if s.rawValue == status {
-                result.status = s
+        QiscusThread.background {
+            result.id               = id
+            result.type             = type
+            result.userAvatarUrl    = URL(string: userAvatarUrl)
+            result.username         = username
+            result.userEmail        = userEmail
+            result.userId           = userId
+            result.message          = message
+            result.extras           = extras
+            result.uniqId           = uniqueId
+            result.roomId           = roomId
+            result.commentBeforeId  = commentBeforeId
+            result.isDeleted        = data.isDeleted
+            result.unixTimestamp    = Int64(data.unixTimestamp)
+            result.timestamp        = timestamp
+            result.isPublicChannel  = data.isPublicChannel
+            result.payload          = self.convertToDictionary(from: payload)
+            
+            for s in CommentStatus.all {
+                if s.rawValue == status {
+                    result.status = s
+                }
             }
         }
-        
         return result
     }
     

@@ -115,12 +115,14 @@ extension MemberDatabase {
         }else {
             result = Member.generate() // prepare create new
         }
-        result.id           = core.id
-        result.avatarUrl    = core.avatarUrl?.absoluteString
-        result.email        = core.email
-        result.username     = core.username
-        result.lastCommentReadId        = Int64(core.lastCommentReadId)
-        result.lastCommentReceivedId    = Int64(core.lastCommentReceivedId)
+        QiscusThread.background {
+            result.id           = core.id
+            result.avatarUrl    = core.avatarUrl?.absoluteString
+            result.email        = core.email
+            result.username     = core.username
+            result.lastCommentReadId        = Int64(core.lastCommentReadId)
+            result.lastCommentReceivedId    = Int64(core.lastCommentReceivedId)
+        }
         return result
     }
     
@@ -131,14 +133,14 @@ extension MemberDatabase {
         guard let name = member.username else { return result }
         guard let email = member.email else { return result }
         guard let avatarUrl = member.avatarUrl else { return result }
-
-        result.id            = id
-        result.username      = name
-        result.email         = email
-        result.avatarUrl     = URL(string: avatarUrl)
-        result.lastCommentReceivedId    = Int(member.lastCommentReceivedId)
-        result.lastCommentReadId        = Int(member.lastCommentReadId)
-
+        QiscusThread.background {
+            result.id            = id
+            result.username      = name
+            result.email         = email
+            result.avatarUrl     = URL(string: avatarUrl)
+            result.lastCommentReceivedId    = Int(member.lastCommentReceivedId)
+            result.lastCommentReadId        = Int(member.lastCommentReadId)
+        }
         return result
     }
 }

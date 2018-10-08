@@ -37,7 +37,7 @@ class ConfigManager : NSObject {
         }
     }
     var server      : ServerConfig?     = nil
-    var syncInterval : TimeInterval     = 30.0
+    var syncInterval : TimeInterval     = 10.0
     
     fileprivate func filename(_ name: String) -> String {
         return prefix + name + "userdata"
