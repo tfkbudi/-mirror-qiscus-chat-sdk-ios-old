@@ -31,15 +31,17 @@ class PresistentStore {
     
     // MARK: Core Data Saving support
     static func saveContext () {
-        context.perform {
-            do {
-                if context.hasChanges {
-                    try context.save()
+        persistentContainer.performBackgroundTask { (_context) in
+            _context.perform {
+                do {
+                    if _context.hasChanges {
+                        try _context.save()
+                    }
+                } catch {
+                    let saveError = error as NSError
+                    QiscusLogger.errorPrint("Unable to Save Changes of Managed Object Context")
+                    QiscusLogger.errorPrint("\(saveError), \(saveError.localizedDescription)")
                 }
-            } catch {
-                let saveError = error as NSError
-                QiscusLogger.errorPrint("Unable to Save Changes of Managed Object Context")
-                QiscusLogger.errorPrint("\(saveError), \(saveError.localizedDescription)")
             }
         }
     }
