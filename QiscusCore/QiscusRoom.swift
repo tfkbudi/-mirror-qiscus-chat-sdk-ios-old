@@ -157,7 +157,6 @@ extension QiscusCore {
                 }
                 onError(QError.init(message: message))
             }
-            
         }
     }
     

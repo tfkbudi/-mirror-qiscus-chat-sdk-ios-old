@@ -21,17 +21,19 @@ class Router<endpoint: EndPoint>: NetworkRouter {
     private var task: URLSessionTask?
     
     func request(_ route: endpoint, completion: @escaping NetworkRouterCompletion) {
-        do {
-            let request = try self.buildRequest(from: route)
-            QiscusLogger.networkLogger(request: request)
-            task = session.dataTask(with: request, completionHandler: { data, response, error in
-                QiscusLogger.networkLogger(request: request, response: data)
-                DispatchQueue.main.async { completion(data, response, error) }
-            })
-        }catch {
-            DispatchQueue.main.async { completion(nil, nil, error) }
+        DispatchQueue.global(qos: .background).async {
+            do {
+                let request = try self.buildRequest(from: route)
+                QiscusLogger.networkLogger(request: request)
+                self.task = self.session.dataTask(with: request, completionHandler: { data, response, error in
+                    QiscusLogger.networkLogger(request: request, response: data)
+                    DispatchQueue.main.async { completion(data, response, error) }
+                })
+            }catch {
+                DispatchQueue.main.async { completion(nil, nil, error) }
+            }
+            self.task?.resume()
         }
-        self.task?.resume()
     }
     
     func cancel() {
