@@ -8,11 +8,23 @@
 
 import Foundation
 
-public class QiscusStorage {
-    static var shared   : QiscusStorage = QiscusStorage()
-    let fileManager     : QiscusFileManager = QiscusFileManager()
-    
-    init() { }
+class QiscusStorage {
+//    static var shared   : QiscusStorage = QiscusStorage()
+//    let fileManager     : QiscusFileManager = QiscusFileManager()
+//
+//    init() { }
     
     // Move this to File Manager
+    
+//    func background(_ work: @escaping () -> ()) {
+//        DispatchQueue.global(qos: .userInitiated).async {
+//            work()
+//        }
+//    }
+//    
+//    func main(_ work: @escaping () -> ()) {
+//        DispatchQueue.main.async {
+//            work()
+//        }
+//    }
 }

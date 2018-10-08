@@ -7,10 +7,11 @@
 
 import Foundation
 
-class CommentStorage {
+class CommentStorage : QiscusStorage {
     private var data : [CommentModel] = [CommentModel]()
 
-    init() {
+    override init() {
+        super.init()
         // MARK: TODO load data rooms from local storage to var data
     }
     
@@ -105,9 +106,11 @@ class CommentStorage {
     
     func sort(_ data: [CommentModel]) -> [CommentModel]{
         var result = data
-        result.sort { (comment1, comment2) -> Bool in
-            return comment1.unixTimestamp > comment2.unixTimestamp
-        }
+        //self.background {
+            result.sort { (comment1, comment2) -> Bool in
+                return comment1.unixTimestamp > comment2.unixTimestamp
+            }
+        //}
         return result
     }
 }
@@ -135,7 +138,7 @@ extension CommentStorage {
             let _comment = self.map(data)
             _comment.save()
         }
-        self.data = loadFromLocal()
+        self.data = self.loadFromLocal()
     }
     
     private func loadFromLocal() -> [CommentModel] {

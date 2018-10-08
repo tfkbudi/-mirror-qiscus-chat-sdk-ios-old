@@ -33,6 +33,9 @@ extension Member {
     }
     
      static func find(predicate: NSPredicate) -> [Member]? {
+//        PresistentStore.persistentContainer.performBackgroundTask { () in
+//            <#code#>
+//        }
         let fetchRequest:NSFetchRequest<Member> = Member.fetchRequest()
         fetchRequest.predicate = predicate
         do {

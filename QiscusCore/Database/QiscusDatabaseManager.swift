@@ -84,12 +84,6 @@ public class RoomDB {
     
     internal func save(_ rooms: [RoomModel]) {
         room.add(rooms)
-        
-        for r in rooms {
-            // save member
-            guard let participants = r.participants else { return }
-            QiscusCore.database.member.save(participants, roomID: r.id)
-        }
     }
     
     internal func updateLastComment(_ comment: CommentModel) -> Bool {
@@ -114,7 +108,8 @@ public class RoomDB {
     }
     
     public func all() -> [RoomModel] {
-        return room.all()
+        let results = room.all()
+        return results
     }
     
 }
@@ -134,6 +129,8 @@ public class CommentDB {
                 QiscusEventManager.shared.gotNewMessage(comment: c)
                 // check is mycomment
                 self.markCommentAsRead(comment: result)
+                // update last comment in room, mean comment where you send
+                _ = QiscusCore.database.room.updateLastComment(c)
             }) { (updatedResult) in
                 // MARK : TODO refactor comment update flow and event
                 QiscusCore.eventManager.gotMessageStatus(roomID: c.roomId, commentUniqueID: c.uniqId, status: c.status)
@@ -141,10 +138,9 @@ public class CommentDB {
         }
         
         // make sure data sort by date
-        data.reversed().forEach { (c) in
-            // update last comment in room, mean comment where you send
-            _ = QiscusCore.database.room.updateLastComment(c)
-        }
+//        data.reversed().forEach { (c) in
+//            
+//        }
     }
     
     internal func delete(uniqId id: String) -> Bool {

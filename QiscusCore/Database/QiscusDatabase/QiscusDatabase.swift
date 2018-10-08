@@ -23,6 +23,6 @@ class QiscusDatabase {
     
     /// Remove all data from db
     static func clear() {
-        // MARK: TODO clear all data
+        PresistentStore.clear()
     }
 }

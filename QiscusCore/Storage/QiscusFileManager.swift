@@ -8,6 +8,7 @@
 import Foundation
 
 class QiscusFileManager {
+    static var shared : QiscusFileManager = QiscusFileManager()
     // Get local file path: download task stores tune here; AV player plays it.
     private let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     private let qiscusDocumentsPath = "Qiscus"
