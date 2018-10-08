@@ -9,8 +9,7 @@
 import CoreData
 
 class PresistentStore {
-    // MARK: - Core Data stack
-    
+    // MARK: Core Data stack
     private init() {
     }
     
@@ -24,23 +23,41 @@ class PresistentStore {
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
             if let error = error as NSError? {
-//                fatalError("Unresolved error \(error), \(error.userInfo)")
+                QiscusLogger.errorPrint("Unresolved error \(error), \(error.userInfo)")
             }
         })
         return container
     }()
     
-    // MARK: - Core Data Saving support
-    
+    // MARK: Core Data Saving support
     static func saveContext () {
-        if context.hasChanges {
-            context.perform {
-                do {
+        context.perform {
+            do {
+                if context.hasChanges {
                     try context.save()
-                } catch {
-                    fatalError("Unresolved error \(error), \(String(describing: error._userInfo))")
                 }
+            } catch {
+                let saveError = error as NSError
+                QiscusLogger.errorPrint("Unable to Save Changes of Managed Object Context")
+                QiscusLogger.errorPrint("\(saveError), \(saveError.localizedDescription)")
             }
+        }
+    }
+    
+    static func clear() {
+        do {
+            try persistentContainer.persistentStoreCoordinator.managedObjectModel.entities.forEach({ (entity) in
+                if let name = entity.name {
+                    let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: name)
+                    let request = NSBatchDeleteRequest(fetchRequest: fetch)
+                    try context.execute(request)
+                }
+            })
+            try context.save()
+        } catch {
+            let saveError = error as NSError
+            QiscusLogger.errorPrint("Unable to clear DB")
+            QiscusLogger.errorPrint("\(saveError), \(saveError.localizedDescription)")
         }
     }
 }
