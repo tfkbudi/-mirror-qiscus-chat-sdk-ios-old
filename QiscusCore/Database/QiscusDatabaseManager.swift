@@ -126,21 +126,17 @@ public class CommentDB {
         data.forEach { (c) in
             // listen callback to provide event
             comment.add(c, onCreate: { (result) in
-                QiscusEventManager.shared.gotNewMessage(comment: result)
                 // check is mycomment
                 self.markCommentAsRead(comment: result)
                 // update last comment in room, mean comment where you send
-                _ = QiscusCore.database.room.updateLastComment(result)
+                if QiscusCore.database.room.updateLastComment(result) {
+                    QiscusEventManager.shared.gotNewMessage(comment: result)
+                }
             }) { (updatedResult) in
                 // MARK : TODO refactor comment update flow and event
                 QiscusCore.eventManager.gotMessageStatus(roomID: c.roomId, commentUniqueID: c.uniqId, status: c.status)
             }
         }
-        
-        // make sure data sort by date
-//        data.reversed().forEach { (c) in
-//            
-//        }
     }
     
     internal func delete(uniqId id: String) -> Bool {
