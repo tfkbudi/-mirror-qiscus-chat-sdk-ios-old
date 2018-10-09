@@ -31,11 +31,13 @@ class PresistentStore {
     
     // MARK: Core Data Saving support
     static func saveContext () {
-        persistentContainer.performBackgroundTask { (_context) in
-            _context.perform {
+        // persistentContainer.performBackgroundTask { (_context) in
+            context.perform {
                 do {
-                    if _context.hasChanges {
-                        try _context.save()
+                    if context.hasChanges {
+                        try context.save()
+                    }else {
+                        QiscusLogger.debugPrint("no changes db")
                     }
                 } catch {
                     let saveError = error as NSError
@@ -43,7 +45,7 @@ class PresistentStore {
                     QiscusLogger.errorPrint("\(saveError), \(saveError.localizedDescription)")
                 }
             }
-        }
+        // }
     }
     
     static func clear() {
