@@ -94,6 +94,15 @@ class CommentStorage : QiscusStorage {
         }
     }
     
+    func find(status: CommentStatus) -> [CommentModel]? {
+        if data.isEmpty {
+            return nil
+        }else {
+            let result = data.filter{ $0.status == status }
+            return sort(result) // short by unix
+        }
+    }
+    
     // update/replace === identical object
     private func updateCommentDataEvent(old: CommentModel, new: CommentModel) -> Bool{
         if let index = data.index(where: { $0 === old }) {

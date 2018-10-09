@@ -196,4 +196,12 @@ public class CommentDB {
             return comment.find(predicate: NSPredicate(format: "uniqId = %@", id))?.first
         }
     }
+    
+    public func find(status: CommentStatus) -> [CommentModel]? {
+        if let comment = comment.find(status: status) {
+            return comment
+        }else {
+            return comment.find(predicate: NSPredicate(format: "status = %@", status.rawValue))
+        }
+    }
 }

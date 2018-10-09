@@ -26,6 +26,7 @@ public class QiscusCore: NSObject {
     static let fileManager      : QiscusFileManager     = QiscusFileManager.shared
     public static var database  : QiscusDatabaseManager = QiscusDatabaseManager.shared
     static var network          : NetworkManager        = NetworkManager()
+    static var worker           : QiscusWorkerManager   = QiscusWorkerManager()
     static var heartBeat        : QiscusHeartBeat?      = nil
     public static var delegate  : QiscusCoreDelegate? {
         get {
@@ -53,12 +54,7 @@ public class QiscusCore: NSObject {
             QiscusLogger.debugPrint("Start background sync")
             // MARK : Improve realtime state acurate disconnected
 //            if QiscusCore.realtime.state == .disconnected {
-                QiscusCore.shared.sync(onSuccess: { (comments) in
-                    // save comment in local
-                    QiscusCore.database.comment.save(comments)
-                }, onError: { (error) in
-                    QiscusLogger.errorPrint("sync error, \(error.message)")
-                })
+                QiscusCore.worker.resume()
 //            }
         }
         QiscusCore.heartBeat?.resume()

@@ -40,11 +40,11 @@ extension QiscusCore {
                 comment.onChange(commentResult) // view data binding
                 onSuccess(commentResult)
             }else {
-                let _failed = comment
-                _failed.status  = .failed
-                QiscusCore.database.comment.save([_failed])
-                comment.onChange(_failed) // view data binding
-                onError(QError.init(message: error ?? "Failed to send message"))
+                let _pending = comment
+                _pending.status  = .pending
+                QiscusCore.database.comment.save([_pending])
+                comment.onChange(_pending) // view data binding
+                onError(QError.init(message: error ?? "Pending to send message"))
             }
         }
     }
