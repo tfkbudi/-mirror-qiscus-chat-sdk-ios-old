@@ -126,11 +126,11 @@ public class CommentDB {
         data.forEach { (c) in
             // listen callback to provide event
             comment.add(c, onCreate: { (result) in
-                QiscusEventManager.shared.gotNewMessage(comment: c)
+                QiscusEventManager.shared.gotNewMessage(comment: result)
                 // check is mycomment
                 self.markCommentAsRead(comment: result)
                 // update last comment in room, mean comment where you send
-                _ = QiscusCore.database.room.updateLastComment(c)
+                _ = QiscusCore.database.room.updateLastComment(result)
             }) { (updatedResult) in
                 // MARK : TODO refactor comment update flow and event
                 QiscusCore.eventManager.gotMessageStatus(roomID: c.roomId, commentUniqueID: c.uniqId, status: c.status)

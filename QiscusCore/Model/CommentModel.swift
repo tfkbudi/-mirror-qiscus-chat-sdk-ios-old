@@ -41,7 +41,7 @@ open class CommentModel {
         self.username       = user.username
         self.userAvatarUrl  = user.avatarUrl
         self.userEmail      = user.email
-        let now             = Int64(NSDate().timeIntervalSince1970 * 1000.0)
+        let now             = Int64(NSDate().timeIntervalSince1970 * 1000000000.0) // nano sec
         self.uniqId         = "ios_\(now)"
         self.unixTimestamp  = now
     }
