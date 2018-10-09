@@ -19,6 +19,8 @@ extension QiscusCore {
         // call api get_or_create_room_with_target
         QiscusCore.network.getOrCreateRoomWithTarget(targetSdkEmail: user, onSuccess: { (room, comments) in
             QiscusCore.database.room.save([room])
+            // subscribe room from local
+            QiscusCore.realtime.subscribeRooms(rooms: [room])
             var c = [CommentModel]()
             if let _comments = comments {
                 // save comments
@@ -42,6 +44,8 @@ extension QiscusCore {
             if let room = rooms {
                 // save room
                 QiscusCore.database.room.save(room)
+                // subscribe room from local
+                QiscusCore.realtime.subscribeRooms(rooms: room)
                 if let first = room.first {
                     onSuccess(first)
                 }else {
@@ -73,6 +77,9 @@ extension QiscusCore {
                 // trick, coz this api object room not provide comment. So we need to path response api.
                 r.lastComment = c.first
                 QiscusCore.database.room.save([r])
+                // subscribe room from local
+                QiscusCore.realtime.subscribeRooms(rooms: [r])
+                
                 onSuccess(r,c)
             }else {
                 if let e = error {
@@ -95,6 +102,8 @@ extension QiscusCore {
             if let data = rooms {
                 // save room
                 QiscusCore.database.room.save(data)
+                // subscribe room from local
+                QiscusCore.realtime.subscribeRooms(rooms: data)
                 onSuccess(data)
             }else {
                 onError(error ?? QError(message: "Unexpected error"))
@@ -112,6 +121,8 @@ extension QiscusCore {
             if let data = rooms {
                 // save room
                 QiscusCore.database.room.save(data)
+                // subscribe room from local
+                QiscusCore.realtime.subscribeRooms(rooms: data)
                 onSuccess(data)
             }else {
                 onError(error ?? QError(message: "Unexpected error"))
@@ -129,7 +140,7 @@ extension QiscusCore {
                 // save room
                 QiscusCore.database.room.save(rooms)
                 // subscribe room from local
-                // QiscusCore.realtime.subscribeRooms(rooms: rooms)
+                QiscusCore.realtime.subscribeRooms(rooms: rooms)
                 onSuccess(rooms,meta)
             }else {
                 onError(QError.init(message: error ?? "Something Wrong"))
@@ -149,6 +160,8 @@ extension QiscusCore {
             // save room
             if let data = room {
                 QiscusCore.database.room.save([data])
+                // subscribe room from local
+                QiscusCore.realtime.subscribeRooms(rooms: [data])
                 onSuccess(data)
             }else {
                 guard let message = error else {
@@ -173,6 +186,8 @@ extension QiscusCore {
         QiscusCore.network.updateRoom(roomId: id, roomName: name, avatarUrl: url, options: options) { (room, error) in
             if let data = room {
                 QiscusCore.database.room.save([data])
+                // subscribe room from local
+                QiscusCore.realtime.subscribeRooms(rooms: [data])
                 onSuccess(data)
             }else {
                 guard let message = error else {

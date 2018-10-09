@@ -37,7 +37,7 @@ class PresistentStore {
                     if context.hasChanges {
                         try context.save()
                     }else {
-                        QiscusLogger.debugPrint("no changes db")
+                        // QiscusLogger.debugPrint("no changes db")
                     }
                 } catch {
                     let saveError = error as NSError

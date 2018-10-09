@@ -72,17 +72,17 @@ class RealtimeManager {
                 self.pendingSubscribeTopic.append(.read(roomID: room.id))
                 QiscusLogger.errorPrint("failed to subscribe event read from room \(room.name), then queue in pending")
             }
-//            if !c.subscribe(endpoint: .typing(roomID: room.id)) {
-//                self.pendingSubscribeTopic.append(.typing(roomID: room.id))
-//                QiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
-//            }
-//            guard let participants = room.participants else { return }
-//            for u in participants {
-//                if !c.subscribe(endpoint: .onlineStatus(user: u.email)) {
-//                    self.pendingSubscribeTopic.append(.onlineStatus(user: u.email))
-//                    QiscusLogger.errorPrint("failed to subscribe online status user \(u.email), then queue in pending")
-//                }
-//            }
+            if !c.subscribe(endpoint: .typing(roomID: room.id)) {
+                self.pendingSubscribeTopic.append(.typing(roomID: room.id))
+                QiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
+            }
+            guard let participants = room.participants else { return }
+            for u in participants {
+                if !c.subscribe(endpoint: .onlineStatus(user: u.email)) {
+                    self.pendingSubscribeTopic.append(.onlineStatus(user: u.email))
+                    QiscusLogger.errorPrint("failed to subscribe online status user \(u.email), then queue in pending")
+                }
+            }
         }
     }
     
