@@ -51,11 +51,8 @@ public class QiscusCore: NSObject {
         // Background sync when realtime off
         QiscusCore.heartBeat = QiscusHeartBeat.init(timeInterval: config.syncInterval)
         QiscusCore.heartBeat?.eventHandler = {
-            QiscusLogger.debugPrint("Start background sync")
-            // MARK : Improve realtime state acurate disconnected
-//            if QiscusCore.realtime.state == .disconnected {
-                QiscusCore.worker.resume()
-//            }
+            QiscusLogger.debugPrint("Bip")
+            QiscusCore.worker.resume()
         }
         QiscusCore.heartBeat?.resume()
     }

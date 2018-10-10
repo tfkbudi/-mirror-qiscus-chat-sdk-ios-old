@@ -152,7 +152,6 @@ extension CommentStorage {
     private func loadFromLocal() -> [CommentModel] {
         var results = [CommentModel]()
         let db = Comment.all()
-        
         for comment in db {
             let _comment = map(comment)
             results.append(_comment)
@@ -209,12 +208,11 @@ extension CommentStorage {
         guard let username = data.username else { return result }
         guard let userEmail = data.userEmail else { return result }
         guard let userAvatarUrl = data.userAvatarUrl else { return result }
-        guard let extras = data.extras else { return result }
         guard let roomId = data.roomId else { return result }
         guard let uniqueId = data.uniqId else { return result }
         guard let timestamp = data.timestamp else { return result }
         guard let commentBeforeId = data.commentBeforeId else { return result }
-        guard let payload = data.payload else { return result }
+        
         QiscusThread.background {
             result.id               = id
             result.type             = type
@@ -223,7 +221,6 @@ extension CommentStorage {
             result.userEmail        = userEmail
             result.userId           = userId
             result.message          = message
-            result.extras           = extras
             result.uniqId           = uniqueId
             result.roomId           = roomId
             result.commentBeforeId  = commentBeforeId
@@ -231,12 +228,17 @@ extension CommentStorage {
             result.unixTimestamp    = Int64(data.unixTimestamp)
             result.timestamp        = timestamp
             result.isPublicChannel  = data.isPublicChannel
-            result.payload          = self.convertToDictionary(from: payload)
+            result.extras           = data.extras
             
             for s in CommentStatus.all {
                 if s.rawValue == status {
                     result.status = s
                 }
+            }
+            if let _payload = data.payload {
+                result.payload          = self.convertToDictionary(from: _payload)
+            }else {
+                result.payload          = nil
             }
         }
         return result

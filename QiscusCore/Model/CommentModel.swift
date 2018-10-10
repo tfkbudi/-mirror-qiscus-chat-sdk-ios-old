@@ -43,7 +43,9 @@ open class CommentModel {
         self.userEmail      = user.email
         let now             = Int64(NSDate().timeIntervalSince1970 * 1000000000.0) // nano sec
         self.uniqId         = "ios_\(now)"
+        self.id             = "ios_\(now)"
         self.unixTimestamp  = now
+        self.timestamp      = getTimestamp()
     }
     
     init(json: JSON) {
@@ -105,9 +107,16 @@ extension CommentModel {
     func getDate(string: String) -> Date {
         let formatter = DateFormatter()
         formatter.dateFormat    = "yyyy-MM-dd'T'HH:mm:ssZ"
-        formatter.timeZone      = TimeZone(abbreviation: "UTC")
+        formatter.timeZone      = TimeZone(secondsFromGMT: 0)
         let date = formatter.date(from: string)
         return date ?? Date()
+    }
+    
+    func getTimestamp() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat    = "yyyy-MM-dd'T'HH:mm:ssZ"
+        formatter.timeZone      = TimeZone(secondsFromGMT: 0)
+        return formatter.string(from: Date())
     }
     
     func isQiscustype() -> Bool {
