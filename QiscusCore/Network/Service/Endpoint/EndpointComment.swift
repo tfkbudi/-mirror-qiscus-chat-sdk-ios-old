@@ -11,7 +11,7 @@ import Foundation
 internal enum APIComment {
     case postComment(topicId: String, type: String, message: String, payload: [String:Any]?, extras: String?, uniqueTempId: String?)
     case loadComment(topicId: String, lastCommentId: Int?, timestamp: String?, after: Bool?, limit: Int?)
-    case delete(commentUniqueId: [String], type: DeleteType)
+    case delete(commentUniqueId: [String], type: DeleteType, source: DeleteSource)
     case updateStatus(roomId: String,lastCommentReadId: String?, lastCommentReceivedId: String?)
     case clear(roomChannelIds: [String])
     /// Search comment on server
@@ -98,13 +98,16 @@ extension APIComment : EndPoint {
                 params["limit"] = limt
             }
             return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: params)
-        case .delete(let id, let type):
+        case .delete(let id, let type, let source):
             var params = [
                 "token"                     : AUTHTOKEN,
                 "unique_ids"                : id
                 ] as [String : Any]
             if type == .forEveryone {
                 params["is_delete_for_everyone"] = true
+            }
+            if source == .hard {
+                params["is_hard_delete"] = true
             }
             return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
         case .updateStatus(let roomId,let lastCommentReadId,let lastCommentReceivedId):

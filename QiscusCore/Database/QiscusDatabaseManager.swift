@@ -134,14 +134,18 @@ public class CommentDB {
                 }
             }) { (updatedResult) in
                 // MARK : TODO refactor comment update flow and event
-                QiscusCore.eventManager.gotMessageStatus(roomID: c.roomId, commentUniqueID: c.uniqId, status: c.status)
+                QiscusCore.eventManager.gotMessageStatus(comment: updatedResult)
             }
         }
     }
     
-    internal func delete(uniqId id: String) -> Bool {
-        // MARK : TODO
-        return comment.delete(byUniqueID: id)
+    internal func delete(_ data: CommentModel) -> Bool {
+        if comment.delete(byUniqueID: data.uniqId) {
+            QiscusEventManager.shared.gotMessageStatus(comment: data)
+            return true
+        }else {
+            return false
+        }
     }
     
     /// Requirement said, we asume when receive comment from opponent then old my comment status is read

@@ -54,8 +54,8 @@ open class CommentModel {
         self.uniqId             = json["unique_temp_id"].stringValue
         self.commentBeforeId    = json["comment_before_id_str"].stringValue
         self.userEmail          = json["email"].stringValue
-        self.isDeleted          = json["room_id_str"].boolValue
-        self.isPublicChannel    = json["room_id_str"].boolValue
+        self.isDeleted          = json["is_deleted"].boolValue
+        self.isPublicChannel    = json["is_public_channel"].boolValue
         self.message            = json["message"].stringValue
         self.payload            = json["payload"].dictionaryObject
         self.extras             = json["extras"].stringValue
@@ -69,6 +69,9 @@ open class CommentModel {
             if s.rawValue == _status {
                 self.status = s
             }
+        }
+        if isDeleted {
+            self.status = .deleted // maping status deleted, backend not provide
         }
         let _type   = json["type"].stringValue
         if _type.lowercased() != "custom" {

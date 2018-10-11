@@ -15,18 +15,15 @@ class QiscusEventManager {
     var roomDelegate : QiscusCoreRoomDelegate? = nil
     var room : RoomModel? = nil
     
-    func gotMessageStatus(roomID: String, commentUniqueID id: String, status: CommentStatus){
-        guard let room = QiscusCore.database.room.find(id: roomID) else { return }
-        guard let comment = QiscusCore.database.comment.find(uniqueId: id) else { return }
-
-
+    func gotMessageStatus(comment: CommentModel){
+        guard let room = QiscusCore.database.room.find(id: comment.roomId) else { return }
         if let r = QiscusEventManager.shared.room {
-            if r.id == roomID {
-                roomDelegate?.didComment(comment: comment, changeStatus: status)
+            if r.id == room.id {
+                roomDelegate?.didComment(comment: comment, changeStatus: comment.status)
             }
         }
         // got new comment for other room
-        delegate?.onRoom(room, didChangeComment: comment, changeStatus: status)
+        delegate?.onRoom(room, didChangeComment: comment, changeStatus: comment.status)
     }
     
     func gotNewMessage(comment: CommentModel) {

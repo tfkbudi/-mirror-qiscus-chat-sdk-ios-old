@@ -134,20 +134,21 @@ extension RealtimeManager: QiscusRealtimeDelegate {
         case .deleted:
             _status  = .deleted
             // delete from local
-            _ = QiscusCore.database.comment.delete(uniqId: commentUniqueId)
-            QiscusEventManager.shared.gotMessageStatus(roomID: roomId, commentUniqueID: commentUniqueId, status: .deleted)
+            guard var _comment = QiscusCore.database.comment.find(uniqueId: commentUniqueId) else { return }
+            _comment.status = .deleted
+            _comment.isDeleted  = true
+            _ = QiscusCore.database.comment.delete(_comment)
             break
         case .delivered:
             _status  = .delivered
-            QiscusEventManager.shared.gotMessageStatus(roomID: roomId, commentUniqueID: commentUniqueId, status: .delivered)
             break
         case .read:
             _status  = .read
-            QiscusEventManager.shared.gotMessageStatus(roomID: roomId, commentUniqueID: commentUniqueId, status: .read)
             break
         }
         // check convert status
         guard let status = _status else { return }
+        if status == .deleted { return }
         if let room = QiscusCore.database.room.find(id: roomId) {
             // very tricky, need to review v3, calculating comment status in backend for group rooms
             if let comments = QiscusCore.database.comment.find(roomId: roomId) {
