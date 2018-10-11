@@ -134,10 +134,10 @@ extension RealtimeManager: QiscusRealtimeDelegate {
         case .deleted:
             _status  = .deleted
             // delete from local
-            guard var _comment = QiscusCore.database.comment.find(uniqueId: commentUniqueId) else { return }
+            guard let _comment = QiscusCore.database.comment.find(uniqueId: commentUniqueId) else { return }
             _comment.status = .deleted
             _comment.isDeleted  = true
-            _ = QiscusCore.database.comment.delete(_comment)
+            _ = QiscusCore.database.comment.delete(_comment, source: .soft)
             break
         case .delivered:
             _status  = .delivered

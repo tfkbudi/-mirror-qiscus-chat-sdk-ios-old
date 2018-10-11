@@ -97,19 +97,10 @@ extension QiscusCore {
     public func deleteMessage(uniqueIDs id: [String], type: DeleteType, source: DeleteSource = .soft, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
         QiscusCore.network.deleteComment(commentUniqueId: id, type: type, source: source) { (results, error) in
             if let c = results {
-                if source == .soft {
-                    for comment in c {
-                        let new = comment
-                        new.status = .deleted
-                        QiscusCore.database.comment.save([new])
-                    }
-                }
                 // MARK : delete comment in local
                 for comment in c {
-                    if source == .hard {
-                        // delete
-                        _ = QiscusCore.database.comment.delete(comment)
-                    }
+                    // delete
+                    _ = QiscusCore.database.comment.delete(comment, source: source)
                 }
                 onSuccess(c)
             }else {
