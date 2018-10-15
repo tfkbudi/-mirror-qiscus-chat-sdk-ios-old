@@ -8,8 +8,17 @@
 import Foundation
 
 class CommentStorage : QiscusStorage {
-    private var data : [CommentModel] = [CommentModel]()
-
+    private var data : [CommentModel] {
+        get {
+            return _data
+        }
+        set {
+            _data = newValue
+        }
+    }
+    
+    private var _data : [CommentModel] = [CommentModel]()
+    
     override init() {
         super.init()
         // MARK: TODO load data rooms from local storage to var data
@@ -49,6 +58,7 @@ class CommentStorage : QiscusStorage {
         // filter if comment exist update, if not add
         if let r = find(byUniqueID: comment.uniqId)  {
             // check new comment status, end status is read. sending - sent - deliverd - read
+            print("compare add \(comment.uniqId) : \(comment.status.hashValue)/\(comment.status.rawValue) < \(r.status.hashValue)/\(r.status.rawValue)")
             if comment.status.hashValue <= r.status.hashValue && comment.status != .deleted {
                 return // just ignore, except delete(soft, connten ischanged) this part is trick from backend. after receiver update comment status then sender call api load comment somehow status still sent but sender already receive event status read/deliverd via mqtt
             }
@@ -240,6 +250,7 @@ extension CommentStorage {
             }else {
                 result.payload          = nil
             }
+            
         }
         return result
     }

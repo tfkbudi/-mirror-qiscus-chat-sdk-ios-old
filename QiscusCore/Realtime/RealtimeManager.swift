@@ -129,12 +129,12 @@ extension RealtimeManager: QiscusRealtimeDelegate {
     }
 
     func didReceiveMessageStatus(roomId: String, commentId: String, commentUniqueId: String, Status: MessageStatus) {
+        guard let _comment = QiscusCore.database.comment.find(uniqueId: commentUniqueId) else { return }
         var _status : CommentStatus? = nil
         switch Status {
         case .deleted:
             _status  = .deleted
             // delete from local
-            guard let _comment = QiscusCore.database.comment.find(uniqueId: commentUniqueId) else { return }
             _comment.status = .deleted
             _comment.isDeleted  = true
             _ = QiscusCore.database.comment.delete(_comment, source: .soft)
@@ -155,7 +155,7 @@ extension RealtimeManager: QiscusRealtimeDelegate {
                 guard let user = QiscusCore.getProfile() else { return }
                 var mycomments = comments.filter({ $0.userEmail == user.email }) // filter my comment
                 mycomments = mycomments.filter({ $0.status.hashValue < status.hashValue }) // filter status < new status
-                mycomments = mycomments.sorted(by: { $0.date < $1.date}) // asc
+                mycomments = mycomments.filter({ $0.date <= _comment.date })
                 // call api
                 guard let lastMyComment = mycomments.last else { return }
                 
@@ -163,14 +163,17 @@ extension RealtimeManager: QiscusRealtimeDelegate {
                     // compare current status
                     if lastMyComment.status.hashValue < status.hashValue {
                         // update all my comment status
-                        for c in mycomments {
+                        mycomments.forEach { (c) in
                             // check lastStatus and compare
-                            print("compare \(c.status.hashValue)/\(c.status.rawValue) < \(status.hashValue)/\(status.rawValue)")
+                            print("compare event \(c.uniqId) : \(c.status.hashValue)/\(c.status.rawValue) < \(status.hashValue)/\(status.rawValue)")
                             if c.status.hashValue < status.hashValue {
+                                let new = c
                                 // update comment
-                                c.status = status
-                                QiscusCore.database.comment.save([c])
+                                new.status = status
+                                QiscusCore.database.comment.save([new])
+                                QiscusCore.eventManager.gotMessageStatus(comment: new) // patch hard update
                             }
+                            
                         }
                     }
                 }else if room.type == .group {
@@ -184,6 +187,16 @@ extension RealtimeManager: QiscusRealtimeDelegate {
                                     // update comment
                                     c.status = result.status
                                     QiscusCore.database.comment.save([c])
+                                }
+                            }
+                            mycomments.forEach { (c) in
+                                // check lastStatus and compare
+                                if c.status.hashValue < status.hashValue {
+                                    let new = c
+                                    // update comment
+                                    new.status = status
+                                    QiscusCore.database.comment.save([new])
+                                    QiscusCore.eventManager.gotMessageStatus(comment: new) // patch hard update
                                 }
                             }
                         }
