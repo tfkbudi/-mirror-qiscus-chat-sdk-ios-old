@@ -139,6 +139,13 @@ extension QiscusCore {
             if let rooms = data {
                 // save room
                 QiscusCore.database.room.save(rooms)
+                rooms.forEach({ (_room) in
+                    if let _comment = _room.lastComment {
+                        // save last comment
+                        QiscusCore.database.comment.save([_comment])
+                    }
+                })
+
                 // subscribe room from local
                 QiscusCore.realtime.subscribeRooms(rooms: rooms)
                 onSuccess(rooms,meta)
