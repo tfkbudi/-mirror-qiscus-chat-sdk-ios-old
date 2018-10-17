@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		1A9AE35F987E498A4394B208 /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A30556DA65A102F1FEE21504 /* Pods_Example.framework */; };
+		3D05B0FA217715A600060DC9 /* QiscusHeartBeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D05B0F7217715A600060DC9 /* QiscusHeartBeat.swift */; };
+		3D05B0FB217715A600060DC9 /* QiscusWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D05B0F8217715A600060DC9 /* QiscusWorker.swift */; };
+		3D05B0FC217715A600060DC9 /* QiscusThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D05B0F9217715A600060DC9 /* QiscusThread.swift */; };
+		3D05B0FE217715FB00060DC9 /* QiscusWorkerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D05B0FD217715FB00060DC9 /* QiscusWorkerManager.swift */; };
 		3D55936E20FC89CE00AE35E5 /* QiscusCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D55936420FC89CD00AE35E5 /* QiscusCore.framework */; };
 		3D55937320FC89CE00AE35E5 /* QiscusCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D55937220FC89CE00AE35E5 /* QiscusCoreTests.swift */; };
 		3D55938520FC8A0300AE35E5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D55938420FC8A0300AE35E5 /* AppDelegate.swift */; };
@@ -84,6 +88,10 @@
 
 /* Begin PBXFileReference section */
 		12272639BF0C7839D8A8A270 /* Pods-QiscusCoreTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QiscusCoreTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QiscusCoreTests/Pods-QiscusCoreTests.debug.xcconfig"; sourceTree = "<group>"; };
+		3D05B0F7217715A600060DC9 /* QiscusHeartBeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusHeartBeat.swift; sourceTree = "<group>"; };
+		3D05B0F8217715A600060DC9 /* QiscusWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusWorker.swift; sourceTree = "<group>"; };
+		3D05B0F9217715A600060DC9 /* QiscusThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusThread.swift; sourceTree = "<group>"; };
+		3D05B0FD217715FB00060DC9 /* QiscusWorkerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusWorkerManager.swift; sourceTree = "<group>"; };
 		3D55936420FC89CD00AE35E5 /* QiscusCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QiscusCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D55936D20FC89CE00AE35E5 /* QiscusCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QiscusCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D55937220FC89CE00AE35E5 /* QiscusCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiscusCoreTests.swift; sourceTree = "<group>"; };
@@ -286,6 +294,7 @@
 				3DDF1276213307B900E15B36 /* Realtime */,
 				3DDF1278213307B900E15B36 /* Model */,
 				3DDF1284213307B900E15B36 /* QiscusEventManager.swift */,
+				3D05B0FD217715FB00060DC9 /* QiscusWorkerManager.swift */,
 				3DDF1285213307B900E15B36 /* Info.plist */,
 				3DDF1286213307B900E15B36 /* QiscusRoom.swift */,
 			);
@@ -295,6 +304,9 @@
 		3DDF125B213307B900E15B36 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				3D05B0F7217715A600060DC9 /* QiscusHeartBeat.swift */,
+				3D05B0F9217715A600060DC9 /* QiscusThread.swift */,
+				3D05B0F8217715A600060DC9 /* QiscusWorker.swift */,
 				3DDF125C213307B900E15B36 /* Data+Json.swift */,
 				3DDF125D213307B900E15B36 /* QiscusLogger.swift */,
 			);
@@ -608,15 +620,11 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-QiscusCoreTests-checkManifestLockResult.txt",
 			);
@@ -658,8 +666,6 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-QiscusCoreTests/Pods-QiscusCoreTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
@@ -671,8 +677,6 @@
 				"${BUILT_PRODUCTS_DIR}/SwiftyTimer/SwiftyTimer.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
@@ -714,6 +718,7 @@
 			files = (
 				3DDF128A213307B900E15B36 /* QiscusCore.swift in Sources */,
 				3DEC8F02214A20A700B1BC53 /* RoomStorage.swift in Sources */,
+				3D05B0FB217715A600060DC9 /* QiscusWorker.swift in Sources */,
 				3D72892B214A2A2A00B373A9 /* PersistentStore.swift in Sources */,
 				3DDF12A2213307B900E15B36 /* RoomModel.swift in Sources */,
 				3DDF12A7213307B900E15B36 /* QiscusRoom.swift in Sources */,
@@ -730,12 +735,15 @@
 				3D728933214A2A2A00B373A9 /* Room+CoreDataProperties.swift in Sources */,
 				3DDF1295213307B900E15B36 /* EndpointUser.swift in Sources */,
 				3DDF1298213307B900E15B36 /* QiscusStorage.swift in Sources */,
+				3D05B0FC217715A600060DC9 /* QiscusThread.swift in Sources */,
 				3D72892A214A2A2A00B373A9 /* QiscusDatabase.swift in Sources */,
 				3DDF129D213307B900E15B36 /* CommentModel.swift in Sources */,
+				3D05B0FE217715FB00060DC9 /* QiscusWorkerManager.swift in Sources */,
 				3DF16E9B21426E9000E6B059 /* QiscusFileManager.swift in Sources */,
 				3DDF128D213307B900E15B36 /* NetworkRoom.swift in Sources */,
 				3D728930214A2A2A00B373A9 /* Member+CoreDataProperties.swift in Sources */,
 				3DDF1294213307B900E15B36 /* EndpointRoom.swift in Sources */,
+				3D05B0FA217715A600060DC9 /* QiscusHeartBeat.swift in Sources */,
 				3DDF129F213307B900E15B36 /* NonceModel.swift in Sources */,
 				3D72892F214A2A2A00B373A9 /* Comment+CoreDataClass.swift in Sources */,
 				3D728932214A2A2A00B373A9 /* Member+CoreDataClass.swift in Sources */,
