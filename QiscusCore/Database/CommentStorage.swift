@@ -136,7 +136,7 @@ class CommentStorage : QiscusStorage {
 // MARK: Comment database
 extension CommentStorage {
     func find(predicate: NSPredicate) -> [CommentModel]? {
-        guard let data = Comment.find(predicate: predicate) else { return nil}
+        guard let data = Comment.find(predicate: predicate) else { return nil }
         var results = [CommentModel]()
         for r in data {
             results.append(map(r))

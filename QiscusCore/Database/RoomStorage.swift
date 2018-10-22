@@ -241,7 +241,7 @@ extension RoomStorage {
         
         guard let lastCommentid = room.lastCommentId else { return result }
         // check comment
-        result.lastComment   = CommentStorage().find(predicate: NSPredicate(format: "id = %@", lastCommentid))?.first
+        result.lastComment   = CommentStorage().find(predicate: NSPredicate(format: "id == %@", lastCommentid))?.first
         
         return result
     }
