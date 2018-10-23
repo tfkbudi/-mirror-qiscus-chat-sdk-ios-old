@@ -267,4 +267,18 @@ extension QiscusCore {
             }
         }
     }
+    
+    // MARK : Realtime Event
+    
+    public func subscribeEvent(roomID: String) -> Bool {
+        return QiscusCore.realtime.subscribeEvent(roomID: roomID)
+    }
+    
+    public func unsubscribeEvent(roomID: String) {
+        QiscusCore.realtime.unsubscribeEvent(roomID: roomID)
+    }
+    
+    public func publishEvent(roomID: String, payload: [String : Any]) -> Bool {
+        return QiscusCore.realtime.publishEvent(roomID: roomID, payload: payload)
+    }
 }

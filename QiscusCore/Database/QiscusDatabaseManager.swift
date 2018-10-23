@@ -61,11 +61,11 @@ public class MemberDB {
     // MARK : Public
     // take time, coz search in all rooms
     public func find(byEmail email: String) -> MemberModel? {
-//        if let member = comment.find(byUniqueID: id) {
-//            return comment
-//        }else {
-            return member.find(predicate: NSPredicate(format: "email = %@", email))?.first
-//        }
+        if let member = member.find(byEmail: email) {
+            return member
+        }else {
+            return member.find(predicate: NSPredicate(format: "email == %@", email))?.first
+        }
     }
     
 }
@@ -189,7 +189,7 @@ public class CommentDB {
         if let comments = comment.find(byRoomID: id) {
             return comments
         }else {
-            return comment.find(predicate: NSPredicate(format: "roomId = %@", id))
+            return comment.find(predicate: NSPredicate(format: "roomId == %@", id))
         }
     }
 
@@ -197,7 +197,7 @@ public class CommentDB {
         if let comment = comment.find(byID: id) {
             return comment
         }else {
-            return comment.find(predicate: NSPredicate(format: "id = %@", id))?.first
+            return comment.find(predicate: NSPredicate(format: "id == %@", id))?.first
         }
     }
 
@@ -205,7 +205,7 @@ public class CommentDB {
         if let comment = comment.find(byUniqueID: id) {
             return comment
         }else {
-            return comment.find(predicate: NSPredicate(format: "uniqId = %@", id))?.first
+            return comment.find(predicate: NSPredicate(format: "uniqId == %@", id))?.first
         }
     }
     
@@ -213,7 +213,7 @@ public class CommentDB {
         if let comment = comment.find(status: status) {
             return comment
         }else {
-            return comment.find(predicate: NSPredicate(format: "status = %@", status.rawValue))
+            return comment.find(predicate: NSPredicate(format: "status == %@", status.rawValue))
         }
     }
 }

@@ -63,6 +63,14 @@ class MemberDatabase {
             return data.filter{ $0.id == id }.first
         }
     }
+    
+    func find(byEmail id: String) -> MemberModel? {
+        if data.isEmpty {
+            return nil
+        }else {
+            return data.filter{ $0.email == id }.first
+        }
+    }
 }
 
 // MARK: Local Database

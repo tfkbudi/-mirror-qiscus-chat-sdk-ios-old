@@ -121,9 +121,62 @@ class RealtimeManager {
         }
     }
     
+    // MARK : Custom Event
+    func subscribeEvent(roomID: String) -> Bool {
+        guard let c = client else {
+            return false
+        }
+        // subcribe user token to get new comment
+        if !c.subscribe(endpoint: .roomEvent(roomID: roomID)) {
+            self.pendingSubscribeTopic.append(.roomEvent(roomID: roomID))
+            QiscusLogger.errorPrint("failed to subscribe room Event, then queue in pending")
+            return false
+        }else {
+            return true
+        }
+    }
+    
+    func unsubscribeEvent(roomID: String) {
+        guard let c = client else {
+            return
+        }
+        // unsubcribe room event
+        c.unsubscribe(endpoint: .roomEvent(roomID: roomID))
+    }
+    
+    func publishEvent(roomID: String, payload: [String : Any]) -> Bool {
+        guard let c = client else {
+            return false
+        }
+        
+        if c.publish(endpoint: .roomEvent(roomID: roomID, payload: payload.dict2json())) {
+            return true //
+        }else {
+            return false
+        }
+    }
+    
+    // util
+    func toDictionary(text : String) -> [String: Any]? {
+        if let data = text.data(using: .utf8) {
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            } catch {
+                print("error parsing \(error.localizedDescription)")
+            }
+        }
+        return nil
+    }
 }
 
-extension RealtimeManager: QiscusRealtimeDelegate {
+ extension RealtimeManager: QiscusRealtimeDelegate {
+    func didReceiveRoomEvent(roomID: String, data: String) {
+        // MARK : TODO parsing sender and payload
+        print(data)
+        let payload = toDictionary(text: data)
+        print(payload)
+    }
+    
     func didReceiveUser(userEmail: String, isOnline: Bool, timestamp: String) {
         QiscusEventManager.shared.gotEvent(email: userEmail, isOnline: isOnline, timestamp: timestamp)
     }

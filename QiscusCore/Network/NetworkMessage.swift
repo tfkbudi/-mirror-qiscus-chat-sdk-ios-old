@@ -185,14 +185,7 @@ extension NetworkManager {
                     let unread = ApiResponse.decode(unread: responseData)
                     completion(unread,nil)
                 case .failure(let errorMessage):
-                    do {
-                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
-                    } catch {
-                        
-                    }
-                    
-                    completion(0, QError(message: errorMessage))
+                    completion(0, QError(message: "Can't parse error, when request unread count."))
                 }
             }
         }

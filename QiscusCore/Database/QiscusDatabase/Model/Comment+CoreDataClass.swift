@@ -46,6 +46,7 @@ extension Comment {
         do {
             return try  QiscusDatabase.context.fetch(fetchRequest)
         } catch  {
+            QiscusLogger.errorPrint("comment with predicate \(error.localizedDescription)")
             return nil
         }
     }
