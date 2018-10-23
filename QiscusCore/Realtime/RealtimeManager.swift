@@ -155,12 +155,26 @@ class RealtimeManager {
             return false
         }
     }
+    
+    // util
+    func toDictionary(text : String) -> [String: Any]? {
+        if let data = text.data(using: .utf8) {
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            } catch {
+                print("error parsing \(error.localizedDescription)")
+            }
+        }
+        return nil
+    }
 }
 
  extension RealtimeManager: QiscusRealtimeDelegate {
     func didReceiveRoomEvent(roomID: String, data: String) {
         // MARK : TODO parsing sender and payload
         print(data)
+        let payload = toDictionary(text: data)
+        print(payload)
     }
     
     func didReceiveUser(userEmail: String, isOnline: Bool, timestamp: String) {
