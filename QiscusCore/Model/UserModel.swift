@@ -9,7 +9,6 @@
 import SwiftyJSON
 
 public struct UserModel {
-    var app                     : App?      = nil
     public var avatarUrl        : URL       = URL(string: "http://")!
     public var email            : String    = ""
     public var id               : String    = ""
@@ -34,22 +33,20 @@ public struct UserModel {
         token           = json["token"].stringValue
         username        = json["username"].stringValue
         extras          = json["extras"].dictionaryObject
-        let _app        = json["app"]
-        app             = App(json: _app)
     }
 }
 
-class App  {
-     var code : String    = ""
-     var id : String      = ""
-     var name : String    = ""
-
-    init(json: JSON) {
-        code    = json["code"].stringValue
-        id      = json["id_str"].stringValue
-        name    = json["name"].stringValue
-    }
-}
+//class App  {
+//     var code : String    = ""
+//     var id : String      = ""
+//     var name : String    = ""
+//
+//    init(json: JSON) {
+//        code    = json["code"].stringValue
+//        id      = json["id_str"].stringValue
+//        name    = json["name"].stringValue
+//    }
+//}
 
 open class MemberModel {
     public var avatarUrl : URL? = nil

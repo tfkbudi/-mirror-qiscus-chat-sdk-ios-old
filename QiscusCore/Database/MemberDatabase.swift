@@ -71,6 +71,7 @@ class MemberDatabase {
             return data.filter{ $0.email == id }.first
         }
     }
+
 }
 
 // MARK: Local Database

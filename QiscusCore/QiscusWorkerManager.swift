@@ -32,6 +32,8 @@ class QiscusWorkerManager {
     private func pending() {
         guard let comments = QiscusCore.database.comment.find(status: .pending) else { return }
         comments.reversed().forEach { (c) in
+            // validation comment prevent id
+            if c.uniqId.isEmpty { QiscusCore.database.comment.evaluate(); return }
             QiscusCore.shared.sendMessage(roomID: c.roomId, comment: c, onSuccess: { (response) in
                 QiscusLogger.debugPrint("success send pending message \(response.uniqId)")
             }, onError: { (error) in

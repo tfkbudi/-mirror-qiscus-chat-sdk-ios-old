@@ -118,6 +118,10 @@ public class CommentDB {
     private var comment = CommentStorage()
     
     // MARK: Internal
+    internal func evaluate() {
+        comment.evaluate()
+    }
+    
     internal func loadData() {
         comment.loadData()
     }

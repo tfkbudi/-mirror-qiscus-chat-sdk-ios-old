@@ -131,6 +131,16 @@ class CommentStorage : QiscusStorage {
         //}
         return result
     }
+    
+    /// Evaluate data source, remove invalid comment object. exp: uniqid empty, id empty, etc
+    func evaluate() {
+        for (index,c) in data.enumerated() {
+            if c.uniqId.isEmpty {
+                self.data.remove(at: index)
+                // MARK : TODO remove from local db
+            }
+        }
+    }
 }
 
 // MARK: Comment database
