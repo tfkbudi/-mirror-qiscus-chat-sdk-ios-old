@@ -19,6 +19,7 @@ public struct UserModel {
     public var rtKey            : String    = ""
     public var token            : String    = ""
     public var username         : String    = ""
+    public var extras           : [String:Any]? = nil
     
     init() { }
     
@@ -32,6 +33,7 @@ public struct UserModel {
         rtKey           = json["rtKey"].stringValue
         token           = json["token"].stringValue
         username        = json["username"].stringValue
+        extras          = json["extras"].dictionaryObject
         let _app        = json["app"]
         app             = App(json: _app)
     }

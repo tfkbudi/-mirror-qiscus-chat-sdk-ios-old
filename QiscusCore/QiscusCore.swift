@@ -108,16 +108,16 @@ public class QiscusCore: NSObject {
         network.getNonce(onSuccess: onSuccess, onError: onError)
     }
     
-    /// SDK Connect with userId and passkey. The handler to be called once the request has finished.
+    /// SDK Login or Register with userId and passkey, if new user register you can set username and avatar The handler to be called once the request has finished.
     /// - parameter userID              : must be unique per appid, exm: email, phonenumber, udid.
     /// - userKey                       : user password
     /// - parameter completion          : The code to be executed once the request has finished, also give a user object and error.
     ///
-    public class func login(userID: String, userKey: String, onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
+    public class func loginOrRegister(userID: String, userKey: String, username: String? = nil, avatarURL: URL? = nil, extras: [String:Any]? = nil, onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
         if config.appID == nil {
             fatalError("You need to set App ID")
         }
-        network.login(email: userID, password: userKey, username: nil, avatarUrl: nil, onSuccess: { (user) in
+        network.login(email: userID, password: userKey, username: username, avatarUrl: avatarURL?.absoluteString, extras: extras, onSuccess: { (user) in
             // save user in local
             ConfigManager.shared.user = user
             realtime.connect(username: user.email, password: user.token)

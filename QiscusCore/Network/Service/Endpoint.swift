@@ -73,7 +73,7 @@ internal enum APIClient {
     case search(keyword: String, roomId: String?, lastCommentId: Int?)
     case registerDeviceToken(token: String) //
     case removeDeviceToken(token: String) //
-    case loginRegister(user: String, password: String , username: String?, avatarUrl: String?) //
+    case loginRegister(user: String, password: String , username: String?, avatarUrl: String?, extras: [String:Any]?) //
     case loginRegisterJWT(identityToken: String) //
     case nonce //
     case unread
@@ -99,7 +99,7 @@ extension APIClient : EndPoint {
             return "/set_user_device_token"
         case .removeDeviceToken( _):
             return "/remove_user_device_token"
-        case .loginRegister( _, _, _, _):
+        case .loginRegister( _, _, _, _, _):
             return "/login_or_register"
         case .loginRegisterJWT( _):
             return "/auth/verify_identity_token"
@@ -176,18 +176,21 @@ extension APIClient : EndPoint {
                 "device_platform"             : "ios",
                 ]
             return .requestParameters(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil)
-        case .loginRegister(let user, let password, let username, let avatarUrl):
+        case .loginRegister(let user, let password, let username, let avatarUrl, let extras):
             var param = [
                 "email"                       : user,
                 "password"                    : password,
                 "device_platform"             : "ios",
-            ]
+            ] as [String : Any]
             
             if let usernm = username {
                 param["username"] = usernm
             }
             if let avatarurl = avatarUrl{
                 param["avatar_url"] = avatarurl
+            }
+            if let extra = extras {
+                param["extras"] = extra
             }
             return .requestParameters(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil)
         case .loginRegisterJWT(let identityToken):

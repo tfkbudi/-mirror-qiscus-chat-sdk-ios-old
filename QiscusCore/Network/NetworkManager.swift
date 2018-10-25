@@ -142,8 +142,8 @@ extension NetworkManager {
     ///   - username: user display name
     ///   - avatarUrl: user avatar url
     ///   - completion: @escaping on 
-    func login(email: String, password: String ,username : String? ,avatarUrl : String?, onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
-        clientRouter.request(.loginRegister(user: email, password: password,username: username,avatarUrl: avatarUrl)) { (data, response, error) in
+    func login(email: String, password: String ,username : String? ,avatarUrl : String?, extras: [String:Any]?, onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
+        clientRouter.request(.loginRegister(user: email, password: password,username: username,avatarUrl: avatarUrl, extras: extras)) { (data, response, error) in
             if error != nil {
                 onError(QError(message: "Please check your network connection."))
             }
