@@ -276,12 +276,12 @@ extension NetworkManager {
     ///   - displayName: user new displayname
     ///   - avatarUrl: user new avatar url
     ///   - completion: @escaping when finish updating user profile return update Optional(UserModel) and Optional(String error message)
-    func updateProfile(displayName: String = "", avatarUrl: URL? = nil,  onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
+    func updateProfile(displayName: String = "", avatarUrl: URL? = nil, extras: [String : Any]? = nil,  onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
         if displayName.isEmpty && avatarUrl == nil {
             onError(QError(message: "Please set display name"))
             return
         }
-        clientRouter.request(.updateMyProfile(name: displayName, avatarUrl: avatarUrl?.absoluteString)) { (data, response, error) in
+        clientRouter.request(.updateMyProfile(name: displayName, avatarUrl: avatarUrl?.absoluteString, extras: extras)) { (data, response, error) in
             if error != nil {
                 onError(QError(message: "Please check your network connection."))
             }

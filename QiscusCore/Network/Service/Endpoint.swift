@@ -78,7 +78,7 @@ internal enum APIClient {
     case nonce //
     case unread
     case myProfile //
-    case updateMyProfile(name: String?, avatarUrl: String?) //
+    case updateMyProfile(name: String?, avatarUrl: String?, extras: [String : Any]?) //
     case upload()
 }
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
@@ -109,7 +109,7 @@ extension APIClient : EndPoint {
             return "/total_unread_count"
         case .myProfile:
             return "/my_profile"
-        case .updateMyProfile( _, _):
+        case .updateMyProfile( _, _, _):
             return "/my_profile"
         case .upload:
             return "/upload"
@@ -211,10 +211,10 @@ extension APIClient : EndPoint {
                 "token"                       : AUTHTOKEN
             ]
                return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: param)
-        case .updateMyProfile(let name,let avatarUrl) :
+        case .updateMyProfile(let name, let avatarUrl, let extras) :
             var param = [
                 "token"                       : AUTHTOKEN,
-            ]
+            ] as [String : Any]
             
             if let newName = name {
                 param["name"] = newName
@@ -222,6 +222,10 @@ extension APIClient : EndPoint {
             
             if let newAvatarUrl = avatarUrl {
                 param["avatar_url"] = newAvatarUrl
+            }
+            
+            if let _extras = extras {
+                param["extras"] = _extras
             }
             
             return .requestParameters(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil)

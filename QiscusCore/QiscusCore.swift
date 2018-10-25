@@ -273,9 +273,9 @@ public class QiscusCore: NSObject {
     ///   - displayName: nick name
     ///   - url: user avatar url
     ///   - completion: The code to be executed once the request has finished
-    public func updateProfile(displayName: String = "", avatarUrl url: URL? = nil, onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
+    public func updateProfile(username: String = "", avatarUrl url: URL? = nil, extras: [String : Any]? = nil, onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
         // MARK : TODO save profile
-        QiscusCore.network.updateProfile(displayName: displayName, avatarUrl: url, onSuccess: onSuccess, onError: onError)
+        QiscusCore.network.updateProfile(displayName: username, avatarUrl: url, extras: extras, onSuccess: onSuccess, onError: onError)
     }
     
     /// Get total unreac count by user
