@@ -173,6 +173,7 @@ extension CommentStorage {
         let db = Comment.all()
         for comment in db {
             let _comment = map(comment)
+            if _comment.uniqId.isEmpty { break }
             results.append(_comment)
         }
         return results
