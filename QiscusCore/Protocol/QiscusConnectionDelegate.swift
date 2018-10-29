@@ -24,13 +24,6 @@ public enum QiscusConnectionState : String{
 public protocol QiscusCoreDelegate {
     // MARK: Comment Event in Room
     
-    /// Room event, got room when subsribe by room id
-    ///
-    /// - Parameters:
-    ///   - room: <#room description#>
-    ///   - event: <#event description#>
-    //func onRoom(_ room: RoomModel, gotNewEvent event: [String:Any])
-    
     /// new comment is comming
     ///
     /// - Parameters:

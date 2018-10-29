@@ -8,7 +8,7 @@
 import Foundation
 import SwiftyJSON
 
-protocol RoomEvent {
+protocol RoomDelegate {
     var delegate : QiscusCoreRoomDelegate? { set get }
 }
 
@@ -31,7 +31,7 @@ public class Meta {
     
 }
 
-open class RoomModel : RoomEvent {
+open class RoomModel : RoomDelegate {
     public var onChange : (CommentModel) -> Void = { _ in} // data binding
     public internal(set) var id : String = ""
     public internal(set) var name : String = ""
