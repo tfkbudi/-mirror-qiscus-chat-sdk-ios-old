@@ -124,15 +124,15 @@ extension QiscusCore {
     ///   - keyword: required, keyword to search
     ///   - roomID: optional, search on specific room by room id
     ///   - lastCommentId: optional, will get comments aafter this id
-    public func searchMessage(keyword: String, roomID: String?, lastCommentId: Int?, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.searchMessage(keyword: keyword, roomID: roomID, lastCommentId: lastCommentId) { (results, error) in
-            if let c = results {
-                onSuccess(c)
-            }else {
-                onError(error ?? QError(message: "Unexpected error"))
-            }
-        }
-    }
+//    public func searchMessage(keyword: String, roomID: String?, lastCommentId: Int?, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
+//        QiscusCore.network.searchMessage(keyword: keyword, roomID: roomID, lastCommentId: lastCommentId) { (results, error) in
+//            if let c = results {
+//                onSuccess(c)
+//            }else {
+//                onError(error ?? QError(message: "Unexpected error"))
+//            }
+//        }
+//    }
     
     /// Mark Comment as read, include comment before
     ///

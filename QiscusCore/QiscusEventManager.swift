@@ -16,6 +16,8 @@ class QiscusEventManager {
     var room : RoomModel? = nil
     
     func gotMessageStatus(comment: CommentModel){
+        guard let user = QiscusCore.getProfile() else { return }
+        if comment.userEmail != user.email { return }
         guard let room = QiscusCore.database.room.find(id: comment.roomId) else { return }
         if let r = QiscusEventManager.shared.room {
             if r.id == room.id {

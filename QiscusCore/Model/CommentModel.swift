@@ -140,6 +140,7 @@ public enum CommentStatus : String {
     case sent       = "sent"
     case delivered    = "delivered"
     case read       = "read"
+    case deleting   = "deleting" // because delete process not only in device
     case deleted    = "deleted"
     
     static let all = [sending, pending, failed, sent, delivered, read, deleted]
