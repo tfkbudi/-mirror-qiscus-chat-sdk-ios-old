@@ -8,59 +8,54 @@
 
 /* Begin PBXBuildFile section */
 		1A9AE35F987E498A4394B208 /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A30556DA65A102F1FEE21504 /* Pods_Example.framework */; };
-		3D3F9DE521880A3500DDD00C /* QiscusCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D3F9DA121880A3400DDD00C /* QiscusCore.h */; };
-		3D3F9DE621880A3500DDD00C /* QiscusHeartBeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DA321880A3400DDD00C /* QiscusHeartBeat.swift */; };
-		3D3F9DE721880A3500DDD00C /* QiscusWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DA421880A3400DDD00C /* QiscusWorker.swift */; };
-		3D3F9DE821880A3500DDD00C /* Data+Json.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DA521880A3400DDD00C /* Data+Json.swift */; };
-		3D3F9DE921880A3500DDD00C /* QiscusLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DA621880A3400DDD00C /* QiscusLogger.swift */; };
-		3D3F9DEA21880A3500DDD00C /* QiscusThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DA721880A3400DDD00C /* QiscusThread.swift */; };
-		3D3F9DEB21880A3500DDD00C /* QiscusRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DA821880A3400DDD00C /* QiscusRoom.swift */; };
-		3D3F9DEC21880A3500DDD00C /* CommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DAA21880A3400DDD00C /* CommentModel.swift */; };
-		3D3F9DED21880A3500DDD00C /* FileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DAB21880A3400DDD00C /* FileModel.swift */; };
-		3D3F9DEE21880A3500DDD00C /* QiscusConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DAD21880A3400DDD00C /* QiscusConfig.swift */; };
-		3D3F9DEF21880A3500DDD00C /* NonceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DAE21880A3400DDD00C /* NonceModel.swift */; };
-		3D3F9DF021880A3500DDD00C /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DAF21880A3400DDD00C /* UserModel.swift */; };
-		3D3F9DF121880A3500DDD00C /* QError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DB021880A3400DDD00C /* QError.swift */; };
-		3D3F9DF221880A3500DDD00C /* RoomModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DB121880A3400DDD00C /* RoomModel.swift */; };
-		3D3F9DF321880A3500DDD00C /* GenericModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DB221880A3400DDD00C /* GenericModel.swift */; };
-		3D3F9DF421880A3500DDD00C /* ApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DB421880A3400DDD00C /* ApiResponse.swift */; };
-		3D3F9DF521880A3500DDD00C /* RealtimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DB621880A3400DDD00C /* RealtimeManager.swift */; };
-		3D3F9DF621880A3500DDD00C /* CommentStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DB821880A3400DDD00C /* CommentStorage.swift */; };
-		3D3F9DF721880A3500DDD00C /* MemberDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DB921880A3400DDD00C /* MemberDatabase.swift */; };
-		3D3F9DF821880A3500DDD00C /* RoomStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DBA21880A3400DDD00C /* RoomStorage.swift */; };
-		3D3F9DF921880A3500DDD00C /* QiscusDatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DBB21880A3400DDD00C /* QiscusDatabaseManager.swift */; };
-		3D3F9DFA21880A3500DDD00C /* Qiscus.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DBD21880A3400DDD00C /* Qiscus.xcdatamodeld */; };
-		3D3F9DFB21880A3500DDD00C /* QiscusDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DBF21880A3400DDD00C /* QiscusDatabase.swift */; };
-		3D3F9DFC21880A3500DDD00C /* Room+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DC121880A3400DDD00C /* Room+CoreDataClass.swift */; };
-		3D3F9DFD21880A3500DDD00C /* ActiveRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DC221880A3400DDD00C /* ActiveRecord.swift */; };
-		3D3F9DFE21880A3500DDD00C /* Comment+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DC321880A3400DDD00C /* Comment+CoreDataClass.swift */; };
-		3D3F9DFF21880A3500DDD00C /* Member+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DC421880A3400DDD00C /* Member+CoreDataProperties.swift */; };
-		3D3F9E0021880A3500DDD00C /* Comment+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DC521880A3400DDD00C /* Comment+CoreDataProperties.swift */; };
-		3D3F9E0121880A3500DDD00C /* Member+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DC621880A3400DDD00C /* Member+CoreDataClass.swift */; };
-		3D3F9E0221880A3500DDD00C /* Room+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DC721880A3400DDD00C /* Room+CoreDataProperties.swift */; };
-		3D3F9E0321880A3500DDD00C /* PersistentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DC821880A3400DDD00C /* PersistentStore.swift */; };
-		3D3F9E0421880A3500DDD00C /* QiscusComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DC921880A3400DDD00C /* QiscusComment.swift */; };
-		3D3F9E0521880A3500DDD00C /* QiscusStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DCB21880A3400DDD00C /* QiscusStorage.swift */; };
-		3D3F9E0621880A3500DDD00C /* ConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DCC21880A3400DDD00C /* ConfigManager.swift */; };
-		3D3F9E0721880A3500DDD00C /* QiscusFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DCD21880A3400DDD00C /* QiscusFileManager.swift */; };
-		3D3F9E0821880A3500DDD00C /* QiscusWorkerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DCE21880A3400DDD00C /* QiscusWorkerManager.swift */; };
-		3D3F9E0921880A3500DDD00C /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3D3F9DCF21880A3500DDD00C /* Info.plist */; };
-		3D3F9E0A21880A3500DDD00C /* NetworkMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DD121880A3500DDD00C /* NetworkMessage.swift */; };
-		3D3F9E0B21880A3500DDD00C /* NetworkUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DD221880A3500DDD00C /* NetworkUpload.swift */; };
-		3D3F9E0C21880A3500DDD00C /* NetworkRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DD321880A3500DDD00C /* NetworkRoom.swift */; };
-		3D3F9E0D21880A3500DDD00C /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DD421880A3500DDD00C /* NetworkManager.swift */; };
-		3D3F9E0E21880A3500DDD00C /* ParameterEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DD621880A3500DDD00C /* ParameterEncoder.swift */; };
-		3D3F9E0F21880A3500DDD00C /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DD721880A3500DDD00C /* ParameterEncoding.swift */; };
-		3D3F9E1021880A3500DDD00C /* HTTPUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DD921880A3500DDD00C /* HTTPUtil.swift */; };
-		3D3F9E1121880A3500DDD00C /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DDA21880A3500DDD00C /* Router.swift */; };
-		3D3F9E1221880A3500DDD00C /* EndpointComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DDC21880A3500DDD00C /* EndpointComment.swift */; };
-		3D3F9E1321880A3500DDD00C /* EndpointRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DDD21880A3500DDD00C /* EndpointRoom.swift */; };
-		3D3F9E1421880A3500DDD00C /* EndpointUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DDE21880A3500DDD00C /* EndpointUser.swift */; };
-		3D3F9E1521880A3500DDD00C /* DownloadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DDF21880A3500DDD00C /* DownloadService.swift */; };
-		3D3F9E1621880A3500DDD00C /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DE021880A3500DDD00C /* Endpoint.swift */; };
-		3D3F9E1721880A3500DDD00C /* QiscusConnectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DE221880A3500DDD00C /* QiscusConnectionDelegate.swift */; };
-		3D3F9E1821880A3500DDD00C /* QiscusCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DE321880A3500DDD00C /* QiscusCore.swift */; };
-		3D3F9E1921880A3500DDD00C /* QiscusEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9DE421880A3500DDD00C /* QiscusEventManager.swift */; };
+		3D05B0FE217715FB00060DC9 /* QiscusWorkerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D05B0FD217715FB00060DC9 /* QiscusWorkerManager.swift */; };
+		3D3F9EC82188103E00DDD00C /* QiscusStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9E8A2188103E00DDD00C /* QiscusStorage.swift */; };
+		3D3F9EC92188103E00DDD00C /* ConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9E8B2188103E00DDD00C /* ConfigManager.swift */; };
+		3D3F9ECA2188103E00DDD00C /* QiscusFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9E8C2188103E00DDD00C /* QiscusFileManager.swift */; };
+		3D3F9ECC2188103E00DDD00C /* CommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9E8F2188103E00DDD00C /* CommentModel.swift */; };
+		3D3F9ECD2188103E00DDD00C /* FileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9E902188103E00DDD00C /* FileModel.swift */; };
+		3D3F9ECE2188103E00DDD00C /* QiscusConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9E922188103E00DDD00C /* QiscusConfig.swift */; };
+		3D3F9ECF2188103E00DDD00C /* NonceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9E932188103E00DDD00C /* NonceModel.swift */; };
+		3D3F9ED02188103E00DDD00C /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9E942188103E00DDD00C /* UserModel.swift */; };
+		3D3F9ED12188103E00DDD00C /* QError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9E952188103E00DDD00C /* QError.swift */; };
+		3D3F9ED22188103E00DDD00C /* RoomEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9E962188103E00DDD00C /* RoomEvent.swift */; };
+		3D3F9ED32188103E00DDD00C /* RoomModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9E972188103E00DDD00C /* RoomModel.swift */; };
+		3D3F9ED42188103E00DDD00C /* GenericModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9E982188103E00DDD00C /* GenericModel.swift */; };
+		3D3F9ED52188103E00DDD00C /* ApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9E9A2188103E00DDD00C /* ApiResponse.swift */; };
+		3D3F9ED62188103E00DDD00C /* QiscusConnectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9E9C2188103E00DDD00C /* QiscusConnectionDelegate.swift */; };
+		3D3F9ED72188103E00DDD00C /* NetworkMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9E9E2188103E00DDD00C /* NetworkMessage.swift */; };
+		3D3F9ED82188103E00DDD00C /* NetworkUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9E9F2188103E00DDD00C /* NetworkUpload.swift */; };
+		3D3F9ED92188103E00DDD00C /* NetworkRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EA02188103E00DDD00C /* NetworkRoom.swift */; };
+		3D3F9EDA2188103E00DDD00C /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EA12188103E00DDD00C /* NetworkManager.swift */; };
+		3D3F9EDB2188103E00DDD00C /* ParameterEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EA32188103E00DDD00C /* ParameterEncoder.swift */; };
+		3D3F9EDC2188103E00DDD00C /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EA42188103E00DDD00C /* ParameterEncoding.swift */; };
+		3D3F9EDD2188103E00DDD00C /* HTTPUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EA62188103E00DDD00C /* HTTPUtil.swift */; };
+		3D3F9EDE2188103E00DDD00C /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EA72188103E00DDD00C /* Router.swift */; };
+		3D3F9EDF2188103E00DDD00C /* EndpointComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EA92188103E00DDD00C /* EndpointComment.swift */; };
+		3D3F9EE02188103E00DDD00C /* EndpointRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EAA2188103E00DDD00C /* EndpointRoom.swift */; };
+		3D3F9EE12188103E00DDD00C /* EndpointUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EAB2188103E00DDD00C /* EndpointUser.swift */; };
+		3D3F9EE22188103E00DDD00C /* DownloadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EAC2188103E00DDD00C /* DownloadService.swift */; };
+		3D3F9EE32188103E00DDD00C /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EAD2188103E00DDD00C /* Endpoint.swift */; };
+		3D3F9EE42188103E00DDD00C /* RealtimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EAF2188103E00DDD00C /* RealtimeManager.swift */; };
+		3D3F9EE52188103E00DDD00C /* QiscusHeartBeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EB12188103E00DDD00C /* QiscusHeartBeat.swift */; };
+		3D3F9EE62188103E00DDD00C /* QiscusWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EB22188103E00DDD00C /* QiscusWorker.swift */; };
+		3D3F9EE72188103E00DDD00C /* Data+Json.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EB32188103E00DDD00C /* Data+Json.swift */; };
+		3D3F9EE82188103E00DDD00C /* QiscusLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EB42188103E00DDD00C /* QiscusLogger.swift */; };
+		3D3F9EE92188103E00DDD00C /* QiscusThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EB52188103E00DDD00C /* QiscusThread.swift */; };
+		3D3F9EEA2188103E00DDD00C /* CommentStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EB72188103E00DDD00C /* CommentStorage.swift */; };
+		3D3F9EEB2188103E00DDD00C /* MemberDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EB82188103E00DDD00C /* MemberDatabase.swift */; };
+		3D3F9EEC2188103E00DDD00C /* RoomStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EB92188103E00DDD00C /* RoomStorage.swift */; };
+		3D3F9EED2188103E00DDD00C /* QiscusDatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EBA2188103E00DDD00C /* QiscusDatabaseManager.swift */; };
+		3D3F9EEE2188103E00DDD00C /* Qiscus.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EBC2188103E00DDD00C /* Qiscus.xcdatamodeld */; };
+		3D3F9EEF2188103E00DDD00C /* QiscusDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EBE2188103E00DDD00C /* QiscusDatabase.swift */; };
+		3D3F9EF02188103E00DDD00C /* Room+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EC02188103E00DDD00C /* Room+CoreDataClass.swift */; };
+		3D3F9EF12188103E00DDD00C /* ActiveRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EC12188103E00DDD00C /* ActiveRecord.swift */; };
+		3D3F9EF22188103E00DDD00C /* Comment+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EC22188103E00DDD00C /* Comment+CoreDataClass.swift */; };
+		3D3F9EF32188103E00DDD00C /* Member+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EC32188103E00DDD00C /* Member+CoreDataProperties.swift */; };
+		3D3F9EF42188103E00DDD00C /* Comment+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EC42188103E00DDD00C /* Comment+CoreDataProperties.swift */; };
+		3D3F9EF52188103E00DDD00C /* Member+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EC52188103E00DDD00C /* Member+CoreDataClass.swift */; };
+		3D3F9EF62188103E00DDD00C /* Room+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EC62188103E00DDD00C /* Room+CoreDataProperties.swift */; };
+		3D3F9EF72188103E00DDD00C /* PersistentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9EC72188103E00DDD00C /* PersistentStore.swift */; };
 		3D55936E20FC89CE00AE35E5 /* QiscusCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D55936420FC89CD00AE35E5 /* QiscusCore.framework */; };
 		3D55937320FC89CE00AE35E5 /* QiscusCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D55937220FC89CE00AE35E5 /* QiscusCoreTests.swift */; };
 		3D55938520FC8A0300AE35E5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D55938420FC8A0300AE35E5 /* AppDelegate.swift */; };
@@ -70,6 +65,12 @@
 		3D55938F20FC8A0800AE35E5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D55938D20FC8A0800AE35E5 /* LaunchScreen.storyboard */; };
 		3D55939520FC8F3500AE35E5 /* QiscusCore.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 3D55939420FC8F3500AE35E5 /* QiscusCore.podspec */; };
 		3D84A2DE2164EA92008F61A5 /* ConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D84A2DD2164EA92008F61A5 /* ConfigTests.swift */; };
+		3DDF1287213307B900E15B36 /* QiscusCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DDF125A213307B900E15B36 /* QiscusCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3DDF128A213307B900E15B36 /* QiscusCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF125E213307B900E15B36 /* QiscusCore.swift */; };
+		3DDF128B213307B900E15B36 /* QiscusComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF125F213307B900E15B36 /* QiscusComment.swift */; };
+		3DDF12A5213307B900E15B36 /* QiscusEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF1284213307B900E15B36 /* QiscusEventManager.swift */; };
+		3DDF12A6213307B900E15B36 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3DDF1285213307B900E15B36 /* Info.plist */; };
+		3DDF12A7213307B900E15B36 /* QiscusRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF1286213307B900E15B36 /* QiscusRoom.swift */; };
 		3DE20493215888B700E3DF96 /* QiscusCore.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 3DE20492215888B600E3DF96 /* QiscusCore.podspec */; };
 		3DE20495215889A500E3DF96 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 3DE20494215889A500E3DF96 /* README.md */; };
 		BEE67DF727DAF96B4B587D6C /* Pods_QiscusCoreTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9FFD5261FB0CA8C203545C0 /* Pods_QiscusCoreTests.framework */; };
@@ -88,59 +89,54 @@
 
 /* Begin PBXFileReference section */
 		12272639BF0C7839D8A8A270 /* Pods-QiscusCoreTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QiscusCoreTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QiscusCoreTests/Pods-QiscusCoreTests.debug.xcconfig"; sourceTree = "<group>"; };
-		3D3F9DA121880A3400DDD00C /* QiscusCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QiscusCore.h; sourceTree = "<group>"; };
-		3D3F9DA321880A3400DDD00C /* QiscusHeartBeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusHeartBeat.swift; sourceTree = "<group>"; };
-		3D3F9DA421880A3400DDD00C /* QiscusWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusWorker.swift; sourceTree = "<group>"; };
-		3D3F9DA521880A3400DDD00C /* Data+Json.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Json.swift"; sourceTree = "<group>"; };
-		3D3F9DA621880A3400DDD00C /* QiscusLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusLogger.swift; sourceTree = "<group>"; };
-		3D3F9DA721880A3400DDD00C /* QiscusThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusThread.swift; sourceTree = "<group>"; };
-		3D3F9DA821880A3400DDD00C /* QiscusRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusRoom.swift; sourceTree = "<group>"; };
-		3D3F9DAA21880A3400DDD00C /* CommentModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentModel.swift; sourceTree = "<group>"; };
-		3D3F9DAB21880A3400DDD00C /* FileModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileModel.swift; sourceTree = "<group>"; };
-		3D3F9DAD21880A3400DDD00C /* QiscusConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusConfig.swift; sourceTree = "<group>"; };
-		3D3F9DAE21880A3400DDD00C /* NonceModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonceModel.swift; sourceTree = "<group>"; };
-		3D3F9DAF21880A3400DDD00C /* UserModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
-		3D3F9DB021880A3400DDD00C /* QError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QError.swift; sourceTree = "<group>"; };
-		3D3F9DB121880A3400DDD00C /* RoomModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomModel.swift; sourceTree = "<group>"; };
-		3D3F9DB221880A3400DDD00C /* GenericModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericModel.swift; sourceTree = "<group>"; };
-		3D3F9DB421880A3400DDD00C /* ApiResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiResponse.swift; sourceTree = "<group>"; };
-		3D3F9DB621880A3400DDD00C /* RealtimeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealtimeManager.swift; sourceTree = "<group>"; };
-		3D3F9DB821880A3400DDD00C /* CommentStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentStorage.swift; sourceTree = "<group>"; };
-		3D3F9DB921880A3400DDD00C /* MemberDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemberDatabase.swift; sourceTree = "<group>"; };
-		3D3F9DBA21880A3400DDD00C /* RoomStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomStorage.swift; sourceTree = "<group>"; };
-		3D3F9DBB21880A3400DDD00C /* QiscusDatabaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusDatabaseManager.swift; sourceTree = "<group>"; };
-		3D3F9DBE21880A3400DDD00C /* Qiscus.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Qiscus.xcdatamodel; sourceTree = "<group>"; };
-		3D3F9DBF21880A3400DDD00C /* QiscusDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusDatabase.swift; sourceTree = "<group>"; };
-		3D3F9DC121880A3400DDD00C /* Room+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Room+CoreDataClass.swift"; sourceTree = "<group>"; };
-		3D3F9DC221880A3400DDD00C /* ActiveRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveRecord.swift; sourceTree = "<group>"; };
-		3D3F9DC321880A3400DDD00C /* Comment+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Comment+CoreDataClass.swift"; sourceTree = "<group>"; };
-		3D3F9DC421880A3400DDD00C /* Member+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Member+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		3D3F9DC521880A3400DDD00C /* Comment+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Comment+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		3D3F9DC621880A3400DDD00C /* Member+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Member+CoreDataClass.swift"; sourceTree = "<group>"; };
-		3D3F9DC721880A3400DDD00C /* Room+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Room+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		3D3F9DC821880A3400DDD00C /* PersistentStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentStore.swift; sourceTree = "<group>"; };
-		3D3F9DC921880A3400DDD00C /* QiscusComment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusComment.swift; sourceTree = "<group>"; };
-		3D3F9DCB21880A3400DDD00C /* QiscusStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusStorage.swift; sourceTree = "<group>"; };
-		3D3F9DCC21880A3400DDD00C /* ConfigManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigManager.swift; sourceTree = "<group>"; };
-		3D3F9DCD21880A3400DDD00C /* QiscusFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusFileManager.swift; sourceTree = "<group>"; };
-		3D3F9DCE21880A3400DDD00C /* QiscusWorkerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusWorkerManager.swift; sourceTree = "<group>"; };
-		3D3F9DCF21880A3500DDD00C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3D3F9DD121880A3500DDD00C /* NetworkMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkMessage.swift; sourceTree = "<group>"; };
-		3D3F9DD221880A3500DDD00C /* NetworkUpload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkUpload.swift; sourceTree = "<group>"; };
-		3D3F9DD321880A3500DDD00C /* NetworkRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkRoom.swift; sourceTree = "<group>"; };
-		3D3F9DD421880A3500DDD00C /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
-		3D3F9DD621880A3500DDD00C /* ParameterEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParameterEncoder.swift; sourceTree = "<group>"; };
-		3D3F9DD721880A3500DDD00C /* ParameterEncoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParameterEncoding.swift; sourceTree = "<group>"; };
-		3D3F9DD921880A3500DDD00C /* HTTPUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPUtil.swift; sourceTree = "<group>"; };
-		3D3F9DDA21880A3500DDD00C /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
-		3D3F9DDC21880A3500DDD00C /* EndpointComment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndpointComment.swift; sourceTree = "<group>"; };
-		3D3F9DDD21880A3500DDD00C /* EndpointRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndpointRoom.swift; sourceTree = "<group>"; };
-		3D3F9DDE21880A3500DDD00C /* EndpointUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndpointUser.swift; sourceTree = "<group>"; };
-		3D3F9DDF21880A3500DDD00C /* DownloadService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadService.swift; sourceTree = "<group>"; };
-		3D3F9DE021880A3500DDD00C /* Endpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
-		3D3F9DE221880A3500DDD00C /* QiscusConnectionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusConnectionDelegate.swift; sourceTree = "<group>"; };
-		3D3F9DE321880A3500DDD00C /* QiscusCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusCore.swift; sourceTree = "<group>"; };
-		3D3F9DE421880A3500DDD00C /* QiscusEventManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusEventManager.swift; sourceTree = "<group>"; };
+		3D05B0FD217715FB00060DC9 /* QiscusWorkerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusWorkerManager.swift; sourceTree = "<group>"; };
+		3D3F9E8A2188103E00DDD00C /* QiscusStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusStorage.swift; sourceTree = "<group>"; };
+		3D3F9E8B2188103E00DDD00C /* ConfigManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigManager.swift; sourceTree = "<group>"; };
+		3D3F9E8C2188103E00DDD00C /* QiscusFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusFileManager.swift; sourceTree = "<group>"; };
+		3D3F9E8F2188103E00DDD00C /* CommentModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentModel.swift; sourceTree = "<group>"; };
+		3D3F9E902188103E00DDD00C /* FileModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileModel.swift; sourceTree = "<group>"; };
+		3D3F9E922188103E00DDD00C /* QiscusConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusConfig.swift; sourceTree = "<group>"; };
+		3D3F9E932188103E00DDD00C /* NonceModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonceModel.swift; sourceTree = "<group>"; };
+		3D3F9E942188103E00DDD00C /* UserModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		3D3F9E952188103E00DDD00C /* QError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QError.swift; sourceTree = "<group>"; };
+		3D3F9E962188103E00DDD00C /* RoomEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomEvent.swift; sourceTree = "<group>"; };
+		3D3F9E972188103E00DDD00C /* RoomModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomModel.swift; sourceTree = "<group>"; };
+		3D3F9E982188103E00DDD00C /* GenericModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericModel.swift; sourceTree = "<group>"; };
+		3D3F9E9A2188103E00DDD00C /* ApiResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiResponse.swift; sourceTree = "<group>"; };
+		3D3F9E9C2188103E00DDD00C /* QiscusConnectionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusConnectionDelegate.swift; sourceTree = "<group>"; };
+		3D3F9E9E2188103E00DDD00C /* NetworkMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkMessage.swift; sourceTree = "<group>"; };
+		3D3F9E9F2188103E00DDD00C /* NetworkUpload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkUpload.swift; sourceTree = "<group>"; };
+		3D3F9EA02188103E00DDD00C /* NetworkRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkRoom.swift; sourceTree = "<group>"; };
+		3D3F9EA12188103E00DDD00C /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		3D3F9EA32188103E00DDD00C /* ParameterEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParameterEncoder.swift; sourceTree = "<group>"; };
+		3D3F9EA42188103E00DDD00C /* ParameterEncoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParameterEncoding.swift; sourceTree = "<group>"; };
+		3D3F9EA62188103E00DDD00C /* HTTPUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPUtil.swift; sourceTree = "<group>"; };
+		3D3F9EA72188103E00DDD00C /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		3D3F9EA92188103E00DDD00C /* EndpointComment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndpointComment.swift; sourceTree = "<group>"; };
+		3D3F9EAA2188103E00DDD00C /* EndpointRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndpointRoom.swift; sourceTree = "<group>"; };
+		3D3F9EAB2188103E00DDD00C /* EndpointUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndpointUser.swift; sourceTree = "<group>"; };
+		3D3F9EAC2188103E00DDD00C /* DownloadService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadService.swift; sourceTree = "<group>"; };
+		3D3F9EAD2188103E00DDD00C /* Endpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
+		3D3F9EAF2188103E00DDD00C /* RealtimeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealtimeManager.swift; sourceTree = "<group>"; };
+		3D3F9EB12188103E00DDD00C /* QiscusHeartBeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusHeartBeat.swift; sourceTree = "<group>"; };
+		3D3F9EB22188103E00DDD00C /* QiscusWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusWorker.swift; sourceTree = "<group>"; };
+		3D3F9EB32188103E00DDD00C /* Data+Json.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Json.swift"; sourceTree = "<group>"; };
+		3D3F9EB42188103E00DDD00C /* QiscusLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusLogger.swift; sourceTree = "<group>"; };
+		3D3F9EB52188103E00DDD00C /* QiscusThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusThread.swift; sourceTree = "<group>"; };
+		3D3F9EB72188103E00DDD00C /* CommentStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentStorage.swift; sourceTree = "<group>"; };
+		3D3F9EB82188103E00DDD00C /* MemberDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemberDatabase.swift; sourceTree = "<group>"; };
+		3D3F9EB92188103E00DDD00C /* RoomStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomStorage.swift; sourceTree = "<group>"; };
+		3D3F9EBA2188103E00DDD00C /* QiscusDatabaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusDatabaseManager.swift; sourceTree = "<group>"; };
+		3D3F9EBD2188103E00DDD00C /* Qiscus.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Qiscus.xcdatamodel; sourceTree = "<group>"; };
+		3D3F9EBE2188103E00DDD00C /* QiscusDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusDatabase.swift; sourceTree = "<group>"; };
+		3D3F9EC02188103E00DDD00C /* Room+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Room+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3D3F9EC12188103E00DDD00C /* ActiveRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveRecord.swift; sourceTree = "<group>"; };
+		3D3F9EC22188103E00DDD00C /* Comment+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Comment+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3D3F9EC32188103E00DDD00C /* Member+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Member+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3D3F9EC42188103E00DDD00C /* Comment+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Comment+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3D3F9EC52188103E00DDD00C /* Member+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Member+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3D3F9EC62188103E00DDD00C /* Room+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Room+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3D3F9EC72188103E00DDD00C /* PersistentStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentStore.swift; sourceTree = "<group>"; };
 		3D55936420FC89CD00AE35E5 /* QiscusCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QiscusCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D55936D20FC89CE00AE35E5 /* QiscusCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QiscusCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D55937220FC89CE00AE35E5 /* QiscusCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiscusCoreTests.swift; sourceTree = "<group>"; };
@@ -155,6 +151,12 @@
 		3D55939420FC8F3500AE35E5 /* QiscusCore.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = QiscusCore.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		3D728919214A235E00B373A9 /* QiscusDatabase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QiscusDatabase.framework; sourceTree = "<group>"; };
 		3D84A2DD2164EA92008F61A5 /* ConfigTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigTests.swift; sourceTree = "<group>"; };
+		3DDF125A213307B900E15B36 /* QiscusCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QiscusCore.h; sourceTree = "<group>"; };
+		3DDF125E213307B900E15B36 /* QiscusCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusCore.swift; sourceTree = "<group>"; };
+		3DDF125F213307B900E15B36 /* QiscusComment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusComment.swift; sourceTree = "<group>"; };
+		3DDF1284213307B900E15B36 /* QiscusEventManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusEventManager.swift; sourceTree = "<group>"; };
+		3DDF1285213307B900E15B36 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3DDF1286213307B900E15B36 /* QiscusRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusRoom.swift; sourceTree = "<group>"; };
 		3DE20492215888B600E3DF96 /* QiscusCore.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = QiscusCore.podspec; path = Cocoapods/QiscusCore.podspec; sourceTree = "<group>"; };
 		3DE20494215889A500E3DF96 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = Cocoapods/README.md; sourceTree = "<group>"; };
 		560FF1F83A73EA20444892C4 /* Pods_QiscusCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QiscusCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -207,155 +209,156 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		3D3F9DA221880A3400DDD00C /* Util */ = {
+		3D3F9E892188103E00DDD00C /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				3D3F9DA321880A3400DDD00C /* QiscusHeartBeat.swift */,
-				3D3F9DA421880A3400DDD00C /* QiscusWorker.swift */,
-				3D3F9DA521880A3400DDD00C /* Data+Json.swift */,
-				3D3F9DA621880A3400DDD00C /* QiscusLogger.swift */,
-				3D3F9DA721880A3400DDD00C /* QiscusThread.swift */,
-			);
-			path = Util;
-			sourceTree = "<group>";
-		};
-		3D3F9DA921880A3400DDD00C /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				3D3F9DAA21880A3400DDD00C /* CommentModel.swift */,
-				3D3F9DAB21880A3400DDD00C /* FileModel.swift */,
-				3D3F9DAC21880A3400DDD00C /* Config */,
-				3D3F9DAE21880A3400DDD00C /* NonceModel.swift */,
-				3D3F9DAF21880A3400DDD00C /* UserModel.swift */,
-				3D3F9DB021880A3400DDD00C /* QError.swift */,
-				3D3F9DB121880A3400DDD00C /* RoomModel.swift */,
-				3D3F9DB221880A3400DDD00C /* GenericModel.swift */,
-				3D3F9DB321880A3400DDD00C /* Base */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		3D3F9DAC21880A3400DDD00C /* Config */ = {
-			isa = PBXGroup;
-			children = (
-				3D3F9DAD21880A3400DDD00C /* QiscusConfig.swift */,
-			);
-			path = Config;
-			sourceTree = "<group>";
-		};
-		3D3F9DB321880A3400DDD00C /* Base */ = {
-			isa = PBXGroup;
-			children = (
-				3D3F9DB421880A3400DDD00C /* ApiResponse.swift */,
-			);
-			path = Base;
-			sourceTree = "<group>";
-		};
-		3D3F9DB521880A3400DDD00C /* Realtime */ = {
-			isa = PBXGroup;
-			children = (
-				3D3F9DB621880A3400DDD00C /* RealtimeManager.swift */,
-			);
-			path = Realtime;
-			sourceTree = "<group>";
-		};
-		3D3F9DB721880A3400DDD00C /* Database */ = {
-			isa = PBXGroup;
-			children = (
-				3D3F9DB821880A3400DDD00C /* CommentStorage.swift */,
-				3D3F9DB921880A3400DDD00C /* MemberDatabase.swift */,
-				3D3F9DBA21880A3400DDD00C /* RoomStorage.swift */,
-				3D3F9DBB21880A3400DDD00C /* QiscusDatabaseManager.swift */,
-				3D3F9DBC21880A3400DDD00C /* QiscusDatabase */,
-			);
-			path = Database;
-			sourceTree = "<group>";
-		};
-		3D3F9DBC21880A3400DDD00C /* QiscusDatabase */ = {
-			isa = PBXGroup;
-			children = (
-				3D3F9DBD21880A3400DDD00C /* Qiscus.xcdatamodeld */,
-				3D3F9DBF21880A3400DDD00C /* QiscusDatabase.swift */,
-				3D3F9DC021880A3400DDD00C /* Model */,
-				3D3F9DC821880A3400DDD00C /* PersistentStore.swift */,
-			);
-			path = QiscusDatabase;
-			sourceTree = "<group>";
-		};
-		3D3F9DC021880A3400DDD00C /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				3D3F9DC121880A3400DDD00C /* Room+CoreDataClass.swift */,
-				3D3F9DC221880A3400DDD00C /* ActiveRecord.swift */,
-				3D3F9DC321880A3400DDD00C /* Comment+CoreDataClass.swift */,
-				3D3F9DC421880A3400DDD00C /* Member+CoreDataProperties.swift */,
-				3D3F9DC521880A3400DDD00C /* Comment+CoreDataProperties.swift */,
-				3D3F9DC621880A3400DDD00C /* Member+CoreDataClass.swift */,
-				3D3F9DC721880A3400DDD00C /* Room+CoreDataProperties.swift */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		3D3F9DCA21880A3400DDD00C /* Storage */ = {
-			isa = PBXGroup;
-			children = (
-				3D3F9DCB21880A3400DDD00C /* QiscusStorage.swift */,
-				3D3F9DCC21880A3400DDD00C /* ConfigManager.swift */,
-				3D3F9DCD21880A3400DDD00C /* QiscusFileManager.swift */,
+				3D3F9E8A2188103E00DDD00C /* QiscusStorage.swift */,
+				3D3F9E8B2188103E00DDD00C /* ConfigManager.swift */,
+				3D3F9E8C2188103E00DDD00C /* QiscusFileManager.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
 		};
-		3D3F9DD021880A3500DDD00C /* Network */ = {
+		3D3F9E8E2188103E00DDD00C /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				3D3F9DD121880A3500DDD00C /* NetworkMessage.swift */,
-				3D3F9DD221880A3500DDD00C /* NetworkUpload.swift */,
-				3D3F9DD321880A3500DDD00C /* NetworkRoom.swift */,
-				3D3F9DD421880A3500DDD00C /* NetworkManager.swift */,
-				3D3F9DD521880A3500DDD00C /* Encoding */,
-				3D3F9DD821880A3500DDD00C /* Service */,
+				3D3F9E8F2188103E00DDD00C /* CommentModel.swift */,
+				3D3F9E902188103E00DDD00C /* FileModel.swift */,
+				3D3F9E912188103E00DDD00C /* Config */,
+				3D3F9E932188103E00DDD00C /* NonceModel.swift */,
+				3D3F9E942188103E00DDD00C /* UserModel.swift */,
+				3D3F9E952188103E00DDD00C /* QError.swift */,
+				3D3F9E962188103E00DDD00C /* RoomEvent.swift */,
+				3D3F9E972188103E00DDD00C /* RoomModel.swift */,
+				3D3F9E982188103E00DDD00C /* GenericModel.swift */,
+				3D3F9E992188103E00DDD00C /* Base */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		3D3F9E912188103E00DDD00C /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				3D3F9E922188103E00DDD00C /* QiscusConfig.swift */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		3D3F9E992188103E00DDD00C /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				3D3F9E9A2188103E00DDD00C /* ApiResponse.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		3D3F9E9B2188103E00DDD00C /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				3D3F9E9C2188103E00DDD00C /* QiscusConnectionDelegate.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
+		3D3F9E9D2188103E00DDD00C /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				3D3F9E9E2188103E00DDD00C /* NetworkMessage.swift */,
+				3D3F9E9F2188103E00DDD00C /* NetworkUpload.swift */,
+				3D3F9EA02188103E00DDD00C /* NetworkRoom.swift */,
+				3D3F9EA12188103E00DDD00C /* NetworkManager.swift */,
+				3D3F9EA22188103E00DDD00C /* Encoding */,
+				3D3F9EA52188103E00DDD00C /* Service */,
 			);
 			path = Network;
 			sourceTree = "<group>";
 		};
-		3D3F9DD521880A3500DDD00C /* Encoding */ = {
+		3D3F9EA22188103E00DDD00C /* Encoding */ = {
 			isa = PBXGroup;
 			children = (
-				3D3F9DD621880A3500DDD00C /* ParameterEncoder.swift */,
-				3D3F9DD721880A3500DDD00C /* ParameterEncoding.swift */,
+				3D3F9EA32188103E00DDD00C /* ParameterEncoder.swift */,
+				3D3F9EA42188103E00DDD00C /* ParameterEncoding.swift */,
 			);
 			path = Encoding;
 			sourceTree = "<group>";
 		};
-		3D3F9DD821880A3500DDD00C /* Service */ = {
+		3D3F9EA52188103E00DDD00C /* Service */ = {
 			isa = PBXGroup;
 			children = (
-				3D3F9DD921880A3500DDD00C /* HTTPUtil.swift */,
-				3D3F9DDA21880A3500DDD00C /* Router.swift */,
-				3D3F9DDB21880A3500DDD00C /* Endpoint */,
-				3D3F9DDF21880A3500DDD00C /* DownloadService.swift */,
-				3D3F9DE021880A3500DDD00C /* Endpoint.swift */,
+				3D3F9EA62188103E00DDD00C /* HTTPUtil.swift */,
+				3D3F9EA72188103E00DDD00C /* Router.swift */,
+				3D3F9EA82188103E00DDD00C /* Endpoint */,
+				3D3F9EAC2188103E00DDD00C /* DownloadService.swift */,
+				3D3F9EAD2188103E00DDD00C /* Endpoint.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
 		};
-		3D3F9DDB21880A3500DDD00C /* Endpoint */ = {
+		3D3F9EA82188103E00DDD00C /* Endpoint */ = {
 			isa = PBXGroup;
 			children = (
-				3D3F9DDC21880A3500DDD00C /* EndpointComment.swift */,
-				3D3F9DDD21880A3500DDD00C /* EndpointRoom.swift */,
-				3D3F9DDE21880A3500DDD00C /* EndpointUser.swift */,
+				3D3F9EA92188103E00DDD00C /* EndpointComment.swift */,
+				3D3F9EAA2188103E00DDD00C /* EndpointRoom.swift */,
+				3D3F9EAB2188103E00DDD00C /* EndpointUser.swift */,
 			);
 			path = Endpoint;
 			sourceTree = "<group>";
 		};
-		3D3F9DE121880A3500DDD00C /* Protocol */ = {
+		3D3F9EAE2188103E00DDD00C /* Realtime */ = {
 			isa = PBXGroup;
 			children = (
-				3D3F9DE221880A3500DDD00C /* QiscusConnectionDelegate.swift */,
+				3D3F9EAF2188103E00DDD00C /* RealtimeManager.swift */,
 			);
-			path = Protocol;
+			path = Realtime;
+			sourceTree = "<group>";
+		};
+		3D3F9EB02188103E00DDD00C /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				3D3F9EB12188103E00DDD00C /* QiscusHeartBeat.swift */,
+				3D3F9EB22188103E00DDD00C /* QiscusWorker.swift */,
+				3D3F9EB32188103E00DDD00C /* Data+Json.swift */,
+				3D3F9EB42188103E00DDD00C /* QiscusLogger.swift */,
+				3D3F9EB52188103E00DDD00C /* QiscusThread.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		3D3F9EB62188103E00DDD00C /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				3D3F9EB72188103E00DDD00C /* CommentStorage.swift */,
+				3D3F9EB82188103E00DDD00C /* MemberDatabase.swift */,
+				3D3F9EB92188103E00DDD00C /* RoomStorage.swift */,
+				3D3F9EBA2188103E00DDD00C /* QiscusDatabaseManager.swift */,
+				3D3F9EBB2188103E00DDD00C /* QiscusDatabase */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
+		3D3F9EBB2188103E00DDD00C /* QiscusDatabase */ = {
+			isa = PBXGroup;
+			children = (
+				3D3F9EBC2188103E00DDD00C /* Qiscus.xcdatamodeld */,
+				3D3F9EBE2188103E00DDD00C /* QiscusDatabase.swift */,
+				3D3F9EBF2188103E00DDD00C /* Model */,
+				3D3F9EC72188103E00DDD00C /* PersistentStore.swift */,
+			);
+			path = QiscusDatabase;
+			sourceTree = "<group>";
+		};
+		3D3F9EBF2188103E00DDD00C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3D3F9EC02188103E00DDD00C /* Room+CoreDataClass.swift */,
+				3D3F9EC12188103E00DDD00C /* ActiveRecord.swift */,
+				3D3F9EC22188103E00DDD00C /* Comment+CoreDataClass.swift */,
+				3D3F9EC32188103E00DDD00C /* Member+CoreDataProperties.swift */,
+				3D3F9EC42188103E00DDD00C /* Comment+CoreDataProperties.swift */,
+				3D3F9EC52188103E00DDD00C /* Member+CoreDataClass.swift */,
+				3D3F9EC62188103E00DDD00C /* Room+CoreDataProperties.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		3D55935A20FC89CD00AE35E5 = {
@@ -409,20 +412,20 @@
 		3DDF1259213307B900E15B36 /* QiscusCore */ = {
 			isa = PBXGroup;
 			children = (
-				3D3F9DB721880A3400DDD00C /* Database */,
-				3D3F9DCF21880A3500DDD00C /* Info.plist */,
-				3D3F9DA921880A3400DDD00C /* Model */,
-				3D3F9DD021880A3500DDD00C /* Network */,
-				3D3F9DE121880A3500DDD00C /* Protocol */,
-				3D3F9DC921880A3400DDD00C /* QiscusComment.swift */,
-				3D3F9DA121880A3400DDD00C /* QiscusCore.h */,
-				3D3F9DE321880A3500DDD00C /* QiscusCore.swift */,
-				3D3F9DE421880A3500DDD00C /* QiscusEventManager.swift */,
-				3D3F9DA821880A3400DDD00C /* QiscusRoom.swift */,
-				3D3F9DCE21880A3400DDD00C /* QiscusWorkerManager.swift */,
-				3D3F9DB521880A3400DDD00C /* Realtime */,
-				3D3F9DCA21880A3400DDD00C /* Storage */,
-				3D3F9DA221880A3400DDD00C /* Util */,
+				3DDF125A213307B900E15B36 /* QiscusCore.h */,
+				3DDF125E213307B900E15B36 /* QiscusCore.swift */,
+				3DDF125F213307B900E15B36 /* QiscusComment.swift */,
+				3DDF1284213307B900E15B36 /* QiscusEventManager.swift */,
+				3D3F9EB62188103E00DDD00C /* Database */,
+				3D3F9E8E2188103E00DDD00C /* Model */,
+				3D3F9E9D2188103E00DDD00C /* Network */,
+				3D3F9E9B2188103E00DDD00C /* Protocol */,
+				3D3F9EAE2188103E00DDD00C /* Realtime */,
+				3D3F9E892188103E00DDD00C /* Storage */,
+				3D3F9EB02188103E00DDD00C /* Util */,
+				3D05B0FD217715FB00060DC9 /* QiscusWorkerManager.swift */,
+				3DDF1285213307B900E15B36 /* Info.plist */,
+				3DDF1286213307B900E15B36 /* QiscusRoom.swift */,
 			);
 			path = QiscusCore;
 			sourceTree = "<group>";
@@ -447,7 +450,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D3F9DE521880A3500DDD00C /* QiscusCore.h in Headers */,
+				3DDF1287213307B900E15B36 /* QiscusCore.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -524,7 +527,7 @@
 				TargetAttributes = {
 					3D55936320FC89CD00AE35E5 = {
 						CreatedOnToolsVersion = 9.3;
-						LastSwiftMigration = 0940;
+						LastSwiftMigration = 0930;
 						ProvisioningStyle = Manual;
 					};
 					3D55936C20FC89CE00AE35E5 = {
@@ -562,7 +565,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D3F9E0921880A3500DDD00C /* Info.plist in Resources */,
+				3DDF12A6213307B900E15B36 /* Info.plist in Resources */,
 				3DE20493215888B700E3DF96 /* QiscusCore.podspec in Resources */,
 				3DE20495215889A500E3DF96 /* README.md in Resources */,
 				3D55939520FC8F3500AE35E5 /* QiscusCore.podspec in Resources */,
@@ -708,57 +711,58 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D3F9DEE21880A3500DDD00C /* QiscusConfig.swift in Sources */,
-				3D3F9E0121880A3500DDD00C /* Member+CoreDataClass.swift in Sources */,
-				3D3F9DE621880A3500DDD00C /* QiscusHeartBeat.swift in Sources */,
-				3D3F9E0D21880A3500DDD00C /* NetworkManager.swift in Sources */,
-				3D3F9DF621880A3500DDD00C /* CommentStorage.swift in Sources */,
-				3D3F9DFF21880A3500DDD00C /* Member+CoreDataProperties.swift in Sources */,
-				3D3F9DFC21880A3500DDD00C /* Room+CoreDataClass.swift in Sources */,
-				3D3F9E1021880A3500DDD00C /* HTTPUtil.swift in Sources */,
-				3D3F9DF121880A3500DDD00C /* QError.swift in Sources */,
-				3D3F9DF721880A3500DDD00C /* MemberDatabase.swift in Sources */,
-				3D3F9E1621880A3500DDD00C /* Endpoint.swift in Sources */,
-				3D3F9E0021880A3500DDD00C /* Comment+CoreDataProperties.swift in Sources */,
-				3D3F9DF421880A3500DDD00C /* ApiResponse.swift in Sources */,
-				3D3F9DF921880A3500DDD00C /* QiscusDatabaseManager.swift in Sources */,
-				3D3F9DFD21880A3500DDD00C /* ActiveRecord.swift in Sources */,
-				3D3F9DFE21880A3500DDD00C /* Comment+CoreDataClass.swift in Sources */,
-				3D3F9DF321880A3500DDD00C /* GenericModel.swift in Sources */,
-				3D3F9DF821880A3500DDD00C /* RoomStorage.swift in Sources */,
-				3D3F9E0C21880A3500DDD00C /* NetworkRoom.swift in Sources */,
-				3D3F9DE921880A3500DDD00C /* QiscusLogger.swift in Sources */,
-				3D3F9E0E21880A3500DDD00C /* ParameterEncoder.swift in Sources */,
-				3D3F9DEF21880A3500DDD00C /* NonceModel.swift in Sources */,
-				3D3F9E0721880A3500DDD00C /* QiscusFileManager.swift in Sources */,
-				3D3F9DEB21880A3500DDD00C /* QiscusRoom.swift in Sources */,
-				3D3F9E1421880A3500DDD00C /* EndpointUser.swift in Sources */,
-				3D3F9E0221880A3500DDD00C /* Room+CoreDataProperties.swift in Sources */,
-				3D3F9DFB21880A3500DDD00C /* QiscusDatabase.swift in Sources */,
-				3D3F9DED21880A3500DDD00C /* FileModel.swift in Sources */,
-				3D3F9E0A21880A3500DDD00C /* NetworkMessage.swift in Sources */,
-				3D3F9E1921880A3500DDD00C /* QiscusEventManager.swift in Sources */,
-				3D3F9DE821880A3500DDD00C /* Data+Json.swift in Sources */,
-				3D3F9E0F21880A3500DDD00C /* ParameterEncoding.swift in Sources */,
-				3D3F9E1721880A3500DDD00C /* QiscusConnectionDelegate.swift in Sources */,
-				3D3F9DEC21880A3500DDD00C /* CommentModel.swift in Sources */,
-				3D3F9E1121880A3500DDD00C /* Router.swift in Sources */,
-				3D3F9E0621880A3500DDD00C /* ConfigManager.swift in Sources */,
-				3D3F9E0421880A3500DDD00C /* QiscusComment.swift in Sources */,
-				3D3F9E1821880A3500DDD00C /* QiscusCore.swift in Sources */,
-				3D3F9DE721880A3500DDD00C /* QiscusWorker.swift in Sources */,
-				3D3F9E0821880A3500DDD00C /* QiscusWorkerManager.swift in Sources */,
-				3D3F9DEA21880A3500DDD00C /* QiscusThread.swift in Sources */,
-				3D3F9E1221880A3500DDD00C /* EndpointComment.swift in Sources */,
-				3D3F9DF021880A3500DDD00C /* UserModel.swift in Sources */,
-				3D3F9E1321880A3500DDD00C /* EndpointRoom.swift in Sources */,
-				3D3F9E0521880A3500DDD00C /* QiscusStorage.swift in Sources */,
-				3D3F9E0321880A3500DDD00C /* PersistentStore.swift in Sources */,
-				3D3F9E1521880A3500DDD00C /* DownloadService.swift in Sources */,
-				3D3F9E0B21880A3500DDD00C /* NetworkUpload.swift in Sources */,
-				3D3F9DFA21880A3500DDD00C /* Qiscus.xcdatamodeld in Sources */,
-				3D3F9DF521880A3500DDD00C /* RealtimeManager.swift in Sources */,
-				3D3F9DF221880A3500DDD00C /* RoomModel.swift in Sources */,
+				3DDF128A213307B900E15B36 /* QiscusCore.swift in Sources */,
+				3D3F9ED32188103E00DDD00C /* RoomModel.swift in Sources */,
+				3D3F9ED92188103E00DDD00C /* NetworkRoom.swift in Sources */,
+				3DDF12A7213307B900E15B36 /* QiscusRoom.swift in Sources */,
+				3D3F9EDF2188103E00DDD00C /* EndpointComment.swift in Sources */,
+				3D3F9EED2188103E00DDD00C /* QiscusDatabaseManager.swift in Sources */,
+				3D3F9ED82188103E00DDD00C /* NetworkUpload.swift in Sources */,
+				3D3F9ED42188103E00DDD00C /* GenericModel.swift in Sources */,
+				3D3F9EE92188103E00DDD00C /* QiscusThread.swift in Sources */,
+				3D3F9EEB2188103E00DDD00C /* MemberDatabase.swift in Sources */,
+				3D3F9EDD2188103E00DDD00C /* HTTPUtil.swift in Sources */,
+				3D3F9EE52188103E00DDD00C /* QiscusHeartBeat.swift in Sources */,
+				3D3F9EE12188103E00DDD00C /* EndpointUser.swift in Sources */,
+				3D3F9ECE2188103E00DDD00C /* QiscusConfig.swift in Sources */,
+				3DDF12A5213307B900E15B36 /* QiscusEventManager.swift in Sources */,
+				3D3F9EE72188103E00DDD00C /* Data+Json.swift in Sources */,
+				3DDF128B213307B900E15B36 /* QiscusComment.swift in Sources */,
+				3D3F9ED62188103E00DDD00C /* QiscusConnectionDelegate.swift in Sources */,
+				3D3F9EE62188103E00DDD00C /* QiscusWorker.swift in Sources */,
+				3D3F9EF62188103E00DDD00C /* Room+CoreDataProperties.swift in Sources */,
+				3D05B0FE217715FB00060DC9 /* QiscusWorkerManager.swift in Sources */,
+				3D3F9EDA2188103E00DDD00C /* NetworkManager.swift in Sources */,
+				3D3F9EDB2188103E00DDD00C /* ParameterEncoder.swift in Sources */,
+				3D3F9ECA2188103E00DDD00C /* QiscusFileManager.swift in Sources */,
+				3D3F9EF72188103E00DDD00C /* PersistentStore.swift in Sources */,
+				3D3F9EF42188103E00DDD00C /* Comment+CoreDataProperties.swift in Sources */,
+				3D3F9ED52188103E00DDD00C /* ApiResponse.swift in Sources */,
+				3D3F9EEC2188103E00DDD00C /* RoomStorage.swift in Sources */,
+				3D3F9EF02188103E00DDD00C /* Room+CoreDataClass.swift in Sources */,
+				3D3F9ED02188103E00DDD00C /* UserModel.swift in Sources */,
+				3D3F9EF12188103E00DDD00C /* ActiveRecord.swift in Sources */,
+				3D3F9EE82188103E00DDD00C /* QiscusLogger.swift in Sources */,
+				3D3F9EEF2188103E00DDD00C /* QiscusDatabase.swift in Sources */,
+				3D3F9ED22188103E00DDD00C /* RoomEvent.swift in Sources */,
+				3D3F9ECC2188103E00DDD00C /* CommentModel.swift in Sources */,
+				3D3F9EC92188103E00DDD00C /* ConfigManager.swift in Sources */,
+				3D3F9EF32188103E00DDD00C /* Member+CoreDataProperties.swift in Sources */,
+				3D3F9EF52188103E00DDD00C /* Member+CoreDataClass.swift in Sources */,
+				3D3F9EDC2188103E00DDD00C /* ParameterEncoding.swift in Sources */,
+				3D3F9EE02188103E00DDD00C /* EndpointRoom.swift in Sources */,
+				3D3F9EE22188103E00DDD00C /* DownloadService.swift in Sources */,
+				3D3F9EE42188103E00DDD00C /* RealtimeManager.swift in Sources */,
+				3D3F9ED72188103E00DDD00C /* NetworkMessage.swift in Sources */,
+				3D3F9ED12188103E00DDD00C /* QError.swift in Sources */,
+				3D3F9EDE2188103E00DDD00C /* Router.swift in Sources */,
+				3D3F9EC82188103E00DDD00C /* QiscusStorage.swift in Sources */,
+				3D3F9EEE2188103E00DDD00C /* Qiscus.xcdatamodeld in Sources */,
+				3D3F9ECF2188103E00DDD00C /* NonceModel.swift in Sources */,
+				3D3F9EE32188103E00DDD00C /* Endpoint.swift in Sources */,
+				3D3F9EF22188103E00DDD00C /* Comment+CoreDataClass.swift in Sources */,
+				3D3F9ECD2188103E00DDD00C /* FileModel.swift in Sources */,
+				3D3F9EEA2188103E00DDD00C /* CommentStorage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1102,12 +1106,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		3D3F9DBD21880A3400DDD00C /* Qiscus.xcdatamodeld */ = {
+		3D3F9EBC2188103E00DDD00C /* Qiscus.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				3D3F9DBE21880A3400DDD00C /* Qiscus.xcdatamodel */,
+				3D3F9EBD2188103E00DDD00C /* Qiscus.xcdatamodel */,
 			);
-			currentVersion = 3D3F9DBE21880A3400DDD00C /* Qiscus.xcdatamodel */;
+			currentVersion = 3D3F9EBD2188103E00DDD00C /* Qiscus.xcdatamodel */;
 			path = Qiscus.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
