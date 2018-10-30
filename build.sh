@@ -73,12 +73,16 @@ say -v veena Copying iOS files into zip directory
 echo "\033[32m Copying iOS files into zip directory \033[0m\n"
 mkdir $ZIP_DIR
 cp -RL LICENSE $ZIP_DIR
+rm -rf $ZIP_DIR/$FRAMEWORK_NAME_WITH_EXT
+rm -rf $ZIP_DIR/$DSYM_NAME_WITH_EXT
 cp -RL $BUILD/$IOS_UNIVERSAL_DIR/$FRAMEWORK_NAME_WITH_EXT $ZIP_DIR/$FRAMEWORK_NAME_WITH_EXT
 cp -RL $BUILD/$IOS_UNIVERSAL_DIR/$DSYM_NAME_WITH_EXT $ZIP_DIR/$DSYM_NAME_WITH_EXT
 cd $ZIP_DIR
 say -v veena creating universal frameworks
 zip -r QiscusCore.zip LICENSE $FRAMEWORK_NAME_WITH_EXT $DSYM_NAME_WITH_EXT
 echo "\033[32m Zipped resulting frameworks and dSYMs to $ZIP_DIR/QiscusCore.zip \033[0m\n"
+rm -rf $ZIP_DIR/$FRAMEWORK_NAME_WITH_EXT
+rm -rf $ZIP_DIR/$DSYM_NAME_WITH_EXT
 echo "\033[35m Finish creating universal frameworks \n Alhamdulillah 🎊 🎊 🎁 \033[0m\n"
 
 # checking arhitechture
@@ -90,6 +94,8 @@ file $FRAMEWORK
 # copy framework, readme, etc to publish directory
 echo "\033[35m \n Copying framework and dSYMs to cocoapods directory \033[0m\n"
 cd ../../ 
+rm -rf $PUBLISH/$FRAMEWORK_NAME_WITH_EXT
+rm -rf $PUBLISH/$DSYM_NAME_WITH_EXT
 cp -RL $BUILD/$IOS_UNIVERSAL_DIR/$FRAMEWORK_NAME_WITH_EXT $PUBLISH/$FRAMEWORK_NAME_WITH_EXT
 cp -RL $BUILD/$IOS_UNIVERSAL_DIR/$DSYM_NAME_WITH_EXT $PUBLISH/$DSYM_NAME_WITH_EXT
 cp -RL LICENSE $PUBLISH
