@@ -270,8 +270,8 @@ extension QiscusCore {
     
     // MARK : Realtime Event
     
-    public func subscribeEvent(roomID: String) -> Bool {
-        return QiscusCore.realtime.subscribeEvent(roomID: roomID)
+    public func subscribeEvent(roomID: String, onEvent: @escaping (RoomEvent) -> Void) {
+        return QiscusCore.realtime.subscribeEvent(roomID: roomID, onEvent: onEvent)
     }
     
     public func unsubscribeEvent(roomID: String) {

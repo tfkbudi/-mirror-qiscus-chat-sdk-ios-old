@@ -8,11 +8,14 @@
 import Foundation
 import QiscusRealtime
 
+typealias _roomEvent = (RoomEvent) -> Void
+ 
 class RealtimeManager {
     static var shared : RealtimeManager = RealtimeManager()
     private var client : QiscusRealtime? = nil
     private var pendingSubscribeTopic : [RealtimeSubscribeEndpoint] = [RealtimeSubscribeEndpoint]()
     var state : QiscusRealtimeConnectionState = QiscusRealtimeConnectionState.disconnected
+    private var roomEvents : [String : _roomEvent] = [String : _roomEvent]()
     
     func setup(appName: String) {
         // make sure realtime client still single object
@@ -122,21 +125,19 @@ class RealtimeManager {
     }
     
     // MARK : Custom Event
-    func subscribeEvent(roomID: String) -> Bool {
-        guard let c = client else {
-            return false
-        }
+    func subscribeEvent(roomID: String, onEvent: @escaping (RoomEvent) -> Void) {
+        guard let c = client else { return }
         // subcribe user token to get new comment
         if !c.subscribe(endpoint: .roomEvent(roomID: roomID)) {
             self.pendingSubscribeTopic.append(.roomEvent(roomID: roomID))
             QiscusLogger.errorPrint("failed to subscribe room Event, then queue in pending")
-            return false
         }else {
-            return true
+            roomEvents[roomID] = onEvent
         }
     }
     
     func unsubscribeEvent(roomID: String) {
+        roomEvents.removeValue(forKey: roomID)
         guard let c = client else {
             return
         }
@@ -172,9 +173,10 @@ class RealtimeManager {
  extension RealtimeManager: QiscusRealtimeDelegate {
     func didReceiveRoomEvent(roomID: String, data: String) {
         // MARK : TODO parsing sender and payload
-        print(data)
-        let payload = toDictionary(text: data)
-        print(payload)
+        guard let payload = toDictionary(text: data) else { return }
+        guard let postEvent = roomEvents[roomID] else { return }
+        let event = RoomEvent(sender: payload["sender"] as? String ?? "", data: payload["data"] as? [String : Any] ?? ["":""])
+        postEvent(event)
     }
     
     func didReceiveUser(userEmail: String, isOnline: Bool, timestamp: String) {
@@ -218,7 +220,6 @@ class RealtimeManager {
                         // update all my comment status
                         mycomments.forEach { (c) in
                             // check lastStatus and compare
-                            print("compare event \(c.uniqId) : \(c.status.hashValue)/\(c.status.rawValue) < \(status.hashValue)/\(status.rawValue)")
                             if c.status.hashValue < status.hashValue {
                                 let new = c
                                 // update comment
