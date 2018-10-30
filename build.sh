@@ -96,7 +96,6 @@ cp -RL LICENSE $PUBLISH
 cp -RL README.md $PUBLISH
 git add .
 git commit -m "finish build for cocoapod"
-rm -rf $BUILD
 
 say -v veena Do you want to publish to github?
 echo -n "\033[31m Mau sekalian di publish ke github (y/n)? \033[0m\n"
@@ -120,3 +119,4 @@ git commit -m "update new build"
 git push origin master
 echo "\033[35m Finish update cocoapod repo \n Alhamdulillah 🎉 🎉 🎉 \033[0m\n"
 say -v veena Horree 🎉, - see you next build - Ashari
+rm -rf $BUILD
