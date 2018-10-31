@@ -83,8 +83,8 @@ class QiscusEventManager {
     }
     
     private func getDate(timestampUTC: String) -> Date {
-        let double = Double(timestampUTC) ?? 0.0 / 1000
-        let date = Date(timeIntervalSince1970: double)
+        let double = Double(timestampUTC) ?? 0.0
+        let date = Date(timeIntervalSince1970: TimeInterval(double/1000))
         return date
     }
     
