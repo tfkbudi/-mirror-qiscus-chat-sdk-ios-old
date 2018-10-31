@@ -71,8 +71,13 @@ class QiscusEventManager {
         guard let member = QiscusCore.database.member.find(byEmail: email) else { return }
         let date = getDate(timestampUTC: time)
         // filter event for room or qiscuscore
-        if QiscusEventManager.shared.room != nil {
-            self.roomDelegate?.onChangeUser(member, onlineStatus: isOnline, whenTime: date)
+        if let room = QiscusEventManager.shared.room  {
+            guard let participants = room.participants else { return }
+            participants.forEach { (member) in
+                if email == member.email {
+                    self.roomDelegate?.onChangeUser(member, onlineStatus: isOnline, whenTime: date)
+                }
+            }
         }
         self.delegate?.onChange(user: member, isOnline: isOnline, at: date)
     }
