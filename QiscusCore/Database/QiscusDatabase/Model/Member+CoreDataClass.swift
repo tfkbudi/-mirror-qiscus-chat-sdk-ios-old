@@ -29,7 +29,14 @@ extension Member {
     }
     
      static func generate() -> Member {
-        return Member(context: QiscusDatabase.context)
+        if #available(iOS 10.0, *) {
+            return Member(context: QiscusDatabase.context)
+        } else {
+            // Fallback on earlier versions
+            let context = QiscusDatabase.context
+            let description = NSEntityDescription.entity(forEntityName: "Member", in: context)
+            return Member(entity: description!, insertInto: context)
+        }
     }
     
      static func find(predicate: NSPredicate) -> [Member]? {

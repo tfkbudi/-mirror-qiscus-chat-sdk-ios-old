@@ -37,7 +37,14 @@ extension Comment {
     }
     
      static func generate() -> Comment {
-        return Comment(context: QiscusDatabase.context)
+        if #available(iOS 10.0, *) {
+            return Comment(context: QiscusDatabase.context)
+        } else {
+            // Fallback on earlier versions
+            let context = QiscusDatabase.context
+            let description = NSEntityDescription.entity(forEntityName: "Comment", in: context)
+            return Comment(entity: description!, insertInto: context)
+        }
     }
     
      static func find(predicate: NSPredicate) -> [Comment]? {

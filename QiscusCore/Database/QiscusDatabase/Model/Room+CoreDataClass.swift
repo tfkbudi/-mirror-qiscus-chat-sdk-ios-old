@@ -30,7 +30,14 @@ extension Room {
     }
     
      static func generate() -> Room {
-        return Room(context: QiscusDatabase.context)
+        if #available(iOS 10.0, *) {
+            return Room(context: QiscusDatabase.context)
+        } else {
+            // Fallback on earlier versions
+            let context = QiscusDatabase.context
+            let description = NSEntityDescription.entity(forEntityName: "Member", in: context)
+            return Room(entity: description!, insertInto: context)
+        }
     }
     
      static func find(predicate: NSPredicate) -> [Room]? {
