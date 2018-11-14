@@ -318,6 +318,7 @@ extension NetworkManager {
             if error != nil {
                 completion(nil, "Please check your network connection.")
             }
+            if data == nil { completion(nil, "Failed to parsing response."); return }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
@@ -348,7 +349,7 @@ extension NetworkManager {
             if error != nil {
                 onError(QError(message: "Please check your network connection."))
             }
-            
+            if data == nil { onError(QError(message: "Failed to parsing response.")); return}
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
@@ -379,7 +380,7 @@ extension NetworkManager {
             if error != nil {
                 completion(nil, QError(message: "Please check your network connection."))
             }
-            
+            if data == nil { completion(nil, QError(message: "Failed to parsing response.")); return}
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
@@ -411,6 +412,7 @@ extension NetworkManager {
             if error != nil {
                 onError(QError(message: "Please check your network connection."))
             }
+            if data == nil { onError(QError(message: "Failed to parsing response.")); return}
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
