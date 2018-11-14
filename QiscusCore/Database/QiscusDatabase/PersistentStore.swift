@@ -22,7 +22,9 @@ class PresistentStore {
             return persistentContainer.viewContext
         } else {
             // Fallback on earlier versions
-            return managedObjectContext
+            let context = managedObjectContext
+            context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+            return context
         }
     }
     
