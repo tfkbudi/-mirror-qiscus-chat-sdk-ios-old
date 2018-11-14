@@ -40,6 +40,11 @@ class PresistentStore {
     }()
     
     // iOS 9 and below
+    static var applicationDocumentsDirectory: URL = {
+        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return urls[urls.count-1]
+    }()
+    
     static var managedObjectModel: NSManagedObjectModel = {
         // The managed object model for the application. This property is not optional. It is a fatal error for the application not to be able to find and load its model.
         let modelURL = Bundle.main.url(forResource: DB_NAME, withExtension: "momd")!
@@ -48,7 +53,8 @@ class PresistentStore {
     
     static var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: managedObjectModel)
-        let modelURL = QiscusCore.bundle.url(forResource: DB_NAME, withExtension: "momd")!
+//        let modelURL = QiscusCore.bundle.url(forResource: DB_NAME, withExtension: "momd")!
+        let modelURL = applicationDocumentsDirectory.appendingPathComponent("\(DB_NAME).sqlite")
         var failureReason = "There was an error creating or loading the application's saved data."
         do {
             try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: modelURL, options: nil)
