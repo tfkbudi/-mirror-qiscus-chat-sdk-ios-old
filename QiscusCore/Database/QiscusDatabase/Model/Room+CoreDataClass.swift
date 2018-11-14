@@ -35,7 +35,7 @@ extension Room {
         } else {
             // Fallback on earlier versions
             let context = QiscusDatabase.context
-            let description = NSEntityDescription.entity(forEntityName: "Member", in: context)
+            let description = NSEntityDescription.entity(forEntityName: "Room", in: context)
             return Room(entity: description!, insertInto: context)
         }
     }
