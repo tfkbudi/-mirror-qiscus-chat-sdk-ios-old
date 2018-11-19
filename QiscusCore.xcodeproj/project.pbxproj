@@ -69,9 +69,7 @@
 		3DDF128A213307B900E15B36 /* QiscusCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF125E213307B900E15B36 /* QiscusCore.swift */; };
 		3DDF128B213307B900E15B36 /* QiscusComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF125F213307B900E15B36 /* QiscusComment.swift */; };
 		3DDF12A5213307B900E15B36 /* QiscusEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF1284213307B900E15B36 /* QiscusEventManager.swift */; };
-		3DDF12A6213307B900E15B36 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3DDF1285213307B900E15B36 /* Info.plist */; };
 		3DDF12A7213307B900E15B36 /* QiscusRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF1286213307B900E15B36 /* QiscusRoom.swift */; };
-		3DE20493215888B700E3DF96 /* QiscusCore.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 3DE20492215888B600E3DF96 /* QiscusCore.podspec */; };
 		3DE20495215889A500E3DF96 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 3DE20494215889A500E3DF96 /* README.md */; };
 		BEE67DF727DAF96B4B587D6C /* Pods_QiscusCoreTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9FFD5261FB0CA8C203545C0 /* Pods_QiscusCoreTests.framework */; };
 		F116692197E20D674B69897F /* Pods_QiscusCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 560FF1F83A73EA20444892C4 /* Pods_QiscusCore.framework */; };
@@ -565,8 +563,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3DDF12A6213307B900E15B36 /* Info.plist in Resources */,
-				3DE20493215888B700E3DF96 /* QiscusCore.podspec in Resources */,
 				3DE20495215889A500E3DF96 /* README.md in Resources */,
 				3D55939520FC8F3500AE35E5 /* QiscusCore.podspec in Resources */,
 			);
@@ -640,7 +636,6 @@
 				"${BUILT_PRODUCTS_DIR}/QiscusCore/QiscusCore.framework",
 				"${BUILT_PRODUCTS_DIR}/QiscusRealtime/QiscusRealtime.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyTimer/SwiftyTimer.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -649,7 +644,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/QiscusCore.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/QiscusRealtime.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyTimer.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -669,7 +663,6 @@
 				"${BUILT_PRODUCTS_DIR}/CocoaMQTT/CocoaMQTT.framework",
 				"${BUILT_PRODUCTS_DIR}/QiscusRealtime/QiscusRealtime.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyTimer/SwiftyTimer.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -679,7 +672,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaMQTT.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/QiscusRealtime.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyTimer.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
