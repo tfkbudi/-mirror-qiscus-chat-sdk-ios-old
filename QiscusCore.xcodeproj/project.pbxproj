@@ -412,6 +412,7 @@
 			children = (
 				3DDF125A213307B900E15B36 /* QiscusCore.h */,
 				3DDF125E213307B900E15B36 /* QiscusCore.swift */,
+				3DDF1286213307B900E15B36 /* QiscusRoom.swift */,
 				3DDF125F213307B900E15B36 /* QiscusComment.swift */,
 				3DDF1284213307B900E15B36 /* QiscusEventManager.swift */,
 				3D3F9EB62188103E00DDD00C /* Database */,
@@ -423,7 +424,6 @@
 				3D3F9EB02188103E00DDD00C /* Util */,
 				3D05B0FD217715FB00060DC9 /* QiscusWorkerManager.swift */,
 				3DDF1285213307B900E15B36 /* Info.plist */,
-				3DDF1286213307B900E15B36 /* QiscusRoom.swift */,
 			);
 			path = QiscusCore;
 			sourceTree = "<group>";

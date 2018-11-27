@@ -22,7 +22,9 @@ open class CommentModel {
     public internal(set) var isPublicChannel      : Bool          = false
     public internal(set) var status               : CommentStatus = .sending
     public var message              : String        = ""
+    /// Comment payload, to describe comment type.
     public var payload              : [String:Any]? = nil
+    /// Extra data, set after comment is complate.
     public var extras               : String?       = nil
     public internal(set) var roomId               : String        = ""
     public internal(set) var timestamp            : String        = ""
@@ -33,6 +35,7 @@ open class CommentModel {
     public internal(set) var userId               : String        = ""
     public internal(set) var username             : String        = ""
     public internal(set) var userEmail            : String        = ""
+    /// automatic set when comment initiated
     public internal(set) var date                 : Date          = Date()
     
     public init() {
