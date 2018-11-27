@@ -43,7 +43,7 @@ public class QiscusCore: NSObject {
     /// - Parameter WithAppID: Qiscus SDK App ID
     public class func setup(WithAppID id: String) {
         config.appID    = id
-        If config.server == nil {
+        if config.server == nil {
             config.server   = ServerConfig(url: URL.init(string: "https://api.qiscus.com/api/v2/mobile")!, realtimeURL: nil, realtimePort: nil)
         }
         
