@@ -17,7 +17,7 @@ class QiscusWorkerManager {
         // send pending
         self.pending()
         // send sending, when process resend then unfortunedly crash/closed
-        self.sending() //  waiting backend fix, comment status from mqtt
+        // self.sending() //  waiting backend fix, comment status from mqtt
     }
     
     private func sync() {
