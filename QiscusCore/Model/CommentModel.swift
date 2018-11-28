@@ -15,7 +15,7 @@ public class SyncMeta {
 }
 
 open class CommentModel {
-    public var onChange : (CommentModel) -> Void = { _ in} // data binding
+    //public var onChange : (CommentModel) -> Void = { _ in} // data binding
     public internal(set) var commentBeforeId      : String        = ""
     public internal(set) var id                   : String        = ""
     public internal(set) var isDeleted            : Bool          = false
@@ -25,7 +25,7 @@ open class CommentModel {
     /// Comment payload, to describe comment type.
     public var payload              : [String:Any]? = nil
     /// Extra data, set after comment is complate.
-    public var extras               : String?       = nil
+    public var extras               : [String:Any]? = nil
     public internal(set) var roomId               : String        = ""
     public internal(set) var timestamp            : String        = ""
     public var type                 : String        = "text"
@@ -61,7 +61,6 @@ open class CommentModel {
         self.isPublicChannel    = json["is_public_channel"].boolValue
         self.message            = json["message"].stringValue
         self.payload            = json["payload"].dictionaryObject
-        self.extras             = json["extras"].stringValue
         self.timestamp          = json["timestamp"].stringValue
         self.unixTimestamp      = json["unix_nano_timestamp"].int64Value
         self.userAvatarUrl      = json["room_avatar"].url ?? URL(string: "http://")
@@ -88,6 +87,7 @@ open class CommentModel {
             }
         }
         
+        self.extras             = json["extras"].dictionaryObject
         
         self.date = self.getDate(string: self.timestamp)
     }

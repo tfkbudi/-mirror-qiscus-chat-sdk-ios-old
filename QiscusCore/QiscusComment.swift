@@ -32,18 +32,18 @@ extension QiscusCore {
         // save in local comment pending
         QiscusCore.database.comment.save([_comment])
         // send message to server
-        QiscusCore.network.postComment(roomId: comment.roomId, type: comment.type, message: comment.message, payload: comment.payload, extras: nil, uniqueTempId: comment.uniqId) { (result, error) in
+        QiscusCore.network.postComment(roomId: comment.roomId, type: comment.type, message: comment.message, payload: comment.payload, extras: comment.extras, uniqueTempId: comment.uniqId) { (result, error) in
             if let commentResult = result {
                 // save in local
                 commentResult.status = .sent
                 QiscusCore.database.comment.save([commentResult])
-                comment.onChange(commentResult) // view data binding
+                //comment.onChange(commentResult) // view data binding
                 onSuccess(commentResult)
             }else {
                 let _pending = comment
                 _pending.status  = .pending
                 QiscusCore.database.comment.save([_pending])
-                comment.onChange(_pending) // view data binding
+                //comment.onChange(_pending) // view data binding
                 onError(QError.init(message: error ?? "Pending to send message"))
             }
         }

@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: Comment API
 internal enum APIComment {
-    case postComment(topicId: String, type: String, message: String, payload: [String:Any]?, extras: String?, uniqueTempId: String?)
+    case postComment(topicId: String, type: String, message: String, payload: [String:Any]?, extras: [String:Any]?, uniqueTempId: String?)
     case loadComment(topicId: String, lastCommentId: Int?, timestamp: String?, after: Bool?, limit: Int?)
     case delete(commentUniqueId: [String], type: DeleteType, source: DeleteSource)
     case updateStatus(roomId: String,lastCommentReadId: String?, lastCommentReceivedId: String?)
@@ -71,9 +71,7 @@ extension APIComment : EndPoint {
                 params["payload"] = payloadParams
             }
             if let extrasParams = extras {
-                if !extrasParams.isEmpty {
-                    params["extras"] = extrasParams
-                }
+                params["extras"] = extrasParams
             }
             if let uniquetempid = uniqueTempId {
                 params["unique_temp_id"] = uniquetempid

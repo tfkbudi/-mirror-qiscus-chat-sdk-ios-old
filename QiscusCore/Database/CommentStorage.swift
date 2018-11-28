@@ -201,7 +201,6 @@ extension CommentStorage {
             result.userEmail        = core.userEmail
             result.userId           = core.userId
             result.message          = core.message
-            result.extras           = core.extras
             result.uniqId           = core.uniqId
             result.roomId           = core.roomId
             result.commentBeforeId  = core.commentBeforeId
@@ -211,6 +210,9 @@ extension CommentStorage {
             result.isPublicChannel  = core.isPublicChannel
             if let payload = core.payload {
                 result.payload = payload.dict2json()
+            }
+            if let extras = core.extras {
+                result.extras   = extras.dict2json()
             }
         }
         return result
@@ -248,7 +250,6 @@ extension CommentStorage {
             result.unixTimestamp    = Int64(data.unixTimestamp)
             result.timestamp        = timestamp
             result.isPublicChannel  = data.isPublicChannel
-            result.extras           = data.extras
             
             for s in CommentStatus.all {
                 if s.rawValue == status {
@@ -261,6 +262,11 @@ extension CommentStorage {
                 result.payload          = nil
             }
             
+            if let _extras = data.extras {
+                result.extras          = self.convertToDictionary(from: _extras)
+            }else {
+                result.extras          = nil
+            }
         }
         return result
     }
