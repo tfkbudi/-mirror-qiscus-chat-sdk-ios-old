@@ -13,7 +13,8 @@ target 'QiscusCore' do
     # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
     use_frameworks!
     pod 'SwiftyJSON'
-    pod 'QiscusRealtime', :path => '../QiscusRealtime'
+    pod 'QiscusRealtime', '~> 0.2.0'
+#    pod 'QiscusRealtime', :path => '../QiscusRealtime'
 end
 
 target 'QiscusCoreTests' do
