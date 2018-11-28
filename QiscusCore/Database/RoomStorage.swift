@@ -80,6 +80,14 @@ class RoomStorage {
         }
     }
     
+    func find(byUniqID id: String) -> RoomModel? {
+        if data.isEmpty {
+            return nil
+        }else {
+            return data.filter{ $0.uniqueId == id }.first
+        }
+    }
+    
     // MARK: TODO Sorting not work
     func sort(_ data: [RoomModel]) -> [RoomModel]{
         var result = data

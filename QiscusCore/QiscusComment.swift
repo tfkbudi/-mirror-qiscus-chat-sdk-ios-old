@@ -118,6 +118,15 @@ extension QiscusCore {
         QiscusCore.network.clearMessage(roomsID: roomID, completion: completion)
     }
     
+    /// Delete all message in room
+    ///
+    /// - Parameters:
+    ///   - roomUniqID: array of room uniq id
+    ///   - completion: Response error if exist
+    public func deleteAllMessage(roomUniqID roomID: [String], completion: @escaping (QError?) -> Void) {
+        QiscusCore.network.clearMessage(roomsUniqueID: roomID, completion: completion)
+    }
+    
     /// Search message
     ///
     /// - Parameters:

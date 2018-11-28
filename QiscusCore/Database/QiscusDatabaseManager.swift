@@ -107,6 +107,14 @@ public class RoomDB {
         }
     }
     
+    public func find(uniqID: String) -> RoomModel? {
+        if let room = room.find(byUniqID: uniqID) {
+            return room
+        }else {
+            return find(predicate: NSPredicate(format: "uniqueId = %@", uniqID))?.last
+        }
+    }
+    
     public func all() -> [RoomModel] {
         let results = room.all()
         return results
@@ -143,11 +151,17 @@ public class CommentDB {
         }
     }
     
+    internal func clear(inRoom id: String) {
+        guard let comments = comment.find(byRoomID: id) else { return }
+        comments.forEach { (comment) in
+            _ = self.delete(comment, source: .hard)
+        }
+    }
+    
     internal func delete(_ data: CommentModel, source: DeleteSource) -> Bool {
         switch source {
         case .hard:
             if comment.delete(byUniqueID: data.uniqId) {
-                
                 return true
             }else {
                 return false

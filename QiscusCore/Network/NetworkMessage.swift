@@ -124,41 +124,6 @@ extension NetworkManager {
         }
     }
     
-    
-    /// clear all comments on room
-    ///
-    /// - Parameters:
-    ///   - roomUniqueIds: room unique ids
-    ///   - completion: @escaping when success clear all comments on a room, return (Bool: true = success, false = failed) and Optional(String error message)
-    func clearComments(roomUniqueIds: [String], completion: @escaping(Bool, String?) -> Void) {
-        commentRouter.request(.clear(roomChannelIds: roomUniqueIds)) { (data, response, error) in
-            if error != nil {
-                completion(false, "Please check your network connection.")
-            }
-            if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
-                switch result {
-                case .success:
-                    guard data != nil else {
-                        completion(false, NetworkResponse.noData.rawValue)
-                        return
-                    }
-                    
-                    completion(true, nil)
-                case .failure(let errorMessage):
-                    do {
-                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
-                    } catch {
-                        
-                    }
-                    
-                    completion(false, errorMessage)
-                }
-            }
-        }
-    }
-    
     // todo: add more documentation
     func updateCommentStatus(roomId: String, lastCommentReadId: String? = nil, lastCommentReceivedId: String? = nil) {
         commentRouter.request(.updateStatus(roomId: roomId, lastCommentReadId: lastCommentReadId, lastCommentReceivedId: lastCommentReceivedId)) { (data, response, error) in
@@ -232,7 +197,28 @@ extension NetworkManager {
     ///   - roomsID: room id where you want to clear
     ///   - completion: got error if exist
     func clearMessage(roomsID: [String], completion: @escaping (QError?) -> Void) {
-        commentRouter.request(.clear(roomChannelIds: roomsID)) { (data, response, error) in
+        if roomsID.isEmpty {
+            completion(QError.init(message: "Parameter can't be empty"))
+        }
+        var uniqueID : [String] = [String]()
+        roomsID.forEach { (id) in
+            if let room = QiscusCore.database.room.find(id: id) {
+                uniqueID.append(room.uniqueId)
+            }
+        }
+        self.clearMessage(roomsUniqueID: uniqueID, completion: completion)
+    }
+    
+    /// Clear message from
+    ///
+    /// - Parameters:
+    ///   - roomsUniqueID: room unique id where you want to clear
+    ///   - completion: got error if exist
+    func clearMessage(roomsUniqueID: [String], completion: @escaping (QError?) -> Void) {
+        if roomsUniqueID.isEmpty {
+            completion(QError.init(message: "Parameter can't be empty"))
+        }
+        commentRouter.request(.clear(roomChannelIds: roomsUniqueID)) { (data, response, error) in
             if error != nil {
                 completion(QError(message: "Please check your network connection."))
             }
@@ -240,6 +226,12 @@ extension NetworkManager {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
+                    // delete comment on local
+                    roomsUniqueID.forEach({ (id) in
+                        if let room = QiscusCore.database.room.find(uniqID: id) {
+                            QiscusCore.database.comment.clear(inRoom: room.id)
+                        }
+                    })
                     completion(nil)
                 case .failure(let errorMessage):
                     do {
