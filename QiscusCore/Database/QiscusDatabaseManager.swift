@@ -134,6 +134,7 @@ public class CommentDB {
         comment.loadData()
     }
     
+    // MARK: TODO need to improve flow, check room then add comment
     internal func save(_ data: [CommentModel]) {
         data.forEach { (c) in
             // listen callback to provide event
@@ -143,7 +144,7 @@ public class CommentDB {
                 // update last comment in room, mean comment where you send
                 if QiscusCore.database.room.updateLastComment(result) {
                     QiscusEventManager.shared.gotNewMessage(comment: result)
-                }
+                }// else room not found
             }) { (updatedResult) in
                 // MARK : TODO refactor comment update flow and event
                 QiscusCore.eventManager.gotMessageStatus(comment: updatedResult)
