@@ -108,7 +108,20 @@ class RoomStorage {
     func updateLastComment(_ comment: CommentModel) -> Bool {
         if let r = find(byID: String(comment.roomId)) {
             guard let lastComment = r.lastComment else {
-                return false
+                //room already exist, but lastComment is nil
+                //need save comment to update lastComment from nil
+                let new = r
+                new.lastComment = comment
+                // check if myComment
+                if let user = QiscusCore.getProfile() {
+                    if comment.userEmail != user.email {
+                        new.unreadCount = new.unreadCount + 1
+                    }
+                }
+                // check data exist and update
+                let isUpdate = updateRoomDataEvent(old: r, new: new)
+                data = sort(data) // check data source
+                return isUpdate
             }
             // check uniqtimestamp if nil, assume new comment from your
             if comment.unixTimestamp > lastComment.unixTimestamp {
