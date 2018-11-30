@@ -107,24 +107,31 @@ class RoomStorage {
     /// - Returns: true if room already exist and false if room unavailable
     func updateLastComment(_ comment: CommentModel) -> Bool {
         if let r = find(byID: String(comment.roomId)) {
-            if let lastComment = r.lastComment {
-                // check uniqtimestamp if nil, assume new comment from your
-                if comment.unixTimestamp > lastComment.unixTimestamp {
-                    let new = r
-                    new.lastComment = comment
-                    // check if myComment
-                    if let user = QiscusCore.getProfile() {
-                        if comment.userEmail != user.email {
-                            new.unreadCount = new.unreadCount + 1
-                        }
-                    }
-                    // check data exist and update
-                    let isUpdate = updateRoomDataEvent(old: r, new: new)
-                    data = sort(data) // check data source
-                    return isUpdate
-                }else { return false }
+            guard let lastComment = r.lastComment else {
+                //room already exist, but lastComment is nil
+                //need save comment to update lastComment from nil
+                return replaceLastComment(in: r, with: comment)
+            }
+            // check uniqtimestamp if nil, assume new comment from your
+            if comment.unixTimestamp > lastComment.unixTimestamp {
+                return replaceLastComment(in: r, with: comment)
             }else { return false }
         }else { return false }
+    }
+    
+    private func replaceLastComment(in room: RoomModel, with comment: CommentModel) -> Bool {
+        let new = room
+        new.lastComment = comment
+        // check if myComment
+        if let user = QiscusCore.getProfile() {
+            if comment.userEmail != user.email {
+                new.unreadCount = new.unreadCount + 1
+            }
+        }
+        // check data exist and update
+        let isUpdate = updateRoomDataEvent(old: room, new: new)
+        data = sort(data) // check data source
+        return isUpdate
     }
     
     

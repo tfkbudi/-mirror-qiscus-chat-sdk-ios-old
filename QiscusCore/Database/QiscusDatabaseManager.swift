@@ -142,9 +142,10 @@ public class CommentDB {
                 // check is mycomment
                 self.markCommentAsRead(comment: result)
                 // update last comment in room, mean comment where you send
-                if QiscusCore.database.room.updateLastComment(result) {
-                    QiscusEventManager.shared.gotNewMessage(comment: result)
-                }// else room not found
+                QiscusEventManager.shared.gotNewMessage(comment: result)
+                if !QiscusCore.database.room.updateLastComment(result) {
+                    QiscusLogger.errorPrint("Add new comment but can't replace last comment in room. Mybe room not found")
+                }
             }) { (updatedResult) in
                 // MARK : TODO refactor comment update flow and event
                 QiscusCore.eventManager.gotMessageStatus(comment: updatedResult)
