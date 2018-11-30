@@ -107,42 +107,24 @@ class RoomStorage {
     /// - Returns: true if room already exist and false if room unavailable
     func updateLastComment(_ comment: CommentModel) -> Bool {
         if let r = find(byID: String(comment.roomId)) {
-            guard let lastComment = r.lastComment else {
-                //room already exist, but lastComment is nil
-                //need save comment to update lastComment from nil
-                let new = r
-                new.lastComment = comment
-                // check if myComment
-                if let user = QiscusCore.getProfile() {
-                    if comment.userEmail != user.email {
-                        new.unreadCount = new.unreadCount + 1
+            if let lastComment = r.lastComment {
+                // check uniqtimestamp if nil, assume new comment from your
+                if comment.unixTimestamp > lastComment.unixTimestamp {
+                    let new = r
+                    new.lastComment = comment
+                    // check if myComment
+                    if let user = QiscusCore.getProfile() {
+                        if comment.userEmail != user.email {
+                            new.unreadCount = new.unreadCount + 1
+                        }
                     }
-                }
-                // check data exist and update
-                let isUpdate = updateRoomDataEvent(old: r, new: new)
-                data = sort(data) // check data source
-                return isUpdate
-            }
-            // check uniqtimestamp if nil, assume new comment from your
-            if comment.unixTimestamp > lastComment.unixTimestamp {
-                let new = r
-                new.lastComment = comment
-                // check if myComment
-                if let user = QiscusCore.getProfile() {
-                    if comment.userEmail != user.email {
-                        new.unreadCount = new.unreadCount + 1
-                    }
-                }
-                // check data exist and update
-                let isUpdate = updateRoomDataEvent(old: r, new: new)
-                data = sort(data) // check data source
-                return isUpdate
-            }else {
-                return false
-            }
-        }else {
-            return false
-        }
+                    // check data exist and update
+                    let isUpdate = updateRoomDataEvent(old: r, new: new)
+                    data = sort(data) // check data source
+                    return isUpdate
+                }else { return false }
+            }else { return false }
+        }else { return false }
     }
     
     

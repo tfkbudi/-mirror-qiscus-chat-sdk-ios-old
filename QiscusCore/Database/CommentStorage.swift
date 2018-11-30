@@ -171,11 +171,17 @@ extension CommentStorage {
     private func loadFromLocal() -> [CommentModel] {
         var results = [CommentModel]()
         let db = Comment.all()
+        QiscusLogger.debugPrint("number of comment in db : \(db.count)")
         for comment in db {
             let _comment = map(comment)
-            if _comment.uniqId.isEmpty { break }
-            results.append(_comment)
+            // validasi comment
+            if !_comment.uniqId.isEmpty && !_comment.roomId.isEmpty {
+                results.append(_comment)
+            } else {
+                comment.remove() // remove from db
+            }
         }
+        QiscusLogger.debugPrint("number of comment in cache : \(results.count)")
         return results
     }
     
