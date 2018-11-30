@@ -133,7 +133,7 @@ class RoomStorage {
         data = sort(data) // check data source
         return isUpdate
     }
-    
+
     
     /// Update unread count -1 to read
     ///
