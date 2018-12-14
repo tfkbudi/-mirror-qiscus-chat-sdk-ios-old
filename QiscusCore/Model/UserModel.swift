@@ -12,9 +12,6 @@ public struct UserModel {
     public var avatarUrl        : URL       = URL(string: "http://")!
     public var email            : String    = ""
     public var id               : String    = ""
-//    public var lastCommentId    : String    = ""
-//    public var lastSyncEventId  : Int64     = -1
-//    public var pnIosConfigured   : Bool      = false
     public var rtKey            : String    = ""
     public var token            : String    = ""
     public var username         : String    = ""
@@ -26,27 +23,12 @@ public struct UserModel {
         avatarUrl       = json["avatar_url"].url ?? URL(string: "http://")!
         email           = json["email"].stringValue
         id              = json["id_str"].stringValue
-//        lastCommentId   = json["last_comment_id"].stringValue
-//        lastSyncEventId = json["last_sync_event_id"].int64Value
-//        pnIosConfigured  = json["pn_ios_configured"].boolValue
         rtKey           = json["rtKey"].stringValue
         token           = json["token"].stringValue
         username        = json["username"].stringValue
         extras          = json["extras"].dictionaryObject
     }
 }
-
-//class App  {
-//     var code : String    = ""
-//     var id : String      = ""
-//     var name : String    = ""
-//
-//    init(json: JSON) {
-//        code    = json["code"].stringValue
-//        id      = json["id_str"].stringValue
-//        name    = json["name"].stringValue
-//    }
-//}
 
 open class MemberModel {
     public var avatarUrl : URL? = nil
