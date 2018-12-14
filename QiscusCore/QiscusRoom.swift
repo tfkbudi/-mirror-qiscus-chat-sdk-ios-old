@@ -33,13 +33,37 @@ extension QiscusCore {
         }
     }
     
-    /// Get room by channel name
-    ///
+    /// Get or create room by channel name
+    /// If room with predefined unique id is not exist then it will create a new one with requester as the only one participant. Otherwise, if room with predefined unique id is already exist, it will return that room and add requester as a participant.
+    /// When first call (room is not exist), if requester did not send avatar_url and/or room name it will use default value. But, after the second call (room is exist) and user (requester) send avatar_url and/or room name, it will be updated to that value. Object changed will be true in first call and when avatar_url or room name is updated.
+    
     /// - Parameters:
     ///   - channel: channel name or channel id
-    ///   - completion: Response Qiscus Room Object and error if exist.
-    public func getRoom(withChannel channel: String, onSuccess: @escaping (RoomModel) -> Void, onError: @escaping (QError) -> Void) {
+    ///   - name: channel name
+    ///   - avatarUrl: url avatar
+    ///   - options: option
+    ///   - onSuccess: return object room
+    ///   - onError: return object QError
+    public func getRoom(withChannel channel: String, name: String? = nil, avatarUrl: URL? = nil, options: String? = nil, onSuccess: @escaping (RoomModel) -> Void, onError: @escaping (QError) -> Void) {
         // call api get_room_by_id
+        QiscusCore.network.getOrCreateChannel(uniqueId: channel, name: name, avatarUrl: avatarUrl, options: options) { (rooms, comments, error) in
+            if let room = rooms {
+                // save room
+                QiscusCore.database.room.save([room])
+                // subscribe room from local
+                QiscusCore.realtime.subscribeRooms(rooms: [room])
+                var c = [CommentModel]()
+                if let _comments = comments {
+                    // save comments
+                    QiscusCore.database.comment.save(_comments)
+                    c = _comments
+                }
+                onSuccess(room)
+            }else {
+                onError(QError(message: error ?? "Unexpected error"))
+            }
+        }
+        
         QiscusCore.network.getRoomInfo(roomIds: nil, roomUniqueIds: [channel], showParticipant: true, showRemoved: false) { (rooms, error) in
             if let room = rooms {
                 // save room
@@ -252,10 +276,10 @@ extension QiscusCore {
     /// get participant by room id
     ///
     /// - Parameters:
-    ///   - roomId: room id (group)
+    ///   - roomUniqeId: room id (group)
     ///   - completion: Response new Qiscus Participant Object and error if exist.
-    public func getParticipant(roomId: String, onSuccess: @escaping ([MemberModel]) -> Void, onError: @escaping (QError) -> Void ) {
-        QiscusCore.network.getParticipants(roomId: roomId) { (members, error) in
+    public func getParticipant(roomUniqeId id: String, onSuccess: @escaping ([MemberModel]) -> Void, onError: @escaping (QError) -> Void ) {
+        QiscusCore.network.getParticipants(roomUniqeId: id) { (members, error) in
             if let _members = members {
                 onSuccess(_members)
             }else{

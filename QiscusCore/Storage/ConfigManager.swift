@@ -51,9 +51,9 @@ class ConfigManager : NSObject {
         defaults.set(data.email, forKey: filename("email"))
         defaults.set(data.token, forKey: filename("token"))
         defaults.set(data.rtKey, forKey: filename("rtKey"))
-        defaults.set(data.pnIosConfigured, forKey: filename("pnIosConfigured"))
-        defaults.set(data.lastSyncEventId, forKey: filename("lastSyncEventId"))
-        defaults.set(data.lastCommentId, forKey: filename("lastCommentId"))
+//        defaults.set(data.pnIosConfigured, forKey: filename("pnIosConfigured"))
+//        defaults.set(data.lastSyncEventId, forKey: filename("lastSyncEventId"))
+//        defaults.set(data.lastCommentId, forKey: filename("lastCommentId"))
         defaults.set(data.avatarUrl, forKey: filename("avatarUrl"))
     }
     
@@ -68,7 +68,7 @@ class ConfigManager : NSObject {
             user.email      = storage.string(forKey: filename("email")) ?? ""
             user.username   = storage.string(forKey: filename("username")) ?? ""
             user.avatarUrl  = storage.url(forKey: filename("avatarUrl")) ?? URL(string: "http://")!
-            user.lastSyncEventId    = Int64(storage.integer(forKey: filename("username")))
+//            user.lastSyncEventId    = Int64(storage.integer(forKey: filename("username")))
             self.userCache  = user
             return user
         }else {
@@ -85,7 +85,7 @@ class ConfigManager : NSObject {
         storage.removeObject(forKey: filename("email"))
         storage.removeObject(forKey: filename("rtKey"))
         storage.removeObject(forKey: filename("avatarUrl"))
-        storage.removeObject(forKey: filename("lastCommentId"))
+//        storage.removeObject(forKey: filename("lastCommentId"))
         self.userCache = nil
     }
 }
