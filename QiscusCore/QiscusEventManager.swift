@@ -53,7 +53,15 @@ class QiscusEventManager {
     }
     
     func deleteComment(_ comment: CommentModel) {
-        
+        if let r = QiscusEventManager.shared.room {
+            if r.id == String(comment.roomId) {
+                roomDelegate?.didDelete(Comment: comment)
+            }
+        }
+        // got new comment for other room
+        if let room = QiscusCore.database.room.find(id: comment.roomId) {
+            delegate?.onRoom(room, didDeleteComment: comment)
+        }
     }
     
     func gotTyping(roomID: String, user: String, value: Bool) {

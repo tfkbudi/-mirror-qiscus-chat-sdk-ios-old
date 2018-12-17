@@ -162,8 +162,11 @@ public class CommentDB {
     
     internal func delete(_ data: CommentModel) -> Bool {
         if comment.delete(byUniqueID: data.uniqId) {
+            QiscusCore.eventManager.deleteComment(data)
             return true
         }else {
+            // overlap with mqtt event
+            QiscusLogger.errorPrint("Deleted message from server, but unfotunetly failed to delete from local db. Or message not exist")
             return false
         }
     }

@@ -99,12 +99,8 @@ extension QiscusCore {
                 // MARK : delete comment in local
                 for comment in c {
                     // delete
-                    if QiscusCore.database.comment.delete(comment) {
-                        QiscusCore.eventManager.deleteComment(comment)
-                        onSuccess(c)
-                    }else {
-                        onError(QError(message: "Deleted message from server, but unfotunetly failed to delete from local db"))
-                    }
+                    _ = QiscusCore.database.comment.delete(comment)
+                    onSuccess(c)
                 }
             }else {
                 onError(error ?? QError(message: "Unexpected error"))

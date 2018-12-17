@@ -99,7 +99,9 @@ extension APIComment : EndPoint {
         case .delete(let id):
             var params = [
                 "token"                     : AUTHTOKEN,
-                "unique_ids"                : id
+                "unique_ids"                : id,
+                "is_hard_delete"            : true,
+                "is_delete_for_everyone"    : true
                 ] as [String : Any]
             return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
         case .updateStatus(let roomId,let lastCommentReadId,let lastCommentReceivedId):
