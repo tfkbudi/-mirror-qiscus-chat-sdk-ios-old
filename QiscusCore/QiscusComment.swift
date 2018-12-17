@@ -92,17 +92,20 @@ extension QiscusCore {
     ///
     /// - Parameters:
     ///   - uniqueID: comment unique id
-    ///   - type: forMe or ForEveryone
     ///   - completion: Response Comments your deleted
-    public func deleteMessage(uniqueIDs id: [String], type: DeleteType, source: DeleteSource = .soft, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.deleteComment(commentUniqueId: id, type: type, source: source) { (results, error) in
+    public func deleteMessage(uniqueIDs id: [String], onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
+        QiscusCore.network.deleteComment(commentUniqueId: id) { (results, error) in
             if let c = results {
                 // MARK : delete comment in local
                 for comment in c {
                     // delete
-                    _ = QiscusCore.database.comment.delete(comment, source: source)
+                    if QiscusCore.database.comment.delete(comment) {
+                        QiscusCore.eventManager.deleteComment(comment)
+                        onSuccess(c)
+                    }else {
+                        onError(QError(message: "Deleted message from server, but unfotunetly failed to delete from local db"))
+                    }
                 }
-                onSuccess(c)
             }else {
                 onError(error ?? QError(message: "Unexpected error"))
             }

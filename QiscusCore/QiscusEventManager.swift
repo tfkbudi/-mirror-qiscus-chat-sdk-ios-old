@@ -52,6 +52,10 @@ class QiscusEventManager {
         }
     }
     
+    func deleteComment(_ comment: CommentModel) {
+        
+    }
+    
     func gotTyping(roomID: String, user: String, value: Bool) {
         // filter event for room or qiscuscore
         if let r = QiscusEventManager.shared.room {

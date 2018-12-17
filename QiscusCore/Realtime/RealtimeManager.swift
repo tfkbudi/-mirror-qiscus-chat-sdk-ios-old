@@ -192,7 +192,7 @@ class RealtimeManager {
             // delete from local
             _comment.status = .deleted
             _comment.isDeleted  = true
-            _ = QiscusCore.database.comment.delete(_comment, source: .soft)
+            _ = QiscusCore.database.comment.delete(_comment)
             break
         case .delivered:
             _status  = .delivered

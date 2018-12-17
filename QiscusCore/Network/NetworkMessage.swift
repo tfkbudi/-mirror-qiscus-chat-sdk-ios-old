@@ -94,8 +94,8 @@ extension NetworkManager {
     /// - Parameters:
     ///   - commentUniqueId: comment unique id or you can use comment.uniqueTempId
     ///   - completion: @escaping when success delete comments, return deleted comment Optional([CommentModel]) and Optional(String error message)
-    func deleteComment(commentUniqueId: [String], type: DeleteType, source: DeleteSource, completion: @escaping ([CommentModel]?, QError?) -> Void) {
-        commentRouter.request(.delete(commentUniqueId: commentUniqueId, type: type, source: source)) { (data, response, error) in
+    func deleteComment(commentUniqueId: [String], completion: @escaping ([CommentModel]?, QError?) -> Void) {
+        commentRouter.request(.delete(commentUniqueId: commentUniqueId)) { (data, response, error) in
             if error != nil {
                 completion(nil, QError(message: "Please check your network connection."))
             }

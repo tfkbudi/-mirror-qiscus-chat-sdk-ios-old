@@ -40,6 +40,11 @@ public protocol QiscusCoreDelegate {
     ///     special case for read, for example we have message 1,2,3,4,5 then you got status change for message 5 it's mean message 1-4 has been read
     func onRoom(_ room: RoomModel, didChangeComment comment: CommentModel, changeStatus status: CommentStatus)
     
+    /// Deleted Comment
+    ///
+    /// - Parameter comment: comment deleted
+    func onRoom(_ room: RoomModel, didDeleteComment comment: CommentModel)
+    
     // MARK: User Event in Room
     
     /// User Typing Indicator
@@ -84,6 +89,11 @@ public protocol QiscusCoreRoomDelegate {
     ///   - status: comment status, exp: deliverd, receipt, or read.
     ///     special case for read, for example we have message 1,2,3,4,5 then you got status change for message 5 it's mean message 1-4 has been read
     func didComment(comment: CommentModel, changeStatus status: CommentStatus)
+    
+    /// Deleted Comment
+    ///
+    /// - Parameter comment: comment deleted
+    func didDelete(Comment comment: CommentModel)
     
     // MARK: User Event in Room
     

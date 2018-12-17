@@ -156,27 +156,16 @@ public class CommentDB {
     internal func clear(inRoom id: String) {
         guard let comments = comment.find(byRoomID: id) else { return }
         comments.forEach { (comment) in
-            _ = self.delete(comment, source: .hard)
+            _ = self.delete(comment)
         }
     }
     
-    internal func delete(_ data: CommentModel, source: DeleteSource) -> Bool {
-        switch source {
-        case .hard:
-            if comment.delete(byUniqueID: data.uniqId) {
-                return true
-            }else {
-                return false
-            }
-        case .soft:
-            let new = data
-            new.status = .deleted
-            QiscusCore.database.comment.save([new])
-            // update content
-            QiscusEventManager.shared.gotMessageStatus(comment: data)
+    internal func delete(_ data: CommentModel) -> Bool {
+        if comment.delete(byUniqueID: data.uniqId) {
             return true
+        }else {
+            return false
         }
-        
     }
     
     /// Requirement said, we asume when receive comment from opponent then old my comment status is read
