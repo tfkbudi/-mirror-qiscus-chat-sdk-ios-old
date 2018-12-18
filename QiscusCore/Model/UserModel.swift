@@ -37,6 +37,7 @@ open class MemberModel {
     public var lastCommentReadId : Int  = -1
     public var lastCommentReceivedId : Int  = -1
     public var username : String    = ""
+    private let userKey = "CoreMemKey_"
     
     init() { }
     
@@ -47,5 +48,18 @@ open class MemberModel {
         self.email      = json["email"].stringValue
         self.lastCommentReadId      = json["last_comment_read_id"].intValue
         self.lastCommentReceivedId  = json["last_comment_received_id"].intValue
+    }
+}
+
+extension MemberModel {
+    internal func saveLastOnline(_ time: Date) {
+        let db = UserDefaults.standard
+        db.set(time, forKey: self.userKey + "lastSeen")
+    }
+    
+    public func lastSeen() -> Date? {
+        let db = UserDefaults.standard
+        return db.object(forKey: self.userKey + "lastSeen") as? Date
+        // MARK: TODO get alternative when null
     }
 }

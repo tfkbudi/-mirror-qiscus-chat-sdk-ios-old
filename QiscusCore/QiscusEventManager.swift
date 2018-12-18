@@ -89,6 +89,7 @@ class QiscusEventManager {
                 if email == member.email {
                     self.roomDelegate?.onChangeUser(member, onlineStatus: isOnline, whenTime: date)
                 }
+                member.saveLastOnline(date)
             }
         }
         self.delegate?.onChange(user: member, isOnline: isOnline, at: date)
