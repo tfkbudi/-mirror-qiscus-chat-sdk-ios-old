@@ -37,7 +37,15 @@ public class QiscusCore: NSObject {
         }
     }
     public static var enableDebugPrint: Bool = false
-  
+    static var syncEventId : Int64 {
+        get {
+            return QiscusCore.config.syncEventId
+        }
+        set {
+            QiscusCore.config.syncEventId = newValue
+        }
+    }
+    
     /// set your app Qiscus APP ID, always set app ID everytime your app lounch. \nAfter login successculy, no need to setup again
     ///
     /// - Parameter WithAppID: Qiscus SDK App ID

@@ -21,7 +21,8 @@ class QiscusWorkerManager {
     
     private func syncEvent() {
         //sync event
-        QiscusCore.network.syncEvent(lastId: 0, onSuccess: { (events) in
+        let id = QiscusCore.syncEventId
+        QiscusCore.network.syncEvent(lastId: id, onSuccess: { (events) in
             events.forEach({ (event) in
                 switch event.actionTopic {
                 case .deletedMessage :
@@ -31,6 +32,7 @@ class QiscusWorkerManager {
                             _ = QiscusCore.database.comment.delete(comment)
                         }
                     })
+                    QiscusCore.syncEventId = event.id
                 case .clearRoom:
                     let ids = event.getClearRoomUniqId()
                     ids.forEach({ (id) in
@@ -38,7 +40,9 @@ class QiscusWorkerManager {
                             _ = QiscusCore.database.comment.clear(inRoom: room.id)
                         }
                     })
+                    QiscusCore.syncEventId = event.id
                 }
+                
             })
         }) { (error) in
             QiscusLogger.errorPrint("sync error, \(error.message)")
