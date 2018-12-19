@@ -12,12 +12,11 @@ class QiscusWorkerManager {
     func resume() {
         // MARK : Improve realtime state acurate disconnected
         // if QiscusCore.realtime.state == .disconnected {
-        // sync
-        self.sync()
-        // send pending
-        self.pending()
-        // send sending, when process resend then unfortunedly crash/closed
-        // self.sending() //  waiting backend fix, comment status from mqtt
+        if QiscusCore.isLogined {
+            self.sync()
+            self.pending()
+            QiscusCore.shared.isOnline(true)
+        }
     }
     
     private func sync() {
