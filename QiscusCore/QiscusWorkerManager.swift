@@ -24,6 +24,8 @@ class QiscusWorkerManager {
         let id = QiscusCore.syncEventId
         QiscusCore.network.syncEvent(lastId: id, onSuccess: { (events) in
             events.forEach({ (event) in
+                if event.id == id { return }
+                
                 switch event.actionTopic {
                 case .deletedMessage :
                     let ids = event.getDeletedMessageUniqId()
