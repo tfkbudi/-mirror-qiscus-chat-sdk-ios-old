@@ -205,6 +205,7 @@ extension RoomStorage {
             result = Room.generate() // prepare create new
         }
         result.id            = core.id
+        result.uniqueId      = core.uniqueId
         result.unreadCount   = Int16(core.unreadCount)
         result.name          = core.name
         result.avatarUrl     = core.avatarUrl?.absoluteString
@@ -225,6 +226,7 @@ extension RoomStorage {
         let result = RoomModel()
         // check record data
         guard let id = room.id else { return result }
+        guard let uniqueId = room.uniqueId else { return result }
         guard let name = room.name else { return result }
         guard let avatarUrl = room.avatarUrl else { return result }
         guard let type = room.type else { return result }
@@ -244,6 +246,7 @@ extension RoomStorage {
             }
         }
         result.id            = id
+        result.uniqueId      = uniqueId
         result.unreadCount   = Int(room.unreadCount)
         result.name          = name
         result.avatarUrl     = URL(string: avatarUrl)

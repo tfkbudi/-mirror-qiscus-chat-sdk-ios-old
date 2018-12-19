@@ -313,6 +313,36 @@ extension NetworkManager {
         }
     }
     
+    func syncEvent(lastId: Int, onSuccess: @escaping ([SyncEvent]) -> Void, onError: @escaping (QError) -> Void) {
+        clientRouter.request(.syncEvent(startEventId: lastId)) { (data, response, error) in
+            if error != nil {
+                onError(QError(message: "Please check your network connection."))
+            }
+            if data == nil { onError(QError(message: "Failed to parsing response.")); return}
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        onError(QError(message: NetworkResponse.noData.rawValue))
+                        return
+                    }
+                    let response = ApiResponse.decode(syncEvent: responseData)
+                    onSuccess(response)
+                case .failure(let errorMessage):
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        QiscusLogger.errorPrint("json: \(jsondata)")
+                    } catch {
+                        QiscusLogger.errorPrint(error as! String)
+                        onError(QError(message: NetworkResponse.unableToDecode.rawValue))
+                    }
+                    onError(QError(message: errorMessage))
+                }
+            }
+        }
+    }
+    
     func sync(lastCommentReceivedId: String, order: String = "", limit: Int = 20, completion: @escaping ([CommentModel]?, String?) -> Void) {
         clientRouter.request(.sync(lastReceivedCommentId: lastCommentReceivedId, order: order, limit: limit)) { (data, response, error) in
             if error != nil {

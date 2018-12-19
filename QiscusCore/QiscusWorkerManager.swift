@@ -19,10 +19,37 @@ class QiscusWorkerManager {
         }
     }
     
+    private func syncEvent() {
+        //sync event
+        QiscusCore.network.syncEvent(lastId: 0, onSuccess: { (events) in
+            events.forEach({ (event) in
+                switch event.actionTopic {
+                case .deletedMessage :
+                    let ids = event.getDeletedMessageUniqId()
+                    ids.forEach({ (id) in
+                        if let comment = QiscusCore.database.comment.find(uniqueId: id) {
+                            _ = QiscusCore.database.comment.delete(comment)
+                        }
+                    })
+                case .clearRoom:
+                    let ids = event.getClearRoomUniqId()
+                    ids.forEach({ (id) in
+                        if let room = QiscusCore.database.room.find(uniqID: id) {
+                            _ = QiscusCore.database.comment.clear(inRoom: room.id)
+                        }
+                    })
+                }
+            })
+        }) { (error) in
+            QiscusLogger.errorPrint("sync error, \(error.message)")
+        }
+    }
+    
     private func sync() {
         QiscusCore.shared.sync(onSuccess: { (comments) in
             // save comment in local
             QiscusCore.database.comment.save(comments)
+            self.syncEvent()
         }, onError: { (error) in
             QiscusLogger.errorPrint("sync error, \(error.message)")
         })

@@ -26,6 +26,20 @@ class ApiResponse {
         let unread = json["total_unread_count"].intValue
         return unread
     }
+    
+    static func decode(syncEvent event: Data) -> [SyncEvent] {
+        let json = JSON(event)
+        var results = [SyncEvent]()
+        if let result = json["events"].array {
+            result.forEach { (data) in
+                let event = SyncEvent(json: data)
+                results.append(event)
+            }
+            return results
+        }else {
+            return results
+        }
+    }
 }
 
 class FileApiResponse {
