@@ -60,6 +60,11 @@ public protocol QiscusCoreDelegate {
     /// - Parameter room: new room object
     func onRoom(update room: RoomModel)
     
+    /// Deleted room
+    ///
+    /// - Parameter room: object room
+    func onRoom(deleted room: RoomModel)
+    
     /// User Online status
     ///
     /// - Parameters:

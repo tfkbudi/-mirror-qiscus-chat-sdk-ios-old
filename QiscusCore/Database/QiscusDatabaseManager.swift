@@ -94,6 +94,17 @@ public class RoomDB {
         return room.updateUnreadComment(comment)
     }
     
+    internal func delete(_ data: RoomModel) -> Bool {
+        if room.delete(byID: data.id) {
+            QiscusCore.eventManager.deleteRoom(data)
+            return true
+        }else {
+            // overlap with mqtt event
+            QiscusLogger.errorPrint("Deleted Room from local succeed, but unfotunetly failed to delete from local db. Or room not exist")
+            return false
+        }
+    }
+    
     // MARK : Private
     public func find(predicate: NSPredicate) -> [RoomModel]? {
         return room.find(predicate: predicate)

@@ -292,6 +292,19 @@ extension QiscusCore {
         }
     }
     
+    public func leaveRoom(by roomId:String, onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
+        guard let user = QiscusCore.getProfile() else {
+            onError(QError(message: "User not found, please login to continue"))
+            return
+        }
+        guard let room = QiscusCore.database.room.find(id: roomId) else {
+            onError(QError(message: "Room not Found"))
+            return
+        }
+        _ = QiscusCore.database.room.delete(room)
+        QiscusCore.shared.removeParticipant(userEmails: [user.email], roomId: roomId, onSuccess: onSuccess, onError: onError)
+    }
+    
     // MARK : Realtime Event
     
     public func subscribeEvent(roomID: String, onEvent: @escaping (RoomEvent) -> Void) {

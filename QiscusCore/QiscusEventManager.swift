@@ -52,6 +52,10 @@ class QiscusEventManager {
         }
     }
     
+    func deleteRoom(_ room: RoomModel) {
+        delegate?.onRoom(deleted: room)
+    }
+    
     func deleteComment(_ comment: CommentModel) {
         if let r = QiscusEventManager.shared.room {
             if r.id == String(comment.roomId) {

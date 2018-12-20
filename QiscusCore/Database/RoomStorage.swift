@@ -72,6 +72,23 @@ class RoomStorage {
         }
     }
     
+    func delete(byID id: String) -> Bool {
+        // remove from memory
+        if let index = self.data.index(where: {$0.id == id}) {
+            data.remove(at: index)
+        }else {
+            return false
+        }
+        
+        // remove from db
+        if let db = Room.find(predicate: NSPredicate(format: "id = %@", id))?.first {
+            db.remove()
+        }else {
+            return false
+        }
+        return true
+    }
+    
     func find(byID id: String) -> RoomModel? {
         if data.isEmpty {
             return nil
