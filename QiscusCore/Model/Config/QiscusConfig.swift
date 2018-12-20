@@ -10,5 +10,5 @@ import Foundation
 struct ServerConfig {
     let url : URL
     let realtimeURL : String?
-    let realtimePort : Int?
+    let realtimePort : UInt16?
 }

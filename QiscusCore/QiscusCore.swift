@@ -37,14 +37,6 @@ public class QiscusCore: NSObject {
         }
     }
     public static var enableDebugPrint: Bool = false
-    static var syncEventId : Int64 {
-        get {
-            return QiscusCore.config.syncEventId
-        }
-        set {
-            QiscusCore.config.syncEventId = newValue
-        }
-    }
     
     /// set your app Qiscus APP ID, always set app ID everytime your app lounch. \nAfter login successculy, no need to setup again
     ///
@@ -96,7 +88,7 @@ public class QiscusCore: NSObject {
     ///   - customServer: your custom server host
     ///   - realtimeServer: your qiscus realtime host, without port
     ///   - realtimePort: your qiscus realtime port
-    public class func set(customServer: URL, realtimeServer: String?, realtimePort port: Int?) {
+    public class func set(customServer: URL, realtimeServer: String?, realtimePort port: UInt16?) {
         config.server = ServerConfig(url: customServer, realtimeURL: realtimeServer, realtimePort: port)
     }
     

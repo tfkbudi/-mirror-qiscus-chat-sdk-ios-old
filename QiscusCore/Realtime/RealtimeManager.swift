@@ -26,7 +26,13 @@ class RealtimeManager {
             deviceID = vendorIdentifier.uuidString
         }
         let clientID = "iosMQTT-\(bundle)-\(deviceID)"
-        let config = QiscusRealtimeConfig(appName: appName, clientID: clientID)
+        var config = QiscusRealtimeConfig(appName: appName, clientID: clientID)
+        if let customServer = ConfigManager.shared.server?.realtimeURL {
+            config.hostRealtimeServer = customServer
+        }
+        if let customPort = ConfigManager.shared.server?.realtimePort {
+            config.port = customPort
+        }
         client = QiscusRealtime.init(withConfig: config)
         QiscusRealtime.enableDebugPrint = QiscusCore.enableDebugPrint
     }
