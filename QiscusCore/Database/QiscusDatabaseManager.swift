@@ -146,14 +146,16 @@ public class CommentDB {
     }
     
     // MARK: TODO need to improve flow, check room then add comment
-    internal func save(_ data: [CommentModel]) {
+    internal func save(_ data: [CommentModel], publishEvent: Bool = true) {
         data.forEach { (c) in
             // listen callback to provide event
             comment.add(c, onCreate: { (result) in
                 // check is mycomment
                 self.markCommentAsRead(comment: result)
+                if publishEvent {
+                    QiscusEventManager.shared.gotNewMessage(comment: result)
+                }
                 // update last comment in room, mean comment where you send
-                QiscusEventManager.shared.gotNewMessage(comment: result)
                 if !QiscusCore.database.room.updateLastComment(result) {
                     QiscusLogger.errorPrint("Add new comment but can't replace last comment in room. Mybe room not found")
                 }

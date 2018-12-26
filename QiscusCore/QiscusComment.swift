@@ -60,7 +60,7 @@ extension QiscusCore {
         QiscusCore.network.loadComments(roomId: id, limit: limit) { (comments, error) in
             if let c = comments {
                 // save comment in local
-                QiscusCore.database.comment.save(c)
+                QiscusCore.database.comment.save(c, publishEvent: false)
                 onSuccess(c)
             }else {
                 onError(error ?? QError(message: "Unexpected error"))
@@ -80,7 +80,7 @@ extension QiscusCore {
         QiscusCore.network.loadComments(roomId: id, lastCommentId: commentID, timestamp: nil, after: nil, limit: limit) { (comments, error) in
             if let c = comments {
                 // save comment in local
-                QiscusCore.database.comment.save(c)
+                QiscusCore.database.comment.save(c, publishEvent: false)
                 onSuccess(c)
             }else {
                 onError(error ?? QError(message: "Unexpected error"))
