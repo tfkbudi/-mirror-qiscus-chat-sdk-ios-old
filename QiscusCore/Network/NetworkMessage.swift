@@ -194,24 +194,6 @@ extension NetworkManager {
     /// Clear message from
     ///
     /// - Parameters:
-    ///   - roomsID: room id where you want to clear
-    ///   - completion: got error if exist
-    func clearMessage(roomsID: [String], completion: @escaping (QError?) -> Void) {
-        if roomsID.isEmpty {
-            completion(QError.init(message: "Parameter can't be empty"))
-        }
-        var uniqueID : [String] = [String]()
-        roomsID.forEach { (id) in
-            if let room = QiscusCore.database.room.find(id: id) {
-                uniqueID.append(room.uniqueId)
-            }
-        }
-        self.clearMessage(roomsUniqueID: uniqueID, completion: completion)
-    }
-    
-    /// Clear message from
-    ///
-    /// - Parameters:
     ///   - roomsUniqueID: room unique id where you want to clear
     ///   - completion: got error if exist
     func clearMessage(roomsUniqueID: [String], completion: @escaping (QError?) -> Void) {
@@ -226,12 +208,6 @@ extension NetworkManager {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
-                    // delete comment on local
-                    roomsUniqueID.forEach({ (id) in
-                        if let room = QiscusCore.database.room.find(uniqID: id) {
-                            QiscusCore.database.comment.clear(inRoom: room.id)
-                        }
-                    })
                     completion(nil)
                 case .failure(let errorMessage):
                     do {

@@ -113,8 +113,19 @@ extension QiscusCore {
     /// - Parameters:
     ///   - roomID: array of room id
     ///   - completion: Response error if exist
-    public func deleteAllMessage(roomID: [String], completion: @escaping (QError?) -> Void) {
-        QiscusCore.network.clearMessage(roomsID: roomID, completion: completion)
+    public func deleteAllMessage(roomID ids: [String], completion: @escaping (QError?) -> Void) {
+        if ids.isEmpty {
+            completion(QError.init(message: "Parameter can't be empty"))
+            return
+        }
+        var uniqueID : [String] = [String]()
+        ids.forEach { (id) in
+            if let room = QiscusCore.database.room.find(id: id) {
+                uniqueID.append(room.uniqueId)
+            }
+        }
+        
+        QiscusCore.shared.deleteAllMessage(roomUniqID: uniqueID, completion: completion)
     }
     
     /// Delete all message in room
@@ -122,8 +133,18 @@ extension QiscusCore {
     /// - Parameters:
     ///   - roomUniqID: array of room uniq id
     ///   - completion: Response error if exist
-    public func deleteAllMessage(roomUniqID roomID: [String], completion: @escaping (QError?) -> Void) {
-        QiscusCore.network.clearMessage(roomsUniqueID: roomID, completion: completion)
+    public func deleteAllMessage(roomUniqID roomIDs: [String], completion: @escaping (QError?) -> Void) {
+        QiscusCore.network.clearMessage(roomsUniqueID: roomIDs) { (error) in
+            if error == nil {
+                // delete comment on local
+                roomIDs.forEach({ (id) in
+                    if let room = QiscusCore.database.room.find(uniqID: id) {
+                        QiscusCore.database.comment.clear(inRoom: room.id)
+                    }
+                })
+            }
+            completion(error)
+        }
     }
     
     /// Search message
