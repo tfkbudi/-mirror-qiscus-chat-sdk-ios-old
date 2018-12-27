@@ -194,7 +194,7 @@ public class CommentDB {
         let myCommentBefore = myComments.filter({ $0.unixTimestamp < comment.unixTimestamp })
         for c in myCommentBefore {
             // update comment
-            if c.status.hashValue < comment.status.hashValue {
+            if c.status.intValue < comment.status.intValue {
                 c.status = .read
                 QiscusCore.database.comment.save([c])
             }

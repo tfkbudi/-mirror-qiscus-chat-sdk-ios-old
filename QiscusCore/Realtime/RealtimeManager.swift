@@ -215,18 +215,18 @@ class RealtimeManager {
             if let comments = QiscusCore.database.comment.find(roomId: roomId) {
                 guard let user = QiscusCore.getProfile() else { return }
                 var mycomments = comments.filter({ $0.userEmail == user.email }) // filter my comment
-                mycomments = mycomments.filter({ $0.status.hashValue < status.hashValue }) // filter status < new status
+                mycomments = mycomments.filter({ $0.status.intValue < status.intValue }) // filter status < new status
                 mycomments = mycomments.filter({ $0.date <= _comment.date })
                 // call api
                 guard let lastMyComment = mycomments.last else { return }
                 
                 if room.type == .single {
                     // compare current status
-                    if lastMyComment.status.hashValue < status.hashValue {
+                    if lastMyComment.status.intValue < status.intValue {
                         // update all my comment status
                         mycomments.forEach { (c) in
                             // check lastStatus and compare
-                            if c.status.hashValue < status.hashValue {
+                            if c.status.intValue < status.intValue {
                                 let new = c
                                 // update comment
                                 new.status = status
@@ -239,11 +239,11 @@ class RealtimeManager {
                 }else if room.type == .group {
                     QiscusCore.shared.readReceiptStatus(commentId: lastMyComment.id, onSuccess: { (result) in
                         // compare current status
-                        if lastMyComment.status.hashValue < result.status.hashValue {
+                        if lastMyComment.status.intValue < result.status.intValue {
                             // update all my comment status
                             for c in mycomments {
                                 // check lastStatus and compare
-                                if c.status.hashValue != result.status.hashValue {
+                                if c.status.intValue != result.status.intValue {
                                     // update comment
                                     c.status = result.status
                                     QiscusCore.database.comment.save([c])
@@ -251,7 +251,7 @@ class RealtimeManager {
                             }
                             mycomments.forEach { (c) in
                                 // check lastStatus and compare
-                                if c.status.hashValue < status.hashValue {
+                                if c.status.intValue < status.intValue {
                                     let new = c
                                     // update comment
                                     new.status = status

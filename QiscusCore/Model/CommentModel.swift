@@ -136,7 +136,7 @@ extension CommentModel {
     }
 }
 
-public enum CommentStatus : String {
+public enum CommentStatus : String, CaseIterable {
     case sending    = "sending"
     case pending    = "pending"
     case failed     = "failed"
@@ -147,6 +147,20 @@ public enum CommentStatus : String {
     case deleted    = "deleted"
     
     static let all = [sending, pending, failed, sent, delivered, read, deleted]
+    
+    var intValue : Int {
+        get {
+            return self.asInt()
+        }
+    }
+    private func asInt() -> Int {
+        for (index,s) in CommentStatus.all.enumerated() {
+            if self == s {
+                return index
+            }
+        }
+        return 0
+    }
 }
 
 enum CommentType: String {
