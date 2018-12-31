@@ -39,7 +39,7 @@ class QiscusWorkerManager {
                     let ids = event.getClearRoomUniqId()
                     ids.forEach({ (id) in
                         if let room = QiscusCore.database.room.find(uniqID: id) {
-                            _ = QiscusCore.database.comment.clear(inRoom: room.id)
+                            _ = QiscusCore.database.comment.clear(inRoom: room.id, timestamp: event.timestamp)
                         }
                     })
                     ConfigManager.shared.syncEventId = event.id
@@ -52,10 +52,14 @@ class QiscusWorkerManager {
     }
     
     private func sync() {
-        QiscusCore.shared.sync(onSuccess: { (comments) in
+        let id = ConfigManager.shared.syncId
+        QiscusCore.shared.sync(lastCommentReceivedId: id,onSuccess: { (comments) in
             // save comment in local
             QiscusCore.database.comment.save(comments)
             self.syncEvent()
+            if let c = comments.first {
+                ConfigManager.shared.syncId = c.id
+            }
         }, onError: { (error) in
             QiscusLogger.errorPrint("sync error, \(error.message)")
         })

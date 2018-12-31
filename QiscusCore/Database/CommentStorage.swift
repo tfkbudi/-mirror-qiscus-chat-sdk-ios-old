@@ -226,7 +226,7 @@ extension CommentStorage {
     
     /// map from db model to core model
     private func map(_ data: Comment) -> CommentModel {
-        let result = CommentModel()
+        let result = CommentModel(json: [:])
         // check record data
         guard let id = data.id else { return result }
         guard let message = data.message else { return result }

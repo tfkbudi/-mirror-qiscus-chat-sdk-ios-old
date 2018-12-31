@@ -44,6 +44,14 @@ class ConfigManager : NSObject {
             self.setSyncEventId(newValue)
         }
     }
+    var syncId : String {
+        get {
+            return self.getSyncId()
+        }
+        set {
+            self.setSyncId(newValue)
+        }
+    }
     
     var server      : ServerConfig?     = nil
     var syncInterval : TimeInterval     = 10.0
@@ -83,6 +91,18 @@ class ConfigManager : NSObject {
         }else {
             return nil
         }
+    }
+    
+    private func setSyncId(_ id: String) {
+        // save in file
+        let defaults = UserDefaults.standard
+        defaults.set(id, forKey: filename("syncId"))
+    }
+    
+    private func getSyncId() -> String {
+        // save in file
+        let defaults = UserDefaults.standard
+        return defaults.string(forKey: filename("syncId")) ?? ""
     }
     
     private func setSyncEventId(_ id: Int64) {

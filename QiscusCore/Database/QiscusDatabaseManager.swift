@@ -166,8 +166,11 @@ public class CommentDB {
         }
     }
     
-    internal func clear(inRoom id: String) {
-        guard let comments = comment.find(byRoomID: id) else { return }
+    internal func clear(inRoom id: String, timestamp: Int64? = nil) {
+        guard var comments = comment.find(byRoomID: id) else { return }
+        if let _timestamp = timestamp {
+            comments = comments.filter({ $0.unixTimestamp < _timestamp })
+        }
         comments.forEach { (comment) in
             _ = self.delete(comment)
         }
