@@ -16,6 +16,7 @@ extension QiscusCore {
         let _comment            = comment
         _comment.roomId         = id
         _comment.status         = .sending
+        _comment.timestamp      = CommentModel.getTimestamp()
         // check comment type, if not Qiscus Comment set as custom type
         if !_comment.isQiscustype() {
             let _payload    = _comment.payload

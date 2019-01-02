@@ -36,7 +36,11 @@ open class CommentModel {
     public internal(set) var username             : String        = ""
     public internal(set) var userEmail            : String        = ""
     /// automatic set when comment initiated
-    public internal(set) var date                 : Date          = Date()
+    public var date                 : Date {
+        get {
+            return self.getDate()
+        }
+    }
     
     public init() {
         guard let user = QiscusCore.getProfile() else { return }
@@ -48,7 +52,7 @@ open class CommentModel {
         self.uniqId         = "ios_\(now)"
         self.id             = "ios_\(now)"
         self.unixTimestamp  = now
-        self.timestamp      = getTimestamp()
+//        self.timestamp      = getTimestamp()
     }
     
     init(json: JSON) {
@@ -88,8 +92,6 @@ open class CommentModel {
         }
         
         self.extras             = json["extras"].dictionaryObject
-        
-        self.date = self.getDate(string: self.timestamp)
     }
 }
 
@@ -110,15 +112,15 @@ extension CommentModel {
         }
     }
     
-    func getDate(string: String) -> Date {
+    func getDate() -> Date {
         let formatter = DateFormatter()
         formatter.dateFormat    = "yyyy-MM-dd'T'HH:mm:ssZ"
         formatter.timeZone      = TimeZone(secondsFromGMT: 0)
-        let date = formatter.date(from: string)
+        let date = formatter.date(from: self.timestamp)
         return date ?? Date()
     }
     
-    func getTimestamp() -> String {
+    static func getTimestamp() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat    = "yyyy-MM-dd'T'HH:mm:ssZ"
         formatter.timeZone      = TimeZone(secondsFromGMT: 0)
