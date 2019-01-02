@@ -57,7 +57,7 @@ extension MemberModel {
         db.set(time, forKey: self.userKey + "lastSeen")
     }
     
-    public func lastSeen() -> Date? {
+    func lastSeen() -> Date? {
         let db = UserDefaults.standard
         return db.object(forKey: self.userKey + "lastSeen") as? Date
         // MARK: TODO get alternative when null
