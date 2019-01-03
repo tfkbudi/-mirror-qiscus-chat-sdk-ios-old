@@ -109,7 +109,7 @@ extension APIRoom : EndPoint {
                 "participants"               : participants
                 ]as [String : Any]
             
-            if let avatarurl = avatarUrl{
+            if let avatarurl = avatarUrl?.absoluteString {
                 params["avatar_url"] = avatarurl
             }
             return .requestParameters(bodyParameters: params, bodyEncoding: .jsonEncoding, urlParameters: nil)
@@ -123,7 +123,7 @@ extension APIRoom : EndPoint {
                 params["room_name"] = roomname
             }
             
-            if let avatarurl = avatarUrl {
+            if let avatarurl = avatarUrl?.absoluteString {
                 params["avatar_url"] = avatarurl
             }
             
