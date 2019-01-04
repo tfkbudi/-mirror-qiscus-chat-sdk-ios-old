@@ -41,9 +41,11 @@ public class QiscusCore: NSObject {
     /// set your app Qiscus APP ID, always set app ID everytime your app lounch. \nAfter login successculy, no need to setup again
     ///
     /// - Parameter WithAppID: Qiscus SDK App ID
-    public class func setup(WithAppID id: String) {
+    public class func setup(WithAppID id: String, server: ServerConfig? = nil) {
         config.appID    = id
-        if config.server == nil {
+        if let _server = server {
+            config.server = _server
+        }else {
             config.server   = ServerConfig(url: URL.init(string: "https://api.qiscus.com/api/v2/mobile")!, realtimeURL: nil, realtimePort: nil)
         }
         
@@ -80,16 +82,6 @@ public class QiscusCore: NSObject {
         }else {
             return false
         }
-    }
-    
-    /// Setup custom server, when you use Qiscus on premise
-    ///
-    /// - Parameters:
-    ///   - customServer: your custom server host
-    ///   - realtimeServer: your qiscus realtime host, without port
-    ///   - realtimePort: your qiscus realtime port
-    public class func set(customServer: URL, realtimeServer: String?, realtimePort port: UInt16?) {
-        config.server = ServerConfig(url: customServer, realtimeURL: realtimeServer, realtimePort: port)
     }
     
     /// Sync Time interval, by default is 30s. every 30 sec will be sync when realtime server is disconnect

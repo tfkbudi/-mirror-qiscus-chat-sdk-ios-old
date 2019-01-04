@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct ServerConfig {
-    let url : URL
-    let realtimeURL : String?
-    let realtimePort : UInt16?
+public struct ServerConfig {
+    public let url : URL
+    public let realtimeURL : String?
+    public let realtimePort : UInt16?
 }
