@@ -19,6 +19,7 @@ public class QiscusCore: NSObject {
             }
         }
     }
+    
     public static let shared    : QiscusCore            = QiscusCore()
     private static var config   : ConfigManager         = ConfigManager.shared
     static var realtime         : RealtimeManager       = RealtimeManager.shared

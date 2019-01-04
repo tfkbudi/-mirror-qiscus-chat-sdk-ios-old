@@ -13,7 +13,10 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        QiscusCore.setup(WithAppID: "sampleapp-65ghcsaysse")
+        let conf = ServerConfig(
+        QiscusCore.setup(WithAppID: "sampleapp-65ghcsaysse", server: )
+//        QiscusCore.setup(WithAppID: <#T##String#>, server: <#T##ServerConfig?#>)
+        
         QiscusCore.enableDebugPrint = true
         
     }
