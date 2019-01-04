@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ServerConfig {
+public struct QiscusServer {
     public let url : URL
     public let realtimeURL : String?
     public let realtimePort : UInt16?

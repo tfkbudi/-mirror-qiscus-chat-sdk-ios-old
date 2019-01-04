@@ -42,12 +42,12 @@ public class QiscusCore: NSObject {
     /// set your app Qiscus APP ID, always set app ID everytime your app lounch. \nAfter login successculy, no need to setup again
     ///
     /// - Parameter WithAppID: Qiscus SDK App ID
-    public class func setup(WithAppID id: String, server: ServerConfig? = nil) {
+    public class func setup(WithAppID id: String, server: QiscusServer? = nil) {
         config.appID    = id
         if let _server = server {
             config.server = _server
         }else {
-            config.server   = ServerConfig(url: URL.init(string: "https://api.qiscus.com/api/v2/mobile")!, realtimeURL: nil, realtimePort: nil)
+            config.server   = QiscusServer(url: URL.init(string: "https://api.qiscus.com/api/v2/mobile")!, realtimeURL: nil, realtimePort: nil)
         }
         
         realtime.setup(appName: id)

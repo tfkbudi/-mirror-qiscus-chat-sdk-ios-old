@@ -53,7 +53,7 @@ class ConfigManager : NSObject {
         }
     }
     
-    var server      : ServerConfig?     = nil
+    var server      : QiscusServer?     = nil
     var syncInterval : TimeInterval     = 10.0
     
     fileprivate func filename(_ name: String) -> String {
