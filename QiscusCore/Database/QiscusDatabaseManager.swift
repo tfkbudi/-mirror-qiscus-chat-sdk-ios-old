@@ -94,7 +94,7 @@ public class RoomDB {
         return room.updateUnreadComment(comment)
     }
     
-    internal func delete(_ data: RoomModel) -> Bool {
+    public func delete(_ data: RoomModel) -> Bool {
         if room.delete(byID: data.id) {
             QiscusCore.eventManager.deleteRoom(data)
             return true
