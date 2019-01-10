@@ -93,6 +93,8 @@ class RealtimeManager {
                 }
             }
         }
+        
+        self.resumePendingSubscribeTopic()
     }
     
     func isTyping(_ value: Bool, roomID: String){
@@ -128,6 +130,8 @@ class RealtimeManager {
                 }
             }
         }
+        
+        QiscusLogger.debugPrint("pendingSubscribeTopic count = \(pendingSubscribeTopic.count)")
     }
     
     // MARK : Custom Event
