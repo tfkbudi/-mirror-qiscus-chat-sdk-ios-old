@@ -171,6 +171,7 @@ public class CommentDB {
         if let _timestamp = timestamp {
             comments = comments.filter({ $0.unixTimestamp < _timestamp })
         }
+        // delete all comment by room
         comments.forEach { (comment) in
             _ = self.delete(comment)
         }
