@@ -105,6 +105,15 @@ class QiscusEventManager {
         return date
     }
     
+    func roomUpdate(room: RoomModel) {
+        if let r = QiscusEventManager.shared.room {
+            if r.id == room.id {
+                roomDelegate?.onRoom(update: room)
+            }
+        }
+        delegate?.onRoom(update: room)
+    }
+    
     /// check comment exist in local
     ///
     /// - Parameter data: comment object
