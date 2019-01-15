@@ -13,7 +13,7 @@ public struct QiscusServer {
     public let realtimePort : UInt16?
     
     public init (url: URL, realtimeURL: String?, realtimePort: UInt16?) {
-        self.url            = url
+        self.url            = url + "/api/v2/sdk"
         self.realtimeURL    = realtimeURL
         self.realtimePort   = realtimePort
     }

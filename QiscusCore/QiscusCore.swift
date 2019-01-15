@@ -47,7 +47,7 @@ public class QiscusCore: NSObject {
         if let _server = server {
             config.server = _server
         }else {
-            config.server   = QiscusServer(url: URL.init(string: "https://api.qiscus.com/api/v2/mobile")!, realtimeURL: nil, realtimePort: nil)
+            config.server   = QiscusServer(url: URL.init(string: "https://api.qiscus.com")!, realtimeURL: nil, realtimePort: nil)
         }
         
         realtime.setup(appName: id)
