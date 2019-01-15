@@ -482,7 +482,7 @@ extension NetworkManager {
              QiscusLogger.errorPrint(error as! String)
             return
         }
-        
+        QiscusLogger.networkLogger(request: request)
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             // if response was JSON, then parse it
             if let response = response as? HTTPURLResponse {
