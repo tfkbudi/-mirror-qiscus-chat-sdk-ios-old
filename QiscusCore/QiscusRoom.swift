@@ -24,7 +24,7 @@ extension QiscusCore {
             var c = [CommentModel]()
             if let _comments = comments {
                 // save comments
-                QiscusCore.database.comment.save(_comments)
+                QiscusCore.database.comment.save(_comments,publishEvent: false)
                 c = _comments
             }
             onSuccess(room,c)
