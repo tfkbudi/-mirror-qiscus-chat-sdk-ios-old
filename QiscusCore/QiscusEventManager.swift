@@ -114,6 +114,10 @@ class QiscusEventManager {
         delegate?.onRoom(update: room)
     }
     
+    func roomNew(room: RoomModel) {
+        delegate?.gotNew(room: room)
+    }
+    
     /// check comment exist in local
     ///
     /// - Parameter data: comment object
