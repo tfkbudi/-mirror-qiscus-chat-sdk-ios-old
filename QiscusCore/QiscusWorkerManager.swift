@@ -54,12 +54,15 @@ class QiscusWorkerManager {
     private func sync() {
         let id = ConfigManager.shared.syncId
         QiscusCore.shared.sync(lastCommentReceivedId: id,onSuccess: { (comments) in
-            // save comment in local
-            QiscusCore.database.comment.save(comments)
-            self.syncEvent()
-            if let c = comments.first {
-                ConfigManager.shared.syncId = c.id
+            DispatchQueue.global(qos: .background).async {
+                // save comment in local
+                QiscusCore.database.comment.save(comments)
+                self.syncEvent()
+                if let c = comments.first {
+                    ConfigManager.shared.syncId = c.id
+                }
             }
+           
         }, onError: { (error) in
             QiscusLogger.errorPrint("sync error, \(error.message)")
         })
