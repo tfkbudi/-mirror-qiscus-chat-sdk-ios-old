@@ -45,6 +45,9 @@ class NetworkManager: NSObject {
         return URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
     }()
     
+    var onProgress : (Double) -> Void = { _ in}
+    var onProgressDownload : (Double) -> Void = { _ in}
+    
     override init() {
         super.init()
         self.downloadService.downloadsSession = self.downloadsSession
@@ -483,7 +486,11 @@ extension NetworkManager {
             return
         }
         QiscusLogger.networkLogger(request: request)
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        
+        let configuration = URLSessionConfiguration.default
+        let session = URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
+        
+        let task = session.dataTask(with: request) { data, response, error in
             // if response was JSON, then parse it
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -506,7 +513,7 @@ extension NetworkManager {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
-                        QiscusLogger.errorPrint(error as! String)
+                        QiscusLogger.errorPrint(errorMessage as! String)
                     }
                     DispatchQueue.main.async {
                         onError(QError(message: errorMessage))
@@ -516,6 +523,12 @@ extension NetworkManager {
         }
         
         task.resume()
+        DispatchQueue.main.async {
+            self.onProgress = { progressUpload in
+                progress(progressUpload)
+            }
+        }
+        
     }
     
     func download(url: URL, onSuccess: @escaping (URL) -> Void, onProgress: @escaping (Float) -> Void) {
@@ -530,19 +543,23 @@ extension NetworkManager {
                 self.downloadService.startDownload(file)
             }
         }
-        // find progress in active download queue
-        for d in downloadService.activeDownloads {
-            if d.key == file.url {
-                d.value.onProgress = { progress in
-                    onProgress(progress)
-                }
-                d.value.onCompleted = { success in
-                    if !success { return }
-                    let localPath: URL = QiscusCore.fileManager.localFilePath(for: d.value.file.url)
-                    onSuccess(localPath)
+        
+        self.onProgressDownload = { progressUpload in
+            // find progress in active download queue
+            for d in self.downloadService.activeDownloads {
+                if d.key == file.url {
+                    d.value.onProgress = { progress in
+                        onProgress(progress)
+                    }
+                    d.value.onCompleted = { success in
+                        if !success { return }
+                        let localPath: URL = QiscusCore.fileManager.localFilePath(for: d.value.file.url)
+                        onSuccess(localPath)
+                    }
                 }
             }
         }
+  
     }
 }
 
@@ -572,6 +589,19 @@ extension NetworkManager : URLSessionDownloadDelegate {
         download.onProgress(download.progress)
         // 3
         // let totalSize = ByteCountFormatter.string(fromByteCount: totalBytesExpectedToWrite, countStyle: .file)
+        DispatchQueue.main.async {
+            self.onProgressDownload(Double(download.progress))
+        }
 
     }
+    
+    func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64){
+        
+        let uploadProgress: Double = Double(totalBytesSent) / Double(totalBytesExpectedToSend)
+        DispatchQueue.main.async {
+            self.onProgress(uploadProgress)
+        }
+        
+    }
+    
 }
