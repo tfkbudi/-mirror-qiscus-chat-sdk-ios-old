@@ -141,9 +141,10 @@ extension QiscusCore {
                 roomIDs.forEach({ (id) in
                     if let room = QiscusCore.database.room.find(uniqID: id) {
                         QiscusCore.database.comment.clear(inRoom: room.id)
-                        QiscusEventManager.shared.roomUpdate(room: room)
-                        room.lastComment = nil
+                        room.lastComment    = nil
+                        room.unreadCount    = 0
                         QiscusCore.database.room.save([room])
+                        QiscusEventManager.shared.roomUpdate(room: room)
                     }
                 })
             }

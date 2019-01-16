@@ -52,6 +52,7 @@ class RoomStorage {
                 // publish event add new room
                 delegate?.gotNew(room: room)
             }
+            
         }
     }
     
