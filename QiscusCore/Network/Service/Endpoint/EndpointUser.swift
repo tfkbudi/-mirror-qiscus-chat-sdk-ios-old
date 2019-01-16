@@ -42,7 +42,7 @@ extension APIUser : EndPoint {
         }
     }
     var header: HTTPHeaders? {
-        return nil
+        return HEADERS
     }
     
     var task: HTTPTask {
@@ -72,9 +72,9 @@ extension APIUser : EndPoint {
             return .requestParameters(bodyParameters: params, bodyEncoding: .urlEncoding, urlParameters: nil)
         case .unread:
             let param = [
-                "token"                       : AUTHTOKEN
+                "token" : AUTHTOKEN
             ]
-            return .requestParameters(bodyParameters: param, bodyEncoding: .urlEncoding, urlParameters: nil)
+            return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: param)
         }
     }
 }

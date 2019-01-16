@@ -23,7 +23,7 @@ class ApiResponse {
     
     static func decode(unread data: Data) -> Int {
         let json = JSON(data)
-        let unread = json["total_unread_count"].intValue
+        let unread = json["results"]["total_unread_count"].intValue
         return unread
     }
     
