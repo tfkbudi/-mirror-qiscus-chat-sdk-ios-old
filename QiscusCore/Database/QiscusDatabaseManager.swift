@@ -154,7 +154,7 @@ public class CommentDB {
                 if (QiscusCore.database.room.find(id: result.roomId) == nil){
                     QiscusCore.shared.getRoom(withID: result.roomId, onSuccess: { (room, comments) in
                         if publishEvent {
-                            QiscusEventManager.shared.gotNewMessage(comment: result)
+                            QiscusEventManager.shared.roomNew(room: room)
                         }
                         
                         // update last comment in room, mean comment where you send
