@@ -153,28 +153,32 @@ public class CommentDB {
                 
                 if (QiscusCore.database.room.find(id: result.roomId) == nil){
                     QiscusCore.shared.getRoom(withID: result.roomId, onSuccess: { (room, comments) in
-                        if publishEvent {
-                            QiscusEventManager.shared.roomNew(room: room)
-                        }
-                        
                         // update last comment in room, mean comment where you send
                         if !QiscusCore.database.room.updateLastComment(result) {
                             QiscusLogger.errorPrint("Add new comment but can't replace last comment in room. Mybe room not found")
                         }
+                        
+                        if publishEvent {
+                            QiscusEventManager.shared.roomNew(room: room)
+                        }
+                        
+                       
                     }, onError: { (error) in
                         
                     })
                 }else{
                     
-                    self.markCommentAsRead(comment: result)
-                    if publishEvent {
-                        QiscusEventManager.shared.gotNewMessage(comment: result)
-                    }
-                    
                     // update last comment in room, mean comment where you send
                     if !QiscusCore.database.room.updateLastComment(result) {
                         QiscusLogger.errorPrint("Add new comment but can't replace last comment in room. Mybe room not found")
                     }
+                    
+                    if publishEvent {
+                        QiscusEventManager.shared.gotNewMessage(comment: result)
+                    }else{
+                       self.markCommentAsRead(comment: result)
+                    }
+                    
                 }
                 
             }) { (updatedResult) in
