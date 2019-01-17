@@ -153,10 +153,13 @@ public class CommentDB {
                 
                 if (QiscusCore.database.room.find(id: result.roomId) == nil){
                     QiscusCore.shared.getRoom(withID: result.roomId, onSuccess: { (room, comments) in
+                        
                         // update last comment in room, mean comment where you send
                         if !QiscusCore.database.room.updateLastComment(result) {
                             QiscusLogger.errorPrint("Add new comment but can't replace last comment in room. Mybe room not found")
                         }
+                        
+                        QiscusCore.database.room.loadData()
                         
                         if publishEvent {
                             QiscusEventManager.shared.roomNew(room: room)
