@@ -42,7 +42,7 @@ class RoomStorage {
                     data.append(room)
                     data = sort(data)
                     // publish event add new room
-                    delegate?.gotNew(room: room)
+                    QiscusEventManager.shared.roomNew(room: room)
                 }
             }else {
                 // add new room
@@ -50,7 +50,7 @@ class RoomStorage {
                 save(room)
                 data = sort(data)
                 // publish event add new room
-                delegate?.gotNew(room: room)
+                QiscusEventManager.shared.roomNew(room: room)
             }
             
         }
