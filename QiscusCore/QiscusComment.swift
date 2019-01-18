@@ -37,7 +37,13 @@ extension QiscusCore {
             if let commentResult = result {
                 // save in local
                 commentResult.status = .sent
+                if let roomData = QiscusCore.database.room.find(id: commentResult.roomId){
+                    roomData.lastComment = commentResult
+                    QiscusCore.database.room.save([roomData])
+                }
+                
                 QiscusCore.database.comment.save([commentResult])
+                
                 //comment.onChange(commentResult) // view data binding
                 onSuccess(commentResult)
             }else {
