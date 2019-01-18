@@ -22,7 +22,7 @@ public enum QiscusConnectionState : String{
 }
 
 public protocol QiscusCoreDelegate {
-    // MARK: Comment Event in Room
+    // MARK: Event Room List
     
     /// new comment is comming
     ///
