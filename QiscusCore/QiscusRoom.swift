@@ -120,9 +120,11 @@ extension QiscusCore {
     ///
     /// - Parameters:
     ///   - withId: array of room id
+    ///   - showParticipant : default is false
+    ///   - showRemoved : default is false
     ///   - completion: Response new Qiscus Room Object and error if exist.
-    public func getRooms(withId ids: [String], onSuccess: @escaping ([RoomModel]) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.getRoomInfo(roomIds: ids, roomUniqueIds: nil, showParticipant: false, showRemoved: false){ (rooms, error) in
+    public func getRooms(withId ids: [String], showParticipant: Bool = false, showRemoved: Bool = false, onSuccess: @escaping ([RoomModel]) -> Void, onError: @escaping (QError) -> Void) {
+        QiscusCore.network.getRoomInfo(roomIds: ids, roomUniqueIds: nil, showParticipant: showParticipant, showRemoved: showRemoved){ (rooms, error) in
             if let data = rooms {
                 // save room
                 QiscusCore.database.room.save(data)
@@ -139,9 +141,11 @@ extension QiscusCore {
     ///
     /// - Parameters:
     ///   - ids: Unique room id
+    ///   - showParticipant : default is false
+    ///   - showRemoved : default is false
     ///   - completion: Response new Qiscus Room Object and error if exist.
-    public func getRooms(withUniqueId ids: [String], onSuccess: @escaping ([RoomModel]) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.getRoomInfo(roomIds: nil, roomUniqueIds: ids, showParticipant: false, showRemoved: false){ (rooms, error) in
+    public func getRooms(withUniqueId ids: [String],showParticipant: Bool = false, showRemoved: Bool = false, onSuccess: @escaping ([RoomModel]) -> Void, onError: @escaping (QError) -> Void) {
+        QiscusCore.network.getRoomInfo(roomIds: nil, roomUniqueIds: ids, showParticipant: showParticipant, showRemoved: showRemoved){ (rooms, error) in
             if let data = rooms {
                 // save room
                 QiscusCore.database.room.save(data)
