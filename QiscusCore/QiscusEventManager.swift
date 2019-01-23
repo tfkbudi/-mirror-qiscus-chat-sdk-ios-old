@@ -85,7 +85,8 @@ class QiscusEventManager {
     
     func gotEvent(email: String, isOnline: Bool, timestamp time: String) {
         guard let member = QiscusCore.database.member.find(byEmail: email) else { return }
-        let date = getDate(timestampUTC: time)
+        guard let validTime = self.components(time, length: 13).first else { return }
+        let date = getDate(timestampUTC: validTime)
         // filter event for room or qiscuscore
         if let room = QiscusEventManager.shared.room  {
             guard let participants = room.participants else { return }
@@ -116,6 +117,14 @@ class QiscusEventManager {
     
     func roomNew(room: RoomModel) {
         delegate?.gotNew(room: room)
+    }
+    
+    func components(_ value:String, length: Int) -> [String] {
+        return stride(from: 0, to: value.characters.count, by: length).map {
+            let start = value.index(value.startIndex, offsetBy: $0)
+            let end = value.index(start, offsetBy: length, limitedBy: value.endIndex) ?? value.endIndex
+            return String(value[start..<end])
+        }
     }
     
     /// check comment exist in local
