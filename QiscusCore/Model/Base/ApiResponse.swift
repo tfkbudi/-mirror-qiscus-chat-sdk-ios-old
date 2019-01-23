@@ -144,4 +144,44 @@ class CommentApiResponse {
         let comment = json["comment"]
         return CommentModel(json: comment)
     }
+    
+    static func commentDeliveredUser(from json: JSON) -> [MemberInfoModel]? {
+        if let members = json["delivered_to"].array {
+            var results = [MemberInfoModel]()
+            for member in members {
+                let data = MemberInfoModel(json: member)
+                results.append(data)
+            }
+            return results
+        }else {
+            return nil
+        }
+    }
+    
+    static func commentReadUser(from json: JSON) -> [MemberInfoModel]? {
+        if let members = json["read_by"].array {
+            var results = [MemberInfoModel]()
+            for member in members {
+                let data = MemberInfoModel(json: member)
+                results.append(data)
+            }
+            return results
+        }else {
+            return nil
+        }
+    }
+    
+    static func commentPendingUser(from json: JSON) -> [MemberInfoModel]? {
+        if let members = json["pending"].array {
+            var results = [MemberInfoModel]()
+            for member in members {
+                let data = MemberInfoModel(json: member)
+                results.append(data)
+            }
+            return results
+        }else {
+            return nil
+        }
+    }
+    
 }

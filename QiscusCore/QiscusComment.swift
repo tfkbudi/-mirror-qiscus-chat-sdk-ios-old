@@ -201,15 +201,15 @@ extension QiscusCore {
     ///
     /// - Parameters:
     ///   - id: comment id
-    ///   - completion: return object comment if exist
-    public func readReceiptStatus(commentId id: String, onSuccess: @escaping (CommentModel) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.readReceiptStatus(commentId: id) { (comment, error) in
-            if let c = comment {
-                // save comment in local
+    ///   - completion: return object commentInfo
+    public func readReceiptStatus(commentId id: String, onSuccess: @escaping (CommentInfo) -> Void, onError: @escaping (QError) -> Void) {
+        QiscusCore.network.readReceiptStatus(commentId: id) { (commentInfo, error) in
+            if let commentInfo = commentInfo {
+                let c = commentInfo.comment
                 QiscusCore.database.comment.save([c])
-                onSuccess(c)
-            }else {
-                onError(error ?? QError(message: "Unexpected error"))
+                onSuccess(commentInfo)
+            }else{
+                 onError(error ?? QError(message: "Unexpected error"))
             }
         }
     }

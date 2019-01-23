@@ -241,7 +241,9 @@ class RealtimeManager {
                         }
                     }
                 }else if room.type == .group {
-                    QiscusCore.shared.readReceiptStatus(commentId: lastMyComment.id, onSuccess: { (result) in
+                    QiscusCore.shared.readReceiptStatus(commentId: lastMyComment.id, onSuccess: { (commentInfo) in
+                        print(commentInfo.deliveredUser.first?.username)
+                        let result = commentInfo.comment
                         // compare current status
                         if lastMyComment.status.intValue < result.status.intValue {
                             // update all my comment status

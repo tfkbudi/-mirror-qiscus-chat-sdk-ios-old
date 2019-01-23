@@ -222,7 +222,12 @@ extension NetworkManager {
         }
     }
     
-    func readReceiptStatus(commentId id: String, completion: @escaping (CommentModel?, QError?) -> Void) {
+    /// readReceiptStatus
+    ///
+    /// - Parameters:
+    ///   - commentId: comment id
+    ///   - completion: commentInfo
+    func readReceiptStatus(commentId id: String, completion: @escaping (CommentInfo?, QError?) -> Void) {
         commentRouter.request(.statusComment(id: id)) { (data, response, error) in
             if error != nil {
                 completion(nil, QError(message: "Please check your network connection."))
@@ -237,7 +242,22 @@ extension NetworkManager {
                     }
                     let response = ApiResponse.decode(from: responseData)
                     let comment = CommentApiResponse.comment(from: response)
-                    completion(comment, nil)
+                    
+                    
+                    var commentInfo = CommentInfo()
+                    commentInfo.comment = comment
+                    
+                    if let commentDeliveredUser = CommentApiResponse.commentDeliveredUser(from: response){
+                        commentInfo.deliveredUser = commentDeliveredUser
+                    }
+                    if let commentPendingUser = CommentApiResponse.commentPendingUser(from: response){
+                        commentInfo.pendingUser = commentPendingUser
+                    }
+                    if let commentReadUser = CommentApiResponse.commentReadUser(from: response){
+                        commentInfo.readUser = commentReadUser
+                    }
+                    
+                    completion(commentInfo, nil)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
