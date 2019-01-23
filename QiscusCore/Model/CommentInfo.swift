@@ -9,9 +9,9 @@ import Foundation
 
 public struct CommentInfo {
     public var comment = CommentModel()
-    public var deliveredUser = [MemberInfoModel]()
-    public var readUser = [MemberInfoModel]()
-    public var pendingUser = [MemberInfoModel]()
+    public var deliveredUser = [MemberModel]()
+    public var readUser = [MemberModel]()
+    public var pendingUser = [MemberModel]()
     
 }
 

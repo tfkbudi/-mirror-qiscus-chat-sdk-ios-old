@@ -145,11 +145,13 @@ class CommentApiResponse {
         return CommentModel(json: comment)
     }
     
-    static func commentDeliveredUser(from json: JSON) -> [MemberInfoModel]? {
+    static func commentDeliveredUser(from json: JSON) -> [MemberModel]? {
         if let members = json["delivered_to"].array {
-            var results = [MemberInfoModel]()
+            var results = [MemberModel]()
             for member in members {
-                let data = MemberInfoModel(json: member)
+                let user = member["user"]
+                let data = MemberModel(json: user)
+                
                 results.append(data)
             }
             return results
@@ -158,11 +160,13 @@ class CommentApiResponse {
         }
     }
     
-    static func commentReadUser(from json: JSON) -> [MemberInfoModel]? {
+    static func commentReadUser(from json: JSON) -> [MemberModel]? {
         if let members = json["read_by"].array {
-            var results = [MemberInfoModel]()
+            var results = [MemberModel]()
             for member in members {
-                let data = MemberInfoModel(json: member)
+                let user = member["user"]
+                let data = MemberModel(json: user)
+                
                 results.append(data)
             }
             return results
@@ -171,11 +175,12 @@ class CommentApiResponse {
         }
     }
     
-    static func commentPendingUser(from json: JSON) -> [MemberInfoModel]? {
+    static func commentPendingUser(from json: JSON) -> [MemberModel]? {
         if let members = json["pending"].array {
-            var results = [MemberInfoModel]()
+            var results = [MemberModel]()
             for member in members {
-                let data = MemberInfoModel(json: member)
+                let user = member["user"]
+                let data = MemberModel(json: user)
                 results.append(data)
             }
             return results

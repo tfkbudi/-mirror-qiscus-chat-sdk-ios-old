@@ -51,21 +51,6 @@ open class MemberModel {
     }
 }
 
-open class MemberInfoModel {
-    public var email : String   = ""
-    public var id : String      = ""
-    public var username : String    = ""
-    private let userKey = "CoreMemInfKey_"
-    
-    init() { }
-    
-    init(json: JSON) {
-        self.id         = json["user"]["id_str"].stringValue
-        self.username   = json["user"]["username"].stringValue
-        self.email      = json["user"]["email"].stringValue
-    }
-}
-
 extension MemberModel {
     internal func saveLastOnline(_ time: Date) {
         let db = UserDefaults.standard
