@@ -285,9 +285,11 @@ extension NetworkManager {
     /// - Parameters:
     ///   - roomId: chat room id
     ///   - userSdkEmail: array of user's sdk email
+    ///   - offset : default is 0
+    ///   - sorting : default is asc
     ///   - completion: @escaping when success add participant to room, return added participants Optional([MemberModel]), Optional(String error message)
-    func getParticipants(roomUniqeId id: String, completion: @escaping ([MemberModel]?, QError?) -> Void) {
-        roomRouter.request(.getParticipant(roomId: id)) { (data, response, error) in
+    func getParticipants(roomUniqeId id: String, offset: Int? = nil, sorting: SortType? = nil, completion: @escaping ([MemberModel]?, QError?) -> Void) {
+        roomRouter.request(.getParticipant(roomId: id, offset: offset, sorting: sorting)) { (data, response, error) in
             if error != nil {
                 completion(nil, QError(message: "Please check your network connection."))
             }
@@ -335,6 +337,7 @@ extension NetworkManager {
                         completion(nil, QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
+                    
                     let response    = ApiResponse.decode(from: responseData)
                     let members     = RoomApiResponse.addParticipants(from: response)
                     completion(members, nil)

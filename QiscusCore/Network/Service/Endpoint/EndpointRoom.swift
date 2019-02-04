@@ -17,7 +17,7 @@ internal enum APIRoom {
     case channelWithUniqueId(uniqueId: String,name: String?, avatarUrl: URL?, options: String?)
     case addParticipant(roomId: String, emails: [String])
     case removeParticipant(roomId: String, emails: [String])
-    case getParticipant(roomId: String)
+    case getParticipant(roomId: String, offset: Int?, sorting : SortType?)
     case getRoomById(roomId: String)
 }
 
@@ -191,10 +191,20 @@ extension APIRoom : EndPoint {
                 ] as [String : Any]
             
             return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: params)
-        case .getParticipant(let roomId):
-            let params = [
-                "room_unique_id"                    : roomId,
+        case .getParticipant(let roomId, let offset, let sorting):
+            var params = [
+                "token"                      : AUTHTOKEN,
+                "room_unique_id"                    : roomId
                 ] as [String : Any]
+            
+            if let offset = offset {
+                params["offset"] = offset
+            }
+            
+            if let sorting = sorting {
+                params["sorting"] = sorting
+            }
+            
             return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: params)
         }
     }

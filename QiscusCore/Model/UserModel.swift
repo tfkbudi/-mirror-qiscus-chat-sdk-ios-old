@@ -8,6 +8,11 @@
 
 import SwiftyJSON
 
+public enum SortType: String {
+    case asc = "asc"
+    case desc = "desc"
+}
+
 public struct UserModel {
     public var avatarUrl        : URL       = URL(string: "http://")!
     public var email            : String    = ""

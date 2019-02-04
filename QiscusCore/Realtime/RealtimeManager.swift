@@ -182,7 +182,6 @@ class RealtimeManager {
 
  extension RealtimeManager: QiscusRealtimeDelegate {
     func didReceiveRoomEvent(roomID: String, data: String) {
-        // MARK : TODO parsing sender and payload
         guard let payload = toDictionary(text: data) else { return }
         guard let postEvent = roomEvents[roomID] else { return }
         let event = RoomEvent(sender: payload["sender"] as? String ?? "", data: payload["data"] as? [String : Any] ?? ["":""])

@@ -60,11 +60,14 @@ extension QiscusCore {
     ///
     /// - Parameters:
     ///   - id: Room ID
+    ///   - timestamp: timestamp
+    ///   - lastCommentId: last recieved comment id before loadmore
+    ///   - after: if true returns comments with id >= last_comment_id. if false and last_comment_id is specified, returns last 20 comments with id < last_comment_id. if false and last_comment_id is not specified, returns last 20 comments
     ///   - limit: by default set 20, min 0 and max 100
     ///   - completion: Response new Qiscus Array of Comment Object and error if exist.
-    public func loadComments(roomID id: String, limit: Int? = nil, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
+    public func loadComments(roomID id: String, lastCommentId: Int? = nil, timestamp: String? = nil, after: Bool? = nil, limit: Int? = nil, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
         // Load message by default 20
-        QiscusCore.network.loadComments(roomId: id, limit: limit) { (comments, error) in
+        QiscusCore.network.loadComments(roomId: id, lastCommentId: lastCommentId, timestamp: timestamp, after: after, limit: limit) { (comments, error) in
             if let c = comments {
                 // save comment in local
                 QiscusCore.database.comment.save(c, publishEvent: false)
@@ -80,11 +83,13 @@ extension QiscusCore {
     /// - Parameters:
     ///   - roomID: Room ID
     ///   - lastCommentID: last comment id want to load
+    ///   - timestamp: timestamp
+    ///   - after: if true returns comments with id >= last_comment_id. if false and last_comment_id is specified, returns last 20 comments with id < last_comment_id. if false and last_comment_id is not specified, returns last 20 comments
     ///   - limit: by default set 20, min 0 and max 100
     ///   - completion: Response new Qiscus Array of Comment Object and error if exist.
-    public func loadMore(roomID id: String, lastCommentID commentID: Int, limit: Int? = nil, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
+    public func loadMore(roomID id: String, lastCommentID commentID: Int, timestamp: String? = nil, after: Bool? = nil, limit: Int? = nil, onSuccess: @escaping ([CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
         // Load message from server
-        QiscusCore.network.loadComments(roomId: id, lastCommentId: commentID, timestamp: nil, after: nil, limit: limit) { (comments, error) in
+        QiscusCore.network.loadComments(roomId: id, lastCommentId: commentID, timestamp: timestamp, after: after, limit: limit) { (comments, error) in
             if let c = comments {
                 // save comment in local
                 QiscusCore.database.comment.save(c, publishEvent: false)

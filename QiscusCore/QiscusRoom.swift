@@ -15,9 +15,9 @@ extension QiscusCore {
     /// - Parameters:
     ///   - withUsers: Qiscus user emaial.
     ///   - completion: Qiscus Room Object and error if exist.
-    public func getRoom(withUser user: String, onSuccess: @escaping (RoomModel, [CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
+    public func getRoom(withUser user: String, avatarUrl: URL? = nil, distincId: String? = nil, options: String? = nil, onSuccess: @escaping (RoomModel, [CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
         // call api get_or_create_room_with_target
-        QiscusCore.network.getOrCreateRoomWithTarget(targetSdkEmail: user, onSuccess: { (room, comments) in
+        QiscusCore.network.getOrCreateRoomWithTarget(targetSdkEmail: user,avatarUrl: avatarUrl, distincId: distincId, options: options, onSuccess: { (room, comments) in
             QiscusCore.database.room.save([room])
             // subscribe room from local
             QiscusCore.realtime.subscribeRooms(rooms: [room])
@@ -50,8 +50,6 @@ extension QiscusCore {
             if let room = rooms {
                 // save room
                 QiscusCore.database.room.save([room])
-                // subscribe room from local
-                QiscusCore.realtime.subscribeRooms(rooms: [room])
                 var c = [CommentModel]()
                 if let _comments = comments {
                     // save comments
@@ -68,8 +66,6 @@ extension QiscusCore {
             if let room = rooms {
                 // save room
                 QiscusCore.database.room.save(room)
-                // subscribe room from local
-                QiscusCore.realtime.subscribeRooms(rooms: room)
                 if let first = room.first {
                     onSuccess(first)
                 }else {
@@ -282,9 +278,11 @@ extension QiscusCore {
     ///
     /// - Parameters:
     ///   - roomUniqeId: room id (group)
+    ///   - offset : default is nil
+    ///   - sorting : default is asc
     ///   - completion: Response new Qiscus Participant Object and error if exist.
-    public func getParticipant(roomUniqeId id: String, onSuccess: @escaping ([MemberModel]) -> Void, onError: @escaping (QError) -> Void ) {
-        QiscusCore.network.getParticipants(roomUniqeId: id) { (members, error) in
+    public func getParticipant(roomUniqeId id: String, offset: Int? = nil, sorting: SortType? = nil, onSuccess: @escaping ([MemberModel]) -> Void, onError: @escaping (QError) -> Void ) {
+        QiscusCore.network.getParticipants(roomUniqeId: id, offset: offset, sorting: sorting) { (members, error) in
             if let _members = members {
                 onSuccess(_members)
             }else{
