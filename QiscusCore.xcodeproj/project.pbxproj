@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1A9AE35F987E498A4394B208 /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A30556DA65A102F1FEE21504 /* Pods_Example.framework */; };
 		3D05B0FE217715FB00060DC9 /* QiscusWorkerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D05B0FD217715FB00060DC9 /* QiscusWorkerManager.swift */; };
+		3D18A30122084C4C00036C7B /* CommentInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D18A30022084C4C00036C7B /* CommentInfo.swift */; };
 		3D3F9EC82188103E00DDD00C /* QiscusStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9E8A2188103E00DDD00C /* QiscusStorage.swift */; };
 		3D3F9EC92188103E00DDD00C /* ConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9E8B2188103E00DDD00C /* ConfigManager.swift */; };
 		3D3F9ECA2188103E00DDD00C /* QiscusFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3F9E8C2188103E00DDD00C /* QiscusFileManager.swift */; };
@@ -88,6 +89,7 @@
 /* Begin PBXFileReference section */
 		12272639BF0C7839D8A8A270 /* Pods-QiscusCoreTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QiscusCoreTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QiscusCoreTests/Pods-QiscusCoreTests.debug.xcconfig"; sourceTree = "<group>"; };
 		3D05B0FD217715FB00060DC9 /* QiscusWorkerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusWorkerManager.swift; sourceTree = "<group>"; };
+		3D18A30022084C4C00036C7B /* CommentInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentInfo.swift; sourceTree = "<group>"; };
 		3D3F9E8A2188103E00DDD00C /* QiscusStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusStorage.swift; sourceTree = "<group>"; };
 		3D3F9E8B2188103E00DDD00C /* ConfigManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigManager.swift; sourceTree = "<group>"; };
 		3D3F9E8C2188103E00DDD00C /* QiscusFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QiscusFileManager.swift; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 		3D3F9E8E2188103E00DDD00C /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				3D18A30022084C4C00036C7B /* CommentInfo.swift */,
 				3D3F9E8F2188103E00DDD00C /* CommentModel.swift */,
 				3D3F9E902188103E00DDD00C /* FileModel.swift */,
 				3D3F9E912188103E00DDD00C /* Config */,
@@ -757,6 +760,7 @@
 				3D3F9ECF2188103E00DDD00C /* NonceModel.swift in Sources */,
 				3D3F9EE32188103E00DDD00C /* Endpoint.swift in Sources */,
 				3D3F9EF22188103E00DDD00C /* Comment+CoreDataClass.swift in Sources */,
+				3D18A30122084C4C00036C7B /* CommentInfo.swift in Sources */,
 				3D3F9ECD2188103E00DDD00C /* FileModel.swift in Sources */,
 				3D3F9EEA2188103E00DDD00C /* CommentStorage.swift in Sources */,
 			);
