@@ -153,7 +153,7 @@ extension APIRoom : EndPoint {
         case .channelWithUniqueId(let uniqueId, let name, let avatarUrl, let options):
             var params = [
                 "token"                      : AUTHTOKEN,
-                "email"                      : uniqueId
+                "unique_id"                  : uniqueId
             ]
             
             if let nm = name {
