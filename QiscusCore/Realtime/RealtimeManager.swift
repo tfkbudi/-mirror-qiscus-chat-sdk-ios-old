@@ -97,6 +97,24 @@ class RealtimeManager {
         self.resumePendingSubscribeTopic()
     }
     
+    func unsubscribeRooms(rooms: [RoomModel]) {
+        guard let c = client else {
+            return
+        }
+        
+        for room in rooms {
+            // unsubcribe room event
+            c.unsubscribe(endpoint: .delivery(roomID: room.id))
+            c.unsubscribe(endpoint: .read(roomID: room.id))
+            c.unsubscribe(endpoint: .typing(roomID: room.id))
+            guard let participants = room.participants else { return }
+            for u in participants {
+                c.unsubscribe(endpoint: .onlineStatus(user: u.email))
+            }
+        }
+        
+    }
+
     func isTyping(_ value: Bool, roomID: String){
         guard let c = client else {
             return
