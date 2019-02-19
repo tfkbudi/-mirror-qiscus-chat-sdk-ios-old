@@ -67,7 +67,7 @@ open class CommentModel {
         self.payload            = json["payload"].dictionaryObject
         self.timestamp          = json["timestamp"].stringValue
         self.unixTimestamp      = json["unix_nano_timestamp"].int64Value
-        self.userAvatarUrl      = json["room_avatar"].url ?? URL(string: "http://")
+        self.userAvatarUrl      = json["user_avatar_url"].url ?? json["user_avatar"].url ?? URL(string: "http://")
         self.username           = json["username"].stringValue
         self.userId             = json["user_id_str"].stringValue
         let _status             = json["status"].stringValue
