@@ -13,11 +13,16 @@ public protocol ParameterEncoder {
     func encode(urlRequest: inout URLRequest, with parameters: Parameters) throws
 }
 
+public protocol ParameterNotEncoder{
+    func notEncode(urlRequest: inout URLRequest, with parameters: Parameters) throws
+}
+
 public enum ParameterEncoding {
     
     case urlEncoding
     case jsonEncoding
     case urlAndJsonEncoding
+    case urlNotEncoding
     
     public func encode(urlRequest: inout URLRequest,
                        bodyParameters: Parameters?,
@@ -37,6 +42,9 @@ public enum ParameterEncoding {
                     let urlParameters = urlParameters else { return }
                 try URLParameterEncoder().encode(urlRequest: &urlRequest, with: urlParameters)
                 try JSONParameterEncoder().encode(urlRequest: &urlRequest, with: bodyParameters)
+            case .urlNotEncoding:
+                guard let urlParameters = urlParameters else { return }
+                try URLParameterNotEncode().notEncode(urlRequest: &urlRequest, with: urlParameters)
                 
             }
         }catch {

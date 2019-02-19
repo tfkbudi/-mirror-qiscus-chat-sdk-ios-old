@@ -68,9 +68,27 @@ class UserApiResponse {
         return UserModel(json: comment)
     }
     
+    static func allUser(from json: JSON) -> [MemberModel]?  {
+        if let rooms = json["users"].array {
+            var results = [MemberModel]()
+            for room in rooms {
+                let data = MemberModel(json: room)
+                results.append(data)
+            }
+            return results
+        }else {
+            return nil
+        }
+    }
+    
     static func blockUser(from json: JSON) -> MemberModel {
         let comment = json["user"]
         return MemberModel(json: comment)
+    }
+    
+    static func meta(from json: JSON) -> Meta {
+        let meta = json["meta"]
+        return Meta(json: meta)
     }
 }
 

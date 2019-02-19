@@ -47,7 +47,7 @@ open class MemberModel {
     init() { }
     
     init(json: JSON) {
-        self.id         = json["id_str"].stringValue
+        self.id         = json["id_str"].string ?? "\(json["id"].intValue)"
         self.username   = json["username"].stringValue
         self.avatarUrl  = json["avatar_url"].url ?? nil
         self.email      = json["email"].stringValue

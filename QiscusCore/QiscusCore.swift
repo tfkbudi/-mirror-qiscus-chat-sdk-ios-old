@@ -330,4 +330,16 @@ public class QiscusCore: NSObject {
     public func download(url: URL, onSuccess: @escaping (URL) -> Void, onProgress: @escaping (Float) -> Void) {
         QiscusCore.network.download(url: url, onSuccess: onSuccess, onProgress: onProgress)
     }
+    
+    /// getUsers
+    ///
+    /// - Parameters:
+    ///   - limit: default 20
+    ///   - page: default 1
+    ///   - querySearch: default nil
+    ///   - onSuccess: array of users and metaData
+    ///   - onProgress: progress download
+    public func getUsers(limit : Int? = 20, page: Int? = 1, querySearch: String? = nil,onSuccess: @escaping ([MemberModel], Meta) -> Void, onError: @escaping (QError) -> Void){
+        QiscusCore.network.getUsers(limit: limit, page: page, querySearch: querySearch, onSuccess: onSuccess, onError: onError)
+    }
 }

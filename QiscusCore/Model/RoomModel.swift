@@ -25,8 +25,8 @@ public class Meta {
     public let totalRoom : Int?
     
     init(json: JSON) {
-        self.currentPage    = json["current_page"].intValue
-        self.totalRoom    = json["total_room"].intValue
+        self.currentPage    = json["current_page"].int ??  json["total_page"].intValue
+        self.totalRoom    = json["total_room"].int ?? json["total_data"].intValue
     }
     
 }

@@ -13,6 +13,7 @@ internal enum APIUser {
     case unblock(email: String)
     case listBloked(page: Int?, limit: Int?)
     case unread()
+    case getUsers(page: Int?, limit: Int?, querySearch: String?)
 }
 
 extension APIUser : EndPoint {
@@ -30,6 +31,8 @@ extension APIUser : EndPoint {
             return "/get_blocked_users"
         case .unread:
             return "/total_unread_count"
+        case .getUsers( _, _, _):
+            return "/get_user_list"
         }
     }
     
@@ -37,7 +40,7 @@ extension APIUser : EndPoint {
         switch self {
         case .block, .unblock :
             return .post
-        case .listBloked, .unread:
+        case .listBloked, .unread, .getUsers:
             return .get
         }
     }
@@ -75,6 +78,23 @@ extension APIUser : EndPoint {
                 "token" : AUTHTOKEN
             ]
             return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: param)
+        case .getUsers(let page,let limit, let querySearch):
+        var params = [
+            "token"                       : AUTHTOKEN,
+            "order_query"                 : "username asc",
+            ] as [String : Any]
+        if let p = page {
+            params["page"] = p
+        }
+        if let l = limit {
+            params["limit"] = l
+        }
+        
+        if let s = querySearch {
+            params["query"] = s
+        }
+        
+        return .requestParameters(bodyParameters: nil, bodyEncoding: .urlNotEncoding, urlParameters: params)
         }
     }
 }
