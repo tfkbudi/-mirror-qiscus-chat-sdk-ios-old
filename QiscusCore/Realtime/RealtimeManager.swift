@@ -9,6 +9,7 @@ import Foundation
 import QiscusRealtime
 
 typealias _roomEvent = (RoomEvent) -> Void
+typealias _roomTyping = (RoomTyping) -> Void
  
 class RealtimeManager {
     static var shared : RealtimeManager = RealtimeManager()
@@ -16,6 +17,8 @@ class RealtimeManager {
     private var pendingSubscribeTopic : [RealtimeSubscribeEndpoint] = [RealtimeSubscribeEndpoint]()
     var state : QiscusRealtimeConnectionState = QiscusRealtimeConnectionState.disconnected
     private var roomEvents : [String : _roomEvent] = [String : _roomEvent]()
+    
+    private var roomTypings : [String : _roomTyping] = [String : _roomTyping]()
     
     func setup(appName: String) {
         // make sure realtime client still single object
@@ -150,6 +153,26 @@ class RealtimeManager {
         }
         
         QiscusLogger.debugPrint("pendingSubscribeTopic count = \(pendingSubscribeTopic.count)")
+    }
+    
+    // MARK : Typing event
+    func subscribeTyping(roomID: String, onTyping: @escaping (RoomTyping) -> Void) {
+        guard let c = client else { return }
+        if !c.subscribe(endpoint: .typing(roomID: roomID)) {
+            self.pendingSubscribeTopic.append(.typing(roomID: roomID))
+            QiscusLogger.errorPrint("failed to subscribe event typing from room \(roomID), then queue in pending")
+        }else{
+            roomTypings[roomID] = onTyping
+        }
+    }
+    
+    func unsubscribeTyping(roomID: String) {
+        roomTypings.removeValue(forKey: roomID)
+        guard let c = client else {
+            return
+        }
+        // unsubcribe room event
+        c.unsubscribe(endpoint: .typing(roomID: roomID))
     }
     
     // MARK : Custom Event
@@ -301,6 +324,15 @@ class RealtimeManager {
     
     func didReceiveUser(typing: Bool, roomId: String, userEmail: String) {
         QiscusEventManager.shared.gotTyping(roomID: roomId, user: userEmail, value: typing)
+        
+       //typing event from outside room
+        if let room = QiscusCore.database.room.find(id: roomId) {
+            guard let member = QiscusCore.database.member.find(byEmail: userEmail) else { return }
+            guard let postTyping = roomTypings[roomId] else { return }
+            let typing = RoomTyping(roomID: roomId, user: member, typing: typing)
+            postTyping(typing)
+        }
+        
     }
     
     func connectionState(change state: QiscusRealtimeConnectionState) {

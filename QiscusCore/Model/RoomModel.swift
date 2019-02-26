@@ -89,7 +89,9 @@ open class RoomModel : RoomDelegate {
             QiscusEventManager.shared.roomDelegate = newValue
             if newValue != nil {
                 QiscusEventManager.shared.room  = self
+                QiscusCore.realtime.subscribeRooms(rooms: [self])
             }else {
+                QiscusCore.realtime.unsubscribeRooms(rooms: [self])
                 QiscusEventManager.shared.room  = nil
             }
         }

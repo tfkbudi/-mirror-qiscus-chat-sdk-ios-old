@@ -294,16 +294,6 @@ extension QiscusCore {
         QiscusCore.shared.removeParticipant(userEmails: [user.email], roomId: roomId, onSuccess: onSuccess, onError: onError)
     }
     
-    // MARK : Realtime Event
-    
-    public func subscribeRooms(rooms: [RoomModel]){
-        QiscusCore.realtime.subscribeRooms(rooms: rooms)
-    }
-    
-    public func unsubscribeRooms(rooms: [RoomModel]){
-        QiscusCore.realtime.unsubscribeRooms(rooms: rooms)
-    }
-    
     public func subscribeEvent(roomID: String, onEvent: @escaping (RoomEvent) -> Void) {
         return QiscusCore.realtime.subscribeEvent(roomID: roomID, onEvent: onEvent)
     }
@@ -314,5 +304,13 @@ extension QiscusCore {
     
     public func publishEvent(roomID: String, payload: [String : Any]) -> Bool {
         return QiscusCore.realtime.publishEvent(roomID: roomID, payload: payload)
+    }
+    
+    public func subscribeTyping(roomID: String, onTyping: @escaping (RoomTyping) -> Void) {
+        return QiscusCore.realtime.subscribeTyping(roomID:roomID, onTyping: onTyping)
+    }
+    
+    public func unsubscribeTyping(roomID: String) {
+        QiscusCore.realtime.unsubscribeTyping(roomID: roomID)
     }
 }

@@ -24,8 +24,6 @@ class QiscusEventManager {
                 roomDelegate?.didComment(comment: comment, changeStatus: comment.status)
             }
         }
-        // got new comment for other room
-        delegate?.onRoom(room, didChangeComment: comment, changeStatus: comment.status)
     }
     
     func gotNewMessage(comment: CommentModel) {
@@ -76,11 +74,6 @@ class QiscusEventManager {
                 roomDelegate?.onRoom(thisParticipant: member, isTyping: value)
             }
         }
-        // got typing event for other room
-        if let room = QiscusCore.database.room.find(id: roomID) {
-            guard let member = QiscusCore.database.member.find(byEmail: user) else { return }
-            delegate?.onRoom(room, thisParticipant: member, isTyping: value)
-        }
     }
     
     func gotEvent(email: String, isOnline: Bool, timestamp time: String) {
@@ -97,7 +90,6 @@ class QiscusEventManager {
                 member.saveLastOnline(date)
             }
         }
-        self.delegate?.onChange(user: member, isOnline: isOnline, at: date)
     }
     
     private func getDate(timestampUTC: String) -> Date {

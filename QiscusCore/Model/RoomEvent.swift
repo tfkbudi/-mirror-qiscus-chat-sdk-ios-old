@@ -13,6 +13,12 @@ public struct RoomEvent {
     public let data    : [String:Any]
 }
 
+public struct RoomTyping {
+    public let roomID  : String
+    public let user    : MemberModel
+    public let typing  : Bool
+}
+
 enum SyncEventTopic : String {
     case deletedMessage = "deleted_message"
     case clearRoom      = "clear_room"
