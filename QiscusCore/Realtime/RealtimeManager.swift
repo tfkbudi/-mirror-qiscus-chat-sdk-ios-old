@@ -233,7 +233,7 @@ class RealtimeManager {
         QiscusEventManager.shared.gotEvent(email: userEmail, isOnline: isOnline, timestamp: timestamp)
     }
 
-    func didReceiveMessageStatus(roomId: String, commentId: String, commentUniqueId: String, Status: MessageStatus) {
+    func didReceiveMessageStatus(roomId: String, commentId: String, commentUniqueId: String, Status: MessageStatus, userEmail: String) {
         guard let _comment = QiscusCore.database.comment.find(uniqueId: commentUniqueId) else { return }
         var _status : CommentStatus? = nil
         switch Status {
@@ -281,33 +281,93 @@ class RealtimeManager {
                         }
                     }
                 }else if room.type == .group {
-                    QiscusCore.shared.readReceiptStatus(commentId: lastMyComment.id, onSuccess: { (commentInfo) in
-                        print(commentInfo.deliveredUser.first?.username)
-                        let result = commentInfo.comment
-                        // compare current status
-                        if lastMyComment.status.intValue < result.status.intValue {
-                            // update all my comment status
-                            for c in mycomments {
-                                // check lastStatus and compare
-                                if c.status.intValue != result.status.intValue {
-                                    // update comment
-                                    c.status = result.status
-                                    QiscusCore.database.comment.save([c])
+                    guard let participants = room.participants else { return }
+                    
+                    for participant in participants{
+                        if(userEmail.lowercased() == participant.email.lowercased()){
+                            switch Status {
+                            case .delivered:
+                                if let commentID = Int(commentId){
+                                    if(commentID > participant.lastCommentReceivedId){
+                                        participant.lastCommentReceivedId = commentID
+                                        QiscusCore.database.member.save([participant], roomID: roomId)
+                                    }
                                 }
+                                break
+                            case .read:
+                                if let commentID = Int(commentId){
+                                    if(commentID > participant.lastCommentReadId){
+                                        participant.lastCommentReadId = commentID
+                                        participant.lastCommentReceivedId = commentID
+                                        QiscusCore.database.member.save([participant], roomID: roomId)
+                                    }
+                                }
+                                break
+                            case .deleted:
+                                break
                             }
-                            mycomments.forEach { (c) in
-                                // check lastStatus and compare
-                                if c.status.intValue < status.intValue {
-                                    let new = c
-                                    // update comment
-                                    new.status = status
-                                    QiscusCore.database.comment.save([new])
-                                    QiscusCore.eventManager.gotMessageStatus(comment: new) // patch hard update
+                        }else if participant.email.lowercased() == user.email.lowercased(){
+                            if let commentID = Int(commentId){
+                                if(commentID > participant.lastCommentReadId){
+                                    participant.lastCommentReadId = commentID
+                                    participant.lastCommentReceivedId = commentID
+                                    QiscusCore.database.member.save([participant], roomID: roomId)
                                 }
                             }
                         }
-                    }) { (error) in
-                        //
+                    }
+                    
+                    var readUser = [MemberModel]()
+                    var deliveredUser = [MemberModel]()
+                    var sentUser = [MemberModel]()
+                    
+                    if let room = QiscusCore.database.room.find(id: roomId){
+                        for participant in room.participants!{
+                            if let commentID = Int(commentId){
+                                if participant.lastCommentReadId == commentID{
+                                    readUser.append(participant)
+                                }else if (participant.lastCommentReceivedId == commentID){
+                                    deliveredUser.append(participant)
+                                }else{
+                                    sentUser.append(participant)
+                                }
+                            }
+                            
+                        }
+                    
+                        if(readUser.count == room.participants?.count){
+                            if lastMyComment.status.intValue < status.intValue {
+                                // update all my comment status
+                                mycomments.forEach { (c) in
+                                    // check lastStatus and compare
+                                    if c.status.intValue < status.intValue {
+                                        let new = c
+                                        // update comment
+                                        new.status = .read
+                                        QiscusCore.database.comment.save([new])
+                                        QiscusCore.eventManager.gotMessageStatus(comment: new)
+                                    }
+                                    
+                                }
+                            }
+
+                        }else{
+                            if lastMyComment.status.intValue < status.intValue {
+                                // update all my comment status
+                                mycomments.forEach { (c) in
+                                    // check lastStatus and compare
+                                    if c.status.intValue < status.intValue {
+                                        let new = c
+                                        // update comment
+                                        new.status = .delivered
+                                        QiscusCore.database.comment.save([new])
+                                        QiscusCore.eventManager.gotMessageStatus(comment: new)
+                                    }
+                                    
+                                }
+                            }
+
+                        }
                     }
                 }else {
                     // ignore for channel

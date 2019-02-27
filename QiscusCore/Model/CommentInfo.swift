@@ -11,7 +11,7 @@ public struct CommentInfo {
     public var comment = CommentModel()
     public var deliveredUser = [MemberModel]()
     public var readUser = [MemberModel]()
-    public var pendingUser = [MemberModel]()
+    public var sentUser = [MemberModel]()
     
 }
 

@@ -208,14 +208,37 @@ extension QiscusCore {
     ///   - id: comment id
     ///   - completion: return object commentInfo
     public func readReceiptStatus(commentId id: String, onSuccess: @escaping (CommentInfo) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.readReceiptStatus(commentId: id) { (commentInfo, error) in
-            if let commentInfo = commentInfo {
-                let c = commentInfo.comment
-                QiscusCore.database.comment.save([c])
+        
+        if let comment = QiscusCore.database.comment.find(id: id){
+            if let room = QiscusCore.database.room.find(id: comment.roomId){
+                var commentInfo = CommentInfo()
+                commentInfo.comment = comment
+                
+                var readUser = [MemberModel]()
+                var deliveredUser = [MemberModel]()
+                var sentUser = [MemberModel]()
+                
+                for participant in room.participants!{
+                    if participant.lastCommentReadId >= Int(comment.id)!{
+                        readUser.append(participant)
+                    }else if (participant.lastCommentReceivedId >= Int(comment.id)!){
+                        deliveredUser.append(participant)
+                    }else{
+                        sentUser.append(participant)
+                    }
+                }
+                
+                commentInfo.deliveredUser = deliveredUser
+                commentInfo.readUser = readUser
+                commentInfo.sentUser = sentUser
+                
                 onSuccess(commentInfo)
+                
             }else{
-                 onError(error ?? QError(message: "Unexpected error"))
+                onError(QError(message: "Failed get room from local db"))
             }
+        }else{
+            onError(QError(message: "Failed get comment from local db"))
         }
     }
     

@@ -251,7 +251,7 @@ extension NetworkManager {
                         commentInfo.deliveredUser = commentDeliveredUser
                     }
                     if let commentPendingUser = CommentApiResponse.commentPendingUser(from: response){
-                        commentInfo.pendingUser = commentPendingUser
+                        commentInfo.sentUser = commentPendingUser
                     }
                     if let commentReadUser = CommentApiResponse.commentReadUser(from: response){
                         commentInfo.readUser = commentReadUser
