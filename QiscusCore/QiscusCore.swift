@@ -237,6 +237,7 @@ public class QiscusCore: NSObject {
     public func getProfile(onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
         QiscusCore.network.getProfile { (user, error) in
             if let profile = user{
+                ConfigManager.shared.user = profile
                 onSuccess(profile)
             }
             if let message = error {
@@ -270,8 +271,12 @@ public class QiscusCore: NSObject {
     ///   - url: user avatar url
     ///   - completion: The code to be executed once the request has finished
     public func updateProfile(username: String = "", avatarUrl url: URL? = nil, extras: [String : Any]? = nil, onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
-        // MARK : TODO save profile
-        QiscusCore.network.updateProfile(displayName: username, avatarUrl: url, extras: extras, onSuccess: onSuccess, onError: onError)
+        QiscusCore.network.updateProfile(displayName: username, avatarUrl: url, extras: extras, onSuccess: { (userModel) in
+            ConfigManager.shared.user = userModel
+            onSuccess(userModel)
+        }) { (error) in
+            onError(error)
+        }
     }
     
     /// Get total unreac count by user
