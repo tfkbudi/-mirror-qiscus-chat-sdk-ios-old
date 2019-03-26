@@ -120,7 +120,7 @@ extension APIRoom : EndPoint {
                 ]as [String : Any]
             
             if let roomname = roomName {
-                params["room_name"] = roomname
+                params["name"] = roomname
             }
             
             if let avatarurl = avatarUrl?.absoluteString {

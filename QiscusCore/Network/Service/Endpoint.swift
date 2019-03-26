@@ -43,6 +43,9 @@ var HEADERS : [String: String] {
         var headers = [
             "QISCUS_SDK_PLATFORM": "iOS",
             "QISCUS_SDK_DEVICE_BRAND": "Apple",
+            "QISCUS_SDK_VERSION": QiscusCore.qiscusCoreVersionNumber,
+            "QISCUS_SDK_DEVICE_MODEL" : UIDevice.modelName,
+            "QISCUS_SDK_DEVICE_OS_VERSION" : UIDevice.current.systemVersion
             ]
         if let appID = ConfigManager.shared.appID {
             headers["QISCUS_SDK_APP_ID"] = appID

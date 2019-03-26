@@ -588,7 +588,7 @@ extension NetworkManager {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
                     } catch {
-                        QiscusLogger.errorPrint(error as! String)
+                        QiscusLogger.errorPrint(error as? String ?? "response code 404")
                         onError(QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                     onError(QError(message: errorMessage))

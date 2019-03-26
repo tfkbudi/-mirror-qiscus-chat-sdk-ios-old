@@ -9,6 +9,7 @@
 import Foundation
 
 public class QiscusCore: NSObject {
+    public static let qiscusCoreVersionNumber:String = "0.2.13"
     class var bundle:Bundle{
         get{
             let podBundle = Bundle(for: QiscusCore.self)
@@ -279,7 +280,7 @@ public class QiscusCore: NSObject {
         }
     }
     
-    /// Get total unreac count by user
+    /// Get total unread count by user
     ///
     /// - Parameter completion: number of unread cout for all room
     public func unreadCount(completion: @escaping (Int, QError?) -> Void) {
