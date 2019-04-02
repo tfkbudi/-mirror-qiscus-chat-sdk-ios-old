@@ -161,7 +161,15 @@ public class QiscusCore: NSObject {
     /// - Returns: return true if already login
     public static var isLogined : Bool {
         get {
-            return QiscusCore.connect()
+            if let user = getProfile(){
+                if !user.token.isEmpty{
+                     return true
+                }else{
+                    return false
+                }
+            }else{
+                return false
+            }
         }
     }
     

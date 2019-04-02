@@ -52,17 +52,11 @@ class RealtimeManager {
         guard let c = client else {
             return
         }
+        self.pendingSubscribeTopic.append(.comment(token: password))
+        self.pendingSubscribeTopic.append(.notification(token: password))
+        
         c.connect(username: username, password: password, delegate: self)
-        // subcribe user token to get new comment
-        if !c.subscribe(endpoint: .comment(token: password)) {
-            self.pendingSubscribeTopic.append(.comment(token: password))
-            QiscusLogger.errorPrint("failed to subscribe event comment or new comment, then queue in pending")
-        }
-        // subcribe user notification
-        if !c.subscribe(endpoint: .notification(token: password)) {
-            self.pendingSubscribeTopic.append(.notification(token: password))
-            QiscusLogger.errorPrint("failed to subscribe event comment or new comment, then queue in pending")
-        }
+        
     }
     
     /// Subscribe comment(deliverd and read), typing by member in the room, and online status
@@ -158,11 +152,21 @@ class RealtimeManager {
     // MARK : Typing event
     func subscribeTyping(roomID: String, onTyping: @escaping (RoomTyping) -> Void) {
         guard let c = client else { return }
-        if !c.subscribe(endpoint: .typing(roomID: roomID)) {
-            self.pendingSubscribeTopic.append(.typing(roomID: roomID))
-            QiscusLogger.errorPrint("failed to subscribe event typing from room \(roomID), then queue in pending")
+        
+        if c.isConnect{
+            if !c.subscribe(endpoint: .typing(roomID: roomID)) {
+                self.pendingSubscribeTopic.append(.typing(roomID: roomID))
+                QiscusLogger.errorPrint("failed to subscribe event typing from room \(roomID), then queue in pending")
+            }else{
+                self.roomTypings[roomID] = onTyping
+            }
         }else{
-            roomTypings[roomID] = onTyping
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                self.subscribeTyping(roomID: roomID) { (roomTyping) in
+                    self.roomTypings[roomID] = onTyping
+                }
+            }
+            
         }
     }
     
@@ -178,12 +182,21 @@ class RealtimeManager {
     // MARK : Custom Event
     func subscribeEvent(roomID: String, onEvent: @escaping (RoomEvent) -> Void) {
         guard let c = client else { return }
-        // subcribe user token to get new comment
-        if !c.subscribe(endpoint: .roomEvent(roomID: roomID)) {
-            self.pendingSubscribeTopic.append(.roomEvent(roomID: roomID))
-            QiscusLogger.errorPrint("failed to subscribe room Event, then queue in pending")
-        }else {
-            roomEvents[roomID] = onEvent
+        
+        if c.isConnect{
+            // subcribe user token to get new comment
+            if !c.subscribe(endpoint: .roomEvent(roomID: roomID)) {
+                self.pendingSubscribeTopic.append(.roomEvent(roomID: roomID))
+                QiscusLogger.errorPrint("failed to subscribe room Event, then queue in pending")
+            }else {
+                roomEvents[roomID] = onEvent
+            }
+        }else{
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                self.subscribeEvent(roomID: roomID, onEvent: { (roomEvent) in
+                    self.roomEvents[roomID] = onEvent
+                })
+            }
         }
     }
     
@@ -404,8 +417,8 @@ class RealtimeManager {
         
         switch state {
         case .connected:
-            resumePendingSubscribeTopic()
             QiscusLogger.debugPrint("Qiscus realtime connected")
+            resumePendingSubscribeTopic()
             break
         case .disconnected:
             QiscusCore.heartBeat?.resume()
