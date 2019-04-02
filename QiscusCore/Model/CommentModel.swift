@@ -20,7 +20,7 @@ open class CommentModel {
     public internal(set) var id                   : String        = ""
     public internal(set) var isDeleted            : Bool          = false
     public internal(set) var isPublicChannel      : Bool          = false
-    public internal(set) var status               : CommentStatus = .sending
+    public var status               : CommentStatus = .sending
     public var message              : String        = ""
     /// Comment payload, to describe comment type.
     public var payload              : [String:Any]? = nil
@@ -52,7 +52,7 @@ open class CommentModel {
         self.uniqId         = "ios_\(now)"
         self.id             = "ios_\(now)"
         self.unixTimestamp  = now
-//        self.timestamp      = getTimestamp()
+        self.timestamp      = CommentModel.getTimestamp()
     }
     
     init(json: JSON) {

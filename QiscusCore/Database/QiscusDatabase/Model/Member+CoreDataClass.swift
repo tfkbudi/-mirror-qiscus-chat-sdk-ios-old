@@ -10,7 +10,7 @@
 import Foundation
 import CoreData
 
- class Member: NSManagedObject {
+public class Member: NSManagedObject {
 
 }
 

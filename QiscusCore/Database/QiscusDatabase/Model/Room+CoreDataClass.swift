@@ -11,7 +11,7 @@ import Foundation
 import CoreData
 
 
- class Room: NSManagedObject {
+public class Room: NSManagedObject {
 
 }
 

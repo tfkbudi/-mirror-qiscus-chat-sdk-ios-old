@@ -12,19 +12,19 @@ public class QiscusDatabaseManager {
     public var comment : CommentDB!
     public var member   : MemberDB!
     
-    init() {
+    public init() {
         self.member     = MemberDB()
         self.room       = RoomDB()
         self.comment    = CommentDB()
     }
     
-    func loadData() {
+    public func loadData() {
         member.loadData()
         room.loadData()
         comment.loadData()
     }
     
-    func clear() {
+    public func clear() {
         QiscusDatabase.clear()
     }
     
@@ -34,11 +34,11 @@ public class MemberDB {
     private var member : MemberDatabase = MemberDatabase()
     
     // MARK : Internal
-    internal func loadData() {
+    public func loadData() {
         member.loadData()
     }
     
-    internal func save(_ data: [MemberModel], roomID id: String) {
+    public func save(_ data: [MemberModel], roomID id: String) {
         for m in data {
             guard let room = QiscusCore.database.room.find(id: id) else {
                 QiscusLogger.errorPrint("Failed to save member \(data) in db, mybe room not found")
@@ -50,11 +50,11 @@ public class MemberDB {
     }
     
     // manage relations rooms and member
-    internal func map(_ core: MemberModel, data: Member? = nil) -> Member {
+    public func map(_ core: MemberModel, data: Member? = nil) -> Member {
         return member.map(core, data: data)
     }
     
-    internal func map(member data: Member) -> MemberModel {
+    public func map(member data: Member) -> MemberModel {
         return member.map(data)
     }
     
@@ -73,24 +73,24 @@ public class MemberDB {
 public class RoomDB {
     private var room : RoomStorage = RoomStorage()
     
-    // MARK : Private
-    internal func loadData() {
+    // MARK : Public
+    public func loadData() {
         room.loadData()
     }
     
-    internal func map(_ core: RoomModel, data: Room? = nil) -> Room {
+    public func map(_ core: RoomModel, data: Room? = nil) -> Room {
         return room.map(core, data: data)
     }
     
-    internal func save(_ rooms: [RoomModel]) {
+    public func save(_ rooms: [RoomModel]) {
         room.add(rooms)
     }
     
-    internal func updateLastComment(_ comment: CommentModel) -> Bool {
+    public func updateLastComment(_ comment: CommentModel) -> Bool {
         return room.updateLastComment(comment)
     }
     
-    internal func updateReadComment(_ comment: CommentModel) -> Bool {
+    public func updateReadComment(_ comment: CommentModel) -> Bool {
         return room.updateUnreadComment(comment)
     }
     
@@ -136,17 +136,17 @@ public class RoomDB {
 public class CommentDB {
     private var comment = CommentStorage()
     
-    // MARK: Internal
-    internal func evaluate() {
+    // MARK: Public
+    public func evaluate() {
         comment.evaluate()
     }
     
-    internal func loadData() {
+    public func loadData() {
         comment.loadData()
     }
     
     // MARK: TODO need to improve flow, check room then add comment
-    internal func save(_ data: [CommentModel], publishEvent: Bool = true) {
+    public func save(_ data: [CommentModel], publishEvent: Bool = true) {
         data.forEach { (c) in
             // listen callback to provide event
             comment.add(c, onCreate: { (result) in
@@ -180,7 +180,7 @@ public class CommentDB {
         }
     }
     
-    internal func clear(inRoom id: String, timestamp: Int64? = nil) {
+    public func clear(inRoom id: String, timestamp: Int64? = nil) {
         guard var comments = comment.find(byRoomID: id) else { return }
         if let _timestamp = timestamp {
             comments = comments.filter({ $0.unixTimestamp < _timestamp })
@@ -191,7 +191,7 @@ public class CommentDB {
         }
     }
     
-    internal func delete(_ data: CommentModel) -> Bool {
+    public func delete(_ data: CommentModel) -> Bool {
         if comment.delete(byUniqueID: data.uniqId) {
             QiscusCore.eventManager.deleteComment(data)
             return true
@@ -203,7 +203,7 @@ public class CommentDB {
     }
     
     /// Requirement said, we asume when receive comment from opponent then old my comment status is read
-    private func markCommentAsRead(comment: CommentModel) {
+    public func markCommentAsRead(comment: CommentModel) {
         if comment.status == .deleted { return }
         guard let user = QiscusCore.getProfile() else { return }
         // check comment from opponent
