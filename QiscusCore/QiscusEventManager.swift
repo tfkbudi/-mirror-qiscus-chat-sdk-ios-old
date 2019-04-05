@@ -112,7 +112,7 @@ class QiscusEventManager {
     }
     
     func components(_ value:String, length: Int) -> [String] {
-        return stride(from: 0, to: value.characters.count, by: length).map {
+        return stride(from: 0, to: value.count, by: length).map {
             let start = value.index(value.startIndex, offsetBy: $0)
             let end = value.index(start, offsetBy: length, limitedBy: value.endIndex) ?? value.endIndex
             return String(value[start..<end])

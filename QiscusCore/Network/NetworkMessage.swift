@@ -135,7 +135,7 @@ extension NetworkManager {
     ///
     /// - Parameter completion: result as Int
     func unreadCount(completion: @escaping(Int, QError?) -> Void) {
-        userRouter.request(.unread()) { (data, response, error) in
+        userRouter.request(.unread) { (data, response, error) in
             if error != nil {
                 completion(0, QError(message: "Please check your network connection."))
             }

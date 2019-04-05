@@ -12,7 +12,7 @@ internal enum APIUser {
     case block(email: String)
     case unblock(email: String)
     case listBloked(page: Int?, limit: Int?)
-    case unread()
+    case unread
     case getUsers(page: Int?, limit: Int?, querySearch: String?)
 }
 

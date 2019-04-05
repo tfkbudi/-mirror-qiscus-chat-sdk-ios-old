@@ -476,7 +476,7 @@ extension NetworkManager {
 
     //    MARK: TODO use router to network upload
     func upload(data : Data, filename: String, onSuccess: @escaping (FileModel) -> Void, onError: @escaping (QError) -> Void, progress: @escaping (Double) -> Void) {
-        let endpoint = APIClient.upload()
+        let endpoint = APIClient.upload
         let request: URLRequest
         
         do {
