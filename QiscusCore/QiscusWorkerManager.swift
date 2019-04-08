@@ -15,7 +15,6 @@ class QiscusWorkerManager {
         if QiscusCore.isLogined {
             self.sync()
             self.pending()
-            QiscusCore.shared.isOnline(true)
         }
     }
     

@@ -418,9 +418,11 @@ class RealtimeManager {
         switch state {
         case .connected:
             QiscusLogger.debugPrint("Qiscus realtime connected")
+            QiscusCore.shared.isOnline(true)
             resumePendingSubscribeTopic()
             break
         case .disconnected:
+            QiscusCore.shared.isOnline(false)
             QiscusCore.heartBeat?.resume()
             break
         default:
