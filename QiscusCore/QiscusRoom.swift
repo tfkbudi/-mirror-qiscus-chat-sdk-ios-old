@@ -59,20 +59,6 @@ extension QiscusCore {
                 onError(QError(message: error ?? "Unexpected error"))
             }
         }
-        
-        QiscusCore.network.getRoomInfo(roomIds: nil, roomUniqueIds: [channel], showParticipant: true, showRemoved: false) { (rooms, error) in
-            if let room = rooms {
-                // save room
-                QiscusCore.database.room.save(room)
-                if let first = room.first {
-                    onSuccess(first)
-                }else {
-                    onError(QError(message: "Unexpected error"))
-                }
-            }else {
-                onError(error ?? QError(message: "Unexpected error"))
-            }
-        }
     }
     
     /// Get room with room id
