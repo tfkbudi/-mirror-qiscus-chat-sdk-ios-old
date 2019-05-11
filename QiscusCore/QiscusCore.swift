@@ -9,7 +9,7 @@
 import Foundation
 
 public class QiscusCore: NSObject {
-    public static let qiscusCoreVersionNumber:String = "0.2.14"
+    public static let qiscusCoreVersionNumber:String = "0.3.2"
     class var bundle:Bundle{
         get{
             let podBundle = Bundle(for: QiscusCore.self)
@@ -219,7 +219,7 @@ public class QiscusCore: NSObject {
         }else {
             QiscusCore.network.sync(lastCommentReceivedId: id, order: order, limit: limit) { (comments, error) in
                 if let message = error {
-                    onError(QError.init(message: message))
+                    onError(QError(message: message))
                 }else {
                     if let results = comments {
                         // Save comment in local
@@ -244,14 +244,11 @@ public class QiscusCore: NSObject {
     ///
     /// - Parameter completion: The code to be executed once the request has finished
     public func getProfile(onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.getProfile { (user, error) in
-            if let profile = user{
-                ConfigManager.shared.user = profile
-                onSuccess(profile)
-            }
-            if let message = error {
-                onError(QError.init(message: message))
-            }
+        QiscusCore.network.getProfile(onSuccess: { (userModel) in
+            ConfigManager.shared.user = userModel
+            onSuccess(userModel)
+        }) { (error) in
+            onError(error)
         }
     }
     

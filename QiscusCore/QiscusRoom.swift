@@ -68,30 +68,26 @@ extension QiscusCore {
     ///   - completion: Response Qiscus Room Object and error if exist.
     public func getRoom(withID id: String, onSuccess: @escaping (RoomModel, [CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
         // call api get_room_by_id
-        QiscusCore.network.getRoomById(roomId: id) { (room, comments, error) in
-            if let r = room {
-                // save comments
-                var c = [CommentModel]()
-                if let _comments = comments {
-                    // save comments
-                    QiscusCore.database.comment.save(_comments,publishEvent: false)
-                    c = _comments
-                }
-                // save room
-                // trick, coz this api object room not provide comment. So we need to path response api.
-                r.lastComment = c.first
-                QiscusCore.database.room.save([r])
-                
-                onSuccess(r,c)
-            }else {
-                if let e = error {
-                    onError(QError.init(message: e))
-                }else {
-                    onError(QError.init(message: "Unexpectend results"))
-                }
+        QiscusCore.network.getRoomById(roomId: id, onSuccess: { (room, comments) in
+            // save room
+            if let comments = comments {
+                 room.lastComment = comments.first
             }
+           
+            QiscusCore.database.room.save([room])
+            
+            
+            // save comments
+            var c = [CommentModel]()
+            if let _comments = comments {
+                // save comments
+                QiscusCore.database.comment.save(_comments,publishEvent: false)
+                c = _comments
+            }
+            onSuccess(room,c)
+        }) { (error) in
+            onError(error)
         }
-        // or Load from storage
     }
     
     /// Get Room info
@@ -151,7 +147,7 @@ extension QiscusCore {
 
                 onSuccess(rooms,meta)
             }else {
-                onError(QError.init(message: error ?? "Something Wrong"))
+                onError(QError(message: error ?? "Something Wrong"))
             }
         }
     }
@@ -171,10 +167,10 @@ extension QiscusCore {
                 onSuccess(data)
             }else {
                 guard let message = error else {
-                    onError(QError.init(message: "Something Wrong"))
+                    onError(QError(message: "Something Wrong"))
                     return
                 }
-                onError(QError.init(message: message))
+               onError(QError(message: message))
             }
         }
     }
@@ -195,7 +191,7 @@ extension QiscusCore {
                 onSuccess(data)
             }else {
                 guard let message = error else {
-                    onError(QError.init(message: "Something Wrong"))
+                    onError(QError(message: "Something Wrong"))
                     return
                 }
                 onError(message)

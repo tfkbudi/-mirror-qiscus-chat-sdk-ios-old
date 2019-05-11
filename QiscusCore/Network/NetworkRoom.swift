@@ -249,23 +249,23 @@ extension NetworkManager {
     /// - Parameters:
     ///   - roomId: room id
     ///   - completion: @escaping when success get room, return Optional(RoomModel), Optional([CommentModel]), Optional(String error message)
-    func getRoomById(roomId: String, completion: @escaping (RoomModel?, [CommentModel]?, String?) -> Void) {
+    func getRoomById(roomId: String, onSuccess: @escaping (RoomModel, [CommentModel]?) -> Void, onError: @escaping (QError) -> Void) {
         roomRouter.request(.getRoomById(roomId: roomId)) { (data, response, error) in
             if error != nil {
-                completion(nil, nil, "Please check your network connection.")
+                onError(QError(message:"Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(nil, nil, NetworkResponse.noData.rawValue)
+                        onError(QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     let response    = ApiResponse.decode(from: responseData)
                     let room        = RoomApiResponse.room(from: response)
                     let comments    = CommentApiResponse.comments(from: response)
-                    completion(room, comments, nil)
+                    onSuccess(room,comments)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
@@ -273,8 +273,7 @@ extension NetworkManager {
                     } catch {
                         
                     }
-                    
-                    completion(nil, nil, errorMessage)
+                    onError(QError(message: errorMessage))
                 }
             }
         }
