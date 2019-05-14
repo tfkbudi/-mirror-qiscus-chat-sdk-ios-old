@@ -270,6 +270,20 @@ public class QiscusCore: NSObject {
         QiscusCore.realtime.isOnline(value)
     }
     
+    /// Set subscribe rooms
+    ///
+    /// - Parameter value: RoomModel
+    public func subcribeRooms(_ rooms: [RoomModel]) {
+        QiscusCore.realtime.subscribeRoomsWithoutOnlineStatus(rooms: rooms)
+    }
+    
+    /// Set subscribe rooms
+    ///
+    /// - Parameter value: RoomModel
+    public func unSubcribeRooms(_ rooms: [RoomModel]) {
+        QiscusCore.realtime.unsubscribeRoomsWithoutOnlineStatus(rooms: rooms)
+    }
+    
     /// Update user profile
     ///
     /// - Parameters:

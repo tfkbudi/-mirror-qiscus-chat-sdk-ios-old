@@ -36,6 +36,14 @@ public protocol QiscusCoreDelegate {
     /// - Parameter comment: comment deleted
     func onRoom(_ room: RoomModel, didDeleteComment comment: CommentModel)
     
+    /// comment status change
+    ///
+    /// - Parameters:
+    ///   - comment: new comment where status is change, you can compare from local data
+    ///   - status: comment status, exp: deliverd, receipt, or read.
+    ///     special case for read, for example we have message 1,2,3,4,5 then you got status change for message 5 it's mean message 1-4 has been read
+    func onRoomDidChangeComment(comment: CommentModel, changeStatus status: CommentStatus)
+    
     /// Room update
     ///
     /// - Parameter room: new room object

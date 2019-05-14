@@ -24,6 +24,10 @@ class QiscusEventManager {
                 roomDelegate?.didComment(comment: comment, changeStatus: comment.status)
             }
         }
+        if let delegate = delegate {
+            delegate.onRoomDidChangeComment(comment: comment, changeStatus: comment.status)
+        }
+        
     }
     
     func gotNewMessage(comment: CommentModel) {

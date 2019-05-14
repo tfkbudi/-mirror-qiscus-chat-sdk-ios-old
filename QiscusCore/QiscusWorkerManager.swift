@@ -11,10 +11,21 @@ class QiscusWorkerManager {
     
     func resume() {
         // MARK : Improve realtime state acurate disconnected
-        // if QiscusCore.realtime.state == .disconnected {
         if QiscusCore.isLogined {
             self.sync()
             self.pending()
+            let state = UIApplication.shared.applicationState
+            if state == .background  || state == .inactive{
+                // background
+                QiscusCore.shared.isOnline(false)
+            }else if state == .active {
+                // foreground
+                if QiscusCore.realtime.state == .connected {
+                    QiscusCore.shared.isOnline(true)
+                }else if QiscusCore.realtime.state == .disconnected {
+                    QiscusCore.shared.isOnline(false)
+                }
+            }
         }
     }
     

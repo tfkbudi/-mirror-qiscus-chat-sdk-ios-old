@@ -94,6 +94,35 @@ class RealtimeManager {
         self.resumePendingSubscribeTopic()
     }
     
+    /// Subscribe comment(deliverd and read), typing by member in the room, and online status
+    ///
+    /// - Parameter rooms: array of rooms
+    // MARK: TODO optimize, check already subscribe?
+    func subscribeRoomsWithoutOnlineStatus(rooms: [RoomModel]) {
+        guard let c = client else {
+            return
+        }
+        for room in rooms {
+            // subscribe comment deliverd receipt
+            if !c.subscribe(endpoint: .delivery(roomID: room.id)){
+                self.pendingSubscribeTopic.append(.delivery(roomID: room.id))
+                QiscusLogger.errorPrint("failed to subscribe event deliver event from room \(room.name), then queue in pending")
+            }
+            // subscribe comment read
+            if !c.subscribe(endpoint: .read(roomID: room.id)) {
+                self.pendingSubscribeTopic.append(.read(roomID: room.id))
+                QiscusLogger.errorPrint("failed to subscribe event read from room \(room.name), then queue in pending")
+            }
+            if !c.subscribe(endpoint: .typing(roomID: room.id)) {
+                self.pendingSubscribeTopic.append(.typing(roomID: room.id))
+                QiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
+            }
+            
+        }
+        
+        self.resumePendingSubscribeTopic()
+    }
+    
     func unsubscribeRooms(rooms: [RoomModel]) {
         guard let c = client else {
             return
@@ -111,6 +140,21 @@ class RealtimeManager {
         }
         
     }
+    
+    func unsubscribeRoomsWithoutOnlineStatus(rooms: [RoomModel]) {
+        guard let c = client else {
+            return
+        }
+        
+        for room in rooms {
+            // unsubcribe room event
+            c.unsubscribe(endpoint: .delivery(roomID: room.id))
+            c.unsubscribe(endpoint: .read(roomID: room.id))
+            c.unsubscribe(endpoint: .typing(roomID: room.id))
+        }
+        
+    }
+    
 
     func isTyping(_ value: Bool, roomID: String){
         guard let c = client else {
@@ -294,7 +338,30 @@ class RealtimeManager {
                         }
                     }
                 }else if room.type == .group {
-                    guard let participants = room.participants else { return }
+                    guard let participants = room.participants else {
+                        QiscusCore.network.getRoomById(roomId: room.id, onSuccess: { (room, comments) in
+                            // save room
+                            if let comments = comments {
+                                room.lastComment = comments.first
+                            }
+                            
+                            QiscusCore.database.room.save([room])
+                            
+                            // save comments
+                            var c = [CommentModel]()
+                            if let _comments = comments {
+                                // save comments
+                                QiscusCore.database.comment.save(_comments)
+                                c = _comments
+                            }
+                            
+                            return
+                        }) { (error) in
+                            return
+                        }
+                        
+                        return
+                    }
                     
                     for participant in participants{
                         if(userEmail.lowercased() == participant.email.lowercased()){
