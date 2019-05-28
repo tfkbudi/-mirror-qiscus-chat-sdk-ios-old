@@ -239,9 +239,7 @@ class RealtimeManager {
                 self.pendingSubscribeTopic.append(.roomEvent(roomID: roomID))
                 QiscusLogger.errorPrint("failed to subscribe room Event, then queue in pending")
             }else {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    self.roomEvents[roomID] = onEvent
-                }
+                self.roomEvents[roomID] = onEvent
             }
         }else{
             DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
@@ -253,17 +251,19 @@ class RealtimeManager {
     }
     
     func unsubscribeEvent(roomID: String) {
-        if self.roomEvents.count == 0 {
-            return
-        }
-        
-        guard let c = client else {
-            return
-        }
-        
-        if roomEvents.removeValue(forKey: roomID) != nil{
-            // unsubcribe room event
-            c.unsubscribe(endpoint: .roomEvent(roomID: roomID))
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            if self.roomEvents.count == 0 {
+                return
+            }
+            
+            guard let c = self.client else {
+                return
+            }
+            
+            if self.roomEvents.removeValue(forKey: roomID) != nil{
+                // unsubcribe room event
+                c.unsubscribe(endpoint: .roomEvent(roomID: roomID))
+            }
         }
     }
     
