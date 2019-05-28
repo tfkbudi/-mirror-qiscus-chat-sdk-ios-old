@@ -225,7 +225,13 @@ class RealtimeManager {
     
     // MARK : Custom Event
     func subscribeEvent(roomID: String, onEvent: @escaping (RoomEvent) -> Void) {
-        guard let c = client else { return }
+        guard let c = client else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                self.subscribeEvent(roomID: roomID, onEvent: onEvent)
+                return
+            }
+            return
+        }
         
         if c.isConnect{
             // subcribe user token to get new comment
@@ -233,7 +239,9 @@ class RealtimeManager {
                 self.pendingSubscribeTopic.append(.roomEvent(roomID: roomID))
                 QiscusLogger.errorPrint("failed to subscribe room Event, then queue in pending")
             }else {
-                roomEvents[roomID] = onEvent
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    self.roomEvents[roomID] = onEvent
+                }
             }
         }else{
             DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
@@ -245,12 +253,18 @@ class RealtimeManager {
     }
     
     func unsubscribeEvent(roomID: String) {
-        roomEvents.removeValue(forKey: roomID)
+        if self.roomEvents.count == 0 {
+            return
+        }
+        
         guard let c = client else {
             return
         }
-        // unsubcribe room event
-        c.unsubscribe(endpoint: .roomEvent(roomID: roomID))
+        
+        if roomEvents.removeValue(forKey: roomID) != nil{
+            // unsubcribe room event
+            c.unsubscribe(endpoint: .roomEvent(roomID: roomID))
+        }
     }
     
     func publishEvent(roomID: String, payload: [String : Any]) -> Bool {
