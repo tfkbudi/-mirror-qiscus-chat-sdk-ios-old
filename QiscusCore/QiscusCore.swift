@@ -9,7 +9,7 @@
 import Foundation
 
 public class QiscusCore: NSObject {
-    public static let qiscusCoreVersionNumber:String = "0.3.2"
+    public static let qiscusCoreVersionNumber:String = "0.3.3"
     class var bundle:Bundle{
         get{
             let podBundle = Bundle(for: QiscusCore.self)
@@ -179,7 +179,15 @@ public class QiscusCore: NSObject {
     ///   - deviceToken: device token
     ///   - completion: The code to be executed once the request has finished
     public func register(deviceToken : String, onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.registerDeviceToken(deviceToken: deviceToken, onSuccess: onSuccess, onError: onError)
+        if QiscusCore.isLogined {
+            QiscusCore.network.registerDeviceToken(deviceToken: deviceToken, onSuccess: { (success) in
+                onSuccess(success)
+            }) { (error) in
+                onError(error)
+            }
+        }else{
+            onError(QError(message: "please login Qiscus first before register deviceToken"))
+        }
     }
     
     /// Remove device token
@@ -244,12 +252,21 @@ public class QiscusCore: NSObject {
     ///
     /// - Parameter completion: The code to be executed once the request has finished
     public func getProfile(onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.getProfile(onSuccess: { (userModel) in
-            ConfigManager.shared.user = userModel
-            onSuccess(userModel)
-        }) { (error) in
-            onError(error)
+        if ConfigManager.shared.appID != nil {
+            if QiscusCore.isLogined {
+                QiscusCore.network.getProfile(onSuccess: { (userModel) in
+                    ConfigManager.shared.user = userModel
+                    onSuccess(userModel)
+                }) { (error) in
+                    onError(error)
+                }
+            }else{
+                onError(QError(message: "please login Qiscus first before register deviceToken"))
+            }
+        }else{
+            onError(QError(message: "please setupAPPID first before call api"))
         }
+        
     }
     
     
@@ -291,11 +308,19 @@ public class QiscusCore: NSObject {
     ///   - url: user avatar url
     ///   - completion: The code to be executed once the request has finished
     public func updateProfile(username: String = "", avatarUrl url: URL? = nil, extras: [String : Any]? = nil, onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.updateProfile(displayName: username, avatarUrl: url, extras: extras, onSuccess: { (userModel) in
-            ConfigManager.shared.user = userModel
-            onSuccess(userModel)
-        }) { (error) in
-            onError(error)
+        if ConfigManager.shared.appID != nil {
+            if QiscusCore.isLogined {
+                QiscusCore.network.updateProfile(displayName: username, avatarUrl: url, extras: extras, onSuccess: { (userModel) in
+                    ConfigManager.shared.user = userModel
+                    onSuccess(userModel)
+                }) { (error) in
+                    onError(error)
+                }
+            }else{
+                onError(QError(message: "please login Qiscus first before register deviceToken"))
+            }
+        }else{
+            onError(QError(message: "please setupAppID first"))
         }
     }
     

@@ -67,26 +67,29 @@ extension QiscusCore {
     ///   - withID: existing roomID from server or local db.
     ///   - completion: Response Qiscus Room Object and error if exist.
     public func getRoom(withID id: String, onSuccess: @escaping (RoomModel, [CommentModel]) -> Void, onError: @escaping (QError) -> Void) {
-        // call api get_room_by_id
-        QiscusCore.network.getRoomById(roomId: id, onSuccess: { (room, comments) in
-            // save room
-            if let comments = comments {
-                 room.lastComment = comments.first
-            }
-           
-            QiscusCore.database.room.save([room])
-            
-            
-            // save comments
-            var c = [CommentModel]()
-            if let _comments = comments {
+        if id == "0"{
+            onError(QError(message:"Please check your roomID, now your roomID is =\(id)"))
+        }else{
+            // call api get_room_by_id
+            QiscusCore.network.getRoomById(roomId: id, onSuccess: { (room, comments) in
+                // save room
+                if let comments = comments {
+                    room.lastComment = comments.first
+                }
+                
+                QiscusCore.database.room.save([room])
+                
                 // save comments
-                QiscusCore.database.comment.save(_comments,publishEvent: false)
-                c = _comments
+                var c = [CommentModel]()
+                if let _comments = comments {
+                    // save comments
+                    QiscusCore.database.comment.save(_comments,publishEvent: false)
+                    c = _comments
+                }
+                onSuccess(room,c)
+            }) { (error) in
+                onError(error)
             }
-            onSuccess(room,c)
-        }) { (error) in
-            onError(error)
         }
     }
     
@@ -98,14 +101,22 @@ extension QiscusCore {
     ///   - showRemoved : default is false
     ///   - completion: Response new Qiscus Room Object and error if exist.
     public func getRooms(withId ids: [String], showParticipant: Bool = false, showRemoved: Bool = false, onSuccess: @escaping ([RoomModel]) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.getRoomInfo(roomIds: ids, roomUniqueIds: nil, showParticipant: showParticipant, showRemoved: showRemoved){ (rooms, error) in
-            if let data = rooms {
-                // save room
-                QiscusCore.database.room.save(data)
-                onSuccess(data)
-            }else {
-                onError(error ?? QError(message: "Unexpected error"))
+        if ConfigManager.shared.appID != nil {
+            if QiscusCore.isLogined {
+                QiscusCore.network.getRoomInfo(roomIds: ids, roomUniqueIds: nil, showParticipant: showParticipant, showRemoved: showRemoved){ (rooms, error) in
+                    if let data = rooms {
+                        // save room
+                        QiscusCore.database.room.save(data)
+                        onSuccess(data)
+                    }else {
+                        onError(error ?? QError(message: "Unexpected error"))
+                    }
+                }
+            }else{
+                onError(QError(message: "please login Qiscus first before register deviceToken"))
             }
+        }else{
+            onError(QError(message: "please setupAPPID first before call api"))
         }
     }
     
@@ -117,14 +128,22 @@ extension QiscusCore {
     ///   - showRemoved : default is false
     ///   - completion: Response new Qiscus Room Object and error if exist.
     public func getRooms(withUniqueId ids: [String],showParticipant: Bool = false, showRemoved: Bool = false, onSuccess: @escaping ([RoomModel]) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.getRoomInfo(roomIds: nil, roomUniqueIds: ids, showParticipant: showParticipant, showRemoved: showRemoved){ (rooms, error) in
-            if let data = rooms {
-                // save room
-                QiscusCore.database.room.save(data)
-                onSuccess(data)
-            }else {
-                onError(error ?? QError(message: "Unexpected error"))
+        if ConfigManager.shared.appID != nil {
+            if QiscusCore.isLogined {
+                QiscusCore.network.getRoomInfo(roomIds: nil, roomUniqueIds: ids, showParticipant: showParticipant, showRemoved: showRemoved){ (rooms, error) in
+                    if let data = rooms {
+                        // save room
+                        QiscusCore.database.room.save(data)
+                        onSuccess(data)
+                    }else {
+                        onError(error ?? QError(message: "Unexpected error"))
+                    }
+                }
+            }else{
+                onError(QError(message: "please login Qiscus first before register deviceToken"))
             }
+        }else{
+            onError(QError(message: "please setupAPPID first before call api"))
         }
     }
     
