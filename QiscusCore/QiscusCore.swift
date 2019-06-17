@@ -231,7 +231,9 @@ public class QiscusCore: NSObject {
                 }else {
                     if let results = comments {
                         // Save comment in local
-                        QiscusCore.database.comment.save(results)
+                        if results.count != 0 {
+                            QiscusCore.database.comment.save(results)
+                        }
                         onSuccess(results)
                     }
                 }

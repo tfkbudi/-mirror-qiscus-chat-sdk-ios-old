@@ -501,8 +501,17 @@ class RealtimeManager {
             QiscusLogger.debugPrint("Qiscus realtime connected")
             QiscusCore.shared.isOnline(true)
             resumePendingSubscribeTopic()
+            QiscusEventManager.shared.connectionDelegate?.connected()
+            
+            QiscusCore.network.event_report(moduleName: "MQTT", event: "CONECTED", message: "Realtime Connected", onSuccess: { (success) in
+                
+            }) { (error) in
+                QiscusLogger.debugPrint(error.message)
+            }
+            
             break
         case .disconnected:
+            QiscusLogger.debugPrint("Qiscus realtime disconnected")
             QiscusCore.shared.isOnline(false)
             QiscusCore.heartBeat?.resume()
             break
@@ -510,5 +519,22 @@ class RealtimeManager {
             break
         }
     }
+    
+    
+    func disconnect(withError err: Error?){
+        if let error = err{
+            QiscusEventManager.shared.connectionDelegate?.disconnect(withError: QError(message: error.localizedDescription))
+            if QiscusCore.isLogined{
+                QiscusCore.network.event_report(moduleName: "MQTT", event: "DISCONNECTED", message: error.localizedDescription, onSuccess: { (success) in
+                    //success send report
+                }) { (error) in
+                    QiscusLogger.debugPrint(error.message)
+                }
+            }
+        }else{
+            QiscusEventManager.shared.connectionDelegate?.disconnect(withError: nil)
+        }
+    }
+
 }
 

@@ -66,7 +66,10 @@ class QiscusWorkerManager {
         QiscusCore.shared.sync(lastCommentReceivedId: id,onSuccess: { (comments) in
             DispatchQueue.global(qos: .background).async {
                 // save comment in local
-                QiscusCore.database.comment.save(comments)
+                if comments.count != 0 {
+                    QiscusCore.database.comment.save(comments)
+                }
+                
                 self.syncEvent()
                 if let c = comments.first {
                     ConfigManager.shared.syncId = c.id
