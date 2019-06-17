@@ -25,7 +25,10 @@ public class QiscusDatabaseManager {
     }
     
     public func clear() {
-        QiscusDatabase.clear()
+        //QiscusDatabase.clear()
+        QiscusCore.database.comment.removeAllDB()
+        QiscusCore.database.room.removeAllDB()
+        QiscusCore.database.member.removeAllDB()
     }
     
 }
@@ -36,6 +39,10 @@ public class MemberDB {
     // MARK : Internal
     public func loadData() {
         member.loadData()
+    }
+    
+    public func removeAllDB(){
+        member.removeAll()
     }
     
     public func save(_ data: [MemberModel], roomID id: String) {
@@ -76,6 +83,10 @@ public class RoomDB {
     // MARK : Public
     public func loadData() {
         room.loadData()
+    }
+    
+    public func removeAllDB(){
+        room.removeAll()
     }
     
     public func map(_ core: RoomModel, data: Room? = nil) -> Room {
@@ -143,6 +154,10 @@ public class CommentDB {
     
     public func loadData() {
         comment.loadData()
+    }
+    
+    public func removeAllDB(){
+        comment.removeAll()
     }
     
     // MARK: TODO need to improve flow, check room then add comment
