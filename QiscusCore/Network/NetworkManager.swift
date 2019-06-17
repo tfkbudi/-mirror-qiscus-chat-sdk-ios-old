@@ -73,7 +73,7 @@ extension NetworkManager {
     func getNonce(onSuccess: @escaping (QNonce) -> Void, onError: @escaping (QError) -> Void) {
         clientRouter.request(.nonce) { (data, response, error) in
             if error != nil {
-                onError(QError(message: "Please check your network connection."))
+                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -108,7 +108,7 @@ extension NetworkManager {
     func login(identityToken: String, onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
         clientRouter.request(.loginRegisterJWT(identityToken: identityToken)) { (data, response, error) in
             if error != nil {
-                onError(QError(message: "Please check your network connection."))
+                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             
             if let response = response as? HTTPURLResponse {
@@ -147,7 +147,7 @@ extension NetworkManager {
     func login(email: String, password: String ,username : String? ,avatarUrl : String?, extras: [String:Any]?, onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
         clientRouter.request(.loginRegister(user: email, password: password,username: username,avatarUrl: avatarUrl, extras: extras)) { (data, response, error) in
             if error != nil {
-                onError(QError(message: "Please check your network connection."))
+                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -182,7 +182,7 @@ extension NetworkManager {
     func registerDeviceToken(deviceToken: String, onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
         clientRouter.request(.registerDeviceToken(token: deviceToken)) { (data, response, error) in
             if error != nil {
-                onError(QError(message: "Please check your network connection."))
+                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -214,7 +214,7 @@ extension NetworkManager {
     func removeDeviceToken(deviceToken: String, onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
         clientRouter.request(.removeDeviceToken(token: deviceToken)) { (data, response, error) in
             if error != nil {
-                onError(QError(message: "Please check your network connection."))
+                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -245,7 +245,7 @@ extension NetworkManager {
     func getProfile(onSuccess: @escaping (UserModel) -> Void, onError: @escaping (QError) -> Void) {
         clientRouter.request(.myProfile) { (data, response, error) in
             if error != nil {
-                onError(QError(message:"Please check your network connection."))
+                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -285,7 +285,7 @@ extension NetworkManager {
         }
         clientRouter.request(.updateMyProfile(name: displayName, avatarUrl: avatarUrl?.absoluteString, extras: extras)) { (data, response, error) in
             if error != nil {
-                onError(QError(message: "Please check your network connection."))
+                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -318,7 +318,7 @@ extension NetworkManager {
     func syncEvent(lastId: Int64, onSuccess: @escaping ([SyncEvent]) -> Void, onError: @escaping (QError) -> Void) {
         clientRouter.request(.syncEvent(startEventId: lastId)) { (data, response, error) in
             if error != nil {
-                onError(QError(message: "Please check your network connection."))
+                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if data == nil { onError(QError(message: "Failed to parsing response.")); return}
             if let response = response as? HTTPURLResponse {
@@ -348,7 +348,7 @@ extension NetworkManager {
     func sync(lastCommentReceivedId: String, order: String = "", limit: Int = 20, completion: @escaping ([CommentModel]?, String?) -> Void) {
         clientRouter.request(.sync(lastReceivedCommentId: lastCommentReceivedId, order: order, limit: limit)) { (data, response, error) in
             if error != nil {
-                completion(nil, "Please check your network connection.")
+                completion(nil, error?.localizedDescription ?? "Please check your network connection.")
             }
             if data == nil { completion(nil, "Failed to parsing response."); return }
             if let response = response as? HTTPURLResponse {
@@ -379,7 +379,7 @@ extension NetworkManager {
     func blockUser(email: String, onSuccess: @escaping (MemberModel) -> Void, onError: @escaping (QError) -> Void) {
         userRouter.request(.block(email: email)) { (data, response, error) in
             if error != nil {
-                onError(QError(message: "Please check your network connection."))
+                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if data == nil { onError(QError(message: "Failed to parsing response.")); return}
             if let response = response as? HTTPURLResponse {
@@ -410,7 +410,7 @@ extension NetworkManager {
     func unblockUser(email: String, completion: @escaping (MemberModel?, QError?) -> Void) {
         userRouter.request(.unblock(email: email)) { (data, response, error) in
             if error != nil {
-                completion(nil, QError(message: "Please check your network connection."))
+                completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if data == nil { completion(nil, QError(message: "Failed to parsing response.")); return}
             if let response = response as? HTTPURLResponse {
@@ -441,7 +441,7 @@ extension NetworkManager {
     func getBlokedUser(page: Int?, limit: Int?, onSuccess: @escaping ([MemberModel]) -> Void, onError: @escaping (QError) -> Void) {
         userRouter.request(.listBloked(page: page, limit: limit)) { (data, response, error) in
             if error != nil {
-                onError(QError(message: "Please check your network connection."))
+                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if data == nil { onError(QError(message: "Failed to parsing response.")); return}
             if let response = response as? HTTPURLResponse {
@@ -564,7 +564,7 @@ extension NetworkManager {
     func getUsers(limit : Int?, page: Int?, querySearch: String?, onSuccess: @escaping ([MemberModel], Meta) -> Void, onError: @escaping (QError) -> Void) {
         userRouter.request(.getUsers(page: page, limit: limit, querySearch: querySearch)) { (data, response, error) in
             if error != nil {
-                onError(QError(message: "Please check your network connection."))
+                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if data == nil { onError(QError(message: "Failed to parsing response.")); return}
             if let response = response as? HTTPURLResponse {
@@ -595,6 +595,37 @@ extension NetworkManager {
             }
         }
     }
+    
+    func event_report(moduleName: String, event: String, message: String, onSuccess: @escaping (Bool) -> Void, onError: @escaping (QError) -> Void) {
+        clientRouter.request(.eventReport(moduleName: moduleName, event: event, message: message)) { (data, response, error) in
+            if error != nil {
+                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
+            }
+            if data == nil { onError(QError(message: "Failed to parsing response.")); return}
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        onError(QError(message: NetworkResponse.noData.rawValue))
+                        return
+                    }
+                    let response    = ApiResponse.decode(from: responseData)
+                    onSuccess(true)
+                case .failure(let errorMessage):
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        onError(QError(message: "json: \(jsondata)"))
+                    } catch {
+                        QiscusLogger.errorPrint("Error blockUser Code =\(response.statusCode)\(errorMessage)")
+                        onError( QError(message: NetworkResponse.unableToDecode.rawValue))
+                    }
+                }
+            }
+        }
+    }
+    
 }
 
 

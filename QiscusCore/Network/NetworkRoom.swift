@@ -20,7 +20,7 @@ extension NetworkManager {
     func getRoomList(showParticipant: Bool = true, limit: Int? = nil, page: Int? = nil, roomType: RoomType? = nil, showRemoved: Bool = false, showEmpty: Bool = false, completion: @escaping([RoomModel]?, Meta?, String?) -> Void) {
         roomRouter.request(.roomList(showParticipants: showParticipant, limit: limit, page: page, roomType: roomType, showRemoved: showRemoved, showEmpty: showEmpty)) { (data, response, error) in
             if error != nil {
-                completion(nil, nil, "Please check your network connection.")
+                completion(nil, nil, error?.localizedDescription ?? "Please check your network connection.")
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -60,7 +60,7 @@ extension NetworkManager {
     func getRoomInfo(roomIds: [String]? = [], roomUniqueIds: [String]? = [], showParticipant: Bool = false, showRemoved: Bool = false, completion: @escaping ([RoomModel]?, QError?) -> Void) {
         roomRouter.request(.roomInfo(roomId: roomIds, roomUniqueId: roomUniqueIds, showParticipants: showParticipant, showRemoved: showRemoved)) { (data, response, error) in
             if error != nil {
-                completion(nil, QError(message: "Please check your network connection."))
+                completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -98,7 +98,7 @@ extension NetworkManager {
     func createRoom(name: String, participants: [String], avatarUrl: URL? = nil, completion: @escaping (RoomModel?, String?) -> Void) {
         roomRouter.request(.createNewRoom(name: name, participants: participants, avatarUrl: avatarUrl)) { (data, response, error) in
             if error != nil {
-                completion(nil, "Please check your network connection.")
+                completion(nil, error?.localizedDescription ?? "Please check your network connection.")
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -137,7 +137,7 @@ extension NetworkManager {
     func updateRoom(roomId: String, roomName: String?, avatarUrl: URL?, options: String?, completion: @escaping (RoomModel?, QError?) -> Void) {
         roomRouter.request(.updateRoom(roomId: roomId, roomName: roomName, avatarUrl: avatarUrl, options: options)) { (data, response, error) in
             if error != nil {
-                completion(nil, QError(message: "Please check your network connection."))
+                completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -176,7 +176,7 @@ extension NetworkManager {
     func getOrCreateRoomWithTarget(targetSdkEmail: String, avatarUrl: URL? = nil, distincId: String? = nil, options: String? = nil, onSuccess: @escaping (RoomModel,[CommentModel]?) -> Void, onError: @escaping (QError) -> Void) {
         roomRouter.request(.roomWithTarget(email: [targetSdkEmail], avatarUrl: avatarUrl, distincId: distincId, options: options)) { (data, response, error) in
             if error != nil {
-                onError(QError(message: "Please check your network connection."))
+                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -215,7 +215,7 @@ extension NetworkManager {
     func getOrCreateChannel(uniqueId: String, name: String? = nil, avatarUrl: URL? = nil, options: String? = nil, completion: @escaping (RoomModel?, [CommentModel]?, String?) -> Void) {
         roomRouter.request(.channelWithUniqueId(uniqueId: uniqueId, name: name, avatarUrl: avatarUrl, options: options)) { (data, response, error) in
             if error != nil {
-                completion(nil, nil, "Please check your network connection.")
+                completion(nil, nil, error?.localizedDescription ?? "Please check your network connection.")
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -252,7 +252,7 @@ extension NetworkManager {
     func getRoomById(roomId: String, onSuccess: @escaping (RoomModel, [CommentModel]?) -> Void, onError: @escaping (QError) -> Void) {
         roomRouter.request(.getRoomById(roomId: roomId)) { (data, response, error) in
             if error != nil {
-                onError(QError(message:"Please check your network connection."))
+                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -290,7 +290,7 @@ extension NetworkManager {
     func getParticipants(roomUniqeId id: String, offset: Int? = nil, sorting: SortType? = nil, completion: @escaping ([MemberModel]?, QError?) -> Void) {
         roomRouter.request(.getParticipant(roomId: id, offset: offset, sorting: sorting)) { (data, response, error) in
             if error != nil {
-                completion(nil, QError(message: "Please check your network connection."))
+                completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -326,7 +326,7 @@ extension NetworkManager {
     func addParticipants(roomId: String, userSdkEmail: [String], completion: @escaping ([MemberModel]?, QError?) -> Void) {
         roomRouter.request(.addParticipant(roomId: roomId, emails: userSdkEmail)) { (data, response, error) in
             if error != nil {
-                completion(nil, QError(message: "Please check your network connection."))
+                completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -362,7 +362,7 @@ extension NetworkManager {
     func removeParticipants(roomId: String, userSdkEmail: [String], completion: @escaping(Bool, QError?) -> Void) {
         roomRouter.request(.removeParticipant(roomId: roomId, emails: userSdkEmail)) { (data, response, error) in
             if error != nil {
-                completion(false, QError(message: "Please check your network connection."))
+                completion(false, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)

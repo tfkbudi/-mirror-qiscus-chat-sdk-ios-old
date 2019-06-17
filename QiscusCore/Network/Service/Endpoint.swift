@@ -83,6 +83,7 @@ internal enum APIClient {
     case myProfile //
     case updateMyProfile(name: String?, avatarUrl: String?, extras: [String : Any]?) //
     case upload
+    case eventReport(moduleName: String, event: String, message: String)
 }
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 extension APIClient : EndPoint {
@@ -116,6 +117,8 @@ extension APIClient : EndPoint {
             return "/my_profile"
         case .upload:
             return "/upload"
+        case .eventReport( _, _, _):
+            return "/event_report"
         }
     }
     
@@ -123,7 +126,7 @@ extension APIClient : EndPoint {
         switch self {
         case .sync, .syncEvent, .unread, .myProfile:
             return .get
-        case .search, .registerDeviceToken, .removeDeviceToken, .loginRegister, .loginRegisterJWT, .upload, .nonce:
+        case .search, .registerDeviceToken, .removeDeviceToken, .loginRegister, .loginRegisterJWT, .upload, .nonce, .eventReport:
             return .post
         case .updateMyProfile :
             return .patch
@@ -237,6 +240,15 @@ extension APIClient : EndPoint {
                 "token" : AUTHTOKEN
                 ]
             return .requestParameters(bodyParameters: param, bodyEncoding: .jsonEncoding, urlParameters: nil)
+            
+        case .eventReport(let moduleName, let event, let message) :
+            let param = [
+                "token"                       : AUTHTOKEN,
+                "module_name"                 : moduleName,
+                "event"                       : event,
+                "message"                     : message,
+                ] as [String : Any]
+            return .requestParameters(bodyParameters: nil, bodyEncoding: .urlEncoding, urlParameters: param)
         }
     }
 }

@@ -22,7 +22,7 @@ extension NetworkManager {
     func loadComments(roomId: String, lastCommentId: Int? = nil, timestamp: String? = nil, after: Bool? = nil, limit: Int? = nil, completion: @escaping ([CommentModel]?, QError?) -> Void) {
         commentRouter.request(.loadComment(topicId: roomId, lastCommentId: lastCommentId, timestamp: timestamp, after: after, limit: limit)) { (data, response, error) in
             if error != nil {
-                completion(nil, QError(message: "Please check your network connection."))
+                completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -62,7 +62,7 @@ extension NetworkManager {
     func postComment(roomId: String, type: String = "text", message: String, payload: [String:Any]? = nil, extras: [String:Any]? = nil, uniqueTempId: String = "", completion: @escaping(CommentModel?, String?) -> Void) {
         commentRouter.request(.postComment(topicId: roomId, type: type, message: message, payload: payload, extras: extras, uniqueTempId: uniqueTempId)) { (data, response, error) in
             if error != nil {
-                completion(nil, "Please check your network connection.")
+                completion(nil, error?.localizedDescription ?? "Please check your network connection.")
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -79,9 +79,10 @@ extension NetworkManager {
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
-                        completion(nil, errorMessage)
+                        completion(nil, "json: \(jsondata)")
                     } catch {
-                        completion(nil, errorMessage)
+                        QiscusLogger.errorPrint("Error postComment Code =\(response.statusCode)\(errorMessage)")
+                        completion(nil, NetworkResponse.unableToDecode.rawValue)
                     }
                 }
             }
@@ -97,7 +98,7 @@ extension NetworkManager {
     func deleteComment(commentUniqueId: [String], completion: @escaping ([CommentModel]?, QError?) -> Void) {
         commentRouter.request(.delete(commentUniqueId: commentUniqueId)) { (data, response, error) in
             if error != nil {
-                completion(nil, QError(message: "Please check your network connection."))
+                completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -127,7 +128,6 @@ extension NetworkManager {
     // todo: add more documentation
     func updateCommentStatus(roomId: String, lastCommentReadId: String? = nil, lastCommentReceivedId: String? = nil) {
         commentRouter.request(.updateStatus(roomId: roomId, lastCommentReadId: lastCommentReadId, lastCommentReceivedId: lastCommentReceivedId)) { (data, response, error) in
-            
         }
     }
     
@@ -137,7 +137,7 @@ extension NetworkManager {
     func unreadCount(completion: @escaping(Int, QError?) -> Void) {
         userRouter.request(.unread) { (data, response, error) in
             if error != nil {
-                completion(0, QError(message: "Please check your network connection."))
+                completion(0, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -165,7 +165,7 @@ extension NetworkManager {
     func searchMessage(keyword: String, roomID: String?, lastCommentId: Int?, completion: @escaping ([CommentModel]?, QError?) -> Void) {
         commentRouter.request(.search(keyword: keyword, roomID: roomID, lastCommentID: lastCommentId)) { (data, response, error) in
             if error != nil {
-                completion(nil, QError(message: "Please check your network connection."))
+                completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -202,7 +202,7 @@ extension NetworkManager {
         }
         commentRouter.request(.clear(roomChannelIds: roomsUniqueID)) { (data, response, error) in
             if error != nil {
-                completion(QError(message: "Please check your network connection."))
+                completion(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
@@ -230,7 +230,7 @@ extension NetworkManager {
     func readReceiptStatus(commentId id: String, completion: @escaping (CommentInfo?, QError?) -> Void) {
         commentRouter.request(.statusComment(id: id)) { (data, response, error) in
             if error != nil {
-                completion(nil, QError(message: "Please check your network connection."))
+                completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
