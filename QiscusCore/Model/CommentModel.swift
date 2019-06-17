@@ -44,15 +44,17 @@ open class CommentModel {
     
     public init() {
         guard let user = QiscusCore.getProfile() else { return }
-        self.userId         = String(user.id)
-        self.username       = user.username
-        self.userAvatarUrl  = user.avatarUrl
-        self.userEmail      = user.email
-        let now             = Int64(NSDate().timeIntervalSince1970 * 1000000000.0) // nano sec
-        self.uniqId         = "ios_\(now)"
-        self.id             = "ios_\(now)"
-        self.unixTimestamp  = now
-        self.timestamp      = CommentModel.getTimestamp()
+        DispatchQueue.global(qos: .background).sync {
+            self.userId         = String(user.id)
+            self.username       = user.username
+            self.userAvatarUrl  = user.avatarUrl
+            self.userEmail      = user.email
+            let now             = Int64(NSDate().timeIntervalSince1970 * 1000000000.0) // nano sec
+            self.uniqId         = "ios_\(now)"
+            self.id             = "ios_\(now)"
+            self.unixTimestamp  = now
+            self.timestamp      = CommentModel.getTimestamp()
+        }
     }
     
     init(json: JSON) {
@@ -113,17 +115,23 @@ extension CommentModel {
     }
     
     func getDate() -> Date {
+        //let timezone = TimeZone.current.identifier
         let formatter = DateFormatter()
         formatter.dateFormat    = "yyyy-MM-dd'T'HH:mm:ssZ"
-        formatter.timeZone      = TimeZone(secondsFromGMT: 0)
+        //formatter.timeZone      = TimeZone(secondsFromGMT: 0)
+        formatter.timeZone      = TimeZone(abbreviation: "UTC")
+        formatter.locale = Locale(identifier: "en_US_POSIX")
         let date = formatter.date(from: self.timestamp)
         return date ?? Date()
     }
     
     static func getTimestamp() -> String {
+        let timezone = TimeZone.current.identifier
         let formatter = DateFormatter()
         formatter.dateFormat    = "yyyy-MM-dd'T'HH:mm:ssZ"
-        formatter.timeZone      = TimeZone(secondsFromGMT: 0)
+        //formatter.timeZone      = TimeZone(secondsFromGMT: 0)
+        formatter.timeZone      = TimeZone(abbreviation: "UTC")
+        formatter.locale = Locale(identifier: "en_US_POSIX")
         return formatter.string(from: Date())
     }
     
