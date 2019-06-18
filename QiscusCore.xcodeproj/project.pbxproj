@@ -648,8 +648,8 @@
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaMQTT/CocoaMQTT.framework",
 				"${BUILT_PRODUCTS_DIR}/QiscusCore/QiscusCore.framework",
-				"${PODS_ROOT}/QiscusRealtime/QiscusRealtime.framework",
-				"${PODS_ROOT}/QiscusRealtime/QiscusRealtime.framework.dSYM",
+				"${PODS_ROOT}/../../QiscusRealtime/Cocoapods/QiscusRealtime.framework",
+				"${PODS_ROOT}/../../QiscusRealtime/Cocoapods/QiscusRealtime.framework.dSYM",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -677,8 +677,8 @@
 				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaMQTT/CocoaMQTT.framework",
-				"${PODS_ROOT}/QiscusRealtime/QiscusRealtime.framework",
-				"${PODS_ROOT}/QiscusRealtime/QiscusRealtime.framework.dSYM",
+				"${PODS_ROOT}/../../QiscusRealtime/Cocoapods/QiscusRealtime.framework",
+				"${PODS_ROOT}/../../QiscusRealtime/Cocoapods/QiscusRealtime.framework.dSYM",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -975,6 +975,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 arm64e armv7 armv7s i386 x86_64";
 			};
 			name = Debug;
 		};
@@ -1005,6 +1006,7 @@
 				SKIP_INSTALL = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 arm64e armv7 armv7s i386 x86_64";
 			};
 			name = Release;
 		};
