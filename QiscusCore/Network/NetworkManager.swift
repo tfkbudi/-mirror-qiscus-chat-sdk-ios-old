@@ -508,14 +508,33 @@ extension NetworkManager {
                     }
                 case .failure(let errorMessage):
                     do {
-                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
-                        onError(QError(message: "json: \(jsondata)"))
+                        if data == nil {
+                            QiscusLogger.errorPrint("Error upload Code =\(response.statusCode)\(errorMessage)")
+                            DispatchQueue.main.async {
+                                onError(QError(message: NetworkResponse.unableToDecode.rawValue))
+                            }
+                        }else{
+                            let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                            QiscusLogger.errorPrint("json: \(jsondata)")
+                            onError(QError(message: "json: \(jsondata)"))
+                        }
                     } catch {
                         QiscusLogger.errorPrint("Error upload Code =\(response.statusCode)\(errorMessage)")
                         DispatchQueue.main.async {
                             onError(QError(message: NetworkResponse.unableToDecode.rawValue))
                         }
+                    }
+                }
+            }else{
+                if error != nil {
+                    DispatchQueue.main.async {
+                        self.onProgress(0)
+                        onError(QError(message: "\(error?.localizedDescription)"))
+                    }
+                }else{
+                    DispatchQueue.main.async {
+                        self.onProgress(0)
+                        onError(QError(message: "Something wrong"))
                     }
                 }
             }
@@ -618,7 +637,7 @@ extension NetworkManager {
                         QiscusLogger.errorPrint("json: \(jsondata)")
                         onError(QError(message: "json: \(jsondata)"))
                     } catch {
-                        QiscusLogger.errorPrint("Error blockUser Code =\(response.statusCode)\(errorMessage)")
+                        QiscusLogger.errorPrint("Error event_report Code =\(response.statusCode)\(errorMessage)")
                         onError( QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 }
