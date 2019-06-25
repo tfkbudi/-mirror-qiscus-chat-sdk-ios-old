@@ -54,6 +54,7 @@ open class RoomModel : RoomDelegate {
         self.options        = json["options"].string ?? nil
         self.unreadCount    = json["unread_count"].intValue
         let _lastComment    = json["last_comment"]
+        
         self.lastComment    = CommentModel(json: _lastComment)
         if let _participants    = json["participants"].array {
             var data = [MemberModel]()
@@ -63,10 +64,17 @@ open class RoomModel : RoomDelegate {
             self.participants = data
         }
         if let _type = json["chat_type"].string {
-            for i in RoomType.all {
-                if _type == i.rawValue {
-                    self.type = i
+            if _type == "group"{
+                let _is_public_channel = json["is_public_channel"].bool ?? false
+                
+                if _is_public_channel == true {
+                     self.type = .channel
+                }else{
+                    self.type = .group
                 }
+                
+            }else{
+                self.type = .single
             }
         }
     }
