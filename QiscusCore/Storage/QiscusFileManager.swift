@@ -59,4 +59,14 @@ class QiscusFileManager {
         }
         return dir
     }
+    
+    func clearTempFolder() {
+        let fileManager = FileManager.default
+        let myDocuments = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let diskCacheStorageBaseUrl = myDocuments.appendingPathComponent(qiscusDocumentsPath)
+        guard let filePaths = try? fileManager.contentsOfDirectory(at: diskCacheStorageBaseUrl, includingPropertiesForKeys: nil, options: []) else { return }
+        for filePath in filePaths {
+            try? fileManager.removeItem(at: filePath)
+        }
+    }
 }

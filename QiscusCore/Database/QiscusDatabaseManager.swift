@@ -29,6 +29,7 @@ public class QiscusDatabaseManager {
         QiscusCore.database.comment.removeAllDB()
         QiscusCore.database.room.removeAllDB()
         QiscusCore.database.member.removeAllDB()
+        QiscusCore.fileManager.clearTempFolder()
     }
     
 }
