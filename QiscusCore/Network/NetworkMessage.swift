@@ -128,6 +128,50 @@ extension NetworkManager {
     // todo: add more documentation
     func updateCommentStatus(roomId: String, lastCommentReadId: String? = nil, lastCommentReceivedId: String? = nil) {
         commentRouter.request(.updateStatus(roomId: roomId, lastCommentReadId: lastCommentReadId, lastCommentReceivedId: lastCommentReceivedId)) { (data, response, error) in
+            
+            var commentReceivedId = "0"
+            var commentReadId = "0"
+            
+            if let readID = lastCommentReadId {
+                commentReadId = readID
+            }
+            
+            if let receivedID = lastCommentReceivedId {
+                commentReceivedId = receivedID
+            }
+            
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                   return
+                case .failure(let errorMessage):
+                    do {
+                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                        QiscusLogger.errorPrint("json: \(jsondata)")
+                        QiscusCore.network.event_report(moduleName: "API", event: "update_comment_status", message: "commentReceivedId=\(commentReceivedId), commentReadId=\(commentReadId), error: \(jsondata)", onSuccess: { (success) in
+                            
+                        }) { (error) in
+                            QiscusLogger.debugPrint(error.message)
+                        }
+                    } catch {
+                        var message = errorMessage
+                        if error != nil {
+                            message = error.localizedDescription
+                        }
+                        
+                        QiscusLogger.errorPrint("Error updateCommentStatus Code =\(response.statusCode), \(message)")
+                        
+                        QiscusCore.network.event_report(moduleName: "API", event: "update_comment_status", message: "commentReceivedId=\(commentReceivedId), commentReadId=\(commentReadId), Code =\(response.statusCode), error \(error.localizedDescription)", onSuccess: { (success) in
+                            
+                        }) { (error) in
+                            QiscusLogger.debugPrint(error.message)
+                        }
+                        
+                    }
+                }
+            }
+            
         }
     }
     
