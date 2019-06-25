@@ -68,27 +68,38 @@ class RealtimeManager {
             return
         }
         for room in rooms {
-            // subscribe comment deliverd receipt
-            if !c.subscribe(endpoint: .delivery(roomID: room.id)){
-                self.pendingSubscribeTopic.append(.delivery(roomID: room.id))
-                QiscusLogger.errorPrint("failed to subscribe event deliver event from room \(room.name), then queue in pending")
-            }
-            // subscribe comment read
-            if !c.subscribe(endpoint: .read(roomID: room.id)) {
-                self.pendingSubscribeTopic.append(.read(roomID: room.id))
-                QiscusLogger.errorPrint("failed to subscribe event read from room \(room.name), then queue in pending")
-            }
-            if !c.subscribe(endpoint: .typing(roomID: room.id)) {
-                self.pendingSubscribeTopic.append(.typing(roomID: room.id))
-                QiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
-            }
-            guard let participants = room.participants else { return }
-            for u in participants {
-                if !c.subscribe(endpoint: .onlineStatus(user: u.email)) {
-                    self.pendingSubscribeTopic.append(.onlineStatus(user: u.email))
-                    QiscusLogger.errorPrint("failed to subscribe online status user \(u.email), then queue in pending")
+            if room.type == .channel{
+                if let appId = ConfigManager.shared.appID {
+                    if !c.subscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId)){
+                         self.pendingSubscribeTopic.append(.roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
+                         QiscusLogger.errorPrint("failed to subscribe room channel \(room.name), then queue in pending")
+                    }
+                }
+            }else{
+                // subscribe comment deliverd receipt
+                if !c.subscribe(endpoint: .delivery(roomID: room.id)){
+                    self.pendingSubscribeTopic.append(.delivery(roomID: room.id))
+                    QiscusLogger.errorPrint("failed to subscribe event deliver event from room \(room.name), then queue in pending")
+                }
+                // subscribe comment read
+                if !c.subscribe(endpoint: .read(roomID: room.id)) {
+                    self.pendingSubscribeTopic.append(.read(roomID: room.id))
+                    QiscusLogger.errorPrint("failed to subscribe event read from room \(room.name), then queue in pending")
+                }
+                if !c.subscribe(endpoint: .typing(roomID: room.id)) {
+                    self.pendingSubscribeTopic.append(.typing(roomID: room.id))
+                    QiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
+                }
+                guard let participants = room.participants else { return }
+                for u in participants {
+                    if !c.subscribe(endpoint: .onlineStatus(user: u.email)) {
+                        self.pendingSubscribeTopic.append(.onlineStatus(user: u.email))
+                        QiscusLogger.errorPrint("failed to subscribe online status user \(u.email), then queue in pending")
+                    }
                 }
             }
+            
+           
         }
         
         self.resumePendingSubscribeTopic()
@@ -103,21 +114,29 @@ class RealtimeManager {
             return
         }
         for room in rooms {
-            // subscribe comment deliverd receipt
-            if !c.subscribe(endpoint: .delivery(roomID: room.id)){
-                self.pendingSubscribeTopic.append(.delivery(roomID: room.id))
-                QiscusLogger.errorPrint("failed to subscribe event deliver event from room \(room.name), then queue in pending")
+            if room.type == .channel{
+                if let appId = ConfigManager.shared.appID {
+                    if !c.subscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId)){
+                        self.pendingSubscribeTopic.append(.roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
+                        QiscusLogger.errorPrint("failed to subscribe room channel \(room.name), then queue in pending")
+                    }
+                }
+            }else{
+                // subscribe comment deliverd receipt
+                if !c.subscribe(endpoint: .delivery(roomID: room.id)){
+                    self.pendingSubscribeTopic.append(.delivery(roomID: room.id))
+                    QiscusLogger.errorPrint("failed to subscribe event deliver event from room \(room.name), then queue in pending")
+                }
+                // subscribe comment read
+                if !c.subscribe(endpoint: .read(roomID: room.id)) {
+                    self.pendingSubscribeTopic.append(.read(roomID: room.id))
+                    QiscusLogger.errorPrint("failed to subscribe event read from room \(room.name), then queue in pending")
+                }
+                if !c.subscribe(endpoint: .typing(roomID: room.id)) {
+                    self.pendingSubscribeTopic.append(.typing(roomID: room.id))
+                    QiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
+                }
             }
-            // subscribe comment read
-            if !c.subscribe(endpoint: .read(roomID: room.id)) {
-                self.pendingSubscribeTopic.append(.read(roomID: room.id))
-                QiscusLogger.errorPrint("failed to subscribe event read from room \(room.name), then queue in pending")
-            }
-            if !c.subscribe(endpoint: .typing(roomID: room.id)) {
-                self.pendingSubscribeTopic.append(.typing(roomID: room.id))
-                QiscusLogger.errorPrint("failed to subscribe event typing from room \(room.name), then queue in pending")
-            }
-            
         }
         
         self.resumePendingSubscribeTopic()
@@ -129,13 +148,19 @@ class RealtimeManager {
         }
         
         for room in rooms {
-            // unsubcribe room event
-            c.unsubscribe(endpoint: .delivery(roomID: room.id))
-            c.unsubscribe(endpoint: .read(roomID: room.id))
-            c.unsubscribe(endpoint: .typing(roomID: room.id))
-            guard let participants = room.participants else { return }
-            for u in participants {
-                c.unsubscribe(endpoint: .onlineStatus(user: u.email))
+            if room.type == .channel {
+                if let appId = ConfigManager.shared.appID {
+                    c.unsubscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
+                }
+            }else{
+                // unsubcribe room event
+                c.unsubscribe(endpoint: .delivery(roomID: room.id))
+                c.unsubscribe(endpoint: .read(roomID: room.id))
+                c.unsubscribe(endpoint: .typing(roomID: room.id))
+                guard let participants = room.participants else { return }
+                for u in participants {
+                    c.unsubscribe(endpoint: .onlineStatus(user: u.email))
+                }
             }
         }
         
@@ -147,10 +172,17 @@ class RealtimeManager {
         }
         
         for room in rooms {
-            // unsubcribe room event
-            c.unsubscribe(endpoint: .delivery(roomID: room.id))
-            c.unsubscribe(endpoint: .read(roomID: room.id))
-            c.unsubscribe(endpoint: .typing(roomID: room.id))
+            if room.type == .channel {
+                if let appId = ConfigManager.shared.appID {
+                    c.unsubscribe(endpoint: .roomChannel(AppId: appId, roomUniqueId: room.uniqueId))
+                }
+            }else{
+                // unsubcribe room event
+                c.unsubscribe(endpoint: .delivery(roomID: room.id))
+                c.unsubscribe(endpoint: .read(roomID: room.id))
+                c.unsubscribe(endpoint: .typing(roomID: room.id))
+            }
+           
         }
         
     }
