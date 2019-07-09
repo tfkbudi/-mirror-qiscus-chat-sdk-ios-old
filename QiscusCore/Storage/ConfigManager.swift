@@ -54,7 +54,7 @@ class ConfigManager : NSObject {
     }
     
     var server      : QiscusServer?     = nil
-    var syncInterval : TimeInterval     = 10.0
+    var syncInterval : TimeInterval     = 5
     
     fileprivate func filename(_ name: String) -> String {
         return prefix + name + "userdata"
