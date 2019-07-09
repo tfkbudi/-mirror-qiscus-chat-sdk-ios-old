@@ -20,8 +20,12 @@ public struct RoomTyping {
 }
 
 enum SyncEventTopic : String {
+    case noActionTopic  = ""
     case deletedMessage = "deleted_message"
     case clearRoom      = "clear_room"
+    case delivered      = "delivered"
+    case read           = "read"
+    case sent           = "sent"
 }
 
 struct SyncEvent {
@@ -33,7 +37,7 @@ struct SyncEvent {
     init(json: JSON) {
         self.id = json["id"].int64 ?? 0
         self.timestamp  = json["timestamp"].int64 ?? 0
-        self.actionTopic  = SyncEventTopic(rawValue: json["action_topic"].string ?? "") ?? .deletedMessage
+        self.actionTopic  = SyncEventTopic(rawValue: json["action_topic"].string ?? "") ?? .noActionTopic
         self.payload    = json["payload"].dictionaryObject ?? [:]
     }
 }
@@ -75,5 +79,43 @@ extension SyncEvent {
         }
         
         return result
+    }
+    
+    func updatetStatusMessage(){
+        guard let data = payload["data"] as? [String:Any] else {
+           return
+        }
+        let jsonPayload = JSON(arrayLiteral: data)[0]
+        let commentId = jsonPayload["comment_id"].stringValue
+        
+        guard let commentDB = QiscusCore.database.comment.find(id: commentId) else {
+            return
+        }
+        
+        if actionTopic == .delivered {
+            
+            if commentDB.status != .read {
+                commentDB.status = .delivered
+                QiscusCore.database.comment.save([commentDB])
+                QiscusCore.eventManager.gotMessageStatus(comment: commentDB)
+            }
+        }else if actionTopic == .read {
+            if commentDB.status != .read{
+                commentDB.status = .read
+                QiscusCore.database.comment.save([commentDB])
+                QiscusCore.eventManager.gotMessageStatus(comment: commentDB)
+                
+                //check commentbefore
+                guard let commentBefore = QiscusCore.database.comment.find(id: commentDB.commentBeforeId) else {
+                    return
+                }
+                
+                if commentBefore.status == .delivered || commentBefore.status == .sent{
+                    commentDB.status = .read
+                    QiscusCore.database.comment.save([commentDB])
+                    QiscusCore.eventManager.gotMessageStatus(comment: commentDB)
+                }
+            }
+        }
     }
 }

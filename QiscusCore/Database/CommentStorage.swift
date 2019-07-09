@@ -64,16 +64,19 @@ class CommentStorage : QiscusStorage {
                 }else{
                     return // just ignore, except delete(soft, connten ischanged) this part is trick from backend. after receiver update comment status then sender call api load comment somehow status still sent but sender already receive event status read/deliverd via mqtt
                 }
+            }else{
+                if !updateCommentDataEvent(old: r, new: comment) {
+                    // add new
+                    data.append(comment)
+                    onCreate(comment)
+                    save(comment)
+                }else {
+                    // update
+                    save(comment)
+                    onUpdate(comment)
+                }
+               
             }
-            if !updateCommentDataEvent(old: r, new: comment) {
-                // add new
-                data.append(comment)
-                onCreate(comment)
-            }else {
-                // update
-                onUpdate(comment)
-            }
-            save(comment) // else just update
         }else {
             // add new
             data.append(comment)

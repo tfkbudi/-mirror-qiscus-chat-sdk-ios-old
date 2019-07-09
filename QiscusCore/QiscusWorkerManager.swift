@@ -34,27 +34,43 @@ class QiscusWorkerManager {
         let id = ConfigManager.shared.syncEventId
         QiscusCore.network.syncEvent(lastId: id, onSuccess: { (events) in
             events.forEach({ (event) in
-                if event.id == id { return }
-                
-                switch event.actionTopic {
-                case .deletedMessage :
-                    let ids = event.getDeletedMessageUniqId()
-                    ids.forEach({ (id) in
-                        if let comment = QiscusCore.database.comment.find(uniqueId: id) {
-                            _ = QiscusCore.database.comment.delete(comment)
-                        }
-                    })
-                    ConfigManager.shared.syncEventId = event.id
-                case .clearRoom:
-                    let ids = event.getClearRoomUniqId()
-                    ids.forEach({ (id) in
-                        if let room = QiscusCore.database.room.find(uniqID: id) {
-                            _ = QiscusCore.database.comment.clear(inRoom: room.id, timestamp: event.timestamp)
-                        }
-                    })
-                    ConfigManager.shared.syncEventId = event.id
+                DispatchQueue.global(qos: .background).sync {
+                    if event.id == id { return }
+                    
+                    switch event.actionTopic {
+                    case .deletedMessage :
+                        let ids = event.getDeletedMessageUniqId()
+                        ids.forEach({ (id) in
+                            if let comment = QiscusCore.database.comment.find(uniqueId: id) {
+                                _ = QiscusCore.database.comment.delete(comment)
+                            }
+                        })
+                        ConfigManager.shared.syncEventId = event.id
+                    case .clearRoom:
+                        let ids = event.getClearRoomUniqId()
+                        ids.forEach({ (id) in
+                            if let room = QiscusCore.database.room.find(uniqID: id) {
+                                _ = QiscusCore.database.comment.clear(inRoom: room.id, timestamp: event.timestamp)
+                            }
+                        })
+                        ConfigManager.shared.syncEventId = event.id
+                        
+                    case .noActionTopic:
+                        break
+                        
+                    case .sent:
+                        break
+                        
+                    case .delivered:
+                        event.updatetStatusMessage()
+                        ConfigManager.shared.syncEventId = event.id
+                    case .read:
+                        event.updatetStatusMessage()
+                        ConfigManager.shared.syncEventId = event.id
+                    }
+                    
                 }
-                
+               
             })
         }) { (error) in
             QiscusLogger.errorPrint("sync error, \(error.message)")
@@ -65,11 +81,6 @@ class QiscusWorkerManager {
         let id = ConfigManager.shared.syncId
         QiscusCore.shared.sync(lastCommentReceivedId: id,onSuccess: { (comments) in
             DispatchQueue.global(qos: .background).async {
-                // save comment in local
-                if comments.count != 0 {
-                    QiscusCore.database.comment.save(comments)
-                }
-                
                 self.syncEvent()
                 if let c = comments.first {
                     ConfigManager.shared.syncId = c.id

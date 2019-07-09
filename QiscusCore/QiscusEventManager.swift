@@ -38,6 +38,25 @@ class QiscusEventManager {
                 _ = QiscusCore.database.room.updateReadComment(comment)
                 // publish event new comment inside room
                 roomDelegate?.gotNewComment(comment: comment)
+                
+                if let comments = QiscusCore.database.comment.find(roomId: comment.roomId) {
+                    
+                   
+                    
+                    guard let user = QiscusCore.getProfile() else { return }
+                    if comment.userEmail != user.email{
+                        var mycomments = comments.filter({ $0.userEmail == user.email }) // filter my comment
+                        mycomments = mycomments.filter({ $0.status == .sent || $0.status == .delivered })
+                        
+                        mycomments.forEach { (c) in
+                            let new = c
+                            // update comment
+                            new.status = .read
+                            QiscusCore.database.comment.save([new])
+                            QiscusCore.eventManager.gotMessageStatus(comment: new)
+                        }
+                    }
+                }
             }
         }
         // got new comment for other room

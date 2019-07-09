@@ -505,7 +505,15 @@ class RealtimeManager {
     func didReceiveMessage(data: String) {
         let json = ApiResponse.decode(string: data)
         let comment = CommentModel(json: json)
-        QiscusCore.database.comment.save([comment])
+        
+        //check comment in db
+        if let commentDB = QiscusCore.database.comment.find(id: comment.roomId){
+            //ignored for status sent from my self / after postComment
+        }else{
+            QiscusCore.database.comment.save([comment])
+        }
+        
+        
     }
     
     func didReceiveUser(typing: Bool, roomId: String, userEmail: String) {
