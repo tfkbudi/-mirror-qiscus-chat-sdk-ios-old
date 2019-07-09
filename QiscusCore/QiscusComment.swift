@@ -30,20 +30,24 @@ extension QiscusCore {
                 _comment.payload!["content"] = ["":""]
             }
         }
-        // save in local comment pending
-        QiscusCore.database.comment.save([_comment])
+
         // send message to server
         QiscusCore.network.postComment(roomId: comment.roomId, type: comment.type, message: comment.message, payload: comment.payload, extras: comment.extras, uniqueTempId: comment.uniqId) { (result, error) in
+            
+            if error != nil {
+                //save in local comment pending
+                QiscusCore.database.comment.save([_comment])
+            }
+            
             if let commentResult = result {
                 // save in local
                 commentResult.status = .sent
+                QiscusCore.database.comment.save([commentResult])
+                
                 if let roomData = QiscusCore.database.room.find(id: commentResult.roomId){
                     roomData.lastComment = commentResult
                     QiscusCore.database.room.save([roomData])
                 }
-                
-                QiscusCore.database.comment.save([commentResult])
-                
                 //comment.onChange(commentResult) // view data binding
                 onSuccess(commentResult)
             }else {
