@@ -7,7 +7,8 @@ target 'Example' do
   pod 'QiscusCore', :path => '.'
   #pod 'QiscusRealtime', '~> 0.3.0'
   #pod 'QiscusRealtime', :path => '../QiscusRealtime'
-    pod 'QiscusRealtime', :path => '../QiscusRealtime/Cocoapods/'
+  #pod 'QiscusRealtime', :path => '../QiscusRealtime/Cocoapods/'
+  pod 'QiscusRealtime',  :git => 'https://github.com/qiscus/QiscusRealtime-iOS.git', :tag => '0.4.0-beta1'
 end
 
 target 'QiscusCore' do
@@ -15,7 +16,8 @@ target 'QiscusCore' do
     use_frameworks!
     pod 'SwiftyJSON'
     #pod 'QiscusRealtime', '~> 0.3.0'
-    pod 'QiscusRealtime', :path => '../QiscusRealtime/Cocoapods/'
+    #pod 'QiscusRealtime', :path => '../QiscusRealtime/Cocoapods/'
+    pod 'QiscusRealtime',  :git => 'https://github.com/qiscus/QiscusRealtime-iOS.git', :tag => '0.4.0-beta1'
 end
 
 target 'QiscusCoreTests' do
