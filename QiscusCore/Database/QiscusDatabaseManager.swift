@@ -193,16 +193,14 @@ public class CommentDB {
                     
                     if publishEvent {
                         QiscusEventManager.shared.gotNewMessage(comment: result)
-                    }else{
-                       self.markCommentAsRead(comment: result)
                     }
                     
+                    self.markCommentAsRead(comment: result)
                 }
                 
             }) { (updatedResult) in
                 // MARK : TODO refactor comment update flow and event
                 QiscusCore.eventManager.gotMessageStatus(comment: updatedResult)
-                
             }
         }
     }

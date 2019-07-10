@@ -79,7 +79,7 @@ class QiscusWorkerManager {
     
     private func sync() {
         let id = ConfigManager.shared.syncId
-        QiscusCore.shared.sync(lastCommentReceivedId: id,onSuccess: { (comments) in
+        QiscusCore.shared.sync(onSuccess: { (comments) in
             DispatchQueue.global(qos: .background).async {
                 self.syncEvent()
                 if let c = comments.first {
