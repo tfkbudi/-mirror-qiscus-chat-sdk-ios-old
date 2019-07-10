@@ -194,7 +194,9 @@ extension QiscusCore {
             _ = QiscusCore.database.room.updateReadComment(comment)
         }
         
-        QiscusCore.network.updateCommentStatus(roomId: roomId, lastCommentReadId: commentID, lastCommentReceivedId: nil)
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: DispatchTime.now() + 1) {
+           QiscusCore.network.updateCommentStatus(roomId: roomId, lastCommentReadId: commentID, lastCommentReceivedId: nil)
+        }
     }
     
     /// Mark Comment as received or deliverd, include comment before

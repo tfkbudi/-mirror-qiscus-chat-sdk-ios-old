@@ -31,6 +31,13 @@ class QiscusEventManager {
     }
     
     func gotNewMessage(comment: CommentModel) {
+        guard let user = QiscusCore.getProfile() else { return }
+        // no update if your comment
+        if user.email != comment.userEmail {
+            // call api receive, need optimize
+            QiscusCore.shared.updateCommentReceive(roomId: comment.roomId, lastCommentReceivedId: comment.id)
+        }
+        
         // filter event for active room
         if let r = QiscusEventManager.shared.room {
             if r.id == String(comment.roomId) {
@@ -40,8 +47,6 @@ class QiscusEventManager {
                 roomDelegate?.gotNewComment(comment: comment)
                 
                 if let comments = QiscusCore.database.comment.find(roomId: comment.roomId) {
-                    
-                   
                     
                     guard let user = QiscusCore.getProfile() else { return }
                     if comment.userEmail != user.email{
@@ -62,14 +67,6 @@ class QiscusEventManager {
         // got new comment for other room
         if let room = QiscusCore.database.room.find(id: comment.roomId) {
             delegate?.onRoom(room, gotNewComment: comment)
-        }
-        
-        // MARK: TODO receive new comment, need trotle
-        guard let user = QiscusCore.getProfile() else { return }
-        // no update if your comment
-        if user.email != comment.userEmail {
-            // call api receive, need optimize
-            QiscusCore.shared.updateCommentReceive(roomId: comment.roomId, lastCommentReceivedId: comment.id)
         }
     }
     
