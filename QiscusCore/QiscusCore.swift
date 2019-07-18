@@ -225,7 +225,7 @@ public class QiscusCore: NSObject {
                     }
                 }
             }else {
-                onError(QError(message: "call sync without parameter is not work, please try to set last comment id"))
+                onError(QError(message: "call sync without parameter is not work, please try to set last comment id. Maybe comment in DB is empty"))
             }
         }else {
             QiscusCore.network.sync(lastCommentReceivedId: id, order: order, limit: limit) { (comments, error) in
@@ -352,7 +352,7 @@ public class QiscusCore: NSObject {
     ///   - email: qiscus email user
     ///   - completion: Response object user and error if exist
     public func unblockUser(email: String, onSuccess: @escaping (MemberModel) -> Void, onError: @escaping (QError) -> Void) {
-        QiscusCore.network.blockUser(email: email, onSuccess: onSuccess, onError: onError)
+        QiscusCore.network.unblockUser(email: email, onSuccess: onSuccess, onError: onError)
     }
     
     /// Get blocked user

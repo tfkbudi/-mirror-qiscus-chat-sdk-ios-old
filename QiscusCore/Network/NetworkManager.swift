@@ -407,31 +407,35 @@ extension NetworkManager {
         }
     }
     
-    func unblockUser(email: String, completion: @escaping (MemberModel?, QError?) -> Void) {
+    func unblockUser(email: String, onSuccess: @escaping (MemberModel) -> Void, onError: @escaping (QError) -> Void) {
         userRouter.request(.unblock(email: email)) { (data, response, error) in
             if error != nil {
-                completion(nil, QError(message: error?.localizedDescription ?? "Please check your network connection."))
+                onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
             }
-            if data == nil { completion(nil, QError(message: "Failed to parsing response.")); return}
+            if data == nil {
+                onError(QError(message: "Failed to parsing response."))
+                return
+                
+            }
             if let response = response as? HTTPURLResponse {
                 let result = self.handleNetworkResponse(response)
                 switch result {
                 case .success:
                     guard let responseData = data else {
-                        completion(nil, QError(message: NetworkResponse.noData.rawValue))
+                        onError(QError(message: NetworkResponse.noData.rawValue))
                         return
                     }
                     let response    = ApiResponse.decode(from: responseData)
                     let member      = UserApiResponse.blockUser(from: response)
-                    completion(member, nil)
+                    onSuccess(member)
                 case .failure(let errorMessage):
                     do {
                         let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
                         QiscusLogger.errorPrint("json: \(jsondata)")
-                        completion(nil, QError(message: "json: \(jsondata)"))
+                        onError(QError(message: "json: \(jsondata)"))
                     } catch {
                         QiscusLogger.errorPrint("Error unblockUser Code =\(response.statusCode)\(errorMessage)")
-                        completion(nil, QError(message: NetworkResponse.unableToDecode.rawValue))
+                        onError(QError(message: NetworkResponse.unableToDecode.rawValue))
                     }
                 }
             }
