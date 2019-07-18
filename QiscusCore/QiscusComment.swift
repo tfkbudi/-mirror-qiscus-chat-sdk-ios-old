@@ -193,10 +193,7 @@ extension QiscusCore {
         if let comment = QiscusCore.database.comment.find(id: commentID) {
             _ = QiscusCore.database.room.updateReadComment(comment)
         }
-        
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: DispatchTime.now() + 1) {
-           QiscusCore.network.updateCommentStatus(roomId: roomId, lastCommentReadId: commentID, lastCommentReceivedId: nil)
-        }
+         QiscusCore.network.updateCommentStatus(roomId: roomId, lastCommentReadId: commentID, lastCommentReceivedId: nil)
     }
     
     /// Mark Comment as received or deliverd, include comment before

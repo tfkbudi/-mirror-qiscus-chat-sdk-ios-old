@@ -130,6 +130,7 @@ class ConfigManager : NSObject {
         storage.removeObject(forKey: filename("rtKey"))
         storage.removeObject(forKey: filename("avatarUrl"))
         storage.removeObject(forKey: filename("syncEventId"))
+        storage.removeObject(forKey: filename("syncId"))
 //        storage.removeObject(forKey: filename("lastCommentId"))
         self.userCache = nil
     }

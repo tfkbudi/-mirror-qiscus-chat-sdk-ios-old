@@ -87,35 +87,14 @@ extension SyncEvent {
         }
         let jsonPayload = JSON(arrayLiteral: data)[0]
         let commentId = jsonPayload["comment_id"].stringValue
-        
+        let email = jsonPayload["email"].stringValue
         guard let commentDB = QiscusCore.database.comment.find(id: commentId) else {
             return
         }
-        
         if actionTopic == .delivered {
-            
-            if commentDB.status != .read {
-                commentDB.status = .delivered
-                QiscusCore.database.comment.save([commentDB])
-                QiscusCore.eventManager.gotMessageStatus(comment: commentDB)
-            }
+            RealtimeManager.shared.didReceiveMessageStatus(roomId: commentDB.roomId, commentId: commentDB.id, commentUniqueId: commentDB.uniqId, Status: .delivered, userEmail: email)
         }else if actionTopic == .read {
-            if commentDB.status != .read{
-                commentDB.status = .read
-                QiscusCore.database.comment.save([commentDB])
-                QiscusCore.eventManager.gotMessageStatus(comment: commentDB)
-                
-                //check commentbefore
-                guard let commentBefore = QiscusCore.database.comment.find(id: commentDB.commentBeforeId) else {
-                    return
-                }
-                
-                if commentBefore.status == .delivered || commentBefore.status == .sent{
-                    commentDB.status = .read
-                    QiscusCore.database.comment.save([commentDB])
-                    QiscusCore.eventManager.gotMessageStatus(comment: commentDB)
-                }
-            }
+            RealtimeManager.shared.didReceiveMessageStatus(roomId: commentDB.roomId, commentId: commentDB.id, commentUniqueId: commentDB.uniqId, Status: .read, userEmail: email)
         }
     }
 }
