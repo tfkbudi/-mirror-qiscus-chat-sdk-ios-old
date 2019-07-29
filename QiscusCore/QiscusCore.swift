@@ -52,8 +52,11 @@ public class QiscusCore: NSObject {
         }
         
         realtime.setup(appName: id)
-        // Populate data from db
-        QiscusCore.database.loadData()
+        
+        if QiscusCore.isLogined{
+            // Populate data from db
+            QiscusCore.database.loadData()
+        }
         
         // Background sync when realtime off
         QiscusCore.heartBeat = QiscusHeartBeat.init(timeInterval: config.syncInterval)
@@ -146,12 +149,23 @@ public class QiscusCore: NSObject {
     ///
     /// - Parameter completionHandler: The code to be executed once the request has finished, also give a user object and error.
     public static func logout(completion: @escaping (QError?) -> Void) {
+        let clientRouter    = Router<APIClient>()
+        let roomRouter      = Router<APIRoom>()
+        let commentRouter   = Router<APIComment>()
+        let userRouter      = Router<APIUser>()
+        
+        clientRouter.cancel()
+        roomRouter.cancel()
+        commentRouter.cancel()
+        userRouter.cancel()
+        
         // clear room and comment
         QiscusCore.database.clear()
         // clear config
         ConfigManager.shared.clearConfig()
         // realtime disconnect
         QiscusCore.realtime.disconnect()
+        
         completion(nil)
         
     }

@@ -43,8 +43,10 @@ class QiscusEventManager {
             if r.id == String(comment.roomId) {
                 // we assume UI or developer is active listen this room
                 _ = QiscusCore.database.room.updateReadComment(comment)
-                // publish event new comment inside room
-                roomDelegate?.gotNewComment(comment: comment)
+                if roomDelegate != nil{
+                    // publish event new comment inside room
+                    roomDelegate?.gotNewComment(comment: comment)
+                }
                 
                 if let comments = QiscusCore.database.comment.find(roomId: comment.roomId) {
                     
@@ -66,7 +68,9 @@ class QiscusEventManager {
         }
         // got new comment for other room
         if let room = QiscusCore.database.room.find(id: comment.roomId) {
-            delegate?.onRoom(room, gotNewComment: comment)
+            if delegate != nil{
+                 delegate?.onRoom(room, gotNewComment: comment)
+            }
         }
     }
     
