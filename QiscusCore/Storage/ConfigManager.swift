@@ -53,6 +53,15 @@ class ConfigManager : NSObject {
         }
     }
     
+    var isConnectedMqtt : Bool {
+        get {
+            return self.getIsConnectedMQTT()
+        }
+        set {
+            self.setIsConnectedMQTT(newValue)
+        }
+    }
+    
     var server      : QiscusServer?     = nil
     var syncInterval : TimeInterval     = 5
     
@@ -120,6 +129,18 @@ class ConfigManager : NSObject {
         return Int64(defaults.integer(forKey: filename("syncEventId")))
     }
     
+    private func setIsConnectedMQTT(_ value: Bool) {
+        // save in file
+        let defaults = UserDefaults.standard
+        defaults.set(value, forKey: filename("isConnectedMQTT"))
+    }
+    
+    private func getIsConnectedMQTT() -> Bool {
+        // save in file
+        let defaults = UserDefaults.standard
+        return defaults.bool(forKey: filename("isConnectedMQTT")) ?? true
+    }
+    
     func clearConfig() {
         // remove file user
         let storage = UserDefaults.standard
@@ -131,6 +152,7 @@ class ConfigManager : NSObject {
         storage.removeObject(forKey: filename("avatarUrl"))
         storage.removeObject(forKey: filename("syncEventId"))
         storage.removeObject(forKey: filename("syncId"))
+        storage.removeObject(forKey: filename("isConnectedMQTT"))
 //        storage.removeObject(forKey: filename("lastCommentId"))
         self.userCache = nil
     }

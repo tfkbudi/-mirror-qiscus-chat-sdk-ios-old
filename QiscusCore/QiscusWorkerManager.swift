@@ -78,19 +78,21 @@ class QiscusWorkerManager {
     }
     
     private func sync() {
-        let id = ConfigManager.shared.syncId
-        QiscusCore.shared.sync(lastCommentReceivedId: id, onSuccess: { (comments) in
-            DispatchQueue.global(qos: .background).async {
-                self.syncEvent()
-                if let c = comments.first {
-                    ConfigManager.shared.syncId = c.id
-                }
-            }
-            
-        }, onError: { (error) in
-            QiscusLogger.errorPrint("sync error, \(error.message)")
-        })
         
+        if ConfigManager.shared.isConnectedMqtt == false {
+            let id = ConfigManager.shared.syncId
+            QiscusCore.shared.sync(lastCommentReceivedId: id, onSuccess: { (comments) in
+                DispatchQueue.global(qos: .background).async {
+                    self.syncEvent()
+                    if let c = comments.first {
+                        ConfigManager.shared.syncId = c.id
+                    }
+                }
+                
+            }, onError: { (error) in
+                QiscusLogger.errorPrint("sync error, \(error.message)")
+            })
+        }
     }
     
     private func pending() {

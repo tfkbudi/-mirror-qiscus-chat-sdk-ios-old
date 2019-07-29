@@ -538,6 +538,7 @@ class RealtimeManager {
         
         switch state {
         case .connected:
+            ConfigManager.shared.isConnectedMqtt = true
             QiscusLogger.debugPrint("Qiscus realtime connected")
             QiscusCore.shared.isOnline(true)
             resumePendingSubscribeTopic()
@@ -562,6 +563,7 @@ class RealtimeManager {
     
     
     func disconnect(withError err: Error?){
+        ConfigManager.shared.isConnectedMqtt = false
         if let error = err{
             QiscusEventManager.shared.connectionDelegate?.disconnect(withError: QError(message: error.localizedDescription))
             if QiscusCore.isLogined{
