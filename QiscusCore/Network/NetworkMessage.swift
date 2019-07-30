@@ -76,11 +76,16 @@ extension NetworkManager {
                     let comment = CommentApiResponse.comment(from: response)
                     completion(comment, nil)
                 case .failure(let errorMessage):
-                    do {
-                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
-                        completion(nil, "json: \(jsondata)")
-                    } catch {
+                    if data != nil {
+                        do {
+                            let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                            QiscusLogger.errorPrint("json: \(jsondata)")
+                            completion(nil, "json: \(jsondata)")
+                        } catch {
+                            QiscusLogger.errorPrint("Error postComment Code =\(response.statusCode)\(errorMessage)")
+                            completion(nil, NetworkResponse.unableToDecode.rawValue)
+                        }
+                    }else{
                         QiscusLogger.errorPrint("Error postComment Code =\(response.statusCode)\(errorMessage)")
                         completion(nil, NetworkResponse.unableToDecode.rawValue)
                     }
