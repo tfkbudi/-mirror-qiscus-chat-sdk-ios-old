@@ -7,7 +7,6 @@ target 'Example' do
   pod 'QiscusCore', :path => '.'
   pod 'QiscusRealtime', '~> 0.3.0'
   #pod 'QiscusRealtime', :path => '../QiscusRealtime'
-  pod 'CocoaMQTT', :git => 'https://github.com/ariefnurputranto/CocoaMQTT.git'
 end
 
 target 'QiscusCore' do
@@ -16,7 +15,6 @@ target 'QiscusCore' do
     pod 'SwiftyJSON'
     pod 'QiscusRealtime', '~> 0.3.0'
     #pod 'QiscusRealtime', :path => '../QiscusRealtime'
-    pod 'CocoaMQTT', :git => 'https://github.com/ariefnurputranto/CocoaMQTT.git'
 end
 
 target 'QiscusCoreTests' do
