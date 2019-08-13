@@ -14,6 +14,7 @@ class QiscusWorkerManager {
         if QiscusCore.isLogined {
             self.sync()
             self.pending()
+            self.sending()
             DispatchQueue.main.sync {
                 let state = UIApplication.shared.applicationState
                 
