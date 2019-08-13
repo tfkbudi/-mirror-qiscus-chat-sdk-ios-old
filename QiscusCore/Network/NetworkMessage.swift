@@ -152,13 +152,19 @@ extension NetworkManager {
                    return
                 case .failure(let errorMessage):
                     do {
-                        let jsondata = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                        QiscusLogger.errorPrint("json: \(jsondata)")
-                        QiscusCore.network.event_report(moduleName: "API", event: "update_comment_status", message: "commentReceivedId=\(commentReceivedId), commentReadId=\(commentReadId), error: \(jsondata)", onSuccess: { (success) in
+                        if let data = data{
+                            let jsondata = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
+                            QiscusLogger.errorPrint("json: \(jsondata)")
+                            QiscusCore.network.event_report(moduleName: "API", event: "update_comment_status", message: "commentReceivedId=\(commentReceivedId), commentReadId=\(commentReadId), error: \(jsondata)", onSuccess: { (success) in
+                                
+                            }) { (error) in
+                                QiscusLogger.debugPrint(error.message)
+                            }
+                        }else{
                             
-                        }) { (error) in
-                            QiscusLogger.debugPrint(error.message)
+                            QiscusLogger.errorPrint("Error updateCommentStatus Code =\(response.statusCode), \(errorMessage)")
                         }
+                       
                     } catch {
                         var message = errorMessage
                         if error != nil {
