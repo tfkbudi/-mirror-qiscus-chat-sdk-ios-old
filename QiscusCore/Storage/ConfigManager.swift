@@ -81,6 +81,7 @@ class ConfigManager : NSObject {
 //        defaults.set(data.lastSyncEventId, forKey: filename("lastSyncEventId"))
 //        defaults.set(data.lastCommentId, forKey: filename("lastCommentId"))
         defaults.set(data.avatarUrl, forKey: filename("avatarUrl"))
+        defaults.set(data.extras, forKey: filename("extras"))
     }
     
     private func loadUser() -> UserModel? {
@@ -93,6 +94,7 @@ class ConfigManager : NSObject {
             user.id         = storage.string(forKey: filename("id")) ?? ""
             user.email      = storage.string(forKey: filename("email")) ?? ""
             user.username   = storage.string(forKey: filename("username")) ?? ""
+            user.extras     = storage.string(forKey: filename("extras")) ?? ""
             user.avatarUrl  = storage.url(forKey: filename("avatarUrl")) ?? URL(string: "http://")!
 //            user.lastSyncEventId    = Int64(storage.integer(forKey: filename("username")))
             self.userCache  = user
@@ -153,6 +155,7 @@ class ConfigManager : NSObject {
         storage.removeObject(forKey: filename("syncEventId"))
         storage.removeObject(forKey: filename("syncId"))
         storage.removeObject(forKey: filename("isConnectedMQTT"))
+        storage.removeObject(forKey: filename("extras"))
 //        storage.removeObject(forKey: filename("lastCommentId"))
         self.userCache = nil
     }

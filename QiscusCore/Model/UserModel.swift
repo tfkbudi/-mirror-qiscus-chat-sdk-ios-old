@@ -20,7 +20,7 @@ public struct UserModel {
     public var rtKey            : String    = ""
     public var token            : String    = ""
     public var username         : String    = ""
-    public var extras           : [String:Any]? = nil
+    public var extras           : String    = ""
     
     init() { }
     
@@ -31,7 +31,7 @@ public struct UserModel {
         rtKey           = json["rtKey"].stringValue
         token           = json["token"].stringValue
         username        = json["username"].stringValue
-        extras          = json["extras"].dictionaryObject
+        extras          = json["extras"].rawString() ?? ""
     }
 }
 
