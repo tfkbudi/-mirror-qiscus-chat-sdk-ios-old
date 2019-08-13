@@ -26,7 +26,7 @@ open class CommentModel {
     public var payload              : [String:Any]? = nil
     /// Extra data, set after comment is complate.
     public var extras               : [String:Any]? = nil
-    public internal(set) var roomId               : String        = ""
+    public var roomId               : String        = ""
     public internal(set) var timestamp            : String        = ""
     public var type                 : String        = "text"
     public internal(set) var uniqId               : String        = ""
