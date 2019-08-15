@@ -151,7 +151,7 @@ public enum CommentStatus : String, CaseIterable {
     case pending    = "pending"
     case failed     = "failed"
     case sent       = "sent"
-    case delivered    = "delivered"
+    case delivered  = "delivered"
     case read       = "read"
     case deleting   = "deleting" // because delete process not only in device
     case deleted    = "deleted"

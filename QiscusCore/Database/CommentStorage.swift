@@ -59,10 +59,14 @@ class CommentStorage : QiscusStorage {
         if let r = find(byUniqueID: comment.uniqId)  {
             // check new comment status, end status is read. sending - sent - deliverd - read
             if comment.status.intValue <= r.status.intValue && comment.status != .deleted {
+                
                 if comment.status == .failed {
                      onUpdate(comment)
                 }else{
-                    return // just ignore, except delete(soft, connten ischanged) this part is trick from backend. after receiver update comment status then sender call api load comment somehow status still sent but sender already receive event status read/deliverd via mqtt
+                    // update
+                    save(r)
+                    onUpdate(r)
+                   // return // just ignore, except delete(soft, connten ischanged) this part is trick from backend. after receiver update comment status then sender call api load comment somehow status still sent but sender already receive event status read/deliverd via mqtt
                 }
             }else{
                 if !updateCommentDataEvent(old: r, new: comment) {

@@ -360,18 +360,29 @@ class RealtimeManager {
         if let room = QiscusCore.database.room.find(id: roomId) {
             // very tricky, need to review v3, calculating comment status in backend for group rooms
             if let comments = QiscusCore.database.comment.find(roomId: roomId) {
-                guard let user = QiscusCore.getProfile() else { return }
-                var mycomments = comments.filter({ $0.userEmail == user.email }) // filter my comment
-                mycomments = mycomments.filter({ $0.status.intValue < status.intValue }) // filter status < new status
-                mycomments = mycomments.filter({ $0.date <= _comment.date })
-                // call api
-                guard let lastMyComment = mycomments.last else { return }
+                guard let user = QiscusCore.getProfile() else {
+                    return
+                }
+//                var mycomments = comments.filter({ $0.userEmail == user.email }) // filter my comment
+//                mycomments = mycomments.filter({ $0.status.intValue < status.intValue }) // filter status < new status
+//                mycomments = mycomments.filter({ $0.date <= _comment.date })
+//                // call api
+//                guard let lastMyComment = mycomments.last else {
+//                    return
+//                }
+                
+                guard let comment = QiscusCore.database.comment.find(id: commentId) else{
+                    return
+                }
                 
                 if room.type == .single {
+                    if user.email.lowercased() == userEmail.lowercased(){
+                        return
+                    }
                     // compare current status
-                    if lastMyComment.status.intValue < status.intValue {
+                    if comment.status.intValue < status.intValue {
                         // update all my comment status
-                        mycomments.forEach { (c) in
+                        comments.forEach { (c) in
                             // check lastStatus and compare
                             if c.status.intValue < status.intValue {
                                 let new = c
@@ -462,9 +473,9 @@ class RealtimeManager {
                         }
                     
                         if(readUser.count == room.participants?.count){
-                            if lastMyComment.status.intValue < status.intValue {
+                            if comment.status.intValue < status.intValue {
                                 // update all my comment status
-                                mycomments.forEach { (c) in
+                                comments.forEach { (c) in
                                     // check lastStatus and compare
                                     if c.status.intValue < status.intValue {
                                         let new = c
@@ -478,9 +489,9 @@ class RealtimeManager {
                             }
 
                         }else{
-                            if lastMyComment.status.intValue < status.intValue {
+                            if comment.status.intValue < status.intValue {
                                 // update all my comment status
-                                mycomments.forEach { (c) in
+                                comments.forEach { (c) in
                                     // check lastStatus and compare
                                     if c.status.intValue < status.intValue {
                                         let new = c
@@ -540,7 +551,17 @@ class RealtimeManager {
         case .connected:
             ConfigManager.shared.isConnectedMqtt = true
             QiscusLogger.debugPrint("Qiscus realtime connected")
-            QiscusCore.shared.isOnline(true)
+            DispatchQueue.main.async {
+                let state = UIApplication.shared.applicationState
+                
+                if state == .background  || state == .inactive{
+                    // background
+                    QiscusCore.shared.isOnline(false)
+                }else if state == .active {
+                    // foreground
+                    QiscusCore.shared.isOnline(true)
+                }
+            }
             resumePendingSubscribeTopic()
             QiscusEventManager.shared.connectionDelegate?.connected()
             
