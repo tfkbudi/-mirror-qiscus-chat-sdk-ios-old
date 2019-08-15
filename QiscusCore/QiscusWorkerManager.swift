@@ -39,6 +39,10 @@ class QiscusWorkerManager {
         //sync event
         let id = ConfigManager.shared.syncEventId
         QiscusCore.network.syncEvent(lastId: id, onSuccess: { (events) in
+            if !events.isEmpty{
+                ConfigManager.shared.syncEventId = events.first!.id
+            }
+            
             events.forEach({ (event) in
                 DispatchQueue.global(qos: .background).sync {
                     if event.id == id { return }
@@ -69,10 +73,8 @@ class QiscusWorkerManager {
                         
                     case .delivered:
                         event.updatetStatusMessage()
-                        ConfigManager.shared.syncEventId = event.id
                     case .read:
                         event.updatetStatusMessage()
-                        ConfigManager.shared.syncEventId = event.id
                     }
                     
                 }
@@ -84,7 +86,6 @@ class QiscusWorkerManager {
     }
     
     private func sync() {
-        
         if ConfigManager.shared.isConnectedMqtt == false {
             let id = ConfigManager.shared.syncId
             QiscusCore.shared.sync(lastCommentReceivedId: id, onSuccess: { (comments) in

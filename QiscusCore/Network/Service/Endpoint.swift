@@ -72,7 +72,7 @@ var HEADERS : [String: String] {
 // MARK: General API
 internal enum APIClient {
     case sync(lastReceivedCommentId: String, order: String, limit: Int)
-    case syncEvent(startEventId : Int64)
+    case syncEvent(startEventId : String)
     case search(keyword: String, roomId: String?, lastCommentId: Int?)
     case registerDeviceToken(token: String) //
     case removeDeviceToken(token: String) //

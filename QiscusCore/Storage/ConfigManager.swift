@@ -36,7 +36,7 @@ class ConfigManager : NSObject {
             }
         }
     }
-    var syncEventId : Int64 {
+    var syncEventId : String {
         get {
             return self.getSyncEventId()
         }
@@ -116,19 +116,17 @@ class ConfigManager : NSObject {
         return defaults.string(forKey: filename("syncId")) ?? ""
     }
     
-    private func setSyncEventId(_ id: Int64) {
+    private func setSyncEventId(_ id: String) {
         // save in file
         let defaults = UserDefaults.standard
         let current = self.getSyncEventId()
-        if id > current {
-            defaults.set(id, forKey: filename("syncEventId"))
-        }
+        defaults.set(id, forKey: filename("syncEventId"))
     }
     
-    private func getSyncEventId() -> Int64 {
+    private func getSyncEventId() -> String {
         // save in file
         let defaults = UserDefaults.standard
-        return Int64(defaults.integer(forKey: filename("syncEventId")))
+        return defaults.string(forKey: filename("syncEventId")) ?? "0"
     }
     
     private func setIsConnectedMQTT(_ value: Bool) {

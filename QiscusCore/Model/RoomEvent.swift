@@ -29,13 +29,14 @@ enum SyncEventTopic : String {
 }
 
 struct SyncEvent {
-    let id          : Int64
+    let id          : String
     let timestamp   : Int64
     let actionTopic : SyncEventTopic
     let payload     : [String:Any]
     
     init(json: JSON) {
-        self.id = json["id"].int64 ?? 0
+        let id = json["id"].int64 ?? 0
+        self.id = "\(id)"
         self.timestamp  = json["timestamp"].int64 ?? 0
         self.actionTopic  = SyncEventTopic(rawValue: json["action_topic"].string ?? "") ?? .noActionTopic
         self.payload    = json["payload"].dictionaryObject ?? [:]

@@ -315,7 +315,7 @@ extension NetworkManager {
         }
     }
     
-    func syncEvent(lastId: Int64, onSuccess: @escaping ([SyncEvent]) -> Void, onError: @escaping (QError) -> Void) {
+    func syncEvent(lastId: String, onSuccess: @escaping ([SyncEvent]) -> Void, onError: @escaping (QError) -> Void) {
         clientRouter.request(.syncEvent(startEventId: lastId)) { (data, response, error) in
             if error != nil {
                 onError(QError(message: error?.localizedDescription ?? "Please check your network connection."))
