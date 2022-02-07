@@ -86,7 +86,7 @@ class QiscusWorkerManager {
     }
     
     private func sync() {
-        if ConfigManager.shared.isConnectedMqtt == false {
+//        if ConfigManager.shared.isConnectedMqtt == false {
             let id = ConfigManager.shared.syncId
             QiscusCore.shared.sync(lastCommentReceivedId: id, onSuccess: { (comments) in
                 DispatchQueue.global(qos: .background).async {
@@ -99,7 +99,7 @@ class QiscusWorkerManager {
             }, onError: { (error) in
                 QiscusLogger.errorPrint("sync error, \(error.message)")
             })
-        }
+//        }
     }
     
     private func pending() {
